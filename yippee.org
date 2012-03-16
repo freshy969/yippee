@@ -1,0 +1,15 @@
+#+TITLE: yippee! Readme
+#+STARTUP: indent
+#+Style: <style> h1,h2,h3 {font-family: arial, helvetica, sans-serif} </style>
+
+* Overview
+  - Discuss and finalize interfaces between components:
+    + Individual Parts:
+      - Crawler: Chris + Nikos
+      - Indexer: Marg + TJ
+    + EC2
+    + Pastry
+  - Contemplate pair programming/work division.
+  - Define unit tests to write(?).
+  - Figure out meeting schedule/communications.
+  - Evaluate project completion trajectory.
