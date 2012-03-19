@@ -2,14 +2,28 @@
 #+STARTUP: indent
 #+Style: <style> h1,h2,h3 {font-family: arial, helvetica, sans-serif} </style>
 
-* Overview
-  - Discuss and finalize interfaces between components:
-    + Individual Parts:
-      - Crawler: Chris + Nikos
-      - Indexer: Marg + TJ
-    + EC2
-    + Pastry
-  - Contemplate pair programming/work division.
-  - Define unit tests to write(?).
-  - Figure out meeting schedule/communications.
-  - Evaluate project completion trajectory.
+* Crawler (03/19/12)
+- Top-level design details
+  + Chris single-threaded closely coupled with the Mercator pattern
+    - Well-defined interfaces between components
+    - Disk-based cache of Robots.txt (no limit)
+  + Nikos multi-threaded with a different approach on the URLFrontier
+    - Better than FIFO, worse than Mercator
+    - Memory cache of a fixed number of Robots.txt
+- Testing approach
+  + Given group1 is responsible for c1 and group2 for c2
+    - group1 writes white-box tests for c1 and group2 for c2
+    - group2 writes black-box tests for c1 and group1 for c2
+  + Both groups make sure things work as expected
+  + Implementation changes don't change interface results for both groups
+* Overview (03/16/12)
+- Discuss and finalize interfaces between components:
+  + Individual Parts:
+    - Crawler: Chris + Nikos
+    - Indexer: Marg + TJ
+  + EC2
+  + Pastry
+- Contemplate pair programming/work division.
+- Define unit tests to write(?).
+- Figure out meeting schedule/communications.
+- Evaluate project completion trajectory.
