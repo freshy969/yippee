@@ -1,5 +1,6 @@
 package com.yippee.crawler.frontier;
 
+import com.yippee.crawler.Message;
 /**
  * The URLFrontier interface encodes the frontier queue functionality in which
  * URL's are pushed by the threads and pulled by the threads at a FIFO basis.
