@@ -1,2 +1,13 @@
 .DS_Store
+
+# we don't want to be versioning logs
 *.log
+
+# for Eclipse
+.classpath
+.project
+.settings/
+
+# for Intellij IDEA
+.idea/
+*.iml
