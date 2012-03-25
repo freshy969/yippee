@@ -11,6 +11,7 @@
 # for Intellij IDEA
 .idea/
 *.iml
+out/
 
 # populate the db structure, but do not version
 db/*
