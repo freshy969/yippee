@@ -11,3 +11,6 @@
 # for Intellij IDEA
 .idea/
 *.iml
+
+# populate the db structure, but do not version
+db/*
