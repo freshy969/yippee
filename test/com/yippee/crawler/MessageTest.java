@@ -1,4 +1,4 @@
-package com.yippee.indexer;
+package com.yippee.crawler;
 
 import static org.junit.Assert.*;
 
