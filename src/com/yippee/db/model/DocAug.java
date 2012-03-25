@@ -1,4 +1,4 @@
-package edu.upenn.cis.cis555.persistence;
+package com.yippee.db.model;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
@@ -13,7 +13,7 @@ public class DocAug {
     @PrimaryKey
     private int id;
     private String url;
-    private String Doc;
+    private String doc;
     private Date time;
 
     public int getId() {
@@ -33,11 +33,11 @@ public class DocAug {
     }
 
     public String getDoc() {
-        return Doc;
+        return doc;
     }
 
     public void setDoc(String doc) {
-        Doc = doc;
+        doc = doc;
     }
 
     public Date getTime() {
