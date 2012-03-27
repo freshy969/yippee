@@ -24,7 +24,6 @@ public class DocAugManager {
         myDbEnv.setup(new File("db"), false);
     }
     
-    
 
     /**
      * Insert an augmented document to the database
