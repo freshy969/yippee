@@ -11,16 +11,16 @@ import static com.sleepycat.persist.model.Relationship.*;
 @Entity
 public class DocAug {
     @PrimaryKey
-    private int id;
+    private String id;
     private String url;
     private String doc;
     private Date time;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
