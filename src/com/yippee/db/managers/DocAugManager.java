@@ -23,6 +23,8 @@ public class DocAugManager {
         // Environment is <i>not</i> readonly
         myDbEnv.setup(new File("db"), false);
     }
+    
+    
 
     /**
      * Insert an augmented document to the database

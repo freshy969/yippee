@@ -15,6 +15,7 @@ public class DocAugManagerTest {
 
     @Before
     public void setUp(){
+        // every time it creates a new docAug, with a new timestamp, thus timestamp notEquals
         docAug = new DocAug();
         docAug.setDoc("<root><this><is><a><doc></doc></a></is></this></root>");
         docAug.setTime(new Date());
@@ -29,9 +30,13 @@ public class DocAugManagerTest {
     }
     @Test
     public void testRead(){
-        assertEquals(docAugManager.read("1"), docAug);
+        assertEquals(docAugManager.read("1").getId(), docAug.getId());
     }
 
+    @Test
+    public void testDelete(){
+        assertTrue(docAugManager.delete("1"));
+    }
     @After
     public void tearDown(){
         docAugManager.close();
