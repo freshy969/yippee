@@ -27,3 +27,14 @@
 - Define unit tests to write(?).
 - Figure out meeting schedule/communications.
 - Evaluate project completion trajectory.
+
+
+
+
+* 3/28/2012
+
+- If Indexer needs to restart: 
+	* It should checkpoint the current id of the doc in the respository.
+	* It (or some interface to the repsoitory) can then create an EntityCursor from the last checkpointed 
+		position
+	* http://docs.oracle.com/cd/E17277_02/html/java/index.html?com/sleepycat/persist/EntityStore.html
