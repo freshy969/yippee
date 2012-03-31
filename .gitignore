@@ -7,7 +7,6 @@
 .classpath
 .project
 .settings/
-/bin
 
 # for Intellij IDEA
 .idea/
@@ -16,3 +15,7 @@ out/
 
 # populate the db structure, but do not version
 db/*
+
+# No need to version compiled output
+/bin
+/distribution
