@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 @Entity
-public class DocAug {
+public class DocAug{
     @PrimaryKey
     private String id;
     private String url;

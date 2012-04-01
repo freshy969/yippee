@@ -1,9 +1,9 @@
 package com.yippee.db.util;
 
 import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
-import com.sleepycat.persist.SecondaryIndex;
 import com.yippee.db.model.DocAug;
 
 /**
@@ -33,5 +33,13 @@ public class DAL {
      */
     public PrimaryIndex<String, DocAug> getDocById() {
         return docById;
+    }
+    /**
+     * Get the next object from the entity cursor
+     *
+     * @return the entity cursor
+     */
+    public EntityCursor<DocAug> getCursor() {
+        return docById.entities();
     }
 }

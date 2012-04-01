@@ -1,11 +1,13 @@
 package com.yippee.db.managers;
 
 import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.model.DocAug;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
 
 import java.io.File;
+import java.util.Iterator;
 
 public class DocAugManager {
     private static DBEnv myDbEnv;
@@ -16,13 +18,13 @@ public class DocAugManager {
      * overwrites or writes to other locations. The rest of the managers check
      * to make sure they do not write to this folder.
      */
-    public DocAugManager () {
+    public DocAugManager() {
         myDbEnv = new DBEnv();
         // Path to the environment home
         // Environment is <i>not</i> readonly
         myDbEnv.setup(new File("db"), false);
     }
-    
+
 
     /**
      * Insert an augmented document to the database
@@ -47,7 +49,8 @@ public class DocAugManager {
 
     /**
      * Read an augmented document from the database
-     * @param key  the id of the document
+     *
+     * @param key the id of the document
      * @return the augmented document
      */
     public DocAug read(String key) {
@@ -88,22 +91,38 @@ public class DocAugManager {
     /**
      * Close the database environment
      */
-    public void close(){
+    public void close() {
         myDbEnv.close();
     }
 
     /**
      * Push an augmented document from the database
      */
-    public void push(DocAug doc){
-
+    public boolean push(DocAug doc) {
+        return create(doc);
     }
 
     /**
      * Pull an augmented document from the database
-     * @return
+     *
+     * @return the "next" document from the database
      */
     public DocAug pull() {
-        return new DocAug();
+         DocAug result = null;
+        try {
+            // open data access layer
+            dao = new DAL(myDbEnv.getEntityStore());
+            EntityCursor<DocAug> cursor = dao.getCursor();
+            Iterator<DocAug> docIterator = cursor.iterator();
+            if (docIterator.hasNext()) {
+                result = docIterator.next();
+            }
+            cursor.close();
+        } catch (DatabaseException e) {
+            System.out.println("Exception: " + e.toString());
+            e.printStackTrace();
+        }
+        if (result != null) delete(result.getId()); // remove object from db
+        return result;
     }
 }

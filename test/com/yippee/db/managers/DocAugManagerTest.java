@@ -1,13 +1,14 @@
 package com.yippee.db.managers;
 
-import static org.junit.Assert.*;
-
 import com.yippee.db.model.DocAug;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DocAugManagerTest {
     DocAugManager docAugManager;
@@ -37,6 +38,21 @@ public class DocAugManagerTest {
     public void testDelete(){
         assertTrue(docAugManager.delete("1"));
     }
+
+    @Test
+    public void testPush(){
+        docAugManager.push(docAug);
+        docAug.setId("2");
+        assertTrue(docAugManager.push(docAug));
+    }
+
+    @Test
+    public void testPull(){
+        DocAug doPull = docAugManager.pull();
+        doPull = docAugManager.pull();
+        assertEquals(doPull.getId(), "2"); //it has the last id! (queue)
+    }
+
     @After
     public void tearDown(){
         docAugManager.close();
