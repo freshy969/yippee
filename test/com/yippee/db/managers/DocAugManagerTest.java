@@ -47,9 +47,14 @@ public class DocAugManagerTest {
     }
 
     @Test
-    public void testPull(){
-        DocAug doPull = docAugManager.pull();
-        doPull = docAugManager.pull();
+    public void testPoll(){
+        DocAug doPull = docAugManager.poll();
+        assertEquals(doPull.getId(), "1");
+    }
+
+    @Test
+    public void testPeek(){
+        DocAug doPull = docAugManager.peek();
         assertEquals(doPull.getId(), "2"); //it has the last id! (queue)
     }
 

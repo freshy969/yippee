@@ -103,11 +103,11 @@ public class DocAugManager {
     }
 
     /**
-     * Pull an augmented document from the database
+     * Poll an augmented document from the database
      *
      * @return the "next" document from the database
      */
-    public DocAug pull() {
+    public DocAug poll() {
          DocAug result = null;
         try {
             // open data access layer
@@ -123,6 +123,29 @@ public class DocAugManager {
             e.printStackTrace();
         }
         if (result != null) delete(result.getId()); // remove object from db
+        return result;
+    }
+
+    /**
+     * Peek an augmented document from the database (read but not remove it)
+     *
+     * @return the "next" document from the database
+     */
+    public DocAug peek() {
+         DocAug result = null;
+        try {
+            // open data access layer
+            dao = new DAL(myDbEnv.getEntityStore());
+            EntityCursor<DocAug> cursor = dao.getCursor();
+            Iterator<DocAug> docIterator = cursor.iterator();
+            if (docIterator.hasNext()) {
+                result = docIterator.next();
+            }
+            cursor.close();
+        } catch (DatabaseException e) {
+            System.out.println("Exception: " + e.toString());
+            e.printStackTrace();
+        }
         return result;
     }
 }
