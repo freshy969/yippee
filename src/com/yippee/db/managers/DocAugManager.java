@@ -1,21 +1,20 @@
 package com.yippee.db.managers;
 
 import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.model.DocAug;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
 
 import java.io.File;
-import java.util.ArrayList;
 
 public class DocAugManager {
     private static DBEnv myDbEnv;
     private DAL dao;
 
     /**
-     * The constructor does not take a folder as an argument, to disable overwrites or writes to other locations. The
-     * rest of the managers check to make sure they do not write to this folder.
+     * The constructor does not take a folder as an argument, to disable
+     * overwrites or writes to other locations. The rest of the managers check
+     * to make sure they do not write to this folder.
      */
     public DocAugManager () {
         myDbEnv = new DBEnv();
@@ -93,4 +92,18 @@ public class DocAugManager {
         myDbEnv.close();
     }
 
+    /**
+     * Push an augmented document from the database
+     */
+    public void push(DocAug doc){
+
+    }
+
+    /**
+     * Pull an augmented document from the database
+     * @return
+     */
+    public DocAug pull() {
+        return new DocAug();
+    }
 }
