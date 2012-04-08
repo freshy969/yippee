@@ -52,8 +52,10 @@
         </java>
     </target>
 
-    <target name="clean-build" depends="clean,jar"/>
+    <target name="project-clean" depends="clean,jar"
+            description="Clear resources and build jar"/>
 
-    <target name="create-node" depends="clean,run"/>
+    <target name="project-run" depends="project-clean,run"
+            description="Create a single application node"/>
 
 </project>
