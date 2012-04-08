@@ -1,5 +1,6 @@
 package com.yippee.crawler;
 
+import com.yippee.Configuration;
 import com.yippee.db.managers.RobotsManager;
 import com.yippee.db.model.RobotsTxt;
 
@@ -27,15 +28,14 @@ public class RobotsModule {
     public boolean alowedToCrawl(URL url) {
         try {
             host = new URL(url.getHost());
-
-//            RobotsManager rm = new RobotsManager();
-//            RobotsTxt robotsTxt = rm.read(host);
-//            if (robotsTxt == null) {
-//                robotsTxt = fetchRobots();
-//                rm.create(robotsTxt);
-//            }
-//            rm.close();
-
+            String db = Configuration.getInstance().getBerkeleyDB();
+            RobotsManager rm = new RobotsManager(db);
+            RobotsTxt robotsTxt = new RobotsTxt();
+            if (!rm.read(host.getHost(),robotsTxt)) {
+                robotsTxt = fetchRobots();
+                rm.create(robotsTxt);
+            }
+            rm.close();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
