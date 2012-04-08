@@ -12,6 +12,11 @@ public class YippeeNode {
         System.out.println("Start application");
         for (int i=0; i<args.length; i++) {
             //TODO: Init loggers, log application arguments
+            try {
+                Thread.sleep(10000); //10 seconds
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println(args[i]);
         }
 
