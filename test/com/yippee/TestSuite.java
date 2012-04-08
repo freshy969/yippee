@@ -4,6 +4,7 @@ import com.yippee.crawler.CrawlerTestSuite;
 import com.yippee.db.DBTestSuite;
 import com.yippee.indexer.IndexerTestSuite;
 import com.yippee.pagerank.PRTestSuite;
+import com.yippee.pastry.YippeePastryAppTest;
 import com.yippee.search.SearchTestSuite;
 import com.yippee.web.WebTestSuite;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import org.junit.runners.Suite;
         IndexerTestSuite.class,
         PRTestSuite.class,
         SearchTestSuite.class,
-        WebTestSuite.class
+        WebTestSuite.class,
+        YippeePastryAppTest.class
 })
 public class TestSuite { }
