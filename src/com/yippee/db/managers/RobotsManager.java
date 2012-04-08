@@ -74,8 +74,7 @@ public class RobotsManager {
                 result = true;
             }
         } catch (DatabaseException e) {
-            System.out.println("Exception: " + e.toString());
-            e.printStackTrace();
+        	logger.warn("Exception", e);
             result = false;
         }
         return result;
@@ -95,8 +94,7 @@ public class RobotsManager {
             dao = new DAL(myDbEnv.getEntityStore());
             result = dao.getRobotsById().delete(key);
         } catch (DatabaseException e) {
-            System.out.println("Exception: " + e.toString());
-            e.printStackTrace();
+        	logger.warn("Exception", e);
             result = false;
         }
         return result;
