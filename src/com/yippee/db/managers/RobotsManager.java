@@ -40,8 +40,10 @@ public class RobotsManager {
             dao = new DAL(myDbEnv.getEntityStore());
             dao.getRobotsById().put(robotsTxt);
         } catch (DatabaseException e) {
-            System.out.println("Exception: " + e.toString());
-            e.printStackTrace();
+        	logger.warn("Exception", e);
+            success = false;
+        } catch (IllegalArgumentException e){
+        	logger.warn("Exception", e);
             success = false;
         }
         return success;
