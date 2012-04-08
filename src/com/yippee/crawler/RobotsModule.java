@@ -15,15 +15,15 @@ import java.util.Set;
 
 public class RobotsModule {
 
-    private RobotsManager robotsManager;
     private URL host;
 
     /**
-     * TODO: dubious semantics as allowedToCrawl() may be false because of crawl
-     * TODO: delay -- caller should not discard the url.
+     * It checks if the url can be crawled with respect only to disallows and
+     * <i>not</i> crawl-delay. If needed, it fetches robots.txt and stores all
+     * information to the database
      *
-     * @param url
-     * @return
+     * @param url the url to be crawled
+     * @return yes if allowed; no o/w
      */
     public boolean alowedToCrawl(URL url) {
         try {
@@ -42,6 +42,11 @@ public class RobotsModule {
         return false;
     }
 
+    /**
+     * Fetch robots.txt the host of the url passed to the constructor.
+     *
+     * @return the RobotsTxt entity object to be inserted to the database
+     */
     private RobotsTxt fetchRobots() {
         URLConnection urlConnection = null;
         try {
@@ -82,7 +87,8 @@ public class RobotsModule {
             }
             in.close();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
+            //TODO: LOG ERROR
         }
 
         return new RobotsTxt();
