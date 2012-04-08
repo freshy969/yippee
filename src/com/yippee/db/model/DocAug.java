@@ -39,7 +39,7 @@ public class DocAug{
     }
 
     public void setDoc(String doc) {
-        doc = doc;
+        this.doc = doc;
     }
 
     public Date getTime() {

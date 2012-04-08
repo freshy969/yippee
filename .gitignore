@@ -22,3 +22,6 @@ db/*
 
 # vim backup files
 *.swp
+
+# temp files
+tmp.file
