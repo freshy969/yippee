@@ -105,7 +105,7 @@ public class DocAugManager {
     /**
      * Poll an augmented document from the database
      *
-     * @return the "next" document from the database
+     * @return the "next" document from the database, null if there are no items
      */
     public DocAug poll() {
          DocAug result = null;
