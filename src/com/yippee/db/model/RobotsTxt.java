@@ -17,7 +17,13 @@ public class RobotsTxt {
 
 	@PrimaryKey
 	String host;
+	/**
+	 * Crawl delay (in seconds)
+	 */
 	int crawlDelay;
+	/**
+	 * Parsed disallow values for this robots txt file
+	 */
 	Set<String> disallows;
 	
 	
