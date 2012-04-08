@@ -18,11 +18,11 @@ public class DocAugManager {
      * overwrites or writes to other locations. The rest of the managers check
      * to make sure they do not write to this folder.
      */
-    public DocAugManager() {
+    public DocAugManager(String location) {
         myDbEnv = new DBEnv();
         // Path to the environment home
         // Environment is <i>not</i> readonly
-        myDbEnv.setup(new File("db"), false);
+        myDbEnv.setup(new File(location), false);
     }
 
 
@@ -112,7 +112,7 @@ public class DocAugManager {
         try {
             // open data access layer
             dao = new DAL(myDbEnv.getEntityStore());
-            EntityCursor<DocAug> cursor = dao.getCursor();
+            EntityCursor<DocAug> cursor = dao.getDocCursor();
             Iterator<DocAug> docIterator = cursor.iterator();
             if (docIterator.hasNext()) {
                 result = docIterator.next();
@@ -136,7 +136,7 @@ public class DocAugManager {
         try {
             // open data access layer
             dao = new DAL(myDbEnv.getEntityStore());
-            EntityCursor<DocAug> cursor = dao.getCursor();
+            EntityCursor<DocAug> cursor = dao.getDocCursor();
             Iterator<DocAug> docIterator = cursor.iterator();
             if (docIterator.hasNext()) {
                 result = docIterator.next();

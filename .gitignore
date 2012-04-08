@@ -1,3 +1,4 @@
+# OSX files
 .DS_Store
 
 # we don't want to be versioning logs
@@ -14,7 +15,7 @@
 out/
 
 # populate the db structure, but do not version
-db/*
+# db/*
 
 # No need to version compiled output
 /bin

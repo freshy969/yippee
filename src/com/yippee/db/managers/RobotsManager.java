@@ -54,16 +54,16 @@ public class RobotsManager {
      * if entry exists. Return true if key exists (and continuation gets updated)
      * and false if not.
      *
-     * @param key the keyword requested
+     * @param host the host for which the RobotsTxt is being requested
      * @return true if continuation is updated, false o/w
      */
-    public boolean read(String key, RobotsTxt continuation) {
+    public boolean read(String host, RobotsTxt continuation) {
         boolean result = false;
         try {
             // Open the data accessor. This is used to store
             // persistent objects.
             dao = new DAL(myDbEnv.getEntityStore());
-            RobotsTxt temp = dao.getRobotsById().get(key);
+            RobotsTxt temp = dao.getRobotsById().get(host);
             if (temp != null) {
                 temp.getCrawlDelay();
                 temp.getDisallows();
@@ -74,8 +74,7 @@ public class RobotsManager {
                 result = true;
             }
         } catch (DatabaseException e) {
-            System.out.println("Exception: " + e.toString());
-            e.printStackTrace();
+        	logger.warn("Exception", e);
             result = false;
         }
         return result;
@@ -84,22 +83,32 @@ public class RobotsManager {
     /**
      * Delete a Robots.txt entry from the database (used mainly for testing)
      *
-     * @param key the key of the entry to be deleted
+     * @param host the key of the entry to be deleted
      * @return true if deleted, false o/w
      */
-    public boolean delete(String key) {
+    public boolean delete(String host) {
         boolean result = true;
         try {
             // Open the data accessor. This is used to store
             // persistent objects.
             dao = new DAL(myDbEnv.getEntityStore());
-            result = dao.getRobotsById().delete(key);
+            result = dao.getRobotsById().delete(host);
         } catch (DatabaseException e) {
-            System.out.println("Exception: " + e.toString());
-            e.printStackTrace();
+        	logger.warn("Exception", e);
             result = false;
         }
         return result;
+    }
+    
+    /**
+     * Method to test 
+     * @return
+     */
+    public boolean isEmpty(){
+    	boolean result = false;
+    	dao = new DAL(myDbEnv.getEntityStore());            
+        result = dao.getRobotsCursor().count() == 0;
+    	return result;
     }
 
     /**

@@ -44,8 +44,16 @@ public class DAL {
      *
      * @return the entity cursor
      */
-    public EntityCursor<DocAug> getCursor() {
+    public EntityCursor<DocAug> getDocCursor() {
         return docById.entities();
+    }
+    
+    /**
+     * Get a cursor for the Robots Index
+     * @return RobotsTxt entity cursor
+     */
+    public EntityCursor<RobotsTxt> getRobotsCursor(){
+    	return robotsById.entities();
     }
 
     /**

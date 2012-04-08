@@ -22,7 +22,7 @@ public class DocAugManagerTest {
         docAug.setTime(new Date());
         docAug.setUrl("http://this.is.ate.st");
         docAug.setId("1");
-        docAugManager = new DocAugManager();
+        docAugManager = new DocAugManager("db/test");
     }
 
     @Test
