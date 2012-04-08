@@ -1,12 +1,12 @@
 package com.yippee.db.model;
 
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
 import com.yippee.crawler.HttpResponse;
+
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Object to store robots.txt policy for a given host
@@ -15,7 +15,7 @@ import com.yippee.crawler.HttpResponse;
 @Entity
 public class RobotsTxt {
 
-	@PrimaryKey
+    @PrimaryKey
 	String host;
 	int crawlDelay;
 	Set<String> disallows;
@@ -54,5 +54,17 @@ public class RobotsTxt {
 
 	public Set<String> getDisallows() {
 		return disallows;
-	}	
+	}
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setCrawlDelay(int crawlDelay) {
+        this.crawlDelay = crawlDelay;
+    }
+
+    public void setDisallows(Set<String> disallows) {
+        this.disallows = disallows;
+    }
 }
