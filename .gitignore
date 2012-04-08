@@ -19,6 +19,7 @@ db/*
 # No need to version compiled output
 /bin
 /distribution
+build/*
 
 # vim backup files
 *.swp

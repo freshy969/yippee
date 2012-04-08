@@ -5,6 +5,7 @@ import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.model.DocAug;
+import com.yippee.db.model.RobotsTxt;
 
 /**
  * Data access layer class: it provides simplified access to data stored in persistent storage (BerkeleyDB). It provides
@@ -13,6 +14,8 @@ import com.yippee.db.model.DocAug;
 public class DAL {
     // DocAug Accessors
     PrimaryIndex<String, DocAug> docById;
+    // Robots Accessors
+    PrimaryIndex<String, RobotsTxt> robotsById;
 
     /**
      * Data access layer constructor
@@ -23,7 +26,8 @@ public class DAL {
     public DAL(EntityStore store) throws DatabaseException {
         // Primary key for Inventory classes
         docById = store.getPrimaryIndex(String.class, DocAug.class);
-        
+        // Robots key
+        robotsById = store.getPrimaryIndex(String.class, RobotsTxt.class);
     }
 
     /**
@@ -34,6 +38,7 @@ public class DAL {
     public PrimaryIndex<String, DocAug> getDocById() {
         return docById;
     }
+
     /**
      * Get the next object from the entity cursor
      *
@@ -41,5 +46,14 @@ public class DAL {
      */
     public EntityCursor<DocAug> getCursor() {
         return docById.entities();
+    }
+
+    /**
+     * Access RobotsTXT primary index outside package.
+     *
+     * @return the robotsTxt index
+     */
+    public PrimaryIndex<String, RobotsTxt> getRobotsById() {
+        return robotsById;
     }
 }

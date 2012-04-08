@@ -7,5 +7,10 @@ import org.junit.runners.Suite;
  * Include all tests of the Crawler Package
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({MessageTest.class})
+@Suite.SuiteClasses({	MessageTest.class,
+						HttpModuleTest.class,
+						LinkExtractorTest.class,
+						RobotsModuleTest.class,
+						URLFilterTest.class
+						})
 public class CrawlerTestSuite { }

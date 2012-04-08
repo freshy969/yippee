@@ -6,14 +6,29 @@ import com.sleepycat.persist.model.PrimaryKey;
 import java.util.Date;
 import java.util.Map;
 
-
 @Entity
 public class DocAug{
+	
+	/**
+	 * Unique id for this document crawled at some time
+	 */
     @PrimaryKey
     private String id;
+    /**
+     * url for this document
+     */
     private String url;
+    /**
+     * String for the contents of the crawled document
+     */
     private String doc;
+    /**
+     * time doc was crawled
+     */
     private Date time;
+    /**
+     * Headers received when doc was crawled
+     */
     private Map<String, String> headers;
 
     public DocAug(){}
