@@ -6,10 +6,8 @@ import com.yippee.db.model.RobotsTxt;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +24,7 @@ public class RobotsModule {
      * @return
      */
     public boolean alowedToCrawl(URL url) {
-        try {
+/*        try {
             host = new URL(url.getHost());
 
             RobotsManager rm = new RobotsManager();
@@ -39,7 +37,7 @@ public class RobotsModule {
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        }*/
         return false;
     }
 
@@ -85,6 +83,8 @@ public class RobotsModule {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
+        return new RobotsTxt();
 
     }
 }
