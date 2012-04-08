@@ -82,8 +82,9 @@
     <target name="project-clean" depends="clean,jar"
             description="Clear resources and build jar"/>
 
+    <!-- start 4 applications in parallel -->
     <target name="project-run" depends="project-clean,sanity-check"
-            description="Create a single application node">
+            description="Create 4 application nodes">
         <parallel>
             <antcall target="run">
                 <param name="localPort" value="9001"/>
