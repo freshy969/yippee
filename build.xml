@@ -13,6 +13,11 @@
     <!-- one of the many ways of doing so -->
     <property name="main-class" value="com.yippee.pastry.YippeeNode"/>
 
+    <!-- We are going to make this modular -->
+    <property name="server" value="tomcat"/>
+    <property name="jetty.home" value="/media/w7/Projects/UPenn/cis555/jetty-6.1.26"/>
+    <property name="tomcat.home" value="/home/nikos/Desktop/dsk/latest/apache-tomcat-5.5.35"/>
+
 
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
@@ -57,5 +62,31 @@
 
     <target name="project-run" depends="project-clean,run"
             description="Create a single application node"/>
+
+    <target name="tomcat-startup">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=n"/>
+            <arg value="start"/>
+            <classpath>
+                <fileset dir="${tomcat.home}">
+                    <include name="bin/bootstrap.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="tomcat-shutdown">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+            <arg value="stop"/>
+            <classpath>
+                <fileset dir="${tomcat.home}">
+                    <include name="bin/bootstrap.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
 
 </project>
