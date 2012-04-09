@@ -23,13 +23,21 @@ public class Indexer extends Thread {
 	DocAugManager dam;
 	
 	public Indexer() {
-		dam = new DocAugManager();
+		dam = new DocAugManager("db");
 	}
 
 	public void run() {
-		getNextDoc();
+		DocAug docAug = getNextDoc();
 		
 		Parser parser = new Parser();
+		try {
+			Document doc = parser.parseDoc(docAug);
+			LinkTextExtractor extractor = new LinkTextExtractor();
+			extractor.extract(docAug.getUrl(), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

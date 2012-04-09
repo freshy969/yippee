@@ -1,12 +1,7 @@
 package com.yippee.indexer;
 
+import com.yippee.indexer.Lexicon;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import com.yippee.db.managers.DocAugManager;
-import com.yippee.db.model.DocAug;
-import com.yippee.indexer.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;

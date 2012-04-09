@@ -1,9 +1,12 @@
 package com.yippee.indexer;
 
+import java.util.HashMap;
+
 public class WordStemmer {
+	HashMap<String,String> exceptionWords = new HashMap<String,String>();
 	
 	public WordStemmer(){
-		
+		exceptionWords.put("going", "go");
 	}
 
 	/**
@@ -14,8 +17,9 @@ public class WordStemmer {
 	 */
 	public String stem(String word) {
 		int length = word.length();
-		if(length>=3 && word.endsWith("ies")) {return word.substring(0,length-3)+"y";}
-		else if(length>=4 && word.endsWith("ing")) {return word.substring(0,length-3);}
+		if (checkException(word)) {return exceptionWords.get(word);}
+		else if(length>=3 && word.endsWith("ies")) {return word.substring(0,length-3)+"y";}
+		else if(length>=5 && word.endsWith("ing")) {return word.substring(0,length-3);}
 		else if(length>=3 && word.endsWith("ss")) {return word;}
 		else if(length>=3 && word.endsWith("s")) {return word.substring(0,length-1);}
 		else if(length>=3 && word.endsWith("ed")) {return word.substring(0,length-2);}
@@ -29,9 +33,9 @@ public class WordStemmer {
 	 * @param word
 	 * @return
 	 */
-	public boolean checkExcpetion(String word) {
-	
-		return false;
+	public boolean checkException(String word) {
+		if(exceptionWords.containsKey(word)) return true;
+		else return false;
 	}
 
 	
