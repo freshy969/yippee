@@ -23,7 +23,7 @@ public class Indexer extends Thread {
 	DocAugManager dam;
 	
 	public Indexer() {
-		dam = new DocAugManager("db");
+		dam = new DocAugManager();
 	}
 
 	public void run() {
