@@ -44,4 +44,25 @@ public class WordStemmerTest {
 		String m = stemmer.stem("sings");
 		assertTrue(m.equals("sing"));
 	}
+	
+	@Test 
+	public void testStemList() {
+		String[] wordlist = {"what", "blazes", "carries", "foreboding", "news"};
+		
+		String[] results = stemmer.stemList(wordlist);
+		
+		for (int i = 0; i < results.length; i++) {
+			if (i == 0) {
+				assertTrue(results[i].equals("what"));
+			} else if (i == 1) {
+				assertTrue(results[i].equals("blaze"));
+			} else if (i == 2) {
+				assertTrue(results[i].equals("carry"));
+			} else if (i == 3) {
+				assertTrue(results[i].equals("forebod"));
+			} else if (i == 4) {
+				assertTrue(results[i].equals("new"));
+			}
+		}
+	}
 }
