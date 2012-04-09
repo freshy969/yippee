@@ -2,6 +2,9 @@ package com.yippee.db.managers;
 
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +18,20 @@ public class RobotsManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		rm = new RobotsManager("db");
+		rm = new RobotsManager("db/test");
 		
+		robots = new RobotsTxt();
+		robots.setCrawlDelay(10);
+		robots.setDisallows(new HashSet<String>());
+		robots.setHost("cis.upenn.edu");
+		
+		rm.create(robots);
+	}
+	
+	@After
+	public void tearDown(){
+		rm.delete(robots.getHost());
+		rm.close();
 	}
 	
 	@Test
@@ -26,29 +41,62 @@ public class RobotsManagerTest {
 	
 	@Test
 	public void testCreateReturnsFalseForRobotsTxtWithoutInitializedFields(){
-		robots = new RobotsTxt(new HttpResponse());
-		assertFalse(rm.create(robots));
+		RobotsTxt emptyRobots = new RobotsTxt(new HttpResponse());
+		assertFalse(rm.create(emptyRobots));
 	}
 	
 	@Test
 	public void testCreatePutsWellFormedRobotsTxtIntoDb(){
-		//assertTrue(rm.create(robots));
-		fail("not implemented");
+		RobotsTxt newRobots = new RobotsTxt();
+
+		newRobots = new RobotsTxt();
+		newRobots.setCrawlDelay(10);
+		newRobots.setDisallows(new HashSet<String>());
+		newRobots.setHost("cis.upenn.edu");
+		assertTrue(rm.create(newRobots));
+		
+		rm.delete(newRobots.getHost());
 	}
 	
 	@Test
 	public void testCreateReturnsFalseForADuplicate(){
-		fail("not implemented");
+		RobotsTxt newRobots = new RobotsTxt();
+
+		newRobots = new RobotsTxt();
+		newRobots.setCrawlDelay(10);
+		newRobots.setDisallows(new HashSet<String>());
+		newRobots.setHost("cis.upenn.edu");
+		assertTrue(rm.create(newRobots));
+		
+		RobotsTxt duplicate = new RobotsTxt();
+		duplicate.setCrawlDelay(10);
+		duplicate.setDisallows(new HashSet<String>());
+		duplicate.setHost("cis.upenn.edu");
+		
+		assertFalse(rm.create(duplicate));
 	}
 	
 	@Test
 	public void testCanExtractStoredRobotsTxtFromDb(){
-		fail("not implemented");
+		RobotsTxt readFromDb = new RobotsTxt();;
+		assertTrue(rm.read("cis.upenn.edu", readFromDb));
+		
+		assertEquals(robots.getHost(), readFromDb.getHost());
+		assertEquals(robots.getCrawlDelay(), readFromDb.getCrawlDelay());
+		
+		assertTrue("Extracted Robots has things not in the Robots stored", robots.getDisallows().containsAll(readFromDb.getDisallows()));
+		assertTrue("Extracted robots is missing items that were stored", readFromDb.getDisallows().containsAll(robots.getDisallows()));
+	
 	}
 	
 	@Test
 	public void testDeleteRemovesRobotsTxtFromDb(){
 		fail("not implemented");
+		assertTrue(rm.create(robots));
+		
+		
+		assertTrue(rm.delete(robots.getHost()));
+		//assertFalse(rm.read(key, continuation));
 	}
 	
 	

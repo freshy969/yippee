@@ -10,6 +10,22 @@ public class WordStemmer {
 	}
 
 	/**
+	 * Takes a list of words and implements stemming procedure
+	 * 
+	 * @param words
+	 * @return stemmed words
+	 */
+	public String[] stemList(String[] words) {
+		String[] results = new String[words.length];
+		
+		for(int i = 0; i < words.length; i++) {
+			results[i] = stem(words[i].trim());
+		}
+
+		return results;
+	}
+	
+	/**
 	 * takes a word and implements stemming procedure
 	 * 
 	 * @param word

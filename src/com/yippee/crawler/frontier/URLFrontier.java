@@ -21,7 +21,6 @@ public interface URLFrontier {
      */
     public Message pull() throws InterruptedException;
 
-    /**
      /**
      * Pushes the URL to the shared queue.
      *

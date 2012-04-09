@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;
@@ -23,21 +24,29 @@ public class Indexer extends Thread {
 	DocAugManager dam;
 	
 	public Indexer() {
-		dam = new DocAugManager();
+//		dam = new DocAugManager("db");
 	}
 
 	public void run() {
-		DocAug docAug = getNextDoc();
 		
-		Parser parser = new Parser();
-		try {
-			Document doc = parser.parseDoc(docAug);
-			LinkTextExtractor extractor = new LinkTextExtractor();
-			extractor.extract(docAug.getUrl(), null);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		while(true) {
+			DocAug docAug = getNextDoc();
+			Parser parser = new Parser();
+			LinkTextExtractor linkEx = new LinkTextExtractor();
+			
+			try {
+				parser.parseDoc(docAug);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			ArrayList<String> text = linkEx.getText();
+			
+			//TODO Store these to their appropriate places, such that PageRank/Search Engine can use them later.
+			ArrayList<String> lexicon = createLexicon(text);
+			ArrayList<String> links = linkEx.getLinks();
+//		}
 	}
 	
 	/**
@@ -46,5 +55,26 @@ public class Indexer extends Thread {
 	public DocAug getNextDoc() {
 		DocAug docAug = dam.poll();
 		return docAug;
+	}
+	
+	/**
+	 * Parses the entire text content of a document, filtering text for non-alphanumerical symbols, and parsing them through the stemmed results.
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public ArrayList<String> createLexicon(ArrayList<String> text) {
+		Lexicon lexicon = new Lexicon();
+		WordStemmer stemmer = new WordStemmer();
+		
+		for (int i = 0; i < text.size(); i++) {
+			String sentence = text.get(i);
+			sentence = sentence.replaceAll("\\W", " ");
+			String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
+			
+			lexicon.addListToLexicon(stemlist);
+		}
+		
+		return lexicon.getLexicon();
 	}
 }

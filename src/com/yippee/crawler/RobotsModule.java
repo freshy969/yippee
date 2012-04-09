@@ -1,11 +1,13 @@
 package com.yippee.crawler;
 
+import com.yippee.Configuration;
 import com.yippee.db.managers.RobotsManager;
 import com.yippee.db.model.RobotsTxt;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashSet;
@@ -13,34 +15,38 @@ import java.util.Set;
 
 public class RobotsModule {
 
-    private RobotsManager robotsManager;
     private URL host;
 
     /**
-     * TODO: dubious semantics as allowedToCrawl() may be false because of crawl
-     * TODO: delay -- caller should not discard the url.
+     * It checks if the url can be crawled with respect only to disallows and
+     * <i>not</i> crawl-delay. If needed, it fetches robots.txt and stores all
+     * information to the database
      *
-     * @param url
-     * @return
+     * @param url the url to be crawled
+     * @return yes if allowed; no o/w
      */
     public boolean alowedToCrawl(URL url) {
-/*        try {
+        try {
             host = new URL(url.getHost());
-
-            RobotsManager rm = new RobotsManager();
-            RobotsTxt robotsTxt = rm.getRobotsTxt(host);
-            if (robotsTxt == null) {
+            String db = Configuration.getInstance().getBerkeleyDB();
+            RobotsManager rm = new RobotsManager(db);
+            RobotsTxt robotsTxt = new RobotsTxt();
+            if (!rm.read(host.getHost(),robotsTxt)) {
                 robotsTxt = fetchRobots();
                 rm.create(robotsTxt);
             }
             rm.close();
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }*/
+        }
         return false;
     }
 
+    /**
+     * Fetch robots.txt the host of the url passed to the constructor.
+     *
+     * @return the RobotsTxt entity object to be inserted to the database
+     */
     private RobotsTxt fetchRobots() {
         URLConnection urlConnection = null;
         try {
@@ -81,7 +87,8 @@ public class RobotsModule {
             }
             in.close();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
+            //TODO: LOG ERROR
         }
 
         return new RobotsTxt();

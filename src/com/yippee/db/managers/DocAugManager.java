@@ -112,7 +112,7 @@ public class DocAugManager {
         try {
             // open data access layer
             dao = new DAL(myDbEnv.getEntityStore());
-            EntityCursor<DocAug> cursor = dao.getCursor();
+            EntityCursor<DocAug> cursor = dao.getDocCursor();
             Iterator<DocAug> docIterator = cursor.iterator();
             if (docIterator.hasNext()) {
                 result = docIterator.next();
@@ -136,7 +136,7 @@ public class DocAugManager {
         try {
             // open data access layer
             dao = new DAL(myDbEnv.getEntityStore());
-            EntityCursor<DocAug> cursor = dao.getCursor();
+            EntityCursor<DocAug> cursor = dao.getDocCursor();
             Iterator<DocAug> docIterator = cursor.iterator();
             if (docIterator.hasNext()) {
                 result = docIterator.next();
