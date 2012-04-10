@@ -1,16 +1,16 @@
-package com.yippee.indexer;
+package com.yippee.util;
 
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import com.yippee.indexer.Parser;
+import com.yippee.util.LinkTextExtractor;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
-import com.yippee.db.managers.DocAugManager;
 import com.yippee.db.model.DocAug;
 
 public class ParserExtractTest {
@@ -45,7 +45,7 @@ public class ParserExtractTest {
 	
 	@Test
 	public void testParser() {	
-		Parser parser = new Parser();	
+		Parser parser = new Parser();
 		Document doc = null;
 		
 		try {
