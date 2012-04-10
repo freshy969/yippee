@@ -144,7 +144,7 @@ public class ParserExtractTest {
 
 //		System.out.println(linkEx.getLinks());
         ArrayList<String> links = linkEx.getLinks();
-        assertTrue("http://crawltest.cis.upenn.edu/rss/cnnp.xml".equals(links.get(0)));
+        assertTrue(assertUrls[0].equals(links.get(0)));
     }
 
     @Test
@@ -186,7 +186,7 @@ public class ParserExtractTest {
 
         //		System.out.println(linkEx.getText());
         ArrayList<String> text = linkEx.getText();
-        assertEquals(11, text.size());
+        assertEquals(11, text.size());  // not sure what text means
         assertTrue("CSE455/CIS555 HW2 Grading Data".equals(text.get(0)));
     }
 }
