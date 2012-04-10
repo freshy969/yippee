@@ -15,7 +15,7 @@ public class ParserExtractTest {
     /*
     Please do not remove urls, since the tests are going to break;
     if you want to add a url, just add it below, and update assertUrls table!
-    Current Number: *21* (update also url assertion arrays)
+    Current Number: *23* (update also url assertion arrays)
     TODO: add #tags in url
      */
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD><BODY>" +
@@ -36,7 +36,7 @@ public class ParserExtractTest {
             "      <li><a href=\"../AsiaPacific.html\">Asia</a></li>\n" +
 
             //these should pass, are nothing special (level 0)
-            "<li><a href=\"http://n.v.a.s.i.ak.is/~nvas/something/Africa.html\">dots</a></li>\n" +
+            "<li><a href=\"http://d.o.t.y/~nvas/something/Africa.html\">dots</a></li>\n" +
             "<li><a href=\"http://domain:8080/./Americas.html\">port</a></li>\n" +
             "<li><a href=\"http://www.seas.upenn/../AsiaPacific.html\">..</a></li>\n" +
             "<li><a href=\"http://we.com/index.php\">domain</a></li>\n" +
@@ -44,11 +44,12 @@ public class ParserExtractTest {
             "<li><a href=\"http://we.com/index/\">domain</a></li>\n" +
 
             // these are a bit advanced (level 2)
-            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/./ea.html\">Business</a></li>\n" +
-            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/\">Europe</a></li>\n" +
-            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index\">Front Page</a></li>\n" +
-            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/whatevah/../ea.html\">Middle East</a></li>\n" +
-            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/ea.html\">Movie Reviews</a></li>" +
+            "      <li><a href=\"nothingSpecial/./ea.html\">Business</a></li>\n" +
+            "      <li><a href=\"nothingSpecial/\">Europe</a></li>\n" +
+            "      <li><a href=\"nothingSpecial\">Front Page</a></li>\n" +
+            "      <li><a href=\"nothingSpecial/whatevah/../ea.html\">Middle East</a></li>\n" +
+            "      <li><a href=\"?who=me\">params</a></li>" +
+            "      <li><a href=\"#tag\">tags</a></li>" +
             "</UL>" +
             "<H3>NON XML files</H3>" +
             "<UL>" +
@@ -57,35 +58,38 @@ public class ParserExtractTest {
             "</UL>" +
             "</BODY></HTML>";
 
-    // TODO: there must be 4 tables, depending of the url of the current page, this is only for (1):
+    // TODO: there must be 5 tables, depending of the url of the current page, this is only for (1):
     // 1. for http://crawltest.cis.upenn.edu/index.html
     // 2. for http://crawltest.cis.upenn.edu/index
     // 3. for http://crawltest.cis.upenn.edu/index/
-    // 4. for http://crawltest.cis.upenn.edu
+    // 4. for http://crawltest.cis.upenn.edu/
+    // 5. for http://crawltest.cis.upenn.edu:8080
 
-    // This array contains the correct assertions *21*
+    // This array contains the correct assertions *23*
     String[] assertUrls = {
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml", // the first three are the same, not sure why -- TJ Margarita,
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml", // is there any specific reason for this? such as different anchor text
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml", // the first three are the same, not sure why -- TJ Margarita,
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml", // is there any specific reason for this? such as different anchor text
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
+            "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml",
+            "http://crawltest.cis.upenn.edu/index/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/index/./Americas.html",
+            "http://crawltest.cis.upenn.edu/index/../AsiaPacific.html",
+            "http://d.o.t.y/~nvas/something/Africa.html",
+            "http://domain:8080/./Americas.html",
+            "http://we.com/index.php",
+            "http://we.com/index",
+            "http://we.com/index/",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
     };
 
     DocAug docAug;
@@ -94,7 +98,7 @@ public class ParserExtractTest {
     public void setUp() throws Exception {
         docAug = new DocAug();
         docAug.setDoc(testHTML);
-        docAug.setUrl("http://crawltest.cis.upenn.edu/index.html");
+        docAug.setUrl("http://crawltest.cis.upenn.edu/index/index.html");
     }
 
     @Test
