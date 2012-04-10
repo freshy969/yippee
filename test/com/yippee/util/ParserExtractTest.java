@@ -38,17 +38,19 @@ public class ParserExtractTest {
             "<li><a href=\"http://d.o.t.y/~nvas/something/Africa.html\">dots</a></li>\n" +
             "<li><a href=\"http://domain:8080/./Americas.html\">port</a></li>\n" +
             "<li><a href=\"http://www.seas.upenn/../AsiaPacific.html\">..</a></li>\n" +
+
             "<li><a href=\"http://we.com/index.php\">domain</a></li>\n" +
             "<li><a href=\"http://we.com/index\">domain</a></li>\n" +
             "<li><a href=\"http://we.com/index/\">domain</a></li>\n" +
             "<li><a href=\"http://we.com\">domain</a></li>\n" +
             "<li><a href=\"http://we.com/\">domain</a></li>\n" +
 
-            // these are a bit advanced (level 2)
+            // these are a bit advanced (level 2) -- these should have different semantics depending whether we are in a dir or page!
             "      <li><a href=\"nothingSpecial/./ea.html\">Business</a></li>\n" +
             "      <li><a href=\"nothingSpecial/\">Europe</a></li>\n" +
             "      <li><a href=\"nothingSpecial\">Front Page</a></li>\n" +
             "      <li><a href=\"nothingSpecial/whatevah/../ea.html\">Middle East</a></li>\n" +
+
             "      <li><a href=\"?who=me\">params</a></li>" +
             "      <li><a href=\"#tag\">tags</a></li>" +
             "</UL>" +
@@ -65,34 +67,36 @@ public class ParserExtractTest {
     // 3. for http://crawltest.cis.upenn.edu/index/
     // 4. for http://crawltest.cis.upenn.edu/
     // 5. for http://crawltest.cis.upenn.edu:8080
-
     // This array contains the correct assertions *25*
     String[] assertUrls = {
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml", // the first three are the same, not sure why -- TJ Margarita,
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml", // is there any specific reason for this? such as different anchor text
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+
             "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
             "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml", //
+
             "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
             "http://crawltest.cis.upenn.edu/index/Americas.html",
             "http://crawltest.cis.upenn.edu/AsiaPacific.html",
+
             "http://d.o.t.y/~nvas/something/Africa.html",
             "http://domain:8080/./Americas.html",
+            "http://www.seas.upenn/../AsiaPacific.html",
+
             "http://we.com/index.php",
             "http://we.com/index",
             "http://we.com/index/",
             "http://we.com",
             "http://we.com/",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/./ea.html",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/whatevah/../ea.html",
+
+            "http://crawltest.cis.upenn.edu/index/index.html?who=me",
+            "http://crawltest.cis.upenn.edu/index/index.html#tag",
     };
 
     DocAug docAug;
