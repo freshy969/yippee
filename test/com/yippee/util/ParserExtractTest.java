@@ -15,6 +15,8 @@ public class ParserExtractTest {
     /*
     Please do not remove urls, since the tests are going to break;
     if you want to add a url, just add it below, and update assertUrls table!
+    Current Number: *21* (update also url assertion arrays)
+    TODO: add #tags in url
      */
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD><BODY>" +
             "<H3>XML to be crawled</H3>" +
@@ -55,9 +57,35 @@ public class ParserExtractTest {
             "</UL>" +
             "</BODY></HTML>";
 
-    // This array contains the correct assertions
-    String[] assertUrls = {
+    // TODO: there must be 4 tables, depending of the url of the current page, this is only for (1):
+    // 1. for http://crawltest.cis.upenn.edu/index.html
+    // 2. for http://crawltest.cis.upenn.edu/index
+    // 3. for http://crawltest.cis.upenn.edu/index/
+    // 4. for http://crawltest.cis.upenn.edu
 
+    // This array contains the correct assertions *21*
+    String[] assertUrls = {
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml", // the first three are the same, not sure why -- TJ Margarita,
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml", // is there any specific reason for this? such as different anchor text
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
     };
 
     DocAug docAug;
@@ -102,10 +130,29 @@ public class ParserExtractTest {
 
 //		System.out.println(linkEx.getLinks());
         ArrayList<String> links = linkEx.getLinks();
-        assertEquals(7, links.size()); // change this to
         assertTrue("http://crawltest.cis.upenn.edu/rss/cnnp.xml".equals(links.get(0)));
     }
 
+    @Test
+    public void testNumber() {
+        Parser parser = new Parser();
+        Document doc = null;
+
+        try {
+            doc = parser.parseDoc(docAug);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+
+        linkEx.extract(docAug.getUrl(), doc);
+
+//		System.out.println(linkEx.getLinks());
+        ArrayList<String> links = linkEx.getLinks();
+        assertEquals(assertUrls.length, links.size());
+    }
 
     @Test
     public void testHead() {
