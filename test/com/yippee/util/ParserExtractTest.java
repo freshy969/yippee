@@ -15,8 +15,7 @@ public class ParserExtractTest {
     /*
     Please do not remove urls, since the tests are going to break;
     if you want to add a url, just add it below, and update assertUrls table!
-    Current Number: *23* (update also url assertion arrays)
-    TODO: add #tags in url
+    Current Number: *25* (update also url assertion arrays)
      */
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD><BODY>" +
             "<H3>XML to be crawled</H3>" +
@@ -42,6 +41,8 @@ public class ParserExtractTest {
             "<li><a href=\"http://we.com/index.php\">domain</a></li>\n" +
             "<li><a href=\"http://we.com/index\">domain</a></li>\n" +
             "<li><a href=\"http://we.com/index/\">domain</a></li>\n" +
+            "<li><a href=\"http://we.com\">domain</a></li>\n" +
+            "<li><a href=\"http://we.com/\">domain</a></li>\n" +
 
             // these are a bit advanced (level 2)
             "      <li><a href=\"nothingSpecial/./ea.html\">Business</a></li>\n" +
@@ -65,21 +66,23 @@ public class ParserExtractTest {
     // 4. for http://crawltest.cis.upenn.edu/
     // 5. for http://crawltest.cis.upenn.edu:8080
 
-    // This array contains the correct assertions *23*
+    // This array contains the correct assertions *25*
     String[] assertUrls = {
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml", // the first three are the same, not sure why -- TJ Margarita,
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml", // is there any specific reason for this? such as different anchor text
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
             "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
-            "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml",
-            "http://crawltest.cis.upenn.edu/index/~nvas/something/Africa.html",
-            "http://crawltest.cis.upenn.edu/index/./Americas.html",
-            "http://crawltest.cis.upenn.edu/index/../AsiaPacific.html",
+            "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml", //
+            "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/index/Americas.html",
+            "http://crawltest.cis.upenn.edu/AsiaPacific.html",
             "http://d.o.t.y/~nvas/something/Africa.html",
             "http://domain:8080/./Americas.html",
             "http://we.com/index.php",
             "http://we.com/index",
             "http://we.com/index/",
+            "http://we.com",
+            "http://we.com/",
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
