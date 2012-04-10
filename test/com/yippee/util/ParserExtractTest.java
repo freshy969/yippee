@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 public class ParserExtractTest {
-    // Test input
+    /*
+    Please do not remove urls, since the tests are going to break;
+    if you want to add a url, just add it below, and update assertUrls table!
+     */
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD><BODY>" +
             "<H3>XML to be crawled</H3>" +
             "<UL>" +
@@ -24,6 +27,26 @@ public class ParserExtractTest {
             "<UL>" +
             "<LI><A HREF=\"restrict/frontpage.xml\">BBC frontpage - restricted</A></LI>" +
             "<LI><A HREF=\"eurofxref-hist.xml\">Historical Euro exchange rate data - too large</A></LI>" +
+
+            // these will probably fail (level 3)
+            "      <li><a href=\"/~nvas/something/Africa.html\">Africa</a></li>\n" +
+            "      <li><a href=\"./Americas.html\">Americas</a></li>\n" +
+            "      <li><a href=\"../AsiaPacific.html\">Asia</a></li>\n" +
+
+            //these should pass, are nothing special (level 0)
+            "<li><a href=\"http://n.v.a.s.i.ak.is/~nvas/something/Africa.html\">dots</a></li>\n" +
+            "<li><a href=\"http://domain:8080/./Americas.html\">port</a></li>\n" +
+            "<li><a href=\"http://www.seas.upenn/../AsiaPacific.html\">..</a></li>\n" +
+            "<li><a href=\"http://we.com/index.php\">domain</a></li>\n" +
+            "<li><a href=\"http://we.com/index\">domain</a></li>\n" +
+            "<li><a href=\"http://we.com/index/\">domain</a></li>\n" +
+
+            // these are a bit advanced (level 2)
+            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/./ea.html\">Business</a></li>\n" +
+            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/\">Europe</a></li>\n" +
+            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index\">Front Page</a></li>\n" +
+            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/whatevah/../ea.html\">Middle East</a></li>\n" +
+            "      <li><a href=\"http://www.cis.upenn.edu/~nvas/crawltest/index/ea.html\">Movie Reviews</a></li>" +
             "</UL>" +
             "<H3>NON XML files</H3>" +
             "<UL>" +
@@ -31,6 +54,11 @@ public class ParserExtractTest {
             "<LI><A HREF=\"2.png\">2.png</A></LI>" +
             "</UL>" +
             "</BODY></HTML>";
+
+    // This array contains the correct assertions
+    String[] assertUrls = {
+
+    };
 
     DocAug docAug;
 
@@ -74,7 +102,7 @@ public class ParserExtractTest {
 
 //		System.out.println(linkEx.getLinks());
         ArrayList<String> links = linkEx.getLinks();
-        assertEquals(7, links.size());
+        assertEquals(7, links.size()); // change this to
         assertTrue("http://crawltest.cis.upenn.edu/rss/cnnp.xml".equals(links.get(0)));
     }
 
