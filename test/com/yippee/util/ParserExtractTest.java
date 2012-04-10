@@ -97,6 +97,9 @@ public class ParserExtractTest {
 
             "http://crawltest.cis.upenn.edu/index/index.html?who=me",
             "http://crawltest.cis.upenn.edu/index/index.html#tag",
+
+            "http://crawltest.cis.upenn.edu/index/1.txt",
+            "http://crawltest.cis.upenn.edu/index/2.png",
     };
 
     DocAug docAug;
