@@ -2,9 +2,7 @@ package com.yippee.crawler;
 
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -14,9 +12,9 @@ public class HttpModule {
      */
     static Logger logger = Logger.getLogger(HttpModule.class);
     /**
-     * Open connection
+     * Store the connection
      */
-    private URLConnection connection = null;
+    private URLConnection connection;
 
     /**
      * Default constructor. Builds the connection but does not issue the call,
@@ -25,27 +23,30 @@ public class HttpModule {
      * @param url the url to be requested
      */
     public HttpModule(URL url) {
-
-
         try {
-            logger.debug("Initialize with " + url.toString());
+            logger.debug("Open connection to" + url.toString());
             connection = url.openConnection();
             connection.addRequestProperty("User-Agent","cis455crawler");
-
-
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                yc.getInputStream()));
+        // read
+        //BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
     }
 
     /**
+     * Set action to HEAD or GET
      *
+     * @param action the action to be
+     *
+     * TODO: Somehow force GET or HEAD instead of exception
      */
-    public void setAction() {
-
+    public void setAction(String action) throws IllegalArgumentException{
+        if (action.equals("HEAD") || action.equals("GET"))
+                throw new IllegalArgumentException();
+        //set property
+        //connection.addRequestProperty("User-Agent","GET");
     }
 
 }
