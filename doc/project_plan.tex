@@ -4,8 +4,9 @@
 \usepackage{float}
 \usepackage{subfig}
 \usepackage{graphicx,dblfloatfix}
-\usepackage[hmargin=1.25cm, vmargin=1.5cm]{geometry}               
+\usepackage[hmargin=1.25cm, vmargin=1.75cm]{geometry}               
 \usepackage{enumitem}
+
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 
@@ -24,9 +25,9 @@
 
 \section{ Introduction }
 
-To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size is estimated to be between forty-five and fifty-five billion pages. \cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one. \cite{}REFERENCE To reach this goal, an efficient, scalable search engine is required.  This project is an attempt to develop such a system.
+To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size is estimated to be between forty-five and fifty-five billion pages.\cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one.\cite{google} To reach this goal, an efficient, scalable search engine is required.  This project is an attempt to develop such a system.
 
-Yippee is a distributed search engine designed to provide fast, relevant search results to keyword search via the web.  Section \ref{sec:approach} discusses the architecture decisions while section \ref{sec:goals}  outlines the goals we set out to achieve.  Section \ref{sec:milestones} will outline the milestones for project completion and section \ref{sec:labor} will discuss our approach to dividing the labor.
+Yippee is a distributed search engine designed to provide fast, relevant search results to keyword search via the web.  Section \ref{sec:approach} discusses the architecture decisions while Section \ref{sec:goals}  outlines the goals we set out to achieve.  Section \ref{sec:milestones} will outline the milestones for project completion and Section \ref{sec:labor} will discuss our approach to dividing the labor.
 
 
 \section{ High-level Approach }
@@ -44,6 +45,8 @@ versions, analyse the performance and optimize .
 
 The architecture of the Search Engine is shown in figure 1. Our crawler follows the mercator design\cite{mercator}; however, since the design is criticized for its centralized URLFrontier \cite{ubi,para}, we made this component pluggable, so we can easily plug in and out different versions. We are confident that this design choice will greatly affect the crawler performance.
 
+
+The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword. Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data. The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.  For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
 
 \label{sec:SOAR} %software architecture
 \begin{figure}[!b]
