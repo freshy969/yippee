@@ -1,6 +1,10 @@
-\documentclass[11pt, twocolumn]{article}
+\documentclass[11pt, letterpaper, oneside, twocolumn]{article}
 \usepackage{ amssymb }
 \usepackage{fancyvrb}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage[hmargin=1.25cm, vmargin=1.5cm]{geometry}               
 \DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 
 \newcommand{\tab}{\hspace*{2em}}
@@ -97,4 +101,11 @@ For the first milestone, Chris and Nikos will work on the Crawler and the prelim
 \item Reference 3
 \end{enumerate}
 
+\section{Appendix}
+\label{sec:SOAR} %software architecture
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.25]{figures/yippee_map.pdf}
+  \caption{Software Architecture.}
+\end{figure}
 \end{document}
