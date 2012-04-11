@@ -6,6 +6,7 @@ import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.model.DocAug;
 import com.yippee.db.model.RobotsTxt;
+import com.yippee.db.model.Word;
 
 /**
  * Data access layer class: it provides simplified access to data stored in persistent storage (BerkeleyDB). It provides
@@ -16,6 +17,8 @@ public class DAL {
     PrimaryIndex<String, DocAug> docById;
     // Robots Accessors
     PrimaryIndex<String, RobotsTxt> robotsById;
+    // Lexicon Accessors
+    PrimaryIndex<String, Word> lexiconById;
 
     /**
      * Data access layer constructor
@@ -28,6 +31,8 @@ public class DAL {
         docById = store.getPrimaryIndex(String.class, DocAug.class);
         // Robots key
         robotsById = store.getPrimaryIndex(String.class, RobotsTxt.class);
+        // Lexicon key
+        lexiconById = store.getPrimaryIndex(String.class, Word.class);
     }
 
     /**
@@ -63,5 +68,22 @@ public class DAL {
      */
     public PrimaryIndex<String, RobotsTxt> getRobotsById() {
         return robotsById;
+    }
+    
+    /**
+     * Get a cursor for the Lexicon Index
+     * @return String entity cursor
+     */
+    public EntityCursor<Word> getLexiconCursor(){
+    	return lexiconById.entities();
+    }
+
+    /**
+     * Access Lexicon primary index outside package.
+     *
+     * @return the Lexicon index
+     */
+    public PrimaryIndex<String, Word> getLexiconById() {
+        return lexiconById;
     }
 }
