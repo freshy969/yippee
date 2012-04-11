@@ -22,6 +22,11 @@ out/
 /distribution
 build/*
 
+#LaTeX
+*.pdf
+*.aux
+*.gz
+
 # vim backup files
 *.swp
 

@@ -2,7 +2,7 @@ package com.yippee.db.model;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
-import com.yippee.crawler.HttpResponse;
+import com.yippee.crawler.HttpModule;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -33,10 +33,12 @@ public class RobotsTxt {
 	public RobotsTxt() {}
 	
 	/**
-	 * Constructs a RobotsTxt from the HttpResponse resulting from a request to robots.txt at the host
-	 * @param robotsResponse
+	 * Constructs a RobotsTxt from the HttpModule resulting from a request to
+     * robots.txt at the host
+     *
+	 * @param httpModule the HttpModule to fetch robots
 	 */
-	public RobotsTxt(HttpResponse robotsResponse){
+	public RobotsTxt(HttpModule httpModule){
 		disallows = new HashSet<String>();
 		//TODO initialize this object
 	}

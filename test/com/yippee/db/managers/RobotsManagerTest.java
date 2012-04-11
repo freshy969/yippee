@@ -1,15 +1,14 @@
 package com.yippee.db.managers;
 
-import static org.junit.Assert.*;
-
-import java.util.HashSet;
-
+import com.yippee.crawler.HttpModule;
+import com.yippee.db.model.RobotsTxt;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.yippee.crawler.HttpResponse;
-import com.yippee.db.model.RobotsTxt;
+import java.util.HashSet;
+
+import static org.junit.Assert.*;
 
 public class RobotsManagerTest {
 	
@@ -41,7 +40,7 @@ public class RobotsManagerTest {
 	
 	@Test
 	public void testCreateReturnsFalseForRobotsTxtWithoutInitializedFields(){
-		RobotsTxt emptyRobots = new RobotsTxt(new HttpResponse());
+		RobotsTxt emptyRobots = new RobotsTxt(new HttpModule());
 		assertFalse(rm.create(emptyRobots));
 	}
 	

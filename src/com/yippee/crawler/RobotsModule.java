@@ -1,6 +1,6 @@
 package com.yippee.crawler;
 
-import com.yippee.Configuration;
+import com.yippee.util.Configuration;
 import com.yippee.db.managers.RobotsManager;
 import com.yippee.db.model.RobotsTxt;
 

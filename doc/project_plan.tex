@@ -1,0 +1,91 @@
+\documentclass[11pt, onecolumn]{article}
+\usepackage{ amssymb }
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
+
+\newcommand{\tab}{\hspace*{2em}}
+
+\begin{document}
+\title{Yippee: Web Search for the New Millenium}
+\author{	TJ Du
+	\and Chris Imbriano
+	\and Margarita Miranda
+	\and Nikos Vasilakis}
+\date{April 2011}
+
+\maketitle
+
+\section{ Introduction }
+
+To say the world wide web is enormous would be an understatement.  There are approximately 
+
+\section{ High-level Approach }
+
+The Yippee Search Engine will be comprised of 4 main components
+\begin{itemize}
+\item Web-crawler that will recursively download pages from the web
+\item Indexer/TDF/IDF Retrieval Engine that will index relevant document features for later retrieval 
+\item PageRank Calculations based on the Google PageRank description REFERENCE
+\item Search Engine and User Interface
+\end{itemize}
+
+Most or all of the functionality of these components will be distributed among a number of nodes coordinated with the Pastry substrate.
+
+\section{ Project Goals }
+
+\section{ Milestones }
+
+\subsection{Milestone 1}
+
+\begin{itemize}
+\item            Project Architecture Map
+\item            Deploy basic Pastry nodes locally - minimal functionality
+\item            Deploy minimal Pastry nodes to EC2
+\item            Web crawler with basic implementations of pluggable components
+\item            Basic Indexer ?
+\item            Scripts to deploy nodes locally 
+\end{itemize}
+
+
+\subsection{Milestone 2}
+
+\begin{itemize}
+\item            Completed crawler building corpus on EC2
+\item            Completed indexer building index on EC2
+\end{itemize}
+
+
+\subsection{Milestone 3}
+
+\begin{itemize}
+\item            Wire frame UI
+\item            Basic PageRank Module
+\item            Outline Final Report
+\item            Complete Crawler Final Report Section
+\item            Complete Indexer Final Report Section
+\end{itemize}
+
+
+\subsection{Milestone 4}
+
+\begin{itemize}
+\item            Evaluations of PageRank
+\item            Polish UI
+\end{itemize}
+
+
+\section{ Division of Labor }
+
+While each member of the group is ultimately responsible for monitoring progress and completion of  one of the four components described in Section 2, no individual is tasked with its implementation.  Instead, each component will be implemented by a pair of programmers.  
+
+
+
+\section{References}
+
+\begin{enumerate}
+\item Reference 1
+\item Reference 2
+\item Reference 3
+\end{enumerate}
+
+\end{document}

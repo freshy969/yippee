@@ -1,9 +1,9 @@
 package com.yippee.db.model;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class RobotsTxtTest {
 	
@@ -22,9 +22,9 @@ public class RobotsTxtTest {
 	
 //	@Test
 //	public void testSomething(){
-//		HttpResponse robotsResponse = new HttpResponse();
-//		robotsResponse.setStatus(200);
-//		robotsTxt = new RobotsTxt(robotsResponse);
+//		HttpModule robo = new HttpModule();
+//		robo.setStatus(200);
+//		robotsTxt = new RobotsTxt(robo);
 //		
 //		
 //		
