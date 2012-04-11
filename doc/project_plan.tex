@@ -27,13 +27,7 @@ To say the world wide web is enormous would be an understatement.  There are app
 
 \section{ High-level Approach }
 
-The Yippee Search Engine will be comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, an implementation of 
-\begin{itemize}
-\item Web-crawler that will recursively download pages from the web
-\item Indexer/TDF/IDF Retrieval Engine that will index relevant document features for later retrieval 
-\item PageRank Calculations based on the Google PageRank description REFERENCE
-\item Search Engine and User Interface
-\end{itemize}
+The Yippee Search Engine will be comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, an implementation of the PageRank algorithm based on REFERENCE, and an interface to allow users to search the Yippee index for pages relevant to keyword or words.
 
 Most or all of the functionality of these components will be distributed among a number of nodes coordinated with the Pastry substrate.
 
@@ -41,11 +35,6 @@ Most or all of the functionality of these components will be distributed among a
 
 Our main objective in this project is to create a stable and efficient search engine that quickly evaluates queries with high accuracy. We aim to maximize the correlation between our result rankings and those of other major search engines. Additionally we strive to make our indexing resilient to crashes, distribute PageRank calculation, and to interleave external search results into our own. If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results (along with appropriate weighting for result re-ranking).
 
-We will 
-
-\subsection{ High Accuracy }
-\subsection{ Crawler Efficiency }
-\subsection{ Query Efficiency }
 
 \section{ Milestones }
 
