@@ -40,11 +40,10 @@ Most or all of the functionality of these components will be distributed among a
 The architecture of the Search Engine  is shown in figure 1. Our crawler
 follows the mercator design\cite{mercator}; however, since the design is
 criticized for its centralized URLFrontier \cite{ubi,para}, we made this
-component  pluggable.  That way, we can easily plug  in  and  out  different
-versions, analyse the performance and optimize .
-
-The architecture of the Search Engine is shown in figure 1. Our crawler follows the mercator design\cite{mercator}; however, since the design is criticized for its centralized URLFrontier \cite{ubi,para}, we made this component pluggable, so we can easily plug in and out different versions. We are confident that this design choice will greatly affect the crawler performance.
-
+component pluggable. That  way, we can easily plug in  and out different
+versions and  analyse the performance.  Raw content  is written to  to a
+persistent, shared queue  between the crawler and  the indexer, enabling
+asynchronous indexing and page-rank.
 
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword. Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data. The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.  For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
 
@@ -99,15 +98,12 @@ For the first milestone, Chris and Nikos will work on the Crawler and the prelim
 
 \begin{thebibliography}{9}
 
-  \bibitem{websize} WorldWideWebSize.com, 11 Apr 2012 $<$http://www.worldwidewebsize.com$>$
-  \bibitem{google} Sergey Brin and Lawrence Page \emph{The Anatomy of a Large-Scale Hypertextual
-Web Search Engine}, Stanford University, 1999
+  \bibitem{websize} WorldWideWebSize.com, 11 Apr 2012 \langlehttp://www.worldwidewebsize.com\rangle
+  \bibitem{google} Sergey Brin and Lawrence Page \emph{The Anatomy of a Large-Scale Hypertextual Web Search Engine}, Stanford University, 1999
   \bibitem{pagerank} Sergey Brin and  Lawrence Page and Rajeev Motwani and Terry Winograd \emph{The PageRank Citation Ranking: Bringing Order to the Web}, Stanford InfoLab, 1999
   \bibitem{mercator} Allan Heydon and Marc Najork, \emph{Mercator: A scalable, extensible web crawler}, Compaq Systems Research Center, September 26, 2001
-  
-    \bibitem{ubi} Paolo Boldi, Bruno Codenotti, Massimo Santini, Sebastiano Vigna, \emph{UbiCrawler: a scalable fully distributed Web crawler}, Software: Practice and Experience 34 (2004), 711-726.
-
-  \bibitem{para} Paolo Boldi, Bruno Codenotti, Massimo Santini, Sebastiano Vigna, \emph{UbiCrawler: a scalable fully distributed Web crawler}, Software: Practice and Experience 34 (2004), 711-726.
+  \bibitem{ubi} Paolo Boldi, Bruno Codenotti, Massimo Santini, Sebastiano Vigna, \emph{UbiCrawler: a scalable fully distributed Web crawler}, Software: Practice and Experience 34 (2004), 711-726.
+  \bibitem{para} Junghoo Cho, Héctor Garcia-Molina, \emph{Parallel crawlers}, Proc. of the 11th International Conference on World Wide Web, 2002.
 
 
 \end{thebibliography}
