@@ -22,7 +22,7 @@ out/
 /distribution
 build/*
 
-#LaTeX
+#LaTeX -- although we allow in doc/figures
 *.pdf
 *.aux
 *.gz

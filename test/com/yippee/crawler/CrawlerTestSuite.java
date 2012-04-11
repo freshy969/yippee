@@ -9,6 +9,5 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({	MessageTest.class,
 						HttpModuleTest.class,
-						RobotsModuleTest.class,
-						})
+						RobotsModuleTest.class})
 public class CrawlerTestSuite { }

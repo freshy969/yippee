@@ -1,6 +1,5 @@
 package com.yippee.db.managers;
 
-import com.yippee.crawler.HttpModule;
 import com.yippee.db.model.RobotsTxt;
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +39,7 @@ public class RobotsManagerTest {
 	
 	@Test
 	public void testCreateReturnsFalseForRobotsTxtWithoutInitializedFields(){
-		RobotsTxt emptyRobots = new RobotsTxt(new HttpModule());
+		RobotsTxt emptyRobots = new RobotsTxt();
 		assertFalse(rm.create(emptyRobots));
 	}
 	

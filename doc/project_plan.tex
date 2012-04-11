@@ -1,6 +1,11 @@
-\documentclass[11pt, twocolumn]{article}
+
+\documentclass[11pt, letterpaper, oneside, twocolumn]{article}
 \usepackage{ amssymb }
 \usepackage{fancyvrb}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage[hmargin=1.25cm, vmargin=1.5cm]{geometry}               
 \DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 
 \newcommand{\tab}{\hspace*{2em}}
@@ -33,6 +38,10 @@ Most or all of the functionality of these components will be distributed among a
 
 \section{ Project Goals }
 
+Our main objective in this project is to create a stable and efficient search engine that quickly evaluates queries with high accuracy. We aim to maximize the correlation between our result rankings and those of other major search engines. Additionally we strive to make our indexing resilient to crashes, distribute PageRank calculation, and to interleave external search results into our own. If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results (along with appropriate weighting for result re-ranking).
+
+We will 
+
 \subsection{ High Accuracy }
 \subsection{ Crawler Efficiency }
 \subsection{ Query Efficiency }
@@ -40,37 +49,49 @@ Most or all of the functionality of these components will be distributed among a
 \section{ Milestones }
 
 \subsection{Milestone 1}
-First, we plan to create a complete map of our project architecture to ensure we
-have a thoughtful design. Then, we will deploy minimally functioning
-Pastry nodes locally and write the scripts to do so. Once that is
-working, we will migrate those nodes to EC2. The web crawler will have a basic
-implementation of pluggable components. The indexer will have a static lexicon
-and all major components communicating with each other. 
+
+\begin{itemize}
+\item            Project Architecture Map
+\item            Deploy basic Pastry nodes locally - minimal functionality
+\item            Deploy minimal Pastry nodes to EC2
+\item            Web crawler with basic implementations of pluggable components
+\item            Basic Indexer ?
+\item            Scripts to deploy nodes locally 
+\end{itemize}
 
 
 \subsection{Milestone 2}
-We will complete both the crawler and indexer and start these components on EC2
-to begin building the corpus and index. 
+
+\begin{itemize}
+\item            Completed crawler building corpus on EC2
+\item            Completed indexer building index on EC2
+\end{itemize}
 
 
 \subsection{Milestone 3}
-A basic PageRank Module should be created and working. We will create a wire
-frame for the UI of our web application. For our final report, we will write a complete outline with finished report sections for the crawler
-and indexer. 
+
+\begin{itemize}
+\item            Wire frame UI
+\item            Basic PageRank Module
+\item            Outline Final Report
+\item            Complete Crawler Final Report Section
+\item            Complete Indexer Final Report Section
+\end{itemize}
 
 
 \subsection{Milestone 4}
-We will evaluate the performance of our PageRank and finish polishing the UI. 
+
+\begin{itemize}
+\item            Evaluations of PageRank
+\item            Polish UI
+\end{itemize}
 
 
 \section{ Division of Labor }
 
-While each member of the group is ultimately responsible for monitoring progress and completion of  one of the four components described in Section 2, no individual is tasked with its implementation.  Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members breaks off to implement their assigned component. 
+While each member of the group is ultimately responsible for monitoring progress and completion of one of the four components described in Section 2, no individual is tasked with its implementation.  Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members implements their assigned component.  The other two group members will write black box tests of the agreed upon interface without inspecting the source code such that their tests are unbiased towards any particular implementation decision. The sign-off responsibility is divided as follows: Crawler - Nikos, Indexer - Margarita, PageRank - Chris, Search Engine and Web UI - TJ.
 
-For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry
-
- each component will be implemented by a pair of programmers.  So, once a high level architecture has been established by the group, the pair responsible ofr each component will break of and handle the imp
-
+For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer. The same approach will be used for PageRank and User Interface but the team members may be shuffled.
 
 
 \section{References}
@@ -81,4 +102,11 @@ For the first milestone, Chris and Nikos will work on the Crawler and the prelim
 \item Reference 3
 \end{enumerate}
 
+\section{Appendix}
+\label{sec:SOAR} %software architecture
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=0.25]{figures/yippee_map.pdf}
+  \caption{Software Architecture.}
+\end{figure}
 \end{document}
