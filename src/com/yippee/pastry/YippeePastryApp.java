@@ -1,12 +1,34 @@
 package com.yippee.pastry;
 
-import rice.p2p.commonapi.Application;
-import rice.p2p.commonapi.Id;
-import rice.p2p.commonapi.Message;
-import rice.p2p.commonapi.NodeHandle;
-import rice.p2p.commonapi.RouteMessage;
+import org.apache.log4j.Logger;
+import rice.p2p.commonapi.*;
 
 public class YippeePastryApp implements Application {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(YippeePastryApp.class);
+    /**
+     * The current pastry substrate node
+     */
+    private Node node;
+    /**
+     * The current endpoint
+     */
+    private Endpoint endpoint;
+
+    /**
+     * Constructor
+     *
+     * @param nodeFactory
+     * @param database
+     */
+    public YippeePastryApp(NodeFactory nodeFactory, String database) {
+        logger.info("Register Application");
+        node = nodeFactory.getNode();
+        endpoint = node.buildEndpoint(this, "P2P App");
+        endpoint.register();
+    }
 
     /**
      * Called when the Pastry application receives a message. It pushes the url
@@ -15,9 +37,42 @@ public class YippeePastryApp implements Application {
      *
      */
 	public void deliver(Id id, Message message) {
-
+        PastryMessage om = (PastryMessage) message;
+        logger.info("Received message " + om.content + " from " + om.from);
+        if (om.wantResponse) { // if it is a query
+            if (om.content.equals("PING")) {
+                System.out.println("Received PING to ID " + id + " from node " + om.from.getId() + "; returning PONG");
+                sendDirect(om.from, "PONG");
+            }
 
 	}
+
+
+    /**
+     * Called to route a message to the id
+     */
+    void send(Id idToSendTo, String msgString) {
+        if (msgString.equals("PING")) {
+            System.out.println("Sending PING to " + idToSendTo);
+
+        }
+        logger.info(this + " sending to " + idToSendTo);
+        P2PMessage message = new P2PMessage(node.getLocalNodeHandle(), msgString);
+        endpoint.route(idToSendTo, message, null);
+    }
+
+    /**
+     * Called to directly send a message to the nh
+     */
+    public void sendDirect(NodeHandle nh, String msgString) {
+
+        logger.info(this + " sending direct to " + nh);
+        P2PMessage message = new P2PMessage(node.getLocalNodeHandle(), msgString);
+        message.wantResponse = false;
+        endpoint.route(null, message, nh);
+    }
+
+
 
     /**
      * This is always true in our application.
