@@ -1,13 +1,9 @@
 package com.yippee.indexer;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import org.w3c.dom.Document;
-import org.w3c.tidy.Tidy;
+import com.yippee.util.LinkTextExtractor;
 
 import com.yippee.db.managers.DocAugManager;
 import com.yippee.db.model.DocAug;

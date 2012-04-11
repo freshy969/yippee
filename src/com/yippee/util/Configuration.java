@@ -1,4 +1,4 @@
-package com.yippee;
+package com.yippee.util;
 
 import org.apache.log4j.Logger;
 

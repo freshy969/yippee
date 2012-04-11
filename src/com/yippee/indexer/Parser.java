@@ -1,16 +1,19 @@
 package com.yippee.indexer;
 
+import com.yippee.db.model.DocAug;
+import org.w3c.dom.Document;
+import org.w3c.tidy.Tidy;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import org.w3c.dom.Document;
-import org.w3c.tidy.Tidy;
-import com.yippee.db.model.DocAug;
 
 /**
  * @author tdu2 This class takes a DocAug object from the manager queue and
  *         parses out the relevant parameters for the indexer.
+ *
+ * @author nvasilakis changed parseDoc to public
  * 
  */
 public class Parser {
@@ -23,7 +26,7 @@ public class Parser {
 	 * Parses the HTML content of DocAug object and returns it as Document DOM.
 	 * @throws FileNotFoundException 
 	 */
-	protected Document parseDoc(DocAug docAug) throws FileNotFoundException {
+	public Document parseDoc(DocAug docAug) throws FileNotFoundException {
 		File tmpFile = new File("tmp.file");
 		PrintWriter fileOut;
 		
