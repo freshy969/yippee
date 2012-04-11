@@ -41,7 +41,7 @@ The architecture of the Search Engine  is shown in figure 1. Our crawler
 follows the mercator design\cite{mercator}; however, since the design is
 criticized for its centralized URLFrontier \cite{ubi,para}, we made this
 component pluggable. That  way, we can easily plug in  and out different
-versions and  analyse the performance.  Raw content  is written to  to a
+versions  and analyse  the  performance.  Raw content  is  written to  a
 persistent, shared queue  between the crawler and  the indexer, enabling
 asynchronous indexing and page-rank.
 
