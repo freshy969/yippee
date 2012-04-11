@@ -34,7 +34,10 @@ Most or all of the functionality of these components will be distributed among a
 
 The architecture of the Search Engine is shown in figure 1. Our crawler
 follows the mercator design\cite{mercator}; however, since the design is
-criticized for its centralized URLFrontier \cite{ubi}
+criticized for its centralized URLFrontier \cite{ubi,para}, we made this
+component pluggable, so we can easily plug in and out different
+versions. We are confident that this design choice will greatly affect
+the crawler performance.
 
 
 
@@ -89,8 +92,7 @@ For the first milestone, Chris and Nikos will work on the Crawler and the prelim
 \begin{thebibliography}{9}
   \bibitem{mercator} Allan Heydon and Marc Najork, \emph{Mercator: A scalable, extensible web crawler}, Compaq Systems Research Center, September 26, 2001.
   \bibitem{ubi} Paolo Boldi, Bruno Codenotti, Massimo Santini, Sebastiano Vigna, \emph{UbiCrawler: a scalable fully distributed Web crawler}, Software: Practice and Experience 34 (2004), 711–726.
-
-  \bibitem{test2} Allan Heydon and Marc Najork, \emph{Mercator: A scalable, extensible web crawler}, Compaq Systems Research Center, September 26, 2001
+  \bibitem{para} Paolo Boldi, Bruno Codenotti, Massimo Santini, Sebastiano Vigna, \emph{UbiCrawler: a scalable fully distributed Web crawler}, Software: Practice and Experience 34 (2004), 711–726.
 
 \end{thebibliography}
 
