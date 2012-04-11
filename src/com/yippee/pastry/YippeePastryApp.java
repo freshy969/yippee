@@ -41,10 +41,15 @@ public class YippeePastryApp implements Application {
         logger.info("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
             if (om.content.equals("PING")) {
-                System.out.println("Received PING to ID " + id + " from node " + om.from.getId() + "; returning PONG");
+                logger.info("Received PING to ID " + id + " from node " +
+                        om.from.getId() + "; returning PONG");
                 sendDirect(om.from, "PONG");
+            } // else for other queries
+        } else {
+            if (om.content.equals("PONG")) {
+                logger.info("Received PONG from node " + om.from.getId());
             }
-
+        }
 	}
 
 
@@ -57,17 +62,17 @@ public class YippeePastryApp implements Application {
 
         }
         logger.info(this + " sending to " + idToSendTo);
-        P2PMessage message = new P2PMessage(node.getLocalNodeHandle(), msgString);
+        PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
         endpoint.route(idToSendTo, message, null);
     }
 
     /**
-     * Called to directly send a message to the nh
+     * Called to directly send a message to the node handle
      */
     public void sendDirect(NodeHandle nh, String msgString) {
 
         logger.info(this + " sending direct to " + nh);
-        P2PMessage message = new P2PMessage(node.getLocalNodeHandle(), msgString);
+        PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
         message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
