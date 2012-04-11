@@ -5,9 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+
+import rice.pastry.Id;
 
 
 import com.sleepycat.bind.tuple.StringBinding;
@@ -101,7 +105,17 @@ public class LexiconManager {
      * @return
      */
     public byte[] getWordId(String word) {
-    	return null;
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] content = word.getBytes();
+		md.update(content);
+		byte[] shaDigest = md.digest();
+		return shaDigest;
     }
     
     /**
@@ -115,7 +129,7 @@ public class LexiconManager {
     }
     
     /**
-     * Method to test 
+     * Method to test if empty
      * @return
      */
     public boolean isEmpty(){
@@ -125,7 +139,12 @@ public class LexiconManager {
     	return result;
     }
     
-    public String peek(String word) {
+    /**
+     * returns id of word
+     * @param word
+     * @return
+     */
+    public String peekId(String word) {
       //  boolean result = false;
         try {
             // open data access layer
