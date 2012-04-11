@@ -52,7 +52,6 @@ public class YippeePastryApp implements Application {
         }
 	}
 
-
     /**
      * Called to route a message to the id
      */
@@ -76,8 +75,6 @@ public class YippeePastryApp implements Application {
         message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
-
-
 
     /**
      * This is always true in our application.
