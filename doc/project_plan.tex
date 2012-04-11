@@ -33,14 +33,14 @@ Yippee is a distributed search engine designed to provide fast, relevant search 
 
 The Yippee Search Engine is comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our version of Google's PageRank algorithm \cite{pagerank}, and a web interface to allow users to search the Yippee index for pages relevant to keyword or words.
 
-Most or all of the functionality of these components will be distributed among a number of nodes coordinated with the Pastry substrate. 
+Most or all of the functionality of these components will be distributed among a number of nodes coordinated via the Pastry substrate. 
 
 The architecture of the Search Engine  is shown in figure 1. Our crawler
-follows the mercator design\cite{mercator}; however, since the design is
+follows the Mercator design\cite{mercator}; however, since the design is
 criticized for its centralized URLFrontier \cite{ubi,para}, we made this
-component pluggable. That  way, we can easily plug in  and out different
-versions  and analyse  the  performance.  Raw content  is  written to  a
-persistent, shared queue  between the crawler and  the indexer, enabling
+component pluggable. That  way, we can easily plug in different implementations 
+and analyze the  performance.  Raw content  is  written to a persistent, shared queue  
+between the crawler and  the indexer, enabling
 asynchronous indexing and page-rank.
 
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword. Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data. The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.  For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
