@@ -1,9 +1,6 @@
 \documentclass[11pt, twocolumn]{article}
 \usepackage{ amssymb }
 \usepackage{fancyvrb}
-\usepackage{float}
-\usepackage{subfig}
-\usepackage{graphicx}
 \DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 
 \newcommand{\tab}{\hspace*{2em}}
@@ -36,7 +33,9 @@ Most or all of the functionality of these components will be distributed among a
 
 \section{ Project Goals }
 
-Our main objective in this project is to create a stable and efficient search engine that quickly evaluates queries with high accuracy. We aim to maximize the correlation between our result rankings and those of other major search engines with hopes of matching or exceeding their performance in either speed/accuracy or both. Additionally we strive to make our indexing resilient to crashes, distribute PageRank calculation, and to interleave external search results into our own. If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results (along with appropriate weighting for result re-ranking).
+Our main objective in this project is to create a stable and efficient search engine that quickly evaluates queries with high accuracy. We aim to maximize the correlation between our result rankings and those of other major search engines. Additionally we strive to make our indexing resilient to crashes, distribute PageRank calculation, and to interleave external search results into our own. If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results (along with appropriate weighting for result re-ranking).
+
+We will 
 
 \subsection{ High Accuracy }
 \subsection{ Crawler Efficiency }
@@ -87,7 +86,8 @@ Our main objective in this project is to create a stable and efficient search en
 
 While each member of the group is ultimately responsible for monitoring progress and completion of one of the four components described in Section 2, no individual is tasked with its implementation.  Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members implements their assigned component.  The other two group members will write black box tests of the agreed upon interface without inspecting the source code such that their tests are unbiased towards any particular implementation decision. The sign-off responsibility is divided as follows: Crawler - Nikos, Indexer - Margarita, PageRank - Chris, Search Engine and Web UI - TJ.
 
-For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer.
+For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer. The same approach will be used for PageRank and User Interface but the team members may be shuffled.
+
 
 \section{References}
 
@@ -97,11 +97,4 @@ For the first milestone, Chris and Nikos will work on the Crawler and the prelim
 \item Reference 3
 \end{enumerate}
 
-\section{Appendix}
-\label{sec:SOAR} %software architecture
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=0.75]{figures/yippee_map.pdf}
-  \caption{Software Architecture.}
-\end{figure}
 \end{document}
