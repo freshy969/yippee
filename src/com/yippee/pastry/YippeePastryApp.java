@@ -15,7 +15,7 @@ public class YippeePastryApp implements Application {
      *
      */
 	public void deliver(Id id, Message message) {
-		// TODO Auto-generated method stub
+
 
 	}
 
@@ -33,9 +33,5 @@ public class YippeePastryApp implements Application {
      * Called when we hear about a new neighbor.
      * We do not make use of this method for now.
      */
-	public void update(NodeHandle arg0, boolean arg1) {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void update(NodeHandle arg0, boolean arg1) {}
 }
