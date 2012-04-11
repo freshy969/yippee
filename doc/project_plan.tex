@@ -47,7 +47,7 @@ The Indexer will parse the raw content of the url pages that the Crawler crawls 
 main functions. First, it will extract links for the URL Resolver that will
 convert those urls into DocIds. This information will get fed into PageRank.
 Secondly, the Indexer will take the list of all the words in the document and
-turn them into hitlists containing the DocID, the wordID taken from the lexicon, position in document, and any other useful document specific information for that word. Those hitlists will be placed into barrels organized by wordID and the barrels will eventually get sorted to the inverted index which is necessary for the Search Engine.
+turn them into hit lists containing the DocID, the wordID taken from the lexicon, position in document, and any other useful document specific information for that word. Those hit lists will be placed into barrels organized by wordID and the barrels will eventually get sorted to the inverted index which is necessary for the Search Engine.
 
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword. Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data. The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.  For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
 
@@ -65,7 +65,7 @@ The final piece of Yippee involves presenting the user with highly relevant page
 \label{sec:goals}
 
 
-Our main objective in this project is to create a stable and efficient search engine that quickly evaluates queries with high accuracy. We aim to maximize the correlation between our result rankings and those of other major search engines. Additionally we strive to make our indexing resilient to crashes, distribute PageRank calculation, and to interleave external search results into our own. If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results (along with appropriate weighting for result re-ranking). The performance of Yippee will be evaluated by defining quantifiable metrics for each component, such as pages crawled per minute by the Crawler, or similarity of our PageRank score to that of Google etc.
+Our main objective in this project is to create a stable and efficient search engine that quickly evaluates queries with high accuracy. We aim to maximize the correlation between our result rankings and those of other major search engines. Additionally we strive to make our indexing resilient to crashes and to interleave external search results into our own. If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results. The performance of Yippee will be evaluated by defining quantifiable metrics for each component, such as pages crawled per minute by the Crawler, or similarity of our PageRank score to that of Google etc.
 
 \section{ Milestones }
 \label{sec:milestones}
