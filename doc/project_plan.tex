@@ -24,16 +24,21 @@
 
 \section{ Introduction }
 
-To say the world wide web is enormous would be an understatement.  There are approximately 
+To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size is estimated to be between forty-five and fifty-five billion pages. \cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one. \cite{}REFERENCE To reach this goal, an efficient, scalable search engine is required.  This project is an attempt to develop such a system.
+
+Yippee is a distributed search engine designed to provide fast, relevant search results to keyword search via the web.  Section
+
+
+In order for users of the web to make effective use of this volume of information 
 
 \section{ High-level Approach }
 
-The Yippee Search Engine will be comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, an implementation of the PageRank algorithm based on REFERENCE, and an interface to allow users to search the Yippee index for pages relevant to keyword or words.
+The Yippee Search Engine will be comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, an implementation of the PageRank algorithm \cite{pagerank}, and an interface to allow users to search the Yippee index for pages relevant to keyword or words.
 
 Most or all of the functionality of these components will be distributed among a number of nodes coordinated with the Pastry substrate. 
 
 The architecture of the Search Engine is shown in figure 1. The crawler
-follows the mercator design\cite{mercator}
+follows the Mercator design\cite{mercator}
 
 \section{ Milestones }
 
@@ -84,8 +89,11 @@ While each member of the group is ultimately responsible for monitoring progress
 For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer. The same approach will be used for PageRank and User Interface but the team members may be shuffled.
 
 \begin{thebibliography}{9}
+
+  \bibitem{websize} WorldWideWebSize.com, 11 Apr 2012 $<$http://www.worldwidewebsize.com$>$
+  \bibitem{pagerank} Page, Lawrence and Brin, Sergey and Motwani, Rajeev and Winograd, \emph{The PageRank Citation Ranking: Bringing Order to the Web}, Stanford InfoLab, 1999
   \bibitem{mercator} Allan Heydon and Marc Najork, \emph{Mercator: A scalable, extensible web crawler}, Compaq Systems Research Center, September 26, 2001
-  \bibitem{test2} Allan Heydon and Marc Najork, \emph{Mercator: A scalable, extensible web crawler}, Compaq Systems Research Center, September 26, 2001
+
 
 \end{thebibliography}
 
