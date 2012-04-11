@@ -25,15 +25,15 @@
 
 \section{ Introduction }
 
-To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size is estimated to be between forty-five and fifty-five billion pages.\cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one.\cite{google} To reach this goal, an efficient, scalable search engine is required.  This project is an attempt to develop such a system.
+To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size was estimated to be between forty-five and fifty-five billion pages.\cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one, as many of the commercial search engines during the dawn of the web were unable to return their own site for a search for their site's name.\cite{google} Google has shown that besides the obvious results loading speed, page relevance is just as critical a metric of an effective search engine. This project is an attempt to develop a search engine that can do just that.
 
-Yippee is a distributed search engine designed to provide fast, relevant search results to keyword search via the web.  Section \ref{sec:approach} discusses the architecture decisions while Section \ref{sec:goals}  outlines the goals we set out to achieve.  Section \ref{sec:milestones} will outline the milestones for project completion and Section \ref{sec:labor} will discuss our approach to dividing the labor.
+Yippee is a distributed search engine designed to provide fast, relevant search results to keyword search via the web.  Section \ref{sec:approach} discusses the architecture decisions while Section \ref{sec:goals}  outlines the goals we set out to achieve.  Section \ref{sec:milestones} outlines the milestones for project completion and Section \ref{sec:labor} discusses our approach to dividing labor.
 
 
 \section{ High-level Approach }
 \label{sec:approach}
 
-The Yippee Search Engine will be comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, an implementation of the PageRank algorithm \cite{pagerank}, and an interface to allow users to search the Yippee index for pages relevant to keyword or words.
+The Yippee Search Engine is comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our version of Google's PageRank algorithm \cite{pagerank}, and a web interface to allow users to search the Yippee index for pages relevant to keyword or words.
 
 Most or all of the functionality of these components will be distributed among a number of nodes coordinated with the Pastry substrate. 
 
