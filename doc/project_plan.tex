@@ -1,17 +1,17 @@
-
 \documentclass[11pt, letterpaper, oneside, twocolumn]{article}
 \usepackage{ amssymb }
 \usepackage{fancyvrb}
 \usepackage{float}
 \usepackage{subfig}
-\usepackage{graphicx}
+\usepackage{graphicx,dblfloatfix}
 \usepackage[hmargin=1.25cm, vmargin=1.5cm]{geometry}               
 \usepackage{enumitem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 
 \newcommand{\tab}{\hspace*{2em}}
-
+\floatstyle{plain}
+\restylefloat{figure}
 \begin{document}
 \title{Yippee: Web Search for the New Millenium}
 \author{	TJ Du
@@ -36,7 +36,20 @@ The Yippee Search Engine will be comprised of 4 main components: a web crawler t
 \item Search Engine and User Interface
 \end{itemize}
 
-Most or all of the functionality of these components will be distributed among a number of nodes coordinated with the Pastry substrate.
+Most or all of the functionality of these components will be distributed among a number of nodes coordinated with the Pastry substrate. 
+
+The architecture of the Search Engine is shown in figure
+
+\section{ Milestones }
+
+\label{sec:SOAR} %software architecture
+\begin{figure}[!b]
+  \centering
+  \includegraphics[scale=0.50]{figures/yippee_map.pdf}
+  \caption{Software Architecture.}
+\end{figure}
+
+
 
 \section{ Project Goals }
 
@@ -89,11 +102,4 @@ For the first milestone, Chris and Nikos will work on the Crawler and the prelim
 \item Reference 3
 \end{enumerate}
 
-\section{Appendix}
-\label{sec:SOAR} %software architecture
-\begin{figure}[t]
-  \centering
-  \includegraphics[scale=0.40]{figures/yippee_map.pdf}
-  \caption{Software Architecture.}
-\end{figure}
 \end{document}
