@@ -2,44 +2,18 @@ package com.yippee.indexer;
 
 import java.util.ArrayList;
 
+import com.yippee.db.managers.LexiconManager;
+
 /**
- * The Lexicon takes 
+ * Gives back word ID if has word, otherwise keeps log of words hasn't seen before. 
  */
 public class Lexicon {
-	ArrayList<String> lexicon;
+	LexiconManager lexiconManager;
+	ArrayList<String> wordsToAdd; //eventually turn into a file, initially we can reject unseen words
 	
-	public Lexicon() {
-		lexicon = new ArrayList<String>();
-	}
-	
-	/**
-	 * 
-	 * @return arraylist of strings that represents all words in the lexicon currently
-	 */
-	public ArrayList<String> getLexicon() {
-		return lexicon;
-	}
-	
-	/**
-	 * takes the array of strings of words and adds them to the lexicon if don't exist yet
-	 * 
-	 * @param words
-	 */
-	public void addListToLexicon(String[] words) {
-		for(int i=0; i<words.length; i++){
-			if(!isInLexicon(words[i])){
-				addWord(words[i]);
-			}
-		}
-	}
-	
-	/**
-	 * adds the word to the lexicon
-	 * 
-	 * @param word
-	 */
-	public void addWord(String word) {
-		lexicon.add(word);
+	public Lexicon(String dbEnvlocation, String wordListlocation) {
+		lexiconManager = new LexiconManager(dbEnvlocation, wordListlocation);
+		wordsToAdd = new ArrayList<String>();
 	}
 	
 	/**
@@ -49,7 +23,47 @@ public class Lexicon {
 	 * @return true if in lexicon already, otherwise false
 	 */
 	public boolean isInLexicon(String word) {
-		return lexicon.contains(word);
+		return lexiconManager.contains(word);
+	}
+	
+	
+	/**
+	 * adds new words to lexicon
+	 * 
+	 * @param words
+	 * @return false if didnt add any words in array, true if did
+	 */
+	public boolean addNewWords(String[] words) {
+		boolean anythingAdded = false;
+		for(int i=0; i<words.length; i++){
+			anythingAdded = addNewWord(words[i]) || anythingAdded;
+		}
+		return anythingAdded;
+	}
+	
+	/**
+	 * adds new word to lexicon
+	 * 
+	 * @param word
+	 * @return false if didnt add the word, true if did
+	 */
+	public boolean addNewWord(String word) {
+		if(lexiconManager.contains(word)) {return false;}
+		else {
+			wordsToAdd.add(word);
+			return true;
+		}
+	}
+	
+	
+	/**
+	 * gets wordid of requested word
+	 * 
+	 * @param word
+	 * @return
+	 */
+	public byte[] getWordId(String word) {
+		return lexiconManager.getWordId(word);
 	}
 
 }
