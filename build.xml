@@ -34,10 +34,10 @@
         </fail>
     </target>
 
-
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
+    <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
 
     <target name="sanity-check" depends="check">
         <echo>" Root:. . . . .${project.root}"</echo>
@@ -70,7 +70,7 @@
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
-                <path location="${jar.dir}/${ant.project.name}.jar"/>
+                <path refid="application"/>
             </classpath>
             <!-- in case we need to add arguments -->
             <arg value="${localPort}"/>
@@ -99,6 +99,21 @@
                 <param name="localPort" value="9004"/>
             </antcall>
         </parallel>
+    </target>
+
+    <!-- Run Tests -->
+
+    <target name="Test" depends="jar" description="Run all tests">
+        <junit printsummary="yes">
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="application"/>
+            </classpath>
+
+            <batchtest fork="yes">
+                <fileset dir="${tst.dir}" includes="*Test.java"/>
+            </batchtest>
+        </junit>
     </target>
 
     <!-- ================================================================== -->
