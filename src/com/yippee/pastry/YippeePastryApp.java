@@ -8,16 +8,31 @@ import rice.p2p.commonapi.RouteMessage;
 
 public class YippeePastryApp implements Application {
 
-	public void deliver(Id arg0, Message arg1) {
+    /**
+     * Called when the Pastry application receives a message. It pushes the url
+     * to the URLFrontier (maybe through a duplicate URL eliminator).
+     *
+     *
+     */
+	public void deliver(Id id, Message message) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public boolean forward(RouteMessage arg0) {
-		// TODO Auto-generated method stub
-		return false;
+    /**
+     * This is always true in our application.
+     *
+     * @param routeMessage a message
+     * @return true always
+     */
+	public boolean forward(RouteMessage routeMessage) {
+		return true;
 	}
 
+    /**
+     * Called when we hear about a new neighbor.
+     * We do not make use of this method for now.
+     */
 	public void update(NodeHandle arg0, boolean arg1) {
 		// TODO Auto-generated method stub
 
