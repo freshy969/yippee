@@ -6,6 +6,8 @@
 \usepackage{subfig}
 \usepackage{graphicx}
 \usepackage[hmargin=1.25cm, vmargin=1.5cm]{geometry}               
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 \DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 
 \newcommand{\tab}{\hspace*{2em}}
@@ -26,7 +28,7 @@ To say the world wide web is enormous would be an understatement.  There are app
 
 \section{ High-level Approach }
 
-The Yippee Search Engine will be comprised of 4 main components
+The Yippee Search Engine will be comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, an implementation of 
 \begin{itemize}
 \item Web-crawler that will recursively download pages from the web
 \item Indexer/TDF/IDF Retrieval Engine that will index relevant document features for later retrieval 
@@ -49,42 +51,27 @@ We will
 \section{ Milestones }
 
 \subsection{Milestone 1}
-
-\begin{itemize}
-\item            Project Architecture Map
-\item            Deploy basic Pastry nodes locally - minimal functionality
-\item            Deploy minimal Pastry nodes to EC2
-\item            Web crawler with basic implementations of pluggable components
-\item            Basic Indexer ?
-\item            Scripts to deploy nodes locally 
-\end{itemize}
+First, we plan to create a complete map of our project architecture to ensure we
+have a thoughtful design. Then, we will deploy minimally functioning
+Pastry nodes locally and write the scripts to do so. Once that is
+working, we will migrate those nodes to EC2. The web crawler will have a basic
+implementation of pluggable components. The indexer will have a static lexicon
+and all major components communicating with each other. 
 
 
 \subsection{Milestone 2}
-
-\begin{itemize}
-\item            Completed crawler building corpus on EC2
-\item            Completed indexer building index on EC2
-\end{itemize}
+We will complete both the crawler and indexer and start these components on EC2
+to begin building the corpus and index. 
 
 
 \subsection{Milestone 3}
-
-\begin{itemize}
-\item            Wire frame UI
-\item            Basic PageRank Module
-\item            Outline Final Report
-\item            Complete Crawler Final Report Section
-\item            Complete Indexer Final Report Section
-\end{itemize}
+A basic PageRank Module should be created and working. We will create a wire
+frame for the UI of our web application. For our final report, we will write a complete outline with finished report sections for the crawler
+and indexer. 
 
 
 \subsection{Milestone 4}
-
-\begin{itemize}
-\item            Evaluations of PageRank
-\item            Polish UI
-\end{itemize}
+We will evaluate the performance of our PageRank and finish polishing the UI. 
 
 
 \section{ Division of Labor }
@@ -106,7 +93,7 @@ For the first milestone, Chris and Nikos will work on the Crawler and the prelim
 \label{sec:SOAR} %software architecture
 \begin{figure}[t]
   \centering
-  \includegraphics[scale=0.25]{figures/yippee_map.pdf}
+  \includegraphics[scale=0.40]{figures/yippee_map.pdf}
   \caption{Software Architecture.}
 \end{figure}
 \end{document}
