@@ -3,8 +3,9 @@ package com.yippee.crawler;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class HttpModule {
     /**
@@ -12,9 +13,9 @@ public class HttpModule {
      */
     static Logger logger = Logger.getLogger(HttpModule.class);
     /**
-     * Store the connection
+     * Store the Http connection
      */
-    private URLConnection connection;
+    private HttpURLConnection connection;
 
     /**
      * Default constructor. Builds the connection but does not issue the call,
@@ -25,10 +26,11 @@ public class HttpModule {
     public HttpModule(URL url) {
         try {
             logger.debug("Open connection to" + url.toString());
-            connection = url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.addRequestProperty("User-Agent","cis455crawler");
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            logger.warn("ERROR trying to open" + url.toString());
+            e.printStackTrace();
         }
         // read
         //BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -45,8 +47,12 @@ public class HttpModule {
     public void setAction(String action) throws IllegalArgumentException{
         if (action.equals("HEAD") || action.equals("GET"))
                 throw new IllegalArgumentException();
-        //set property
-        //connection.addRequestProperty("User-Agent","GET");
+        try {
+            connection.setRequestMethod(action);
+        } catch (ProtocolException e) {
+            logger.warn("Protocol Exception");
+            e.printStackTrace();
+        }
     }
 
 }
