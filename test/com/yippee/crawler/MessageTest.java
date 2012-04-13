@@ -55,22 +55,15 @@ public class MessageTest {
 
     /**
      * Test malformed urls; these should throw exception
+     * @throws MalformedURLException 
      */
-    @Test
-    public void testMalformed() {
-        boolean test = true;
+    @Test(expected=MalformedURLException.class)
+    public void testMalformed() throws MalformedURLException {
         for (String url : malformed) {
-            try {
-                if ((new Message(url).getType() != Message.Type.NOX)) {
-                    System.out.println(new Message(url).getURL());
-                    test = false;
-                }
-            } catch (MalformedURLException e) {
-                //e.printStackTrace(); // we know that it is malformed!
-                test = true;
-            }
+        	if ((new Message(url).getType() != Message.Type.NOX)) {
+        		System.out.println(new Message(url).getURL());
+        	}
         }
-        assertTrue(test);
     }
 
     /**
@@ -194,6 +187,17 @@ public class MessageTest {
         }
         assertTrue(result);
 
+    }
+    
+    /**
+     * Test URL retrieved from method is what got put in
+     * @throws MalformedURLException 
+     */
+    @Test
+    public void testRetrieveURL() throws MalformedURLException{
+    	String url = "http://crawltest.cis.upenn.edu";
+    	Message m = new Message(url);
+    	assertEquals(url, m.getURL());
     }
 
 }
