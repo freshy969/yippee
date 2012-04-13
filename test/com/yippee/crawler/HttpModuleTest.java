@@ -1,19 +1,38 @@
 package com.yippee.crawler;
 
-import static org.junit.Assert.*;
-
+import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HttpModuleTest {
+import java.net.MalformedURLException;
+import java.net.URL;
 
-	@Before
-	public void setUp() throws Exception {
-	}
+public class HttpModuleTest extends TestCase{
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
+    @Before
+    public void setUp() throws Exception {
+
+    }
+
+    /**
+     * This is malformed -- the content should be nothing
+     */
+    @Test
+    public void testFalse() {
+        String content = "";
+        try {
+            HttpModule httpModule = new HttpModule(new URL("https://www.tumblr.com/../../blog/nvas"));
+            content = httpModule.getContent();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(content);
+        assertTrue(content == null);
+    }
+
+    @Test
+    public void testFetch() {
+
+    }
 
 }

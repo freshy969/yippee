@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HttpModule {
     /**
@@ -22,6 +25,14 @@ public class HttpModule {
      * Store the actual content of the page
      */
     private String content;
+    /**
+     * Response code (200, 400 etc)
+     */
+    private int status;
+    /**
+     * The hash-map containing the headers
+     */
+    private Map<String, List<String>> headers = new HashMap<String, List<String>>();
 
     /**
      * Default constructor. Builds the connection but does not issue the call,
@@ -36,7 +47,6 @@ public class HttpModule {
             connection.addRequestProperty("User-Agent", "cis455crawler");
         } catch (IOException e) {
             logger.warn("ERROR trying to open" + url.toString());
-            e.printStackTrace();
         }
     }
 
@@ -44,8 +54,6 @@ public class HttpModule {
      * Set action to HEAD or GET
      *
      * @param action the action to be
-     *               <p/>
-     *               TODO: Somehow force GET or HEAD instead of exception
      */
     public void setAction(String action) throws IllegalArgumentException {
         if (action.equals("HEAD") || action.equals("GET"))
@@ -54,7 +62,6 @@ public class HttpModule {
             connection.setRequestMethod(action);
         } catch (ProtocolException e) {
             logger.warn("Protocol Exception");
-            e.printStackTrace();
         }
     }
 
@@ -75,6 +82,15 @@ public class HttpModule {
     public String getContent() {
         if (content == null) {
             try {
+
+                status = connection.getResponseCode();
+                logger.debug("code "+status);
+                for (Map.Entry<String, List<String>> header :
+                        connection.getHeaderFields().entrySet()) {
+                    headers.put(header.getKey(), header.getValue());
+                }
+                // Returning an empty string is not exactly what we want
+                if (status != 200) return null;
                 BufferedReader inputReader = new BufferedReader(new
                         InputStreamReader(connection.getInputStream()));
                 String inputLine;
@@ -83,8 +99,7 @@ public class HttpModule {
                 }
                 inputReader.close();
             } catch (IOException e) {
-                logger.warn("There was an error reading page content");
-                e.printStackTrace();
+                logger.warn("Error reading page content");
             }
         }
         return content;
