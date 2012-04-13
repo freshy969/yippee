@@ -29,6 +29,4 @@ public class SimpleQueueFrontierTest {
 		//TODO test fails, url returned includes a '/' 
 		assertEquals(url, frontier.pull().getURL()	);
 	}
-
-	
 }
