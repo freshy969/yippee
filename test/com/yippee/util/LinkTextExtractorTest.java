@@ -359,6 +359,8 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseZeroHref() {
+    	
+    	System.out.println("Testing Case 0");
         try {
             doc = parser.parseDoc(docAugs[0]);
         } catch (FileNotFoundException e) {
@@ -375,7 +377,7 @@ public class LinkTextExtractorTest {
             String actual = links.get(i);
             if (!expected.equals(actual))
                 System.out.println(caseZeroExpectedUrls[i] + "\t\t" + links.get(i));
-            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
+            assertTrue(caseZeroExpectedUrls[i].equals(links.get(i)));
         }
     }
 
@@ -386,6 +388,8 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseOneHref() {
+    	System.out.println("Testing Case 1");
+
         try {
             doc = parser.parseDoc(docAugs[1]);
         } catch (FileNotFoundException e) {
@@ -413,6 +417,8 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseTwoHref() {
+    	System.out.println("Testing Case 2");
+
         try {
             doc = parser.parseDoc(docAugs[2]);
         } catch (FileNotFoundException e) {
@@ -439,6 +445,8 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseThreeHref() {
+    	System.out.println("Testing Case 3");
+
         try {
             doc = parser.parseDoc(docAugs[3]);
         } catch (FileNotFoundException e) {
@@ -465,6 +473,8 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseFourHref() {
+    	System.out.println("Testing Case 4");
+
         try {
             doc = parser.parseDoc(docAugs[4]);
         } catch (FileNotFoundException e) {
@@ -491,6 +501,8 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseFiveoHref() {
+    	System.out.println("Testing Case 5");
+
         try {
             doc = parser.parseDoc(docAugs[5]);
         } catch (FileNotFoundException e) {
@@ -517,6 +529,8 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseSixoHref() {
+    	System.out.println("Testing Case 7");
+
         try {
             doc = parser.parseDoc(docAugs[6]);
         } catch (FileNotFoundException e) {
