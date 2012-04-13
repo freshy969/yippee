@@ -61,25 +61,27 @@ public class LinkTextExtractorTest {
             "</UL>" +
             "</BODY></HTML>";
 
-    // TODO: there must be 5 tables, depending of the url of the current page, this is only for (1):
+    // 0. for http://crawltest.cis.upenn.edu/index/index.html
     // 1. for http://crawltest.cis.upenn.edu/index.html
     // 2. for http://crawltest.cis.upenn.edu/index
     // 3. for http://crawltest.cis.upenn.edu/index/
     // 4. for http://crawltest.cis.upenn.edu/
     // 5. for http://crawltest.cis.upenn.edu:8080
-    String[] baseUrls = { 	"http://crawltest.cis.upenn.edu/index/index.html",
-    						"http://crawltest.cis.upenn.edu/index.html", 
-    		 				"http://crawltest.cis.upenn.edu/index",
-    		 				"http://crawltest.cis.upenn.edu/index/",
-    		 				"http://crawltest.cis.upenn.edu/",
-    		 				"http://crawltest.cis.upenn.edu:8080",
-    		 				"http://crawltest.cis.upenn.edu"
-    		 				};
-        
+    // 6. for "http://crawltest.cis.upenn.edu"
+    String[] baseUrls = {"http://crawltest.cis.upenn.edu/index/index.html",
+            "http://crawltest.cis.upenn.edu/index.html",
+            "http://crawltest.cis.upenn.edu/index",
+            "http://crawltest.cis.upenn.edu/index/",
+            "http://crawltest.cis.upenn.edu/",
+            "http://crawltest.cis.upenn.edu:8080",
+            "http://crawltest.cis.upenn.edu"
+    };
+
     // This array contains the correct assertions *24*
-    String[] caseOneExpectedUrls = {
+    // 0. for http://crawltest.cis.upenn.edu/index/index.html
+    String[] caseZeroExpectedUrls = {
             "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
-            "http://crawltest.cis.upenn.edu/index/rss/cnnt.xml", 
+            "http://crawltest.cis.upenn.edu/index/rss/cnnt.xml",
             "http://crawltest.cis.upenn.edu/index/rss/cnnl.xml",
 
             "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
@@ -110,24 +112,233 @@ public class LinkTextExtractorTest {
             "http://crawltest.cis.upenn.edu/index/1.txt",
             "http://crawltest.cis.upenn.edu/index/2.png",
     };
-    String[] caseTwoExpectedUrls = {};
-    //DocAug docAug;
-    
+
+    // This array contains the correct assertions *24*
+    // 1. for http://crawltest.cis.upenn.edu/index.html
+    String[] caseOneExpectedUrls = {
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnt.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnl.xml",
+
+            "http://crawltest.cis.upenn.edu/restrict/frontpage.xml",
+            "http://crawltest.cis.upenn.edu/eurofxref-hist.xml", //
+
+            "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/Americas.html",
+            "http://crawltest.cis.upenn.edu/AsiaPacific.html",
+
+            "http://d.o.t.y/~nvas/something/Africa.html",
+            "http://domain:8080/./Americas.html",
+            "http://www.seas.upenn/../AsiaPacific.html",
+
+            "http://we.com/index.php",
+            "http://we.com/index",
+            "http://we.com/index/",
+            "http://we.com",
+            "http://we.com/",
+
+            "http://crawltest.cis.upenn.edu/nothingSpecial/./ea.html",
+            "http://crawltest.cis.upenn.edu/nothingSpecial/",
+            "http://crawltest.cis.upenn.edu/nothingSpecial",
+            "http://crawltest.cis.upenn.edu/nothingSpecial/whatevah/../ea.html",
+
+            "http://crawltest.cis.upenn.edu/index.html?who=me",
+            "http://crawltest.cis.upenn.edu/index.html#tag",
+
+            "http://crawltest.cis.upenn.edu/1.txt",
+            "http://crawltest.cis.upenn.edu/2.png",
+    };
+
+    // 2. for http://crawltest.cis.upenn.edu/index
+    String[] caseTwoExpectedUrls = {
+            "http://crawltest.cis.upenn.edu/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnt.xml",
+            "http://crawltest.cis.upenn.edu/rss/cnnl.xml",
+
+            "http://crawltest.cis.upenn.edu/restrict/frontpage.xml",
+            "http://crawltest.cis.upenn.edu/eurofxref-hist.xml", //
+
+            "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/Americas.html",
+            "http://crawltest.cis.upenn.edu/AsiaPacific.html",
+
+            "http://d.o.t.y/~nvas/something/Africa.html",
+            "http://domain:8080/./Americas.html",
+            "http://www.seas.upenn/../AsiaPacific.html",
+
+            "http://we.com/index.php",
+            "http://we.com/index",
+            "http://we.com/index/",
+            "http://we.com",
+            "http://we.com/",
+
+            "http://crawltest.cis.upenn.edu/nothingSpecial/./ea.html",
+            "http://crawltest.cis.upenn.edu/nothingSpecial/",
+            "http://crawltest.cis.upenn.edu/nothingSpecial",
+            "http://crawltest.cis.upenn.edu/nothingSpecial/whatevah/../ea.html",
+
+            "http://crawltest.cis.upenn.edu/index.html?who=me",
+            "http://crawltest.cis.upenn.edu/index.html#tag",
+
+            "http://crawltest.cis.upenn.edu/1.txt",
+            "http://crawltest.cis.upenn.edu/2.png",
+    };
+
+    // 3. for http://crawltest.cis.upenn.edu/index/
+    String[] caseThreeExpectedUrls = {
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnt.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnl.xml",
+
+            "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
+            "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml", //
+
+            "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/index/Americas.html",
+            "http://crawltest.cis.upenn.edu/AsiaPacific.html",
+
+            "http://d.o.t.y/~nvas/something/Africa.html",
+            "http://domain:8080/./Americas.html",
+            "http://www.seas.upenn/../AsiaPacific.html",
+
+            "http://we.com/index.php",
+            "http://we.com/index",
+            "http://we.com/index/",
+            "http://we.com",
+            "http://we.com/",
+
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/./ea.html",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/whatevah/../ea.html",
+
+            "http://crawltest.cis.upenn.edu/index/index.html?who=me",
+            "http://crawltest.cis.upenn.edu/index/index.html#tag",
+
+            "http://crawltest.cis.upenn.edu/index/1.txt",
+            "http://crawltest.cis.upenn.edu/index/2.png",
+    };
+
+    // 4. for http://crawltest.cis.upenn.edu/
+    String[] caseFourExpectedUrls = {
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnt.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnl.xml",
+
+            "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
+            "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml", //
+
+            "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/index/Americas.html",
+            "http://crawltest.cis.upenn.edu/AsiaPacific.html",
+
+            "http://d.o.t.y/~nvas/something/Africa.html",
+            "http://domain:8080/./Americas.html",
+            "http://www.seas.upenn/../AsiaPacific.html",
+
+            "http://we.com/index.php",
+            "http://we.com/index",
+            "http://we.com/index/",
+            "http://we.com",
+            "http://we.com/",
+
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/./ea.html",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/whatevah/../ea.html",
+
+            "http://crawltest.cis.upenn.edu/index/index.html?who=me",
+            "http://crawltest.cis.upenn.edu/index/index.html#tag",
+
+            "http://crawltest.cis.upenn.edu/index/1.txt",
+            "http://crawltest.cis.upenn.edu/index/2.png",
+    };
+
+    // 5. for http://crawltest.cis.upenn.edu:8080
+    String[] caseFiveExpectedUrls = {
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnt.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnl.xml",
+
+            "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
+            "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml", //
+
+            "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/index/Americas.html",
+            "http://crawltest.cis.upenn.edu/AsiaPacific.html",
+
+            "http://d.o.t.y/~nvas/something/Africa.html",
+            "http://domain:8080/./Americas.html",
+            "http://www.seas.upenn/../AsiaPacific.html",
+
+            "http://we.com/index.php",
+            "http://we.com/index",
+            "http://we.com/index/",
+            "http://we.com",
+            "http://we.com/",
+
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/./ea.html",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/whatevah/../ea.html",
+
+            "http://crawltest.cis.upenn.edu/index/index.html?who=me",
+            "http://crawltest.cis.upenn.edu/index/index.html#tag",
+
+            "http://crawltest.cis.upenn.edu/index/1.txt",
+            "http://crawltest.cis.upenn.edu/index/2.png",
+    };
+
+    // 6. "http://crawltest.cis.upenn.edu"
+    String[] caseSixExpectedUrls = {
+            "http://crawltest.cis.upenn.edu/index/rss/cnnp.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnt.xml",
+            "http://crawltest.cis.upenn.edu/index/rss/cnnl.xml",
+
+            "http://crawltest.cis.upenn.edu/index/restrict/frontpage.xml",
+            "http://crawltest.cis.upenn.edu/index/eurofxref-hist.xml", //
+
+            "http://crawltest.cis.upenn.edu/~nvas/something/Africa.html",
+            "http://crawltest.cis.upenn.edu/index/Americas.html",
+            "http://crawltest.cis.upenn.edu/AsiaPacific.html",
+
+            "http://d.o.t.y/~nvas/something/Africa.html",
+            "http://domain:8080/./Americas.html",
+            "http://www.seas.upenn/../AsiaPacific.html",
+
+            "http://we.com/index.php",
+            "http://we.com/index",
+            "http://we.com/index/",
+            "http://we.com",
+            "http://we.com/",
+
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/./ea.html",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial",
+            "http://crawltest.cis.upenn.edu/index/nothingSpecial/whatevah/../ea.html",
+
+            "http://crawltest.cis.upenn.edu/index/index.html?who=me",
+            "http://crawltest.cis.upenn.edu/index/index.html#tag",
+
+            "http://crawltest.cis.upenn.edu/index/1.txt",
+            "http://crawltest.cis.upenn.edu/index/2.png",
+    };
+
     DocAug[] docAugs;
-    
+
     Parser parser;
     Document doc;
 
     @Before
     public void setUp() throws Exception {
-    	docAugs = new DocAug[baseUrls.length];
-    	for(int i = 0; i < baseUrls.length; i++){
-    		docAugs[i] = new DocAug();
-    		docAugs[i].setDoc(testHTML);
-    		docAugs[i].setUrl(baseUrls[i]);
-    	}
-    	
-    	parser = new Parser();
+        docAugs = new DocAug[baseUrls.length];
+        for (int i = 0; i < baseUrls.length; i++) {
+            docAugs[i] = new DocAug();
+            docAugs[i].setDoc(testHTML);
+            docAugs[i].setUrl(baseUrls[i]);
+        }
+
+        parser = new Parser();
         doc = null;
     }
 
@@ -136,19 +347,21 @@ public class LinkTextExtractorTest {
         try {
             doc = parser.parseDoc(docAugs[0]);
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         assertNotNull(doc);
     }
 
+    /**
+     * Testing as current page being
+     * http://crawltest.cis.upenn.edu/index/index.html case (0)
+     */
     @Test
-    public void testCaseOneHref() {
+    public void testCaseZeroHref() {
         try {
             doc = parser.parseDoc(docAugs[0]);
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -156,20 +369,172 @@ public class LinkTextExtractorTest {
         linkEx.extract(docAugs[0].getUrl(), doc);
 
         ArrayList<String> links = linkEx.getLinks();
-        assertEquals(links.size(), caseOneExpectedUrls.length);
-        for(int i =  0; i < links.size(); i++){
-        	String expected = caseOneExpectedUrls[i];
-        	String actual = links.get(i);
-        	if(!expected.equals(actual)) System.out.println(caseOneExpectedUrls[i] + "\t\t" + links.get(i));
-        	//assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
-        	
+        assertEquals(links.size(), caseZeroExpectedUrls.length);
+        for (int i = 0; i < links.size(); i++) {
+            String expected = caseZeroExpectedUrls[i];
+            String actual = links.get(i);
+            if (!expected.equals(actual))
+                System.out.println(caseZeroExpectedUrls[i] + "\t\t" + links.get(i));
+            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
         }
-        
     }
-    
+
+    /*
+     * Testing as current page being
+     * http://crawltest.cis.upenn.edu/index.html case (1)
+     *
+     */
     @Test
-    public void testCaseTwoHref(){
-    	
+    public void testCaseOneHref() {
+        try {
+            doc = parser.parseDoc(docAugs[1]);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+        linkEx.extract(docAugs[1].getUrl(), doc);
+
+        ArrayList<String> links = linkEx.getLinks();
+        assertEquals(links.size(), caseOneExpectedUrls.length);
+        for (int i = 0; i < links.size(); i++) {
+            String expected = caseOneExpectedUrls[i];
+            String actual = links.get(i);
+            if (!expected.equals(actual))
+                System.out.println(caseOneExpectedUrls[i] + "\t\t" + links.get(i));
+            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
+        }
+    }
+
+    /*
+     * Testing as current page being
+     * http://crawltest.cis.upenn.edu/index (2)
+     *
+     */
+    @Test
+    public void testCaseTwoHref() {
+        try {
+            doc = parser.parseDoc(docAugs[2]);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+        linkEx.extract(docAugs[2].getUrl(), doc);
+
+        ArrayList<String> links = linkEx.getLinks();
+        assertEquals(links.size(), caseTwoExpectedUrls.length);
+        for (int i = 0; i < links.size(); i++) {
+            String expected = caseTwoExpectedUrls[i];
+            String actual = links.get(i);
+            if (!expected.equals(actual))
+                System.out.println(caseTwoExpectedUrls[i] + "\t\t" + links.get(i));
+            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
+        }
+    }
+
+    /**
+     * Testing for current page being
+     * http://crawltest.cis.upenn.edu/index/ (3)
+     */
+    @Test
+    public void testCaseThreeHref() {
+        try {
+            doc = parser.parseDoc(docAugs[3]);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+        linkEx.extract(docAugs[3].getUrl(), doc);
+
+        ArrayList<String> links = linkEx.getLinks();
+        assertEquals(links.size(), caseThreeExpectedUrls.length);
+        for (int i = 0; i < links.size(); i++) {
+            String expected = caseThreeExpectedUrls[i];
+            String actual = links.get(i);
+            if (!expected.equals(actual))
+                System.out.println(caseThreeExpectedUrls[i] + "\t\t" + links.get(i));
+            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
+        }
+    }
+
+    /**
+     * Testing for current page being
+     * http://crawltest.cis.upenn.edu/ (4)
+     */
+    @Test
+    public void testCaseFourHref() {
+        try {
+            doc = parser.parseDoc(docAugs[4]);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+        linkEx.extract(docAugs[4].getUrl(), doc);
+
+        ArrayList<String> links = linkEx.getLinks();
+        assertEquals(links.size(), caseFourExpectedUrls.length);
+        for (int i = 0; i < links.size(); i++) {
+            String expected = caseFourExpectedUrls[i];
+            String actual = links.get(i);
+            if (!expected.equals(actual))
+                System.out.println(caseFourExpectedUrls[i] + "\t\t" + links.get(i));
+            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
+        }
+    }
+
+    /**
+     * Testing for current page being
+     * http://crawltest.cis.upenn.edu:8080 (5)
+     */
+    @Test
+    public void testCaseFiveoHref() {
+        try {
+            doc = parser.parseDoc(docAugs[5]);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+        linkEx.extract(docAugs[5].getUrl(), doc);
+
+        ArrayList<String> links = linkEx.getLinks();
+        assertEquals(links.size(), caseFiveExpectedUrls.length);
+        for (int i = 0; i < links.size(); i++) {
+            String expected = caseFiveExpectedUrls[i];
+            String actual = links.get(i);
+            if (!expected.equals(actual))
+                System.out.println(caseFiveExpectedUrls[i] + "\t\t" + links.get(i));
+            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
+        }
+    }
+
+    /**
+     * Testing for current page being
+     * "http://crawltest.cis.upenn.edu" (6)
+     */
+    @Test
+    public void testCaseSixoHref() {
+        try {
+            doc = parser.parseDoc(docAugs[6]);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+        linkEx.extract(docAugs[6].getUrl(), doc);
+
+        ArrayList<String> links = linkEx.getLinks();
+        assertEquals(links.size(), caseSixExpectedUrls.length);
+        for (int i = 0; i < links.size(); i++) {
+            String expected = caseSixExpectedUrls[i];
+            String actual = links.get(i);
+            if (!expected.equals(actual))
+                System.out.println(caseSixExpectedUrls[i] + "\t\t" + links.get(i));
+            assertTrue(caseOneExpectedUrls[i].equals(links.get(i)));
+        }
     }
 
     @Test
@@ -180,12 +545,8 @@ public class LinkTextExtractorTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-
         linkEx.extract(docAugs[0].getUrl(), doc);
-
-//		System.out.println(linkEx.getLinks());
         ArrayList<String> links = linkEx.getLinks();
         assertEquals(caseOneExpectedUrls.length, links.size());
     }
@@ -198,13 +559,9 @@ public class LinkTextExtractorTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-
         linkEx.extract(docAugs[0].getUrl(), doc);
-
-        //		System.out.println(linkEx.getText());
-        ArrayList<String> text = linkEx.getText();        
+        ArrayList<String> text = linkEx.getText();
         assertEquals(11, text.size());  // not sure what text means
         assertTrue("CSE455/CIS555 HW2 Grading Data".equals(text.get(0)));
     }
