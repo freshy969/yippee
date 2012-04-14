@@ -4,44 +4,41 @@ import com.yippee.indexer.Lexicon;
 import java.util.ArrayList;
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LexiconTest {
 	Lexicon mLexicon;
-	ArrayList<String> correctLexicon;
-	String[] words = {"cat","dog","cat","mouse","farm","rabbit", "dog"};	
+	String test = "word";
 	
     @Before
     public void setUp(){
-        mLexicon = new Lexicon();
-    	correctLexicon = new ArrayList<String>();
-    	correctLexicon.add("cat");
-    	correctLexicon.add("dog");
-    	correctLexicon.add("mouse");
-    	correctLexicon.add("farm");
-    	correctLexicon.add("rabbit");
+        mLexicon = new Lexicon("db/test","doc/en-common.txt");
     }
 	
     @Test
-    public void testAddListToLexicon(){
-    	mLexicon.addListToLexicon(words);
-    	ArrayList<String> actualLexicon = mLexicon.getLexicon();
-        assertTrue(correctLexicon.equals(actualLexicon));
+    public void testIsInLexicon(){
+        assertTrue(mLexicon.isInLexicon(test));
     }
     
     @Test
-    public void testIsWordInLexicon(){
-    	mLexicon.addListToLexicon(words);
-    	ArrayList<String> actualLexicon = mLexicon.getLexicon();
-        assertTrue(actualLexicon.contains("cat"));
+    public void testGetWord(){
+    	byte[] id = mLexicon.getWordId(test);
+    	String word = mLexicon.getWord(id);
+        assertTrue(word.equals(test));
     }
     
     @Test
-    public void testAddWord(){
-    	mLexicon.addWord("monkey");
-    	ArrayList<String> actualLexicon = mLexicon.getLexicon();
-        assertTrue(actualLexicon.contains("monkey"));
+    public void testGetWordId(){
+    	byte[] id = mLexicon.getWordId(test);
+    	byte[] id2 = mLexicon.getWordId(test);
+        assertTrue((new String(id)).equals(new String(id2)));
     }
-
+    
+    
+    @After
+    public void tearDown(){
+        mLexicon.close();
+    }
 }

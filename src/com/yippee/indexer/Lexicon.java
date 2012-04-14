@@ -16,6 +16,7 @@ public class Lexicon {
 		wordsToAdd = new ArrayList<String>();
 	}
 	
+	
 	/**
 	 * checks if the word is in the lexicon
 	 * 
@@ -26,9 +27,29 @@ public class Lexicon {
 		return lexiconManager.contains(word);
 	}
 	
+	/**
+	 * gets wordid of requested word
+	 * 
+	 * @param word
+	 * @return
+	 */
+	public byte[] getWordId(String word) {
+		return lexiconManager.getWordId(word);
+	}
 	
 	/**
-	 * adds new words to lexicon
+	 * gets the word given the id, otherwise null
+	 * 
+	 * @param b
+	 * @return
+	 */
+	public String getWord(byte[] b) {
+		return lexiconManager.getWordById(b);
+	}
+	
+	/**
+	 * adds new words to lexicon - ignore temporarily 
+	 * aka we'll reject words in the document that aren't in the lexicon
 	 * 
 	 * @param words
 	 * @return false if didnt add any words in array, true if did
@@ -42,7 +63,8 @@ public class Lexicon {
 	}
 	
 	/**
-	 * adds new word to lexicon
+	 * adds new word to lexicon - ignore temporarily 
+	 * aka we'll reject words in the document that aren't in the lexicon
 	 * 
 	 * @param word
 	 * @return false if didnt add the word, true if did
@@ -55,15 +77,25 @@ public class Lexicon {
 		}
 	}
 	
-	
 	/**
-	 * gets wordid of requested word
-	 * 
-	 * @param word
-	 * @return
+	 * closes manager
 	 */
-	public byte[] getWordId(String word) {
-		return lexiconManager.getWordId(word);
+	public void close() {
+		lexiconManager.close();
+	}
+	
+	
+	//so there aren't any bugs...need to get rid of later
+	public Lexicon() {
+		
+	}
+	
+	public void addListToLexicon(String[] args) {
+		
+	}
+	
+	public ArrayList<String> getLexicon(){
+		return null;
 	}
 
 }

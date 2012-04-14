@@ -11,21 +11,23 @@ public class Word{
 	
 	/**
 	 * Unique id for this word
-	 */
-    @PrimaryKey
-    private String id;
+	 */    
+    private byte[] id;
+    
     /**
      * string for this word
      */
+    @PrimaryKey
     private String word;
 
-    public Word(){}
+    public Word(){
+    }
 
-    public String getId() {
+    public byte[] getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(byte[] id) {
         this.id = id;
     }
 
