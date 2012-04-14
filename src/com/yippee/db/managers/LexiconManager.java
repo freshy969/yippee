@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -34,6 +35,7 @@ public class LexiconManager {
 	static Logger logger = Logger.getLogger(LexiconManager.class);
 	private static DBEnv myDbEnv;
 	private DAL dao;
+	private static String endOfWordDeliminator = "::";
 	
     /**
      * The constructor takes the BerkeleyDB folder as an argument. It recreates
@@ -52,6 +54,8 @@ public class LexiconManager {
     
     /**
      * Initial import of wordlist to database, should only do this once
+     * reads from file of words with associated ids, so all nodes with 
+     * lexicon have same wordids for words
      *
      * @return true if successful, otherwise false
      */
@@ -60,10 +64,25 @@ public class LexiconManager {
         File f = new File(locationOfWordList);
         try {
 			BufferedReader reader = new BufferedReader(new FileReader(f));
-			//add words into database
 			String word = reader.readLine();
+			String wordText = null;
+			String wordId = null;
 			while(word!=null) {
-				createWord(word);
+				//if end of word / wordid block -> create Word object
+				if(word.length()==0 && wordText!=null && wordId!=null) {
+					createWord(wordText, wordId);
+					wordText = null;
+					wordId = null;
+				}
+				//we reached a word
+				else if(word.endsWith(endOfWordDeliminator)){
+					wordText = word.substring(0,word.length()-endOfWordDeliminator.length());
+				} 
+				//we reached part of the id (could be several lines long)
+				else {
+					if(wordId==null) {wordId=word;}
+					else {wordId+="\n"+word;}
+				}
 				word = reader.readLine();
 			}
 			reader.close();
@@ -82,8 +101,7 @@ public class LexiconManager {
      *
      * @return true if successful, otherwise false
      */
-    public boolean createWord(String word) {
-    	//System.out.println("in createWord");
+    public boolean createWord(String word, String id) {
     	word = word.toLowerCase();
         boolean success = true;
         try {
@@ -91,7 +109,7 @@ public class LexiconManager {
             dao = new DAL(myDbEnv.getEntityStore());
             Word w = new Word();
             w.setWord(word);
-            w.setId(assignWordId(word));
+            w.setId(id.getBytes());
             dao.getLexiconById().put(w);
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
@@ -101,25 +119,6 @@ public class LexiconManager {
             success = false;
         }
         return success;
-    }
-
-    /**
-     * assigns wordid of requested word
-     * 
-     * @param word
-     * @return
-     */
-    public byte[] assignWordId(String word) {
-		MessageDigest md = null;
-		try {
-			md = MessageDigest.getInstance("SHA");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		byte[] content = word.getBytes();
-		md.update(content);
-		byte[] shaDigest = md.digest();
-		return shaDigest;
     }
     
     /**
@@ -189,26 +188,70 @@ public class LexiconManager {
     }
     
     /**
-     * for testing purposes. prints out words towards the end
-     */
-    public void list() {
-        dao = new DAL(myDbEnv.getEntityStore());
-        EntityCursor<Word> curs = dao.getLexiconCursor();
-        Word w = curs.next();
-        int count=0;
-          while(w!=null) {
-        	  if(count>115510) System.out.println(w.getWord()+", "+new String(w.getId()));
-        	  w = curs.next();
-        	  count++;
-          }
-          curs.close();
-      }
-
-    /**
      * Close the database environment
      */
     public void close() {
         myDbEnv.close();
+    }
+    
+    /*************** BELOW ARE MANUAL COMMANDS TO CREATE LEXICON  *****************/
+    
+    /**
+     * makes the lexicon file from a list of words
+     * will create ids for each word
+     * 
+     * should only get called once to make the master copy of the lexicon
+     * gets called manually
+     * 
+     * @param locationOfWordList
+     * @param nameNewFile
+     * @return
+     */
+    public boolean makeLexiconFile(String locationOfWordList, String nameNewFile) {
+    //	locationOfWordList = "doc/en-common.txt";
+    //	nameNewFile = "doc/lexicon.txt";
+        boolean success = true;
+        File fileWords = new File(locationOfWordList);
+        File fileLex = new File(nameNewFile);
+        try {
+			BufferedReader reader = new BufferedReader(new FileReader(fileWords));
+			FileWriter writer = new FileWriter(fileLex);
+			String word = reader.readLine();
+			while(word!=null) {
+				writer.write(word+endOfWordDeliminator+"\n"+new String(assignWordId(word))+"\n\n");
+				word = reader.readLine();
+			}
+			reader.close();
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			logger.warn("Exception", e);
+            success = false;
+		} catch (IOException e) {
+			logger.warn("Exception", e);
+            success = false;
+		}
+        return success;    	
+    }
+    
+    /**
+     * assigns wordid of requested word, this gets called in make lexicon file.
+     * nothing else should call this
+     * 
+     * @param word
+     * @return
+     */
+    public byte[] assignWordId(String word) {
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		byte[] content = word.getBytes();
+		md.update(content);
+		byte[] shaDigest = md.digest();
+		return shaDigest;
     }
     
 }
