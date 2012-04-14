@@ -14,7 +14,7 @@ public class LexiconTest {
 	
     @Before
     public void setUp(){
-        mLexicon = new Lexicon("db/test","doc/en-common.txt");
+        mLexicon = new Lexicon("db/test","doc/lexicon.txt");
     }
 	
     @Test
