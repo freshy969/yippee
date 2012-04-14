@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -35,9 +36,8 @@ public class LexiconManager {
 	private DAL dao;
 	
     /**
-     * The constructor does not take a folder as an argument, to disable
-     * overwrites or writes to other locations. The rest of the managers check
-     * to make sure they do not write to this folder.
+     * The constructor takes the BerkeleyDB folder as an argument. It recreates
+     * it, if it does not exist.
      */
     public LexiconManager(String location, String locationWordList) {
         myDbEnv = new DBEnv();
@@ -84,6 +84,7 @@ public class LexiconManager {
      */
     public boolean createWord(String word) {
     	//System.out.println("in createWord");
+    	word = word.toLowerCase();
         boolean success = true;
         try {
             // Open the data accessor. This is used to store persistent objects.
@@ -128,6 +129,7 @@ public class LexiconManager {
      * @return
      */
     public boolean contains(String word) {
+    	word = word.toLowerCase();
     	dao = new DAL(myDbEnv.getEntityStore());  
     	return dao.getLexiconById().contains(word);
     }
@@ -149,15 +151,19 @@ public class LexiconManager {
      * @return
      */
     public byte[] getWordId(String word) {
+    	word = word.toLowerCase();
+    	byte[] id = null;
         try {
             // open data access layer
             dao = new DAL(myDbEnv.getEntityStore());
-            return dao.getLexiconById().get(word).getId();  
+            Word w = dao.getLexiconById().get(word);
+            if(w!=null)
+            	id = w.getId();  
         } catch (DatabaseException e) {
             System.out.println("Exception: " + e.toString());
             e.printStackTrace();
-        }
-        return null;
+        } 
+        return id;
     }
     
     /**
@@ -169,10 +175,10 @@ public class LexiconManager {
         dao = new DAL(myDbEnv.getEntityStore());
         EntityCursor<Word> curs = dao.getLexiconCursor();
         Word w = curs.next();
-        int count=0;
         String word = null;
           while(w!=null) {
-        	  if((new String(w.getId())).equals(new String(id))) {
+        	 // if((new String(w.getId())).equals(new String(id))) {
+        	  if(Arrays.equals(w.getId(), id)){
         		  word = w.getWord();
         		  break;
         		  }

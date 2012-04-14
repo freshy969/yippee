@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class LexiconManagerTest {
 	LexiconManager lexiconManager;
-	String test = "computer";
+	String test = "Computer";
 	
 	@Before
     public void setUp(){    
@@ -36,7 +36,7 @@ public class LexiconManagerTest {
     public void testGetWordById(){
     	byte[] id = lexiconManager.getWordId(test);
     	String word = lexiconManager.getWordById(id);
-        assertTrue(word.equals(test));
+        assertTrue(word.equals(test.toLowerCase()));
     }
     
     @Test

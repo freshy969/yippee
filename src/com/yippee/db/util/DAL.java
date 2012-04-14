@@ -5,6 +5,7 @@ import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.model.DocAug;
+import com.yippee.db.model.Hit;
 import com.yippee.db.model.RobotsTxt;
 import com.yippee.db.model.Word;
 
@@ -19,6 +20,8 @@ public class DAL {
     PrimaryIndex<String, RobotsTxt> robotsById;
     // Lexicon Accessors
     PrimaryIndex<String, Word> lexiconById;
+    // Barrel Accessors
+    PrimaryIndex<String, Hit> barrelById;
 
     /**
      * Data access layer constructor
@@ -33,6 +36,8 @@ public class DAL {
         robotsById = store.getPrimaryIndex(String.class, RobotsTxt.class);
         // Lexicon key
         lexiconById = store.getPrimaryIndex(String.class, Word.class);
+        // Barrel key
+        barrelById = store.getPrimaryIndex(String.class, Hit.class);
     }
 
     /**
@@ -72,7 +77,7 @@ public class DAL {
     
     /**
      * Get a cursor for the Lexicon Index
-     * @return String entity cursor
+     * @return Word entity cursor
      */
     public EntityCursor<Word> getLexiconCursor(){
     	return lexiconById.entities();
@@ -85,5 +90,22 @@ public class DAL {
      */
     public PrimaryIndex<String, Word> getLexiconById() {
         return lexiconById;
+    }
+    
+    /**
+     * Get a cursor for the Barrel Index
+     * @return HitList entity cursor
+     */
+    public EntityCursor<Hit> getBarrelCursor(){
+    	return barrelById.entities();
+    }
+
+    /**
+     * Access Barrel primary index outside package.
+     *
+     * @return the Barrel index
+     */
+    public PrimaryIndex<String, Hit> getBarrelById() {
+        return barrelById;
     }
 }
