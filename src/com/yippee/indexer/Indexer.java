@@ -68,7 +68,7 @@ public class Indexer extends Thread {
 			sentence = sentence.replaceAll("\\W", " ");
 			String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
 			
-			lexicon.addListToLexicon(stemlist);
+			lexicon.addNewWords(stemlist);
 		}
 		
 		return lexicon.getLexicon();
