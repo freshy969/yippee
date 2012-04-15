@@ -7,6 +7,7 @@ import com.yippee.pagerank.PRTestSuite;
 import com.yippee.pastry.YippeePastryAppTest;
 import com.yippee.search.SearchTestSuite;
 import com.yippee.web.WebTestSuite;
+import com.yippee.util.UtilTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -21,6 +22,7 @@ import org.junit.runners.Suite;
         PRTestSuite.class,
         SearchTestSuite.class,
         WebTestSuite.class,
-        YippeePastryAppTest.class
+        YippeePastryAppTest.class,
+        UtilTestSuite.class
 })
 public class TestSuite { }
