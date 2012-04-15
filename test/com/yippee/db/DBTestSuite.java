@@ -8,7 +8,11 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({	DocAugManagerTest.class,
+@SuiteClasses({	BarrelManagerTest.class,
+				LexiconManagerTest.class,
+				DocAugManagerTest.class,
 				RobotsManagerTest.class,
-				RobotsTxtTest.class})
+				RobotsTxtTest.class,
+				HitTest.class
+				})
 public class DBTestSuite { }
