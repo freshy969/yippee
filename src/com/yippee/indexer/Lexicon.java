@@ -2,12 +2,17 @@ package com.yippee.indexer;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+
+import com.yippee.crawler.HttpModule;
 import com.yippee.db.managers.LexiconManager;
 
 /**
  * Gives back word ID if has word, otherwise keeps log of words hasn't seen before. 
  */
 public class Lexicon {
+	static Logger logger = Logger.getLogger(Lexicon.class);
 	LexiconManager lexiconManager;
 	ArrayList<String> wordsToAdd; //eventually turn into a file, initially we can reject unseen words
 	
@@ -73,6 +78,7 @@ public class Lexicon {
 		if(lexiconManager.contains(word)) {return false;}
 		else {
 			wordsToAdd.add(word);
+			logger.log(Priority.INFO, word);
 			return true;
 		}
 	}

@@ -16,7 +16,7 @@ public class LexiconManagerTest {
 	
 	@Before
     public void setUp(){    
-       lexiconManager = new LexiconManager("db/test","doc/en-common.txt");
+       lexiconManager = new LexiconManager("db/test","doc/lexicon.txt");
     }
 
     
