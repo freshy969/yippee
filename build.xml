@@ -13,11 +13,15 @@
 
     <target name="usage" description="Print the usage of ant scripts">
         <echo>
-            2012, Yippee Project
+            2012, Yippee Project.
 
-            Summary of ant targets:
+            For a laconic summary run 'ant -p'.
 
-            1. project-test -DbootIp=[ip]
+
+
+            Useful ant targets:
+
+            1. ant project-test -DbootIp=[ip]
 
                 [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
@@ -104,8 +108,8 @@
             description="Clear resources and build jar"/>
 
     <!-- start 4 applications in parallel -->
-    <target name="project-run" depends="project-clean,sanity-check"
-            description="Create 4 application nodes">
+    <target name="project-test" depends="project-clean,sanity-check"
+            description="Create 4 application nodes for testing">
         <parallel>
             <antcall target="run">
                 <param name="localPort" value="9001"/>
