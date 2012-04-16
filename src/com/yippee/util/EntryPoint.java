@@ -82,7 +82,7 @@ public class EntryPoint {
      */
     private boolean setUpSubstrate(){
         YippeeEngine yippeeEngine = new YippeeEngine(Integer.parseInt(arguments[0]),
-                    arguments[1], Integer.parseInt(arguments[2]), arguments[4]);
+                    arguments[1], Integer.parseInt(arguments[2]));
         Configuration.getInstance().setPastryEngine(yippeeEngine);
         PingPong pingPong = new PingPong();
         new Thread(pingPong, "Ping Pong Thread").start();
@@ -112,6 +112,8 @@ public class EntryPoint {
      * 2.   The IP address of the Pastry bootstrap node;
      * 3.   The port number of the Pastry bootstrap node;
      *
+     * TODO: We could add a parameter -CIRPS on which component to start
+     *
      * @param args The command line arguments at the order specified above, for
      *             instance 9001 130.91.140.235 9001 4444 DB/db1
      */
@@ -119,7 +121,6 @@ public class EntryPoint {
         EntryPoint entryPoint = new EntryPoint();
         if (!entryPoint.configure(args)) return;
         entryPoint.setUpSubstrate();
-
     }
 
 }
