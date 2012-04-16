@@ -62,44 +62,30 @@ public class YippeeEngine {
      * should bind;
      * 2.   The IP address of the Pastry bootstrap node;
      * 3.   The port number of the Pastry bootstrap node;
-     * 4.   The port number to which the daemon should bind; and
-     * 5.   The path to the BerkeleyDB database
      *
      * @param args  The command line arguments at the order specified above, for
      *              instance 9001 130.91.140.235 9001 4444 DB/db1
      */
     public static void main(String[] args) {
-        System.out.println("2012, Yippee!");
-
-        // TODO: THESE ARE SOME OF THE CONFIGURATIONS NEED TO BE DONE
-        System.out.println("TODO: \n\t * set Thread number");
-        final int NO_OF_THREADS = 1;
-
-
-        if (args.length==0) {
-            logger.error("There were no arb");
+        if (args.length<0) {
+            System.out.println("There are no arguments;");
+            System.out.println("please check README file, or run 'ant usage'");
+            logger.error("Error: No arguments");
             return;
         }
 
-                // only change 1st and 4th
+        System.out.println("2012, Yippee!");
+        // TODO: THESE ARE SOME OF THE CONFIGURATIONS NEED TO BE DONE
+        System.out.println("TODO: \n\t * set Thread number \n\t * set Daemon port");
+        final int NO_OF_THREADS = 1;
+        final String BERKELEY_DB = "db/test";
+
         YippeeEngine yippeeEngine = new YippeeEngine(Integer.parseInt(args[0]),
                 args[1], Integer.parseInt(args[2]), args[4]);
 
         Configuration.getInstance().setPastryEngine(yippeeEngine);
         Configuration.getInstance().setThreadNumber(NO_OF_THREADS);
         Configuration.getInstance().setBerkeleyDB(args[4]);
-
-        if (args.length > 0) {
-            for (int i = 0; i < args.length; i++) {
-                //TODO: Init loggers, log application arguments
-                try {
-                    Thread.sleep(10000); //10 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(args[i]);
-            }
-        }
 
     }
 }
