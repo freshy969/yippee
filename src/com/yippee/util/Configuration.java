@@ -18,7 +18,7 @@ public class Configuration {
     /**
      * Number of threads
      */
-    private int threadNumber;
+    private int crawlerThreadNumber;
     /**
      * Shutdown threads
      */
@@ -57,7 +57,7 @@ public class Configuration {
     private void printConfiguration() {
         //LOG ARGUMENTS
         logger.info("Server reconfiguration complete:");
-        logger.info("Threads \t:" + threadNumber);
+        logger.info("Threads \t:" + crawlerThreadNumber);
         logger.info("Database \t:" + berkeleyDB);
     }
 
@@ -70,21 +70,21 @@ public class Configuration {
 
 
     /**
-     * Get the number of threads
+     * Get the number of threads <i>only</i> for the crawler
      *
      * @return get the number of threads
      */
-    public int getThreadNumber() {
-        return threadNumber;
+    public int getCrawlerThreadNumber() {
+        return crawlerThreadNumber;
     }
 
     /**
-     * Set the number of threads
+     * Set the number of threads <i>only</i> for the crawler
      *
-     * @param threadNumber the number of threads
+     * @param crawlerThreadNumber the number of threads
      */
-    public void setThreadNumber(int threadNumber) {
-        this.threadNumber = threadNumber;
+    public void setCrawlerThreadNumber(int crawlerThreadNumber) {
+        this.crawlerThreadNumber = crawlerThreadNumber;
     }
 
     /**
