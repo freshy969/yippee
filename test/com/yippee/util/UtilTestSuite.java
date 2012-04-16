@@ -6,7 +6,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ FancyExtractorTest.class, 
-				LinkTextExtractorTest.class })
+				LinkTextExtractorTest.class
+				})
 public class UtilTestSuite {
 
 }
