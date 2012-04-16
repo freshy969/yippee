@@ -37,7 +37,7 @@
     </target>
 
     <!-- one of the many ways of doing so -->
-    <property name="main-class" value="com.yippee.pastry.YippeeEngine"/>
+    <property name="main-class" value="com.yippee.util.EntryPoint"/>
 
     <!-- We are going to make this modular -->
     <property name="server" value="tomcat"/>
