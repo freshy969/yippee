@@ -1,5 +1,6 @@
 package com.yippee.util;
 
+import com.yippee.pastry.YippeeEngine;
 import org.apache.log4j.Logger;
 
 /**
@@ -26,6 +27,11 @@ public class Configuration {
      * the path to berkeleyDB
      */
     private String berkeleyDB;
+
+    /**
+     * Store Pastry Engine
+     */
+    private YippeeEngine pastryEngine;
 
     /**
      * Load a thread-safe (yet lazy!) singleton
@@ -106,6 +112,24 @@ public class Configuration {
      */
     public void setBerkeleyDB(String berkeleyDB) {
         this.berkeleyDB = berkeleyDB;
+    }
+
+    /**
+     * Get the node engine
+     *
+     * @return The pastry engine
+     */
+    public YippeeEngine getPastryEngine() {
+        return pastryEngine;
+    }
+
+    /**
+     * Set the pastry application
+     *
+     * @param engine the pastry application running on this node
+     */
+    public void setPastryEngine(YippeeEngine engine) {
+        this.pastryEngine = engine;
     }
 
 }
