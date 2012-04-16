@@ -11,6 +11,27 @@
     <property name="jar.dir" value="${basedir}/build"/>
     <property name="bootPort" value="9001"/>
 
+    <target name="usage" description="Print the usage of ant scripts">
+        <echo>
+            2012, Yippee Project
+
+            Summary of ant targets:
+
+            1. project-test -DbootIp=[ip]
+
+                [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
+
+                The project run target sets up four pastry nodes, at predefined ports:
+                * 9001 for node 1 (bootstrap)
+                * 9002 for node 2
+                * 9003 for node 3
+                * 9004 for node 4
+
+                Refer to the README file for more information.
+        </echo>
+
+    </target>
+
     <!-- one of the many ways of doing so -->
     <property name="main-class" value="com.yippee.pastry.YippeeNode"/>
 
