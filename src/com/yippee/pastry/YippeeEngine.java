@@ -1,14 +1,15 @@
 package com.yippee.pastry;
 
 /**
- * YippeeNode makes use of the YippeePastryApp to create an application instance
+ * YippeeEngine makes use of the YippeePastryApp to create an application instance
  * on this node. It is back-end entry point (front-end being the servlet/JSP)
  * which runs on multiple nodes.
  */
-public class YippeeNode {
+public class YippeeEngine {
 
     public static void main(String[] args) {
-        System.out.println("Yippee!");
+        System.out.println("2012, Yippee!");
+        System.out.println("Starting appliaction Yippee!");
 
         if (args.length > 0) {
             for (int i = 0; i < args.length; i++) {
