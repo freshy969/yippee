@@ -1,6 +1,7 @@
 package com.yippee.crawler;
 
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
 
 /**
@@ -17,6 +18,7 @@ public class Spider implements Runnable {
     private String id;
     private Spider[] spiders;
     private Araneae araneae;
+    private boolean running;
 
     /**
      * The -not so default- constructor. It keeps references to the whole thread
@@ -44,6 +46,21 @@ public class Spider implements Runnable {
      * on a number of conditions.
      */
     public void run() {
+        logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
+        while (running && Configuration.getInstance().isUp()) {
+            try {
+                Message url = urlFrontier.pull();
+                //url.getURL()
+
+
+            } catch (InterruptedException e) {
+                //e.printStackTrace();
+                logger.info("Thread " + Thread.currentThread().getName() + ": Shutting down..");
+                running = false;
+                break;
+            }
+
+        }
 
     }
 }

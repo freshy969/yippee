@@ -1,14 +1,13 @@
 package com.yippee.crawler.frontier;
 
-import static org.junit.Assert.*;
-
-import java.net.MalformedURLException;
-
+import com.yippee.crawler.Message;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.yippee.crawler.Message;
+import java.net.MalformedURLException;
+
+import static org.junit.Assert.assertEquals;
 
 public class SimpleQueueFrontierTest {
 	SimpleQueueFrontier frontier;
@@ -27,6 +26,6 @@ public class SimpleQueueFrontierTest {
 		String url = "http://crawltest.cis.upenn.edu";
 		frontier.push(new Message(url));
 		//TODO test fails, url returned includes a '/' 
-		assertEquals(url, frontier.pull().getURL()	);
+		assertEquals(url, frontier.pull().getUrl());
 	}
 }
