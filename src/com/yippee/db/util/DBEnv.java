@@ -5,10 +5,15 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 
 public class DBEnv {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(DBEnv.class);
     private Environment environment;
     private EntityStore entityStore;
 

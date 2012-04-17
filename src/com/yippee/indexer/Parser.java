@@ -1,6 +1,7 @@
 package com.yippee.indexer;
 
 import com.yippee.db.model.DocAug;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;
 
@@ -17,6 +18,10 @@ import java.io.PrintWriter;
  * 
  */
 public class Parser {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(Parser.class);
 	Document doc;
 	
 	public Parser() {	

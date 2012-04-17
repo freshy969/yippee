@@ -1,8 +1,14 @@
 package com.yippee.indexer;
 
+import org.apache.log4j.Logger;
+
 import java.util.HashMap;
 
 public class WordStemmer {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(WordStemmer.class);
 	HashMap<String,String> exceptionWords = new HashMap<String,String>();
 	
 	public WordStemmer(){

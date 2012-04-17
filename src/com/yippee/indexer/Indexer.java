@@ -1,12 +1,12 @@
 package com.yippee.indexer;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
-import com.yippee.util.LinkTextExtractor;
-
 import com.yippee.db.managers.DocAugManager;
 import com.yippee.db.model.DocAug;
+import com.yippee.util.LinkTextExtractor;
+import org.apache.log4j.Logger;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 /**
  * @author tdu2 The Indexer continually polls the database until no documents
@@ -17,6 +17,10 @@ import com.yippee.db.model.DocAug;
  * 
  */
 public class Indexer extends Thread {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(Indexer.class);
 	DocAugManager dam;
 	
 	public Indexer() {

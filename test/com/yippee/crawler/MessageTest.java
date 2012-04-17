@@ -1,14 +1,19 @@
 package com.yippee.crawler;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class MessageTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(MessageTest.class);
     private String[] urls = {
             "http://n.v.a.s.i.ak.is/~nvas/something/Africa.html",
             "http://domain:8080/./Americas.html",
@@ -25,9 +30,12 @@ public class MessageTest {
 //            "http://crawltest.cis.upenn.edu/"
     };
 
+    // We should handle gracefully
     private String[] malformed = {
-            "https://we.com/index",
-            //"http://we.com///index",  // this is not malformed
+            "htt://we.com/index",
+            "htt://this",
+            "htt://\\\\",
+            "**(**)**",
             "http://we.com:what/index"
     };
 
@@ -35,35 +43,40 @@ public class MessageTest {
      * Test well-formed urls; these should all create messages with no problem
      */
     @Test
-    public void testURLs() {
+    public void testNewTypes() {
         boolean test = true;
         for (String url : urls) {
-            try {
-                if ((new Message(url).getType() == Message.Type.NEW)) {
-                    if (!url.equals(new Message(url).getURL())) {
-                        System.out.println("["+new Message(url).getURL()+"]");
-                        test = false;
-                    }
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                test = false;
-            }
+            if ((new Message(url).getType() != Message.Type.NEW)) test = false;
+        }
+        assertTrue(test);
+    }
+
+    @Test
+    public void testUrls(){
+        boolean test = true;
+        for (String url : urls) {
+             if (!url.equals(new Message(url).getUrl().toString())){
+                 test = false;
+             }
         }
         assertTrue(test);
     }
 
     /**
-     * Test malformed urls; these should throw exception
-     * @throws MalformedURLException 
+     * Test malformed urls
+     *
      */
-    @Test(expected=MalformedURLException.class)
-    public void testMalformed() throws MalformedURLException {
+    @Test
+    public void testMalformed(){
+        boolean test = true;
         for (String url : malformed) {
-        	if ((new Message(url).getType() != Message.Type.NOX)) {
-        		System.out.println(new Message(url).getURL());
-        	}
+            Message msg = new Message(url);
+            if ((msg.getType() != Message.Type.NOX)) {
+                test = false;
+                System.out.println(msg.getUrl().toString());
+            }
         }
+        assertTrue(test);
     }
 
     /**
@@ -73,28 +86,8 @@ public class MessageTest {
     public void testHostEq() {
         boolean test = true;
         for (String url : urls) {
-            try{
-                if (!(new URL(url)).getHost().equals((new Message(url).getHost()))){
-                    test = false;
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                test = false;
-            }
-        }
-        assertTrue(test);
-    }
-
-    /**
-     * Test that the oldPath method can provide the getPath() equivalent of the url class
-     */
-    @Test
-    public void testPathEq() {
-        boolean test = true;
-        for (String url : urls) {
-            try{
-                if (!(new URL(url)).getPath().equals((new Message(url).getOldPath()))){
-                    System.out.println((new URL(url)).getPath() +"|"+(new Message(url)).getOldPath());
+            try {
+                if (!(new URL(url)).getHost().equals((new Message(url).getUrl().getHost()))) {
                     test = false;
                 }
             } catch (MalformedURLException e) {
@@ -109,95 +102,23 @@ public class MessageTest {
      * Make sure that the message type works
      */
     @Test
-    public void testType(){
+    public void testType() {
         Message message = null;
-        try {
-            message = new Message("http://www.example.com");
-            message.setType(Message.Type.UPD);
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        message = new Message("http://www.example.com");
+        message.setType(Message.Type.UPD);
         assertEquals(Message.Type.UPD, message.getType());
     }
 
     /**
-     * Test a number of variations for short paths, these should work ok
-     */
-    @Test
-    public void testGetPath() {
-        boolean result = true;
-        String s1 = "http://we.com/index";
-        String s2 = "http://we.com/index/";
-        String s3 = "http://we.com/";
-        String s4 = "http://we.com";
-        Message message1 = null; Message message2 = null;
-        Message message3 = null; Message message4 = null;
-        try {
-            message1 = new Message(s1);
-            message2 = new Message(s2);
-            message3 = new Message(s3);
-            message4 = new Message(s4);
-            String path1 = message1.getPath();
-            String path2 = message2.getPath();
-            String path3 = message3.getPath();
-            String path4 = message4.getPath();
-            if (!path1.equals("/") || !path2.equals("/index/") || !path3.equals("/") || !path4.equals("/")) {
-                System.out.println(path1 +"|"+path2 + "|" +path3 +"|"+path4);
-                result = false;
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            result = false;
-        }
-        assertTrue(result);
-
-    }
-
-    /**
-     * Test a number of variations for short paths, these should work ok
-     */
-    @Test
-    public void testFile() {
-        boolean result = true;
-        String s1 = "http://we.com/index";
-        String s2 = "http://we.com/index/";
-        String s3 = "http://we.com/";
-        String s4 = "http://we.com";
-        Message message1 = null; Message message2 = null;
-        Message message3 = null; Message message4 = null;
-        try {
-            message1 = new Message(s1);
-            message2 = new Message(s2);
-            message3 = new Message(s3);
-            message4 = new Message(s4);
-            String path1 = message1.getFile();
-            String path2 = message2.getFile();
-            String path3 = message3.getFile();
-            String path4 = message4.getFile();
-            if (!path1.equals("index") || !path2.equals("") || !path3.equals("") || !path4.equals("")) {
-                System.out.println(path1 +"|"+path2);
-                result = false;
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            result = false;
-        }
-        assertTrue(result);
-
-    }
-    
-    /**
      * Test URL retrieved from method is what got put in
-     * @throws MalformedURLException 
+     *
+     * @throws MalformedURLException
      */
     @Test
-    public void testRetrieveURL() throws MalformedURLException{
-    	String url = "http://crawltest.cis.upenn.edu";
-    	Message m = new Message(url);
-    	assertEquals(url, m.getURL());
+    public void testRetrieveURL() throws MalformedURLException {
+        String url = "http://crawltest.cis.upenn.edu";
+        Message m = new Message(url);
+        assertEquals(new URL(url), m.getUrl());
     }
 
 }

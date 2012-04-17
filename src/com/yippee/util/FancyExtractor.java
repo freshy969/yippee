@@ -1,5 +1,6 @@
 package com.yippee.util;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -11,7 +12,15 @@ import com.yippee.indexer.WordStemmer;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * TODO: Guys, could you run FancyExtractor against LinExtractor Test cases
+ * TODO: so that we make sure that we extract the same ids? (URLs)
+ */
 public class FancyExtractor {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(FancyExtractor.class);
 	ArrayList<String> links;
 	ArrayList<String> text;
 	Stack<String> format;

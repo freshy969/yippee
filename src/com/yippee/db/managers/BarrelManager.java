@@ -20,7 +20,10 @@ import com.yippee.db.util.DBEnv;
 import com.yippee.db.model.Hit;
 
 public class BarrelManager {
-	static Logger logger = Logger.getLogger(BarrelManager.class);
+	/**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(BarrelManager.class);
     private static DBEnv myDbEnv;
     private DAL dao;
 

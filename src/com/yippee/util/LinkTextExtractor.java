@@ -1,5 +1,6 @@
 package com.yippee.util;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -9,6 +10,10 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class LinkTextExtractor {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(LinkTextExtractor.class);
 	ArrayList<String> links;
 	ArrayList<String> text;
 	

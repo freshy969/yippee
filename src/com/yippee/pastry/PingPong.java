@@ -1,6 +1,7 @@
 package com.yippee.pastry;
 
 import com.yippee.util.Configuration;
+import org.apache.log4j.Logger;
 
 /**
  * This class implements the ping-pong thread, necessary to
@@ -9,6 +10,10 @@ import com.yippee.util.Configuration;
  * boot-up 10 seconds, ping pong every 5 seconds
  */
 public class PingPong implements Runnable {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(PingPong.class);
     /**
      * Toggle whether the node is booting or not.
      */

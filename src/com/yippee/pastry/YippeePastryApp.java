@@ -21,9 +21,8 @@ public class YippeePastryApp implements Application {
      * Constructor
      *
      * @param nodeFactory
-     * @param database
      */
-    public YippeePastryApp(NodeFactory nodeFactory, String database) {
+    public YippeePastryApp(NodeFactory nodeFactory) {
         logger.info("Register Application");
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "P2P App");
@@ -33,8 +32,6 @@ public class YippeePastryApp implements Application {
     /**
      * Called when the Pastry application receives a message. It pushes the url
      * to the URLFrontier (maybe through a duplicate URL eliminator).
-     *
-     *
      */
 	public void deliver(Id id, Message message) {
         PastryMessage om = (PastryMessage) message;

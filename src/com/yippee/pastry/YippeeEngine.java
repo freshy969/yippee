@@ -33,13 +33,13 @@ public class YippeeEngine {
      * @param ipAddress The IP address of the Pastry bootstrap node;
      * @param bootPort  The port number of the Pastry bootstrap node;
      */
-    public YippeeEngine(int localPort, String ipAddress, int bootPort, String database) {
+    public YippeeEngine(int localPort, String ipAddress, int bootPort) {
         try {
             InetAddress inetAddress = InetAddress.getByName(ipAddress);
             InetSocketAddress address = new InetSocketAddress(inetAddress, bootPort);
             nodeFactory = new NodeFactory(localPort, address);
             logger.info("Starting ring..");
-            yippeePastryApp = new YippeePastryApp(nodeFactory, database);
+            yippeePastryApp = new YippeePastryApp(nodeFactory);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

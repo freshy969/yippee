@@ -1,13 +1,16 @@
 package com.yippee.indexer;
 
-import com.yippee.indexer.WordStemmer;
-import static org.junit.Assert.*;
-
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 public class WordStemmerTest {
-	
+	/**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(WordStemmerTest.class);
 	WordStemmer stemmer;
 	
 	@Before

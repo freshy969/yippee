@@ -1,6 +1,7 @@
 package com.yippee.crawler;
 
 import junit.framework.TestCase;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +9,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class HttpModuleTest extends TestCase{
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(HttpModuleTest.class);
 
     @Before
     public void setUp() throws Exception {

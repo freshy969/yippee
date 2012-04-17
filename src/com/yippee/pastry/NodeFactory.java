@@ -1,5 +1,6 @@
 package com.yippee.pastry;
 
+import org.apache.log4j.Logger;
 import rice.environment.Environment;
 import rice.p2p.commonapi.Node;
 import rice.pastry.Id;
@@ -24,6 +25,10 @@ import java.security.NoSuchAlgorithmException;
  *
  */
 public class NodeFactory {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(NodeFactory.class);
 	Environment env;
 	NodeIdFactory nidFactory;
 	SocketPastryNodeFactory factory;
