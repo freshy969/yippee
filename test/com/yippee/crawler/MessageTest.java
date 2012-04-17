@@ -25,9 +25,12 @@ public class MessageTest {
 //            "http://crawltest.cis.upenn.edu/"
     };
 
+    // We should handle gracefully
     private String[] malformed = {
-            "https://we.com/index",
-            //"http://we.com///index",  // this is not malformed
+            "htt://we.com/index",
+            "htt://this",
+            "htt://\\\\",
+            "**(**)**",
             "http://we.com:what/index"
     };
 
@@ -47,27 +50,25 @@ public class MessageTest {
     public void testUrls(){
         boolean test = true;
         for (String url : urls) {
-             if (!url.equals(new Message(url).getUrl().getPath())){
+             if (!url.equals(new Message(url).getUrl().toString())){
                  test = false;
-                 System.out.println(new Message(url).getUrl().getPath());
-                 System.out.println(new Message(url).getUrl().getFile());
              }
         }
         assertTrue(test);
     }
 
     /**
-     * Test malformed urls; these should throw exception
+     * Test malformed urls
      *
-     * @throws MalformedURLException
      */
-    @Test(expected = MalformedURLException.class)
-    public void testMalformed() throws MalformedURLException {
+    @Test
+    public void testMalformed(){
         boolean test = true;
         for (String url : malformed) {
-            if ((new Message(url).getType() != Message.Type.NOX)) {
+            Message msg = new Message(url);
+            if ((msg.getType() != Message.Type.NOX)) {
                 test = false;
-                System.out.println(new Message(url).getUrl().getPath());
+                System.out.println(msg.getUrl().toString());
             }
         }
         assertTrue(test);
