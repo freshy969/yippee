@@ -8,19 +8,32 @@ import com.yippee.db.model.DocAug;
 import com.yippee.db.model.Hit;
 import com.yippee.db.model.RobotsTxt;
 import com.yippee.db.model.Word;
+import org.apache.log4j.Logger;
 
 /**
  * Data access layer class: it provides simplified access to data stored in persistent storage (BerkeleyDB). It provides
  * a layer of abstraction to the managers
  */
 public class DAL {
-    // DocAug Accessors
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(DAL.class);
+    /**
+     *DocAug Accessors
+     */
     PrimaryIndex<String, DocAug> docById;
-    // Robots Accessors
+    /**
+     * Robots Accessors
+     */
     PrimaryIndex<String, RobotsTxt> robotsById;
-    // Lexicon Accessors
+    /**
+     * Lexicon Accessors
+     */
     PrimaryIndex<String, Word> lexiconById;
-    // Barrel Accessors
+    /**
+     * Barrel Accessors
+     */
     PrimaryIndex<String, Hit> barrelById;
 
     /**

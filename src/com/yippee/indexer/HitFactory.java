@@ -1,10 +1,15 @@
 package com.yippee.indexer;
 
+import com.yippee.db.model.Hit;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 
-import com.yippee.db.model.Hit;
-
 public class HitFactory {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(HitFactory.class);
 	Lexicon lexicon;
 	
 	/**

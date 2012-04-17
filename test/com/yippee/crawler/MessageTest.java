@@ -1,5 +1,6 @@
 package com.yippee.crawler;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
@@ -9,6 +10,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class MessageTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(MessageTest.class);
     private String[] urls = {
             "http://n.v.a.s.i.ak.is/~nvas/something/Africa.html",
             "http://domain:8080/./Americas.html",

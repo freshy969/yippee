@@ -1,14 +1,17 @@
 package com.yippee.indexer;
 
-import com.yippee.indexer.Lexicon;
-import java.util.ArrayList;
-import static org.junit.Assert.*;
-
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 public class LexiconTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(LexiconTest.class);
 	Lexicon mLexicon;
 	String test = "word";
 	

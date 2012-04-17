@@ -1,6 +1,7 @@
 package com.yippee.crawler.frontier;
 
 import com.yippee.crawler.Message;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,10 @@ import java.net.MalformedURLException;
 import static org.junit.Assert.assertEquals;
 
 public class SimpleQueueFrontierTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(SimpleQueueFrontierTest.class);
 	SimpleQueueFrontier frontier;
 
 	@Before

@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.yippee.indexer.Lexicon;
 import org.apache.log4j.Logger;
 
 import rice.pastry.Id;
@@ -32,7 +33,10 @@ import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
 
 public class LexiconManager {
-	static Logger logger = Logger.getLogger(LexiconManager.class);
+	/**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(LexiconManager.class);
 	private static DBEnv myDbEnv;
 	private DAL dao;
 	private static String endOfWordDeliminator = "::";

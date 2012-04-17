@@ -1,15 +1,20 @@
 package com.yippee.indexer;
 
 import com.yippee.db.model.Hit;
-import com.yippee.indexer.Lexicon;
-import java.util.ArrayList;
-import static org.junit.Assert.*;
-
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertTrue;
+
 public class HitFactoryTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(HitFactoryTest.class);
 	Lexicon mLexicon;
 	String[] words = {"The","fox","jumped","over","the","lazy","dog"};
 	String docID = "doc123";

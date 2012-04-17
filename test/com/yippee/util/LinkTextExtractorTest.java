@@ -2,6 +2,7 @@ package com.yippee.util;
 
 import com.yippee.db.model.DocAug;
 import com.yippee.indexer.Parser;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -12,6 +13,10 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 public class LinkTextExtractorTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(LinkTextExtractorTest.class);
     /*
     Please do not remove urls, since the tests are going to break;
     if you want to add a url, just add it below, and update assertUrls table!

@@ -5,11 +5,16 @@ import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.model.DocAug;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.Iterator;
 
 public class DocAugManager {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(DocAugManager.class);
     private static DBEnv myDbEnv;
     private DAL dao;
 

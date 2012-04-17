@@ -1,11 +1,16 @@
 package com.yippee.indexer;
 
-import static org.junit.Assert.*;
-
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 public class MessageTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(MessageTest.class);
 	Message m;
 
 	@Before

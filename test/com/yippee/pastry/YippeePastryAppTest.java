@@ -1,15 +1,15 @@
 package com.yippee.pastry;
 
-import static org.junit.Assert.*;
+import org.apache.log4j.Logger;
+import org.junit.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.fail;
 
 public class YippeePastryAppTest {
-
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(YippeePastryAppTest.class);
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}

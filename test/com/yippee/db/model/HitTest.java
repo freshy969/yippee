@@ -1,14 +1,16 @@
 package com.yippee.db.model;
 
-import com.yippee.indexer.Lexicon;
-import java.util.ArrayList;
-import static org.junit.Assert.*;
-
-import org.junit.After;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 public class HitTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(HitTest.class);
 	Hit hit;
 	String docID = "doc123";
 	byte[] wordID = {1,0,1,1};

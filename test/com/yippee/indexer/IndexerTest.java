@@ -1,16 +1,17 @@
 package com.yippee.indexer;
 
-import static org.junit.Assert.assertTrue;
+import org.apache.log4j.Logger;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
-
-import com.yippee.db.managers.DocAugManager;
-import com.yippee.db.model.DocAug;
+import static org.junit.Assert.assertTrue;
 
 public class IndexerTest {
-
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(IndexerTest.class);
 	@Test 
 	public void testParseAndCleanText() {
 		String test = "Google easy123, ";

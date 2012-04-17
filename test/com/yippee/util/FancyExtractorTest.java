@@ -2,16 +2,17 @@ package com.yippee.util;
 
 import com.yippee.db.model.DocAug;
 import com.yippee.indexer.Parser;
-import org.junit.Before;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 public class FancyExtractorTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(FancyExtractorTest.class);
     /* Testing for fancy HTML extraction */
 	
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD><BODY>" +

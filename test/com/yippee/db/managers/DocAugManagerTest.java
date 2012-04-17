@@ -1,6 +1,7 @@
 package com.yippee.db.managers;
 
 import com.yippee.db.model.DocAug;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DocAugManagerTest {
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(DocAugManagerTest.class);
     DocAugManager docAugManager;
     DocAug docAug;
 
