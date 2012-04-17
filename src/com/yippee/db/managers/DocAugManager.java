@@ -19,10 +19,9 @@ public class DocAugManager {
      * to make sure they do not write to this folder.
      */
     public DocAugManager(String location) {
-        myDbEnv = new DBEnv();
+        myDbEnv = DBEnv.getInstance(location);
         // Path to the environment home
         // Environment is <i>not</i> readonly
-        myDbEnv.setup(new File(location), false);
     }
 
 

@@ -57,10 +57,4 @@ public class DocAugManagerTest {
         DocAug doPull = docAugManager.peek();
         assertEquals(doPull.getId(), "2"); //it has the last id! (queue)
     }
-
-    @After
-    public void tearDown(){
-        docAugManager.close();
-    }
-
 }

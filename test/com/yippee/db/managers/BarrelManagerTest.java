@@ -62,9 +62,4 @@ public class BarrelManagerTest {
     	assertTrue(hits3.size()==1);
     }
     
-    @After
-    public void tearDown(){
-        barrelManager.close();
-    }
-
 }

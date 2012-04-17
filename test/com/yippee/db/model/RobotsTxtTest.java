@@ -12,6 +12,7 @@ public class RobotsTxtTest {
 
 	@Before
 	public void setUp() throws Exception {	
+		robotsTxt = new RobotsTxt();
 	}
 	
 	@Test
