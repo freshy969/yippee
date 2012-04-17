@@ -13,9 +13,15 @@ public class Spider implements Runnable {
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(Spider.class);
+    private URLFrontier urlFrontier;
+    private String id;
+    private Spider[] spiders;
+    private Araneae araneae;
 
     /**
-     * Default constructor
+     * The -not so default- constructor. It keeps references to the whole thread
+     * pool of araneae (in order to shutdown if needed from the Frontier), the
+     * URLFrontier, its own thread it and the other spiders.
      *
      * @param urlFrontier
      * @param id
@@ -23,7 +29,10 @@ public class Spider implements Runnable {
      * @param araneae
      */
     public Spider(URLFrontier urlFrontier, String id, Spider[] spiders, Araneae araneae) {
-
+        this.urlFrontier = urlFrontier;
+        this.id = id;
+        this.spiders = spiders;
+        this.araneae = araneae;
     }
 
     /**

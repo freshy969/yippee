@@ -44,5 +44,19 @@ public class Araneae {
         }
     }
 
+    /**
+     * Shuts down all threads gracefully
+     *
+     * @return true
+     */
+    public boolean shutdown(){
+        logger.info(" Shutting down idle threads");
+        for (int i=0; i<threads.length;i++){
+            logger.info(" Shutting down thread" + threads[i].getName());
+            threads[i].interrupt();
+        }
+        return true;
+    }
+
 
 }
