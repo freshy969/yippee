@@ -3,6 +3,7 @@ package com.yippee.crawler;
 import com.yippee.util.Configuration;
 import com.yippee.db.managers.RobotsManager;
 import com.yippee.db.model.RobotsTxt;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +15,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class RobotsModule {
-
+    /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(RobotsModule.class);
+    /**
+     * The host url
+     */
     private URL host;
 
     /**
