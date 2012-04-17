@@ -54,16 +54,26 @@ public class BarrelManagerTest {
     
     @Test
     public void testGetHitList(){
-    	ArrayList<Hit> hits = barrelManager.getHitList(wordid1);  	
+    	ArrayList<Hit> hits = barrelManager.getHitList(wordid1).getHitList();  	
     	assertTrue(hits.size()==3);
-    	ArrayList<Hit> hits2 = barrelManager.getHitList(wordid2);  	
+    	ArrayList<Hit> hits2 = barrelManager.getHitList(wordid2).getHitList();  	
     	assertTrue(hits2.size()==1);
-    	ArrayList<Hit> hits3 = barrelManager.getHitList(wordid3);  	
+    	ArrayList<Hit> hits3 = barrelManager.getHitList(wordid3).getHitList();  	
     	assertTrue(hits3.size()==1);
     }
     
+    @Test 
+    public void testDelete() {
+    	barrelManager.deleteWordEntry(wordid1);
+    	barrelManager.deleteWordEntry(wordid2);
+    	barrelManager.deleteWordEntry(wordid3);
+    	assertTrue(barrelManager.getHitList(wordid1)==null);
+    	assertTrue(barrelManager.getHitList(wordid2)==null);
+    	assertTrue(barrelManager.getHitList(wordid3)==null);
+    }
+    
     @After
-    public void tearDown(){
+    public void tearDown(){ 	
         barrelManager.close();
     }
 

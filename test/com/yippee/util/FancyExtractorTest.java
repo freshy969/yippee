@@ -14,10 +14,10 @@ import static org.junit.Assert.*;
 public class FancyExtractorTest {
     /* Testing for fancy HTML extraction */
 	
-    String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD><BODY>" +
+    String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD>" +
             "<H3>XML to be crawled</H3>" +
             "<UL>" +
-            "<LI><B><A HREF=\"rss/cnnp.xml\">CNN politics - MATCHED</A></B></LI>" +
+            "<LI><A HREF=\"rss/cnnp.xml\"><B>CNN politics - MATCHED</A></B></LI>" +
             "<LI><I><A HREF=\"rss/cnnt.xml\">CNN top stories - MATCHED</A></I></LI>" +
             "<LI><A HREF=\"rss/cnnl.xml\">CNN Laws - NOT MATCHED</A></LI>" +
             "</UL>" +
@@ -48,7 +48,7 @@ public class FancyExtractorTest {
             "      <li><a href=\"nothingSpecial\">Front Page</a></li>\n" +
             "      <li><a href=\"nothingSpecial/whatevah/../ea.html\">Middle East</a></li>\n" +
 
-            "      <li><a href=\"?who=me\">params</a></li>" +
+            "      <li><a href=\"?who=me\">params</a></li> " +
             "      <li><a href=\"#tag\">tags</a></li>" +
             "</UL>" +
             "<H3>NON XML files</H3>" +

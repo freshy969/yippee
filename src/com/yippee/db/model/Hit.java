@@ -1,26 +1,27 @@
 package com.yippee.db.model;
 
 import com.sleepycat.persist.model.Entity;
+import com.sleepycat.persist.model.Persistent;
 import com.sleepycat.persist.model.PrimaryKey;
 
-@Entity
+@Persistent
 public class Hit {
 	/**
 	 * variables we want to keep that we extract from document about each word
 	 * we can add more, if find things are meaningful
 	 */
-	@PrimaryKey
-	private String key;
 	
 	private String docID;
 	private byte[] wordID;
 	private boolean caps = false;
 	private boolean bold = false;
 	private boolean ital = false;
+	private boolean isAnchor = false;
+	private String docIDfrom;
 	private int position;
 	
 	/**
-	 * constructor for a Hit - need docID it came from, wordId for that word, and 
+	 * constructor for a normal Hit - need docID it came from, wordId for that word, and 
 	 * position of word in the document
 	 * 
 	 * @param docID
@@ -30,11 +31,24 @@ public class Hit {
 	public Hit(String docID, byte[] wordID, int position) {
 		this.docID = docID;
 		this.wordID = wordID;
-		this.key = new String(wordID)+docID+position;
 		this.position = position;
 	}
 	
-	public Hit() {}
+	/**
+	 * Constructor for Anchor Hits - need docID it points to, docID it came from, and
+	 * wordId for that word
+	 * 
+	 * @param docPointingTo
+	 * @param docFrom
+	 * @param wordID
+	 */
+	public Hit(String docPointingTo, String docFrom, byte[] wordID) {
+		this.docID = docPointingTo;
+		this.docIDfrom = docFrom;
+		this.wordID = wordID;
+		isAnchor = true;
+	}
+	
 	
 	/**
 	 * sets capitalization variable to true or false. default is fault.
@@ -58,6 +72,23 @@ public class Hit {
 	 */
 	public void setItalicize(boolean b){
 		ital = b;
+	}
+	
+	
+	/**
+	 * 
+	 * @return whether or not an anchor hit
+	 */
+	public boolean isAnchor(){
+		return isAnchor;
+	}
+	
+	/**
+	 * sets document this anchor hit came from
+	 * @param b
+	 */
+	public String getDocCameFrom(){
+		return docIDfrom;
 	}
 	
 	/**

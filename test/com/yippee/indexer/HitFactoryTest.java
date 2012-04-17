@@ -20,7 +20,7 @@ public class HitFactoryTest {
         mLexicon = new Lexicon("db/test","doc/en-common.txt"); 
         hitFactory = new HitFactory(mLexicon);
     }
-	
+/*	
     @Test
     public void testCreateHits(){
     	ArrayList<Hit> hitList = hitFactory.createHits(words, docID);
@@ -53,7 +53,7 @@ public class HitFactoryTest {
         assertTrue((new String(wordid)).equals(new String(lexiconWordID)));
         assertTrue(position==4); 
         assertTrue(!h.getCaps());
-    }
+    }*/
     
     @After
     public void tearDown(){

@@ -13,6 +13,7 @@ import org.junit.Before;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.model.DocAug;
+import com.yippee.db.model.HitList;
 import com.yippee.db.model.Word;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
@@ -34,15 +35,32 @@ public class BarrelManager {
         myDbEnv.setup(new File(location), false);
     }
 
-    /**
-     * add a document to the hitlist of a word
-     */
+	/**
+	 * add a document Hit to the hitlist of a word
+	 * updates if word already in db, otherwise adds it
+	 * 
+	 * @param h
+	 * @return
+	 */
     public boolean addDocHit(Hit h){
     	boolean success = true;
         try {
             // Open the data accessor. This is used to store persistent objects.
             dao = new DAL(myDbEnv.getEntityStore());
-            dao.getBarrelById().put(h);
+            if(dao.getBarrelById().contains(new String(h.getWordId()))) {
+            	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
+            	HitList hl = dao.getBarrelById().get(new String(h.getWordId()));
+            	hl.addHit(h);
+            	dao.getBarrelById().delete(new String(h.getWordId()));
+            	//"updates" entry
+            	dao.getBarrelById().put(hl);
+            } else {
+            	//System.out.println("create new entry "+h.getDocId()+", "+new String(h.getWordId()));
+            	HitList hl = new HitList(new String(h.getWordId()));
+            	hl.addHit(h);
+            	dao.getBarrelById().put(hl);
+            }
+            
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
             success = false;
@@ -55,11 +73,39 @@ public class BarrelManager {
     
     /**
      * gives hitlist for a given word
+     * aka a HitList object
+     * @param wordid
+     * @return
+     */
+    public HitList getHitList(byte[] wordid){
+        dao = new DAL(myDbEnv.getEntityStore());
+        
+        return dao.getBarrelById().get(new String(wordid));
+    }
+    
+    /**
+     * deletes word entry, should only be used for test
+     * @param wordid
+     */
+    public void deleteWordEntry(byte[] wordid){
+        dao = new DAL(myDbEnv.getEntityStore());
+        dao.getBarrelById().delete(new String(wordid));
+    }
+    
+    /**
+     * Close the database environment
+     */
+    public void close() {
+        myDbEnv.close();
+    }
+    
+    /**
+     * gives hitlist for a given word
      * aka a list of the Hit objects 
      * @param wordid
      * @return
      */
-    public ArrayList<Hit> getHitList(byte[] wordid){
+/*    public ArrayList<Hit> getHitList(byte[] wordid){
         dao = new DAL(myDbEnv.getEntityStore());
         EntityCursor<Hit> curs = dao.getBarrelCursor();
         Hit hitList = curs.next();
@@ -72,12 +118,12 @@ public class BarrelManager {
           }
         curs.close();
         return h;
-    }
-    
-    /**
+    }*/
+/*    
+    *//**
      * sorts the hitlist
      * @param hits
-     */
+     *//*
     public void sortByDocId(ArrayList<Hit> hits){
     	 Collections.sort(hits,new Comparator<Hit>() {
              public int compare(Hit hit1, Hit hit2) {
@@ -85,14 +131,7 @@ public class BarrelManager {
              }
          });
     }
-    
-   
-    /**
-     * Close the database environment
-     */
-    public void close() {
-        myDbEnv.close();
-    }
+    */
     
 /*    *//**
      * does word exist in barrel
@@ -155,35 +194,4 @@ public class BarrelManager {
         return myHitList;
     }*/
     
-
-    
-    
-    public static void main(String[] args){
-    	BarrelManager barrelManager = new BarrelManager("db/test");
-    	byte[] wordid1 = {1,2,3};
-    	byte[] wordid2 = {1,0,7};
-    	byte[] wordid3 = {7,9,0,7,7};
-        Hit h1 = new Hit("doc5",wordid1,2);
-        Hit h2 = new Hit("doc2",wordid2,67);
-        Hit h3 = new Hit("doc2",wordid1,6);
-        Hit h4 = new Hit("doc1",wordid1,6907);
-        Hit h5 = new Hit("doc1",wordid3,5);  
-        Hit h6 = new Hit("doc1",wordid1,5);  
-    	barrelManager.addDocHit(h1);
-    	barrelManager.addDocHit(h2);
-    	barrelManager.addDocHit(h3);
-    	barrelManager.addDocHit(h4);
-    	barrelManager.addDocHit(h5);
-    	barrelManager.addDocHit(h6);
-    	ArrayList<Hit> h = barrelManager.getHitList(wordid1);
-    	for(Hit a : h) {
-    		System.out.println(a.getDocId()+", "+a.getPostion());
-    	}
-    	
-    	//boolean success = true;
-    	//ArrayList<Hit> hits = h.getHitList();
-
-    	barrelManager.close();
-
-    }
 }

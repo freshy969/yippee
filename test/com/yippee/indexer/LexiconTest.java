@@ -2,6 +2,8 @@ package com.yippee.indexer;
 
 import com.yippee.indexer.Lexicon;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -33,7 +35,7 @@ public class LexiconTest {
     public void testGetWordId(){
     	byte[] id = mLexicon.getWordId(test);
     	byte[] id2 = mLexicon.getWordId(test);
-        assertTrue((new String(id)).equals(new String(id2)));
+        assertTrue(Arrays.equals(id, id2));
     }
     
     
