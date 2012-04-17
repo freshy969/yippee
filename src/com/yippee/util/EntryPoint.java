@@ -97,6 +97,8 @@ public class EntryPoint {
      */
     private boolean setupCrawler(){
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
+
+
         return true;
     }
 
