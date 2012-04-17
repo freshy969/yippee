@@ -26,12 +26,7 @@ public class DbShutdownHook extends Thread {
 	public void run(){
 		if(env != null){
 			try{
-				
-				System.out.println(store.toString());
 				store.close();
-				System.out.println(env.toString());
-				System.out.println(env.isValid());
-				
 				env.cleanLog();
 				env.close();
 				System.out.println("Database closed.");
