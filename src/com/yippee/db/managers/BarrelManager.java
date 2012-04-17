@@ -32,10 +32,9 @@ public class BarrelManager {
      * it, if it does not exist.
      */
     public BarrelManager(String location) {
-        myDbEnv = new DBEnv();
+        myDbEnv = DBEnv.getInstance(location);
         // Path to the environment home
         // Environment is <i>not</i> readonly
-        myDbEnv.setup(new File(location), false);
     }
 
 	/**
