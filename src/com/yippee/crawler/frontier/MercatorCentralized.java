@@ -8,6 +8,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import com.yippee.crawler.Message;
+import com.yippee.crawler.prioritizer.Prioritizer;
+import com.yippee.crawler.prioritizer.PrioritizerFactory;
+import com.yippee.crawler.prioritizer.PrioritizerType;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -20,7 +24,7 @@ public class MercatorCentralized implements URLFrontier{
     static Logger logger = Logger.getLogger(MercatorCentralized.class);
     
     //Prioritizer?
-    
+    Prioritizer prioritizer;
     //Random queue chooser with bias
     
     
@@ -36,7 +40,7 @@ public class MercatorCentralized implements URLFrontier{
 	
 	
 	//Priority queue (heap) (for next time back-end queue can be selected)
-	Queue<Integer> nextToCrawl;
+	Queue<Integer> nextHostToCrawl;
 	
 	
 	//RobotsMOdule
@@ -45,6 +49,10 @@ public class MercatorCentralized implements URLFrontier{
 	public MercatorCentralized(){}
 	
 	public MercatorCentralized(int numPriorityLevels, int numWorkerThreads){
+		//Init prioritizer
+		prioritizer = PrioritizerFactory.get(PrioritizerType.RANDOM, numPriorityLevels);
+		
+		
 		//Initilaize front end queues
 		frontEndQueues = new HashMap<Integer, Queue<URL>>();
 		for(int i = 0; i < numPriorityLevels; i++){
@@ -62,7 +70,7 @@ public class MercatorCentralized implements URLFrontier{
 		
 		
 		//Initialize priority queue
-		nextToCrawl = new PriorityBlockingQueue<Integer>();
+		nextHostToCrawl = new PriorityBlockingQueue<Integer>();
 	}
 	
 	
@@ -74,15 +82,45 @@ public class MercatorCentralized implements URLFrontier{
     public Message pull() throws InterruptedException {
     	//Based on priority queue of time to next crawl pick a back end queue
     	
-        return null;
+    	//Get top/head of priority queue -> returns index of queue to pick from
+    	int priorityQueueHead = nextHostToCrawl.poll();
+    	//TODO - poll removes the element from the queue.  We don't want it
+    	//		removed unless that host's backend queue is empty.
+    	//	Either encapsulate this, or handle it here?
+    	
+    	
+    	
+    	//
+    	URL url = backEndQueues.get(priorityQueueHead).poll();
+    	
+    	
+    	//TODO - Put this URL back in frontier for crawling again (with explicit low priority?)
+    	//	via this.push(Message), or other facility?
+    	//TODO - this should be done in a way that does not make the caller of pull wait.
+    	reinsertURL(url);
+    	
+    	
+    	
+    	Message retVal = new Message(url.toString()); 
+        return retVal;
     }
 
     public void push(Message message) {
     	//Put URL into one of the front end queues based on priority from Prioritizer
     	URL url = message.getURL();
     	
+    	//Get queue of priority returned by prioritizer, add url to that queue
+    	frontEndQueues.get((prioritizer.getPriority(url))).add(url);
+    	
+    	//TODO - Do we have RobotsTxt? If yes, no problem.  If no, need to get it
     }
+    
 
+    private void reinsertURL(URL url){
+    	int lowPriority = frontEndQueues.size();
+    	frontEndQueues.get(lowPriority).add(url);
+    }
+    
     public boolean save() {
         return false;
     }
