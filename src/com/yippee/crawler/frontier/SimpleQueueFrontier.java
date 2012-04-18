@@ -4,7 +4,7 @@ import com.yippee.crawler.Message;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class SimpleQueueFrontier implements URLFrontier {
 	/**
@@ -15,7 +15,7 @@ public class SimpleQueueFrontier implements URLFrontier {
 	BlockingQueue<Message> urls;
 	
 	public SimpleQueueFrontier(){
-		urls = new PriorityBlockingQueue<Message>();
+		urls = new LinkedBlockingQueue<Message>();
 	}
 
 	public Message pull() throws InterruptedException {
