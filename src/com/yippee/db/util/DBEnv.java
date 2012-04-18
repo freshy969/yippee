@@ -6,8 +6,11 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
 import org.apache.log4j.Logger;
+import com.yippee.db.DbShutdownHook;
+
 
 import java.io.File;
+import java.io.IOException;
 
 public class DBEnv {
     /**
@@ -16,26 +19,53 @@ public class DBEnv {
     static Logger logger = Logger.getLogger(DBEnv.class);
     private Environment environment;
     private EntityStore entityStore;
+    
+    private static DBEnv _instance;
 
     /**
      * The constructor does nothing
      */
-    public DBEnv() {
+    public DBEnv() {}
+    
+    public static DBEnv getInstance(String dbLocation){
+    	if(_instance != null) return _instance;
+    	else {
+    		try{
+    			setup(new File(dbLocation), false); 
+        		return _instance;
+        		
+    		} catch(DatabaseException e){
+    			e.printStackTrace();
+    			return null;
+    		} 
+    	}
     }
 
-    public void setup(File target, boolean readonly) throws DatabaseException {
-        EnvironmentConfig environmentConfig = new EnvironmentConfig();
-        StoreConfig storeConfig = new StoreConfig();
-        environmentConfig.setReadOnly(readonly);
-        storeConfig.setReadOnly(readonly);
+    private static void setup(File target, boolean readonly) throws DatabaseException {
+    		
+    		_instance = new DBEnv();
+    	
+    		EnvironmentConfig environmentConfig = new EnvironmentConfig();
+    		StoreConfig storeConfig = new StoreConfig();
+    		environmentConfig.setReadOnly(readonly);
+    		storeConfig.setReadOnly(readonly);
 
-        // If not readonly, then enable creation
-        environmentConfig.setAllowCreate(!readonly);
-        storeConfig.setAllowCreate(!readonly);
+    		// If not readonly, then enable creation
+    		environmentConfig.setAllowCreate(!readonly);
+    		storeConfig.setAllowCreate(!readonly);
 
-        // Create the actual objects
-        environment = new Environment(target, environmentConfig);
-        entityStore = new EntityStore(environment, "EntityStore", storeConfig);
+    		// Create the actual objects
+    		_instance.environment = new Environment(target, environmentConfig);
+    		_instance.entityStore = new EntityStore(_instance.environment, "EntityStore", storeConfig);
+
+
+    		//Guarantee environment is shutdown upon system exit
+    		/*
+    		 *  This technique comes from an online lecture which can be found at:
+    		 *  http://www.youtube.com/watch?v=7JvmIYjyYYE
+    		 */
+    		DbShutdownHook shutdownHook = new DbShutdownHook(_instance.environment, _instance.entityStore);
+    		Runtime.getRuntime().addShutdownHook(shutdownHook);       
     }
 
 

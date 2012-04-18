@@ -21,10 +21,10 @@ public class RobotsManager {
      * it, if it does not exist.
      */
     public RobotsManager(String location) {
-        myDbEnv = new DBEnv();
+        myDbEnv = DBEnv.getInstance(location);
         // Path to the environment home //TODO CHECK IF EXISTS
         // Environment is <i>not</i> readonly
-        myDbEnv.setup(new File(location), false);
+        //myDbEnv.setup(new File(location), false);
     }
 
     /**
