@@ -245,7 +245,7 @@ public class LexiconManager {
      * @param word
      * @return
      */
-    public byte[] assignWordId(String word) {
+    public static byte[] assignWordId(String word) {
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA");
@@ -257,5 +257,6 @@ public class LexiconManager {
 		byte[] shaDigest = md.digest();
 		return shaDigest;
     }
+    
     
 }
