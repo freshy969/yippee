@@ -34,7 +34,7 @@ public class FrontierFactory {
      *
      * @return The concrete URLFrontier implementation
      */
-    public static URLFrontier get(Frontier type) {
+    public static URLFrontier get(FrontierType type) {
         switch (type){
             case SIMPLE:
                 return new SimpleQueueFrontier();

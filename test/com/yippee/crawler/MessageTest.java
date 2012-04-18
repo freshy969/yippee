@@ -55,7 +55,7 @@ public class MessageTest {
     public void testUrls(){
         boolean test = true;
         for (String url : urls) {
-             if (!url.equals(new Message(url).getUrl().toString())){
+             if (!url.equals(new Message(url).getURL().toString())){
                  test = false;
              }
         }
@@ -73,7 +73,7 @@ public class MessageTest {
             Message msg = new Message(url);
             if ((msg.getType() != Message.Type.NOX)) {
                 test = false;
-                System.out.println(msg.getUrl().toString());
+                System.out.println(msg.getURL().toString());
             }
         }
         assertTrue(test);
@@ -87,7 +87,7 @@ public class MessageTest {
         boolean test = true;
         for (String url : urls) {
             try {
-                if (!(new URL(url)).getHost().equals((new Message(url).getUrl().getHost()))) {
+                if (!(new URL(url)).getHost().equals((new Message(url).getURL().getHost()))) {
                     test = false;
                 }
             } catch (MalformedURLException e) {
@@ -118,7 +118,7 @@ public class MessageTest {
     public void testRetrieveURL() throws MalformedURLException {
         String url = "http://crawltest.cis.upenn.edu";
         Message m = new Message(url);
-        assertEquals(new URL(url), m.getUrl());
+        assertEquals(new URL(url), m.getURL());
     }
 
 }

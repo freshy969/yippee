@@ -2,21 +2,20 @@ package com.yippee.crawler.frontier;
 
 import com.yippee.crawler.Message;
 import org.apache.log4j.Logger;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class SimpleQueueFrontier implements URLFrontier {
 	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
-    static Logger logger = Logger.getLogger(SpanShapeRenderer.Simple.class);
+    static Logger logger = Logger.getLogger(SimpleQueueFrontier.class);
 
 	BlockingQueue<Message> urls;
 	
 	public SimpleQueueFrontier(){
-		urls = new PriorityBlockingQueue<Message>();
+		urls = new LinkedBlockingQueue<Message>();
 	}
 
 	public Message pull() throws InterruptedException {
