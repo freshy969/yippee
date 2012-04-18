@@ -23,21 +23,25 @@ public class HitFactory {
 	/**
 	 * Parser passes in the list of words from the document and createHits will
 	 * turn the words into hits, creating a hitlist
-	 * @param args
+	 * @param words
 	 * @param docId
 	 * @return
 	 */
-	public ArrayList<Hit> createHits(String[] args, String docId) {
+	public ArrayList<Hit> createHits(String[] words, String docId, boolean[] formatting) {
 		ArrayList<Hit> hitlist = new ArrayList<Hit>();
-		for(int i=0; i<args.length; i++) {
-			String word = args[i];
+		
+		for(int i = 0; i < words.length; i++) {
+		
+			String word = words[i];
 			byte[] wordID = lexicon.getWordId(word.toLowerCase());
-			if(wordID!=null) {
-				Hit h = new Hit(docId, wordID,i);
+			
+			if (wordID != null) {
+				Hit h = new Hit(docId, wordID, i);
 				setCap(h, word);
 				hitlist.add(h);
 			}
 		}
+		
 		return hitlist;		
 	}
 	

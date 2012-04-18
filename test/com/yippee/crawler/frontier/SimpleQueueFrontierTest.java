@@ -31,6 +31,6 @@ public class SimpleQueueFrontierTest {
 		String url = "http://crawltest.cis.upenn.edu";
 		frontier.push(new Message(url));
 		//TODO test fails, url returned includes a '/' 
-		assertEquals(url, frontier.pull().getUrl());
+		assertEquals(url, frontier.pull().getURL());
 	}
 }

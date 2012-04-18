@@ -72,9 +72,5 @@ public class BarrelManagerTest {
     	assertTrue(barrelManager.getHitList(wordid3)==null);
     }
     
-    @After
-    public void tearDown(){ 	
-        barrelManager.close();
-    }
-
+   
 }

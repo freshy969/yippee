@@ -1,12 +1,16 @@
 package com.yippee.util;
 
+import com.yippee.db.model.AnchorHit;
 import com.yippee.db.model.DocAug;
+import com.yippee.db.model.Hit;
+import com.yippee.indexer.Lexicon;
 import com.yippee.indexer.Parser;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class FancyExtractorTest {
     /**
@@ -78,6 +82,44 @@ public class FancyExtractorTest {
 			e.printStackTrace();
 		}
     	
-    	fe.extract("http://crawltest.cis.upenn.edu", doc);    	
+    	fe.extract("http://crawltest.cis.upenn.edu", doc);    
+    	
+    	ArrayList<Hit> hitList = fe.getHitList();
+    	
+    	Lexicon lexicon = new Lexicon("db/test","doc/lexicon.txt");
+    	
+    	for (int i = 0; i < hitList.size(); i++) {
+    		Hit hit = hitList.get(i);
+    		
+    		System.out.print("[" + hit.getPosition() + "]");
+    		
+    		if(hit.isBold())
+    			System.out.print("[BOLD]");
+    		
+    		if(hit.isItalicize())
+    			System.out.print("[ITAL]");
+    	
+    		System.out.println(": " + lexicon.getWord(hit.getWordId()));	
+    	}
+    	
+    	
+    	hitList = fe.getAnchorList();
+    	
+    	for (int i = 0; i < hitList.size(); i++) {
+    		AnchorHit hit = (AnchorHit) hitList.get(i);
+    		
+    		System.out.print("[" + hit.getPosition() + "]");
+    		
+    		if(hit.isBold())
+    			System.out.print("[BOLD]");
+    		
+    		if(hit.isItalicize())
+    			System.out.print("[ITAL]");
+    	
+    		System.out.println(": " + lexicon.getWord(hit.getWordId()));
+    		
+    		System.out.println(hit.getUrl());
+    	}
+    	
     }
 }

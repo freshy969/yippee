@@ -45,8 +45,4 @@ public class LexiconManagerTest {
         assertTrue(!lexiconManager.isEmpty());
     }
     
-    @After
-    public void tearDown(){
-        lexiconManager.close();
-    }
 }

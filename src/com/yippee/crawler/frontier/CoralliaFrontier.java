@@ -107,7 +107,7 @@ public class CoralliaFrontier implements URLFrontier {
         // prepare shadowing
         // TODO: check url type if UPDATE WE NEED TO unshadow and cache
         // TODO: robots.txt
-        logger.info("[Push-dine!]: " + message.getUrl().getFile() + " | Size: " + future.size() + "\t actual: " + noOfTrans + "-" + empty);
+        logger.info("[Push-dine!]: " + message.getURL().getFile() + " | Size: " + future.size() + "\t actual: " + noOfTrans + "-" + empty);
     }
 
     public boolean save() {
@@ -129,47 +129,47 @@ public class CoralliaFrontier implements URLFrontier {
      * @param url the augmented url to be inserted
      */
     private void add(Message url) {
-        logger.info("[push]" + url.getUrl().getFile());
+        logger.info("[push]" + url.getURL().getFile());
         logState();
         // crawl update should be never null
         if (url.getType() == Message.Type.UPD) {
             // remove from current, shadow->future,
             // update timestamp, directives and delay
             // add history
-            if (current.contains(url.getUrl().getFile())) { // but first make sure it is a real update
-                current.remove(url.getUrl().getFile());
-                future.put(url.getUrl().getHost(), shadowed.get(url.getUrl().getHost()));
-                shadowed.remove(url.getUrl().getHost());
+            if (current.contains(url.getURL().getFile())) { // but first make sure it is a real update
+                current.remove(url.getURL().getFile());
+                future.put(url.getURL().getHost(), shadowed.get(url.getURL().getHost()));
+                shadowed.remove(url.getURL().getHost());
 
                 // NOTE: we handle only crawl-delay less than a day!
                 int secOfDay = Calendar.getInstance().get(Calendar.SECOND) +
                         Calendar.getInstance().get(Calendar.MINUTE) * 60 +
                         Calendar.getInstance().get(Calendar.HOUR_OF_DAY) * 60 * 60;
-                timestamps.put(url.getUrl().getHost(), secOfDay);
-                delays.put(url.getUrl().getHost(), url.getCrawlDelay());
+                timestamps.put(url.getURL().getHost(), secOfDay);
+                delays.put(url.getURL().getHost(), url.getCrawlDelay());
                 if (url.getDisallow() != null)
-                    disallows.put(url.getUrl().getHost(), url.getDisallow());
+                    disallows.put(url.getURL().getHost(), url.getDisallow());
 
             }
 
         } else if (url.getType() == Message.Type.NEW) {
             // if currently another thread is working on this, just discard
-            if (current.contains(url.getUrl().getFile())) return;
+            if (current.contains(url.getURL().getFile())) return;
             // if it is in future or shadowed again discard
             //if (history.contains(url.getUrl().getFile())) return; no we just update
             // check if we dont have ANY record at all, then check future then shadowed
-            if ((!future.containsKey(url.getUrl().getHost())) && (!shadowed.containsKey(url.getUrl().getHost()))) {
+            if ((!future.containsKey(url.getURL().getHost())) && (!shadowed.containsKey(url.getURL().getHost()))) {
                 Queue<Message> urlList = new LinkedList<Message>();
                 urlList.add(url);
-                future.put(url.getUrl().getHost(), urlList);
-            } else if (future.containsKey(url.getUrl().getHost())) {
+                future.put(url.getURL().getHost(), urlList);
+            } else if (future.containsKey(url.getURL().getHost())) {
                 logger.info("why?");
-                future.get(url.getUrl().getHost()).add(url);
-            } else if (shadowed.containsKey(url.getUrl().getHost())) {
-                shadowed.get(url.getUrl().getHost()).add(url);
+                future.get(url.getURL().getHost()).add(url);
+            } else if (shadowed.containsKey(url.getURL().getHost())) {
+                shadowed.get(url.getURL().getHost()).add(url);
             }
             // add the ID to history
-            history.add(url.getUrl().getFile());
+            history.add(url.getURL().getFile());
         }
         logState();
     }
@@ -206,7 +206,7 @@ public class CoralliaFrontier implements URLFrontier {
             send = future.get(key).poll();
         } else {
             send = future.entrySet().iterator().next().getValue().poll();
-            key = send.getUrl().getHost();
+            key = send.getURL().getHost();
         }
 
         // step3: shadow record -- BUT If it is the last record of this key,
@@ -220,7 +220,7 @@ public class CoralliaFrontier implements URLFrontier {
 //        }
 
         // step 4: finally push "current"
-        current.add(send.getUrl().getFile());
+        current.add(send.getURL().getFile());
 
         // step 5: Augment url with data from
         // timestamp, delay and disallows before sending

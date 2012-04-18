@@ -16,7 +16,7 @@ public class Hit {
 	private boolean caps = false;
 	private boolean bold = false;
 	private boolean ital = false;
-	private boolean isAnchor = false;
+	private boolean anchor = false;
 	private String docIDfrom;
 	private int position;
 	
@@ -46,7 +46,7 @@ public class Hit {
 		this.docID = docPointingTo;
 		this.docIDfrom = docFrom;
 		this.wordID = wordID;
-		isAnchor = true;
+		anchor = true;
 	}
 	
 	
@@ -73,6 +73,14 @@ public class Hit {
 	public void setItalicize(boolean b){
 		ital = b;
 	}
+
+	/**
+	 * sets anchor variable to true or false. default is fault.
+	 * @param b
+	 */
+	public void setAnchor(boolean b){
+		anchor = b;
+	}
 	
 	
 	/**
@@ -80,7 +88,7 @@ public class Hit {
 	 * @return whether or not an anchor hit
 	 */
 	public boolean isAnchor(){
-		return isAnchor;
+		return anchor;
 	}
 	
 	/**
@@ -103,7 +111,7 @@ public class Hit {
 	 * 
 	 * @return whether word was bolded
 	 */
-	public boolean getBold(){
+	public boolean isBold(){
 		return bold;
 	}
 
@@ -111,7 +119,7 @@ public class Hit {
 	 * 
 	 * @return whether word was italisized
 	 */
-	public boolean getItalicize(){
+	public boolean isItalicize(){
 		return ital;
 	}
 	
@@ -135,7 +143,7 @@ public class Hit {
 	 * 
 	 * @return position of word in document it came from
 	 */
-	public int getPostion() {
+	public int getPosition() {
 		return position;
 	}
 }
