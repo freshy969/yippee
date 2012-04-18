@@ -22,7 +22,7 @@ public class RobotsModule {
     /**
      * The host url
      */
-    private URL host;
+    private URL robotsURL;
 
     /**
      * It checks if the url can be crawled with respect only to disallows and
@@ -34,11 +34,11 @@ public class RobotsModule {
      */
     public boolean alowedToCrawl(URL url) {
         try {
-            host = new URL(url.getHost());
-            String db = Configuration.getInstance().getBerkeleyDB();
-            RobotsManager rm = new RobotsManager(db);
+            robotsURL = new URL(url.getProtocol() + "://" + url.getHost() + "/robots.txt");
+            String dbPath = Configuration.getInstance().getBerkeleyDBPath();
+            RobotsManager rm = new RobotsManager(dbPath);
             RobotsTxt robotsTxt = new RobotsTxt();
-            if (!rm.read(host.getHost(),robotsTxt)) {
+            if (!rm.read(robotsURL.getHost(),robotsTxt)) {
                 robotsTxt = fetchRobots();
                 rm.create(robotsTxt);
             }
@@ -47,6 +47,25 @@ public class RobotsModule {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public int getCrawlDelay(URL url){
+    	
+    	 String dbPath = Configuration.getInstance().getBerkeleyDBPath();
+         RobotsManager rm = new RobotsManager(dbPath);
+         RobotsTxt robotsTxt = new RobotsTxt();
+         
+         if (!rm.read(robotsURL.getHost(),robotsTxt)) {
+        	 //Unsuccessful read
+        	 robotsTxt = fetchRobots();
+             rm.create(robotsTxt);
+         }
+
+    	return robotsTxt.getCrawlDelay();
     }
 
     /**
@@ -57,7 +76,7 @@ public class RobotsModule {
     private RobotsTxt fetchRobots() {
         URLConnection urlConnection = null;
         try {
-            urlConnection = host.openConnection();
+            urlConnection = robotsURL.openConnection();
             urlConnection.setRequestProperty("user-agent", "cis455crawler");
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     urlConnection.getInputStream()));
