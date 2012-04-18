@@ -43,11 +43,13 @@ public class HitList {
 	}
 	
 	public void sortHitsByDocId() {
+		
    	 Collections.sort(hitList,new Comparator<Hit>() {
          public int compare(Hit hit1, Hit hit2) {
              return hit1.getDocId().compareTo(hit2.getDocId());
          }
      });
+   	 
 	}
 	
 

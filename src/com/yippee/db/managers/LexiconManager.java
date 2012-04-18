@@ -50,7 +50,8 @@ public class LexiconManager {
         // Path to the environment home
         // Environment is <i>not</i> readonly
         myDbEnv.setup(new File(location), false);
-        //if lexicon database is empty, then fill it. otherwise words already in database env
+        
+        // if lexicon database is empty, then fill it. otherwise words already in database env
         if(isEmpty()){
         	init(locationWordList);
         }

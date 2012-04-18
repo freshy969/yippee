@@ -5,6 +5,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.yippee.db.model.AnchorHit;
+import com.yippee.db.model.Hit;
 import com.yippee.indexer.HitFactory;
 import com.yippee.indexer.Lexicon;
 import com.yippee.indexer.WordStemmer;
@@ -30,6 +32,8 @@ public class FancyExtractor {
 	Lexicon lexicon;
 	String docId;
 	int pos = 0;
+	ArrayList<Hit> hitList;
+	ArrayList<Hit> anchorList; 
 	
 	public FancyExtractor(String docId) {
 		links = new ArrayList<String>();
@@ -40,8 +44,9 @@ public class FancyExtractor {
 		anchor = false;
 		
 		stemmer = new WordStemmer();
-		lexicon = new Lexicon();
-		hitFactory = new HitFactory(lexicon);
+		lexicon = new Lexicon("db/test","doc/lexicon.txt");
+		hitList = new ArrayList();
+		anchorList = new ArrayList();
 		this.docId = docId;
 	}
 	
@@ -75,21 +80,17 @@ public class FancyExtractor {
 						link = url + link;
 					}
 					
-//					System.out.println("queuing link: " + link);
 					links.add(link);
 					format.push("a");
-//					System.out.println("[PUSH]: " + child.getNodeName());
 					anchor = true;
 				}				
 			} else if (child.getNodeName().equals("b") || child.getNodeName().equals("strong")) {
 				// Bolded
 				format.push("b");
-//				System.out.println("[PUSH]: " + child.getNodeName());
 				bold = true;
 			} else if (child.getNodeName().equals("i") || child.getNodeName().equals("em")) {
 				// Italicized
 				format.push("i");
-//				System.out.println("[PUSH]: " + child.getNodeName());
 				ital = true;
 			} else if (child.getNodeType() == Node.TEXT_NODE) {
 				// Text
@@ -97,20 +98,29 @@ public class FancyExtractor {
 				String sentence = child.getNodeValue();
 				sentence = sentence.replaceAll("\\W", " ");
 				String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
-
+				boolean[] formatting = {anchor, ital, bold};
+				
 				for (int i = 0; i < stemlist.length; i++) {
-					System.out.print("[" + (pos+i) + "]");
-			
-					if (anchor) 
-						System.out.print("[ANCH]");
+					// Create Hits
 					
-					if (ital)
-						System.out.print("[ITAL]");
-					
-					if (bold)				
-						System.out.print("[BOLD]");
-			
-					System.out.println(": " + stemlist[i]);
+					byte[] wordId = lexicon.getWordId(stemlist[i]);
+					Hit hit;
+								
+					if (anchor) {
+						hit = new AnchorHit(docId, wordId, i, docId);
+						anchorList.add(hit);
+					} else {
+						hit = new Hit(docId, wordId, pos+i);
+						
+						if (ital)
+							hit.setItalicize(true);
+						
+						if (bold)				
+							hit.setBold(true);
+				
+						hitList.add(hit);
+					}
+						
 				}
 				
 				pos += stemlist.length;
@@ -119,7 +129,6 @@ public class FancyExtractor {
 			} else {
 				// Other
 				format.push(child.getNodeName());
-//				System.out.println("[PUSH]: " + child.getNodeName());
 
 			}
 			
@@ -129,10 +138,9 @@ public class FancyExtractor {
 			}
 		}
 		
-				
+
 		if(!format.isEmpty()) {
 			String tag = format.pop();	
-//			System.out.println("[POP]: " + tag);
 			
 			if ("a".equals(tag)) {
 				anchor = false;
@@ -144,7 +152,13 @@ public class FancyExtractor {
 		
 	}
 	
+	public ArrayList<Hit> getHitList() {
+		return hitList;
+	}
 	
+	public ArrayList<Hit> getAnchorList() {
+		return anchorList;
+	}
 	
 	public ArrayList<String> getLinks() {
 		return links;

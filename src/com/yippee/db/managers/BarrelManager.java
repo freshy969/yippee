@@ -46,10 +46,13 @@ public class BarrelManager {
 	 * @return
 	 */
     public boolean addDocHit(Hit h){
+    	
     	boolean success = true;
+    	
         try {
             // Open the data accessor. This is used to store persistent objects.
             dao = new DAL(myDbEnv.getEntityStore());
+        
             if(dao.getBarrelById().contains(new String(h.getWordId()))) {
             	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
             	HitList hl = dao.getBarrelById().get(new String(h.getWordId()));
@@ -57,6 +60,7 @@ public class BarrelManager {
             	dao.getBarrelById().delete(new String(h.getWordId()));
             	//"updates" entry
             	dao.getBarrelById().put(hl);
+            	
             } else {
             	//System.out.println("create new entry "+h.getDocId()+", "+new String(h.getWordId()));
             	HitList hl = new HitList(new String(h.getWordId()));
@@ -71,6 +75,7 @@ public class BarrelManager {
         	logger.warn("Exception", e);
             success = false;
         }
+        
         return success;
     }
     

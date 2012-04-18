@@ -23,9 +23,9 @@ public class HitTest {
 	
     @Test
     public void testSetGetItalisize(){
-    	assertTrue(!hit.getItalicize());
+    	assertTrue(!hit.isItalicize());
     	hit.setItalicize(true);
-    	assertTrue(hit.getItalicize());
+    	assertTrue(hit.isItalicize());
     }
     
     @Test
@@ -37,9 +37,9 @@ public class HitTest {
     
     @Test
     public void testSetGetBold(){
-    	assertTrue(!hit.getBold());
+    	assertTrue(!hit.isBold());
     	hit.setBold(true);
-    	assertTrue(hit.getBold());
+    	assertTrue(hit.isBold());
     }
     
     @Test
@@ -54,6 +54,6 @@ public class HitTest {
     
     @Test
     public void testGetPosition(){
-    	assertTrue(hit.getPostion()==pos);
+    	assertTrue(hit.getPosition()==pos);
     }
 }
