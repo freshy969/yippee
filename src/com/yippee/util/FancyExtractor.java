@@ -97,29 +97,38 @@ public class FancyExtractor {
 				
 				String sentence = child.getNodeValue();
 				sentence = sentence.replaceAll("\\W", " ");
+				
 				String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
+				
 				boolean[] formatting = {anchor, ital, bold};
 				
 				for (int i = 0; i < stemlist.length; i++) {
 					// Create Hits
 					
 					byte[] wordId = lexicon.getWordId(stemlist[i]);
+					
+					if (wordId == null) {
+						lexicon.addNewWord(stemlist[i]);
+						wordId = lexicon.getWordId(stemlist[i]);
+					}
+					
 					Hit hit;
 								
 					if (anchor) {
 						hit = new AnchorHit(docId, wordId, i, docId);
 						anchorList.add(hit);
-					} else {
-						hit = new Hit(docId, wordId, pos+i);
+					} 
 						
-						if (ital)
-							hit.setItalicize(true);
+					hit = new Hit(docId, wordId, pos+i);
 						
-						if (bold)				
-							hit.setBold(true);
-				
-						hitList.add(hit);
-					}
+					if (ital)
+						hit.setItalicize(true);
+					
+					if (bold)				
+						hit.setBold(true);
+			
+					hitList.add(hit);
+					
 						
 				}
 				
