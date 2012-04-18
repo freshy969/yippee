@@ -46,7 +46,9 @@ public class MercatorCentralized implements URLFrontier{
 	//RobotsMOdule
 	
 	//Default constructor
-	public MercatorCentralized(){}
+	public MercatorCentralized(){
+		
+	}
 	
 	public MercatorCentralized(int numPriorityLevels, int numWorkerThreads){
 		//Init prioritizer
@@ -113,6 +115,7 @@ public class MercatorCentralized implements URLFrontier{
     	frontEndQueues.get((prioritizer.getPriority(url))).add(url);
     	
     	//TODO - Do we have RobotsTxt? If yes, no problem.  If no, need to get it
+    	//TODO - need to update priority queue
     }
     
 

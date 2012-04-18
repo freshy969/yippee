@@ -59,7 +59,7 @@ public class EntryPoint {
             arguments = args;
             System.out.println("2012, Yippee!");
             cautionMessage();
-            Configuration.getInstance().setBerkeleyDB(BERKELEY_DB);
+            Configuration.getInstance().setBerkeleyDBPath(BERKELEY_DB);
             return true;
         }
     }
