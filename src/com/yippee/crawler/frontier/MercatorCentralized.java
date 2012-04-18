@@ -78,8 +78,8 @@ public class MercatorCentralized implements URLFrontier{
     }
 
     public void push(Message message) {
-    	//Put URL into one od the front end queues based on priority from Prioritizer
-    	
+    	//Put URL into one of the front end queues based on priority from Prioritizer
+    	URL url = message.getURL();
     	
     }
 
