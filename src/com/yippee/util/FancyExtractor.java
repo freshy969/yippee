@@ -96,7 +96,7 @@ public class FancyExtractor {
 				// Text
 				
 				String sentence = child.getNodeValue();
-				sentence = sentence.replaceAll("\\W", " ");
+				sentence = removePunctuation(sentence);
 				
 				String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
 				
@@ -175,5 +175,12 @@ public class FancyExtractor {
 	
 	public ArrayList<String> getText() {
 		return text;
+	}
+	
+	public String removePunctuation(String input) {
+		
+		String result = input.replaceAll("[,;@/!<>#\\.\\*\\?\\[\\]\\(\\)]| - ", " ");
+		
+		return result;
 	}
 }
