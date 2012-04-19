@@ -31,6 +31,6 @@ public class SimpleQueueFrontierTest {
 	public void testPushPullOneItem() throws MalformedURLException, InterruptedException{
 		String url = "http://crawltest.cis.upenn.edu";
 		frontier.push(new Message(url));
-		assertEquals(new URL(url), frontier.pull().getUrl());
+		assertEquals(new URL(url), frontier.pull().getURL());
 	}
 }

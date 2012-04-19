@@ -6,7 +6,7 @@
  * Implementation (if not changed from initial commit on 4/16) comes from Chris's 555 hw2
  */
 
-package com.yippee.db;
+package com.yippee.db.util;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;

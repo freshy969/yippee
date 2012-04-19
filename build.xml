@@ -19,7 +19,7 @@
 
 
 
-            Useful ant targets (see below for details:
+            Useful ant targets (see below for details):
 
             1. project-test-pastry
             2. project-test-crawler
@@ -44,6 +44,12 @@
                 [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
                 The project run target sets up one pastry node running the crawler.
+
+            A an elegant way to get the ip automatically would be to use ifconfig
+            when running the ant target. To get the result of ifconfig you can do
+            `ifconfig`; for instance, to launch the first target, I can always do
+            ant project-test-pastry \
+            -DbootIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
         </echo>
 
     </target>
