@@ -35,6 +35,9 @@ public class DAL {
 
     // Barrel Accessors
     PrimaryIndex<String, HitList> barrelById;
+    
+    // Anchors Accessors
+    PrimaryIndex<String, HitList> anchorById;
 
 
     /**
@@ -52,6 +55,8 @@ public class DAL {
         lexiconById = store.getPrimaryIndex(String.class, Word.class);
         // Barrel key
         barrelById = store.getPrimaryIndex(String.class, HitList.class);
+     // Anchor key
+        anchorById = store.getPrimaryIndex(String.class, HitList.class);
     }
 
     /**
@@ -121,5 +126,22 @@ public class DAL {
      */
     public PrimaryIndex<String, HitList> getBarrelById() {
         return barrelById;
+    }
+    
+    /**
+     * Get a cursor for the Anchor Index
+     * @return HitList entity cursor
+     */
+    public EntityCursor<HitList> getAnchorCursor(){
+    	return anchorById.entities();
+    }
+
+    /**
+     * Access Barrel primary index outside package.
+     *
+     * @return the Barrel index
+     */
+    public PrimaryIndex<String, HitList> getAnchorById() {
+        return anchorById;
     }
 }
