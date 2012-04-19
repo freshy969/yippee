@@ -6,11 +6,9 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
 import org.apache.log4j.Logger;
-import com.yippee.db.DbShutdownHook;
 
 
 import java.io.File;
-import java.io.IOException;
 
 public class DBEnv {
     /**

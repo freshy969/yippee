@@ -1,9 +1,19 @@
 package com.yippee.util;
 
+import com.yippee.crawler.Araneae;
+import com.yippee.crawler.Message;
+import com.yippee.crawler.frontier.FrontierFactory;
+import com.yippee.crawler.frontier.FrontierType;
+import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.pastry.PingPong;
 import com.yippee.pastry.YippeeEngine;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  * This the entry point of the Yippe engine back-end , providing convenient setup
@@ -12,7 +22,7 @@ import org.apache.log4j.PropertyConfigurator;
  * components are started by private methods, so we can have granular component
  * initialization. For instance, we can start only the crawler or pastry ring or
  * any combination of components.
- *
+ * <p/>
  * TODO: We can add a config.properties file to read configuration from there on startup
  */
 public class EntryPoint {
@@ -68,7 +78,7 @@ public class EntryPoint {
      * Here we add any todos/caution messages we need to show to the user who
      * launches the application. It is called by the constructor.
      */
-    private void cautionMessage(){
+    private void cautionMessage() {
         // TODO: THESE ARE SOME OF THE CONFIGURATIONS NEED TO BE DONE
         System.out.println("TODO: \n\t * set Thread number \n\t * set Daemon port");
     }
@@ -80,12 +90,19 @@ public class EntryPoint {
      *
      * @return true if everything ok; false o/w;
      */
-    private boolean setUpSubstrate(){
+    private boolean setUpSubstrate() {
         YippeeEngine yippeeEngine = new YippeeEngine(Integer.parseInt(arguments[0]),
-                    arguments[1], Integer.parseInt(arguments[2]));
+                arguments[1], Integer.parseInt(arguments[2]));
         Configuration.getInstance().setPastryEngine(yippeeEngine);
         PingPong pingPong = new PingPong();
         new Thread(pingPong, "Ping Pong Thread").start();
+        // sleep for a number of seconds so that when the rest of the services
+        // launch, pastry is up and running
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -95,17 +112,70 @@ public class EntryPoint {
      *
      * @return true if everything ok; false o/w;
      */
-    private boolean setupCrawler(){
+    private boolean setupCrawler(String[] args) {
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
+        URLFrontier urlFrontier = FrontierFactory.get(FrontierType.SIMPLE);
+        boolean success = true;
+        // only overwrite database with new seeds iff an overwrite flag was given
+        if (args[args.length-1].equals("--overwrite")) {
+            logger.warn("Overwrite -- loading frontier from the url feed");
+            if ((args.length > 4) && (!args[3].contains("--"))) {
+                if (!seed(urlFrontier, args[3])) {
+                    success = false;
+                }
+            } else {
+                success = false;
+            }
+        } else { // load URLFrontier from database
+            logger.warn("No overwrite -- loading frontier from the database");
+            urlFrontier.load();
+        }
+        if (success) {
+            Araneae threadPool = new Araneae(urlFrontier);
+        } else {
+            String error = "FATAL: No file found to load urls from";
+            logger.error(error);
+            System.out.println(error);
+        }
+        return success;
+    }
 
 
+    // TODO: NEED TO REDISTRIBUTE SEEDS AMONG PASTRY NODES -- this could be a good test
+    private boolean seed(URLFrontier urlFrontier, String seed) {
+
+        File seedFile = new File(seed);
+        if (!seedFile.exists()) {
+            return false;
+        }
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new FileInputStream(seed));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            while (scanner.hasNextLine()) {
+                String url = new StringBuilder(scanner.nextLine()).toString();
+                if (url.startsWith("#")) continue;
+                String aLog = "New URL [" + url +"]";
+                Message msg = new Message(url);
+                if (msg.getType()==Message.Type.NEW) {
+                    urlFrontier.push(msg);
+                    aLog += "..added!";
+                }
+                logger.info(aLog);
+            }
+        } finally {
+            scanner.close();
+        }
         return true;
     }
 
 
     /**
      * The entry point for the whole Yippee Engine.
-     *
+     * <p/>
      * Currently, it takes the following
      * arguments:
      * <p/>
@@ -113,7 +183,7 @@ public class EntryPoint {
      * should bind;
      * 2.   The IP address of the Pastry bootstrap node;
      * 3.   The port number of the Pastry bootstrap node;
-     *
+     * <p/>
      * TODO: We could add a parameter -CIRPS on which component to start
      *
      * @param args The command line arguments at the order specified above, for
@@ -121,8 +191,11 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
         EntryPoint entryPoint = new EntryPoint();
+        // Pastry
         if (!entryPoint.configure(args)) return;
         entryPoint.setUpSubstrate();
+        // Crawler
+        if (!entryPoint.setupCrawler(args)) return;
     }
 
 }

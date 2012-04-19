@@ -19,9 +19,15 @@
 
 
 
-            Useful ant targets:
+            Useful ant targets (see below for details):
 
-            1. ant project-test -DbootIp=[ip]
+            1. project-test-pastry
+            2. project-test-crawler
+
+
+            Ant target details:
+
+            1. ant project-test-pastry -DbootIp=[ip]
 
                 [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
@@ -32,6 +38,18 @@
                 * 9004 for node 4
 
                 Refer to the README file for more information.
+
+            2. ant project-test-crawler -DbootIp=[ip]
+
+                [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
+
+                The project run target sets up one pastry node running the crawler.
+
+            A an elegant way to get the ip automatically would be to use ifconfig
+            when running the ant target. To get the result of ifconfig you can do
+            `ifconfig`; for instance, to launch the first target, I can always do
+            ant project-test-pastry \
+            -DbootIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
         </echo>
 
     </target>
@@ -101,14 +119,23 @@
             <arg value="${localPort}"/>
             <arg value="${bootIp}"/>
             <arg value="${bootPort}"/>
+            <arg value="feed.url"/>
+            <arg value="--overwrite"/>
         </java>
     </target>
 
     <target name="project-clean" depends="clean,jar"
             description="Clear resources and build jar"/>
 
+    <target name="project-test-crawler" depends="project-clean,sanity-check"
+            description="Create single-noded crawler">
+            <antcall target="run">
+                <param name="localPort" value="9001"/>
+            </antcall>
+    </target>
+
     <!-- start 4 applications in parallel -->
-    <target name="project-test" depends="project-clean,sanity-check"
+    <target name="project-test-pastry" depends="project-clean,sanity-check"
             description="Create 4 application nodes for testing">
         <parallel>
             <antcall target="run">

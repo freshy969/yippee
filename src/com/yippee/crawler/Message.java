@@ -31,7 +31,6 @@ public class Message {
     public static enum Type {
         NEW, UPD, FIN, NOX
     }
-
     /**
      * The actual URL of the message.
      */
