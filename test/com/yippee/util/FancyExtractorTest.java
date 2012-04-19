@@ -22,9 +22,9 @@ public class FancyExtractorTest {
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD>" +
             "<H3>XML to be crawled</H3>" +
             "<UL>" +
-            "<LI><A HREF=\"rss/cnnp.xml\"><B>CNN politics - MATCHED</A></B></LI>" +
+            "<LI><A HREF=\"rss/cnnp.xml\"><B>CNN's politics - MATCHED</A></B></LI>" +
             "<LI><I><A HREF=\"rss/cnnt.xml\">CNN top stories - MATCHED</A></I></LI>" +
-            "<LI><A HREF=\"rss/cnnl.xml\">CNN Laws - NOT MATCHED</A></LI>" +
+            "<LI><A HREF=\"rss/cnnl.xml\">CNN Laws - N-O-T MATCHED</A></LI>" +
             "</UL>" +
             "<H3>Other XML data</H3>" +
             "<UL>" +
@@ -118,8 +118,8 @@ public class FancyExtractorTest {
     	
     		System.out.println(": " + lexicon.getWord(hit.getWordId()));
     		
-    		System.out.println(hit.getUrl());
     	}
-    	
+    
+    	System.out.println(fe.getTitle());
     }
 }

@@ -20,32 +20,44 @@ public class WordStemmerTest {
 
 	@Test
 	public void testStemNoChange() {
-		String m = stemmer.stem("caress");
-		assertTrue(m.equals("caress"));
+		String word = "caress";
+		assertTrue("caress".equals(stemWord(word)));
 	}
 	
 	@Test
 	public void testStemChangeED() {
-		String m = stemmer.stem("caressed");
-		assertTrue(m.equals("caress"));
+		String word = "caressed";
+		assertTrue("caress".equals(stemWord(word)));
 	}
 	
 	@Test
 	public void testStemChangeIES() {
-		String m = stemmer.stem("fireflies");
-		assertTrue(m.equals("firefly"));
+		String word = "fireflies";
+		assertTrue("firefli".equals(stemWord(word)));
 	}
 	
 	@Test
 	public void testStemChangeING() {
-		String m = stemmer.stem("jumping");
-		assertTrue(m.equals("jump"));
+		String word = "jumping";
+		assertTrue("jump".equals(stemWord(word)));
 	}
 
 	@Test
 	public void testStemChangeS() {
-		String m = stemmer.stem("sings");
-		assertTrue(m.equals("sing"));
+		String word = "flares";
+		assertTrue("flare".equals(stemWord(word)));
+	}
+	
+	@Test
+	public void testApostrophe() {
+		String word = "Bob's";
+		assertTrue("Bob'".equals(stemWord(word)));
+	}
+	
+	@Test
+	public void testContraction() {
+		String word = "I've";
+		assertTrue("I've".equals(stemWord(word)));
 	}
 	
 	@Test 
@@ -60,12 +72,22 @@ public class WordStemmerTest {
 			} else if (i == 1) {
 				assertTrue(results[i].equals("blaze"));
 			} else if (i == 2) {
-				assertTrue(results[i].equals("carry"));
+				assertTrue(results[i].equals("carri"));
 			} else if (i == 3) {
 				assertTrue(results[i].equals("forebod"));
 			} else if (i == 4) {
 				assertTrue(results[i].equals("new"));
 			}
 		}
+	}
+	
+	public String stemWord(String input) {
+		String word = input;
+		stemmer.add(word.toCharArray(), word.length());
+		stemmer.stem();
+		int resultLength = stemmer.getResultLength();
+		char[] resultBuffer = stemmer.getResultBuffer();
+
+		return new String(resultBuffer).substring(0, resultLength);
 	}
 }

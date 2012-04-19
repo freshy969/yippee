@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 /**
  * This class implements the (fixed-size) thread pool (Araneae is the order of
- * spiders, in our cases implementing a pool of multiple spiders). It always has a specified
+ * spiders, in our case implementing a pool of multiple spiders). It always has a specified
  * number of threads running; if a thread is somehow terminated while it's still
  * in use, it's automatically replaced with a new thread. Tasks are submitted to
  * the pool via an internal  URLFrontier, which  holds extracted URLs and offers
