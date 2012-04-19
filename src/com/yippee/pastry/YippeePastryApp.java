@@ -25,7 +25,7 @@ public class YippeePastryApp implements Application {
     public YippeePastryApp(NodeFactory nodeFactory) {
         logger.info("Register Application");
         node = nodeFactory.getNode();
-        endpoint = node.buildEndpoint(this, "P2P App");
+        endpoint = node.buildEndpoint(this, "Yippee App");
         endpoint.register();
     }
 
@@ -35,16 +35,16 @@ public class YippeePastryApp implements Application {
      */
 	public void deliver(Id id, Message message) {
         PastryMessage om = (PastryMessage) message;
-        logger.info("Received message " + om.content + " from " + om.from);
+        logger.debug("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
             if (om.content.equals("PING")) {
-                logger.info("Received PING to ID " + id + " from node " +
+                logger.debug("Received PING to ID " + id + " from node " +
                         om.from.getId() + "; returning PONG");
                 sendDirect(om.from, "PONG");
             } // else for other queries
         } else {
             if (om.content.equals("PONG")) {
-                logger.info("Received PONG from node " + om.from.getId());
+                logger.debug("Received PONG from node " + om.from.getId());
             }
         }
 	}
@@ -54,10 +54,10 @@ public class YippeePastryApp implements Application {
      */
     void send(Id idToSendTo, String msgString) {
         if (msgString.equals("PING")) {
-            System.out.println("Sending PING to " + idToSendTo);
-
+            logger.debug("Sending PING to " + idToSendTo);
+        } else {
+            logger.info(this + " sending to " + idToSendTo);
         }
-        logger.info(this + " sending to " + idToSendTo);
         PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
         endpoint.route(idToSendTo, message, null);
     }
