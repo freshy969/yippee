@@ -70,9 +70,11 @@ public class BarrelManager {
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
             success = false;
+            System.out.println("Exception: " + e.toString());
         } catch (IllegalArgumentException e){
         	logger.warn("Exception", e);
             success = false;
+            System.out.println("Exception: " + e.toString());
         }
         
         return success;

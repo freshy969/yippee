@@ -54,7 +54,7 @@ public class BarrelManagerTest {
     
     @Test
     public void testGetHitList(){
-    	ArrayList<Hit> hits = barrelManager.getHitList(wordid1).getHitList();  	
+    	ArrayList<Hit> hits = barrelManager.getHitList(wordid1).getHitList();  
     	assertTrue(hits.size()==3);
     	ArrayList<Hit> hits2 = barrelManager.getHitList(wordid2).getHitList();  	
     	assertTrue(hits2.size()==1);
