@@ -49,6 +49,8 @@ public class Hit {
 		anchor = true;
 	}
 	
+	public Hit(){}
+	
 	
 	/**
 	 * sets capitalization variable to true or false. default is fault.
