@@ -16,6 +16,9 @@ function e {
   echo "$1";
 }
 
+##
+#Function used for outputting script usage
+##
 function usage {
   e
   e 'Please run ./usage <uname>'
@@ -37,3 +40,4 @@ e 'adding pair to ssh agent..'
 ssh-add ~/.ssh/id_rsa
 # we could rsync to make sure that it works
 e 'please run ssh '$1'@eniac.seas.upenn.edu and confirm'
+echo "# Log file generated automatically on $(date)" > ~/.backup.log
