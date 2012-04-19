@@ -39,5 +39,9 @@ ssh-copy-id -i $1@eniac.seas.upenn.edu
 e 'adding pair to ssh agent..'
 ssh-add ~/.ssh/id_rsa
 # we could rsync to make sure that it works
-e 'please run ssh '$1'@eniac.seas.upenn.edu and confirm'
+e 'Now logging to '$1'@eniac.seas.upenn.edu ..'
+e 
+e '******************************************'
+e '*This should *not* request your password!*'
+e '******************************************'
 echo "# Log file generated automatically on $(date)" > ~/.backup.log
