@@ -26,11 +26,11 @@ public class FancyExtractor {
 	ArrayList<String> links;
 	ArrayList<String> text;
 	Stack<String> format;
-	boolean bold, ital, anchor;
+	boolean bold, ital, anchor, title;
 	WordStemmer stemmer;
 	HitFactory hitFactory;
 	Lexicon lexicon;
-	String docId;
+	String docId, docTitle;
 	int pos = 0;
 	ArrayList<Hit> hitList;
 	ArrayList<Hit> anchorList; 
@@ -42,6 +42,7 @@ public class FancyExtractor {
 		bold = false;
 		ital = false;
 		anchor = false;
+		title = false;
 		
 		stemmer = new WordStemmer();
 		lexicon = new Lexicon("db/test","doc/lexicon.txt");
@@ -92,10 +93,19 @@ public class FancyExtractor {
 				// Italicized
 				format.push("i");
 				ital = true;
+			} else if (child.getNodeName().equals("title")) {
+				// Title Node
+				format.push("title");
+				title = true;
 			} else if (child.getNodeType() == Node.TEXT_NODE) {
 				// Text
 				
 				String sentence = child.getNodeValue();
+				
+				if (title){
+					docTitle = sentence;
+				}
+				
 				sentence = removePunctuation(sentence);
 				
 				String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
@@ -155,10 +165,17 @@ public class FancyExtractor {
 				anchor = false;
 			} else if ("b".equals(tag)) {
 				bold = false;
-			} else if ("i".equals(tag)) 
+			} else if ("i".equals(tag)) { 
 				ital = false;
+			} else if ("title".equals(tag)) {
+				title = false;
+			}
 		}		
 		
+	}
+	
+	public String getTitle() {
+		return docTitle;
 	}
 	
 	public ArrayList<Hit> getHitList() {

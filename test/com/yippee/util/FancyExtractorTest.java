@@ -119,6 +119,7 @@ public class FancyExtractorTest {
     		System.out.println(": " + lexicon.getWord(hit.getWordId()));
     		
     	}
-    	
+    
+    	System.out.println(fe.getTitle());
     }
 }
