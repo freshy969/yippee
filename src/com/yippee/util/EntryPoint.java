@@ -96,6 +96,13 @@ public class EntryPoint {
         Configuration.getInstance().setPastryEngine(yippeeEngine);
         PingPong pingPong = new PingPong();
         new Thread(pingPong, "Ping Pong Thread").start();
+        // sleep for a number of seconds so that when the rest of the services
+        // launch, pastry is up and running
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -110,7 +117,7 @@ public class EntryPoint {
         URLFrontier urlFrontier = FrontierFactory.get(Frontier.SIMPLE);
         boolean success = true;
         // only overwrite database with new seeds iff an overwrite flag was given
-        if (args[args.length].equals("--overwrite")) {
+        if (args[args.length-1].equals("--overwrite")) {
             logger.warn("Overwrite -- loading frontier from the url feed");
             if ((args.length > 4) && (!args[3].contains("--"))) {
                 if (!seed(urlFrontier, args[3])) {
@@ -133,6 +140,8 @@ public class EntryPoint {
         return success;
     }
 
+
+    // TODO: NEED TO REDISTRIBUTE SEEDS AMONG PASTRY NODES -- this could be a good test
     private boolean seed(URLFrontier urlFrontier, String seed) {
 
         File seedFile = new File(seed);

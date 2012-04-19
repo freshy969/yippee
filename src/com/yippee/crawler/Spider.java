@@ -53,6 +53,8 @@ public class Spider implements Runnable {
                 //url.getURL()
 
 
+
+
             } catch (InterruptedException e) {
                 //e.printStackTrace();
                 logger.info("Thread " + Thread.currentThread().getName() + ": Shutting down..");
