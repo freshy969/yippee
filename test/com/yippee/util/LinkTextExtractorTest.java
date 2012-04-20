@@ -342,7 +342,6 @@ public class LinkTextExtractorTest {
             docAugs[i].setDoc(testHTML);
             docAugs[i].setUrl(baseUrls[i]);
         }
-
         parser = new Parser();
         doc = null;
     }

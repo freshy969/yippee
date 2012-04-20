@@ -41,7 +41,12 @@ public class YippeePastryApp implements Application {
                 logger.debug("Received PING to ID " + id + " from node " +
                         om.from.getId() + "; returning PONG");
                 sendDirect(om.from, "PONG");
-            } // else for other queries
+            } else {// else for other queries
+                // push to the urlFrontier or that node
+                String urlString = om.content;
+                logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
+                // TODO: add to frontier
+            }
         } else {
             if (om.content.equals("PONG")) {
                 logger.debug("Received PONG from node " + om.from.getId());
