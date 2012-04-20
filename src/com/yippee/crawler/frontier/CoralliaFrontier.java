@@ -58,7 +58,7 @@ public class CoralliaFrontier implements URLFrontier {
      * @return a URL containing the link information
      * @throws InterruptedException
      */
-    public Message pull() throws InterruptedException {
+    public synchronized Message pull() throws InterruptedException {
         // Wait until a request is available.
         while (empty) {
             try {
@@ -93,7 +93,7 @@ public class CoralliaFrontier implements URLFrontier {
      *
      * @param message a java URL object containing the all url information
      */
-    public void push(Message message) {
+    public synchronized void push(Message message) {
         // Now it is not empty -- notify threads that status has changed.
         if ((empty) && ((message.getType() == Message.Type.NEW))) { // even if UPD or NEW it is not empty now
             logger.debug("Queue is empty -- notifyAll");

@@ -1,5 +1,6 @@
 package com.yippee.pastry;
 
+import com.yippee.crawler.frontier.URLFrontier;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
@@ -16,6 +17,10 @@ public class YippeePastryApp implements Application {
      * The current endpoint
      */
     private Endpoint endpoint;
+    /**
+     * The urlFrontier in which
+     */
+    private URLFrontier urlFrontier;
 
     /**
      * Constructor
@@ -27,6 +32,10 @@ public class YippeePastryApp implements Application {
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "Yippee App");
         endpoint.register();
+    }
+
+    public void setupURLFrontier(URLFrontier urlFrontier){
+        this.urlFrontier = urlFrontier;
     }
 
     /**
@@ -41,7 +50,15 @@ public class YippeePastryApp implements Application {
                 logger.debug("Received PING to ID " + id + " from node " +
                         om.from.getId() + "; returning PONG");
                 sendDirect(om.from, "PONG");
-            } // else for other queries
+            } else {// else for other queries
+                // push to the urlFrontier or that node
+                String urlString = om.content;
+                logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
+//                com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
+//                if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
+//                    urlFrontier.push(msg);
+//                }
+            }
         } else {
             if (om.content.equals("PONG")) {
                 logger.debug("Received PONG from node " + om.from.getId());

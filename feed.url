@@ -1,4 +1,5 @@
 # This file contains the feed urls. Comments should start with a #
+#
 #.edu
 http://www.upenn.edu
 http://cis.upenn.edu
@@ -7,9 +8,9 @@ http://mit.edu
 http://www.harvard.edu
 http://berkeley.edu
 http://www.princeton.edu/main
-
-
+#
 # .com
+#
 http://www.cnn.com
 http://www.bbc.com
 http://www.yahoo.com
@@ -33,17 +34,18 @@ http://www.guardiannews.com
 http://www.yelp.com
 http://www.walmart.com
 http://w3schools.com
-
-
+#
 # .net
+#
 http://sourceforge.net
-
+#
 # .gov
+#
 http://www.whitehouse.gov
 https://www.cia.gov
 https://www.fbi.gov
-
+#
 # .it
+#
 http://www.gazzetta.it
-
-# 
+#

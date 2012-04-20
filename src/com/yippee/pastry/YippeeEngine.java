@@ -1,5 +1,6 @@
 package com.yippee.pastry;
 
+import com.yippee.crawler.frontier.URLFrontier;
 import org.apache.log4j.Logger;
 
 import java.net.*;
@@ -57,5 +58,14 @@ public class YippeeEngine {
         String content = url.toString();
         logger.info("Sending URL "+content+"to node closest to"+url.getHost());
         yippeePastryApp.send(nodeFactory.getIdFromString(url.getHost()), content);
+    }
+
+    /**
+     * Sets up the url frontier for the pastry substrate
+     *
+     * @param urlFrontier the urlFrontier to be used
+     */
+    public void setupURLFrontier(URLFrontier urlFrontier){
+        yippeePastryApp.setupURLFrontier(urlFrontier);
     }
 }
