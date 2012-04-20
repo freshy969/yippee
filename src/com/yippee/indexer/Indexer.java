@@ -1,9 +1,12 @@
 package com.yippee.indexer;
 
 import com.yippee.db.managers.DocAugManager;
+import com.yippee.db.model.AnchorHit;
 import com.yippee.db.model.DocAug;
-import com.yippee.util.LinkTextExtractor;
+import com.yippee.db.model.Hit;
+import com.yippee.util.FancyExtractor;
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -24,57 +27,73 @@ public class Indexer extends Thread {
 	DocAugManager dam;
 	
 	public Indexer() {
-//		dam = new DocAugManager("db");
+		dam = new DocAugManager("db/test/indexer");
 	}
 
 	public void run() {
 		
-//		while(true) {
-			DocAug docAug = getNextDoc();
-			Parser parser = new Parser();
-			LinkTextExtractor linkEx = new LinkTextExtractor();
+		while(true) {
 			
+			DocAug docAug = null; 
+			
+			while(docAug == null)
+				docAug = dam.poll();
+			
+			System.out.println("Retrieved: " + docAug.getId());
+			Parser parser = new Parser();
+			FancyExtractor fe = new FancyExtractor(docAug.getId());
+	    	
+	    	Document doc = null;
 			try {
-				parser.parseDoc(docAug);
+				doc = parser.parseDoc(docAug);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			ArrayList<String> text = linkEx.getText();
-			
-			//TODO Store these to their appropriate places, such that PageRank/Search Engine can use them later.
-			ArrayList<String> lexicon = createLexicon(text);
-			ArrayList<String> links = linkEx.getLinks();
-//		}
-	}
-	
-	/**
-	 * Gets the next DocAug from the document queue. 
-	 */
-	public DocAug getNextDoc() {
-		DocAug docAug = dam.poll();
-		return docAug;
-	}
-	
-	/**
-	 * Parses the entire text content of a document, filtering text for non-alphanumerical symbols, and parsing them through the stemmed results.
-	 * 
-	 * @param text
-	 * @return
-	 */
-	public ArrayList<String> createLexicon(ArrayList<String> text) {
-		Lexicon lexicon = new Lexicon();
-		WordStemmer stemmer = new WordStemmer();
-		
-		for (int i = 0; i < text.size(); i++) {
-			String sentence = text.get(i);
-			sentence = sentence.replaceAll("\\W", " ");
-			String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
-			
-			lexicon.addNewWords(stemlist);
+	    	
+	    	fe.extract("http://crawltest.cis.upenn.edu", doc);    
+	    	
+	    	// Read hits test
+	    	ArrayList<Hit> hitList = fe.getHitList();
+	    	
+	    	Lexicon lexicon = new Lexicon("db/test","doc/lexicon.txt");
+	    	
+	    	for (int i = 0; i < hitList.size(); i++) {
+	    		Hit hit = hitList.get(i);
+	    		
+	    		System.out.print("[" + hit.getPosition() + "]");
+	    		
+	    		if(hit.isBold())
+	    			System.out.print("[BOLD]");
+	    		
+	    		if(hit.isItalicize())
+	    			System.out.print("[ITAL]");
+	    	
+	    		System.out.println(": " + lexicon.getWord(hit.getWordId()));	
+	    	}
+	    	
+	    	
+	    	hitList = fe.getAnchorList();
+	 
+	    	// Read anchors test
+	    	for (int i = 0; i < hitList.size(); i++) {
+	    		AnchorHit hit = (AnchorHit) hitList.get(i);
+	    		
+	    		System.out.print("[" + hit.getPosition() + "]");
+	    		
+	    		if(hit.isBold())
+	    			System.out.print("[BOLD]");
+	    		
+	    		if(hit.isItalicize())
+	    			System.out.print("[ITAL]");
+	    	
+	    		System.out.println(": " + lexicon.getWord(hit.getWordId()));
+	    		
+	    	}
+
+	    	// Read title test
+	    	System.out.println("Title: " + fe.getTitle());
+	    
 		}
-		
-		return lexicon.getLexicon();
 	}
 }

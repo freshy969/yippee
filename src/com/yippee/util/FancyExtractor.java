@@ -58,7 +58,7 @@ public class FancyExtractor {
 	 * @param parent the parent node of this node
 	 * @return All links found in this branch
 	 */
-	protected void extract (String url, Node parent) {
+	public void extract (String url, Node parent) {
 		
 		NodeList nodes = parent.getChildNodes();
 //		ArrayList<String> links = new ArrayList<String>(); 
