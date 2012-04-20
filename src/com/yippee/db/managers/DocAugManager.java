@@ -25,6 +25,7 @@ public class DocAugManager {
      */
     public DocAugManager(String location) {
         myDbEnv = DBEnv.getInstance(location);
+        dao = new DAL(myDbEnv.getEntityStore());
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }
@@ -41,7 +42,6 @@ public class DocAugManager {
         try {
             // Open the data accessor. This is used to store
             // persistent objects.
-            dao = new DAL(myDbEnv.getEntityStore());
             dao.getDocById().put(docAug);
         } catch (DatabaseException e) {
             System.out.println("Exception: " + e.toString());
@@ -62,7 +62,6 @@ public class DocAugManager {
         try {
             // Open the data accessor. This is used to store
             // persistent objects.
-            dao = new DAL(myDbEnv.getEntityStore());
             result = dao.getDocById().get(key);
         } catch (DatabaseException e) {
             System.out.println("Exception: " + e.toString());
@@ -82,7 +81,6 @@ public class DocAugManager {
         try {
             // Open the data accessor. This is used to store
             // persistent objects.
-            dao = new DAL(myDbEnv.getEntityStore());
             result = dao.getDocById().delete(key);
         } catch (DatabaseException e) {
             System.out.println("Exception: " + e.toString());
@@ -92,12 +90,6 @@ public class DocAugManager {
         return result;
     }
 
-    /**
-     * Close the database environment
-     */
-    public void close() {
-        myDbEnv.close();
-    }
 
     /**
      * Push an augmented document from the database
@@ -115,7 +107,6 @@ public class DocAugManager {
          DocAug result = null;
         try {
             // open data access layer
-            dao = new DAL(myDbEnv.getEntityStore());
             EntityCursor<DocAug> cursor = dao.getDocCursor();
             Iterator<DocAug> docIterator = cursor.iterator();
             if (docIterator.hasNext()) {
@@ -139,7 +130,6 @@ public class DocAugManager {
          DocAug result = null;
         try {
             // open data access layer
-            dao = new DAL(myDbEnv.getEntityStore());
             EntityCursor<DocAug> cursor = dao.getDocCursor();
             Iterator<DocAug> docIterator = cursor.iterator();
             if (docIterator.hasNext()) {
