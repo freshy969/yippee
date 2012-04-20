@@ -50,6 +50,7 @@ public class Spider implements Runnable {
         while (running && Configuration.getInstance().isUp()) {
             try {
                 Message url = urlFrontier.pull();
+                logger.debug(url);
                 //url.getURL()
 
 
