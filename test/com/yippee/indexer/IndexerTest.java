@@ -92,7 +92,7 @@ class DocCreator extends Thread {
 			
 			counter++;
 			try {
-				this.sleep(5000);
+				this.sleep(20000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

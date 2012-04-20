@@ -26,20 +26,34 @@ public class Indexer extends Thread {
      */
     static Logger logger = Logger.getLogger(Indexer.class);
 	DocAugManager dam;
+	long pollDelay;
 	
 	public Indexer() {
-		dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBPath());
+		dam = new DocAugManager("db/test/indexer");
 	}
 
 	public void run() {
 		
 		while(true) {
+			pollDelay = 500;
+
 			logger.info("TJ!");
 			DocAug docAug = null; 
 			
-			while(docAug == null)
+			while(docAug == null) {
+				try {
+					System.out.println("Waiting... " + pollDelay + "ms");
+					this.sleep(pollDelay);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				docAug = dam.poll();
-			
+				
+				pollDelay *= 2;
+			}
+				
 			System.out.println("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
@@ -94,7 +108,6 @@ public class Indexer extends Thread {
 
 	    	// Read title test
 	    	System.out.println("Title: " + fe.getTitle());
-	    
-		}
+	    }
 	}
 }
