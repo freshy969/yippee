@@ -132,7 +132,9 @@ public class EntryPoint {
             urlFrontier.load();
         }
         if (success) {
+            Configuration.getInstance().getPastryEngine().sendPing();
             Araneae threadPool = new Araneae(urlFrontier);
+
         } else {
             String error = "FATAL: No file found to load urls from";
             logger.error(error);
