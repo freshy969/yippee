@@ -4,6 +4,7 @@ import com.yippee.db.managers.DocAugManager;
 import com.yippee.db.model.AnchorHit;
 import com.yippee.db.model.DocAug;
 import com.yippee.db.model.Hit;
+import com.yippee.util.Configuration;
 import com.yippee.util.FancyExtractor;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -27,13 +28,13 @@ public class Indexer extends Thread {
 	DocAugManager dam;
 	
 	public Indexer() {
-		dam = new DocAugManager("db/test/indexer");
+		dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBPath());
 	}
 
 	public void run() {
 		
 		while(true) {
-			
+			logger.info("TJ!");
 			DocAug docAug = null; 
 			
 			while(docAug == null)
@@ -51,7 +52,7 @@ public class Indexer extends Thread {
 				e.printStackTrace();
 			}
 	    	
-	    	fe.extract("http://crawltest.cis.upenn.edu", doc);    
+	    	fe.extract(docAug.getUrl(), doc);
 	    	
 	    	// Read hits test
 	    	ArrayList<Hit> hitList = fe.getHitList();

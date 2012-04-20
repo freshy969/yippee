@@ -5,6 +5,7 @@ import com.yippee.crawler.Message;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.indexer.Indexer;
 import com.yippee.pastry.PingPong;
 import com.yippee.pastry.YippeeEngine;
 import org.apache.log4j.Logger;
@@ -99,7 +100,7 @@ public class EntryPoint {
         // sleep for a number of seconds so that when the rest of the services
         // launch, pastry is up and running
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -201,6 +202,9 @@ public class EntryPoint {
         entryPoint.setUpSubstrate();
         // Crawler
         if (!entryPoint.setupCrawler(args)) return;
+
+        Indexer indexer = new Indexer();
+        indexer.start();
     }
 
 }

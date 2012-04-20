@@ -1,6 +1,7 @@
 package com.yippee.crawler;
 
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.db.managers.DocAugManager;
 import com.yippee.db.model.DocAug;
 import com.yippee.indexer.Parser;
 import com.yippee.util.Configuration;
@@ -44,6 +45,7 @@ public class Spider implements Runnable {
         this.id = id;
         this.spiders = spiders;
         this.araneae = araneae;
+        running = true;
     }
 
     /**
@@ -58,6 +60,8 @@ public class Spider implements Runnable {
         logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
         while (running && Configuration.getInstance().isUp()) {
             try {
+
+                logger.info("start spider ");
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
                 //url.getURL()
@@ -73,6 +77,12 @@ public class Spider implements Runnable {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+                logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBPath());
+                logger.info("1");
+                DocAugManager dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBPath());
+                logger.info("1");
+                dam.push(docAug);
+                logger.info("2");
                 LinkTextExtractor linkEx = new LinkTextExtractor();
                 ArrayList<String> links = linkEx.getLinks();
                 RobotsModule robotsModule = new RobotsModule();
