@@ -1,34 +1,24 @@
 package com.yippee.indexer;
 
+import com.yippee.db.model.AnchorHit;
+import com.yippee.db.model.DocAug;
+import com.yippee.db.model.Hit;
+import com.yippee.indexer.Lexicon;
+import com.yippee.indexer.Parser;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
-import com.yippee.db.managers.DocAugManager;
-import com.yippee.db.model.DocAug;
-
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Random;
 
-import static org.junit.Assert.assertTrue;
-
-public class IndexerTest {
+public class FancyExtractorTest {
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */
-    static Logger logger = Logger.getLogger(IndexerTest.class);
-	
-//	 Threading tester
-	public static void main(String[] args) {
-		// Start putting test documents into the queues
-		DocCreator doccreate = new DocCreator();
-		doccreate.start();
-		
-		Indexer indexer = new Indexer();
-		indexer.start();
-	}
-}
-
-class DocCreator extends Thread {
+    static Logger logger = Logger.getLogger(FancyExtractorTest.class);
+    /* Testing for fancy HTML extraction */
 	
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD>" +
             "<H3>XML to be crawled</H3>" +
@@ -73,40 +63,64 @@ class DocCreator extends Thread {
             "<LI><A HREF=\"2.png\">2.png</A></LI>" +
             "</UL>" +
             "</BODY></HTML>";
-	
-	DocAugManager dam;
-	int counter;
-	
-	public void run() {
-		dam = new DocAugManager("db/test/indexer");
-		counter = 0;
-		
-		while (true) {
-			DocAug doc = new DocAug();
-			doc.setId(String.valueOf(counter) + "ID");
-			doc.setUrl(String.valueOf(counter) + ".com");
-			doc.setDoc(testHTML);
-			System.out.println("Creating doc: " + counter);
-						
-			dam.create(doc);
-			
-			counter++;
-			try {
-				this.sleep(60000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-//			DocAug newDoc = dam.poll();
-//			
-//			System.out.println("Retrieved ID: " + newDoc.getId());
-//			System.out.println("Retrieved URL: " + newDoc.getUrl());
-//			
-//			System.out.println(dam.peek());
-			
+
+    @Test
+    public void testFancyExtract() {    	
+    	Parser parser = new Parser();    	
+    	DocAug docAug = new DocAug();
+    	
+    	docAug.setId("http://crawltest.cis.upenn.edu/index.html");
+    	docAug.setDoc(testHTML);
+    	docAug.setUrl("http://crawltest.cis.upenn.edu/index.html");
+    	
+    	FancyExtractor fe = new FancyExtractor(docAug.getId());
+    	
+    	Document doc = null;
+		try {
+			doc = parser.parseDoc(docAug);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		
-	}
+    	
+    	fe.extract("http://crawltest.cis.upenn.edu", doc);    
+    	
+    	ArrayList<Hit> hitList = fe.getHitList();
+    	
+    	Lexicon lexicon = new Lexicon("db/test","doc/lexicon.txt");
+    	
+    	for (int i = 0; i < hitList.size(); i++) {
+    		Hit hit = hitList.get(i);
+    		
+    		System.out.print("[" + hit.getPosition() + "]");
+    		
+    		if(hit.isBold())
+    			System.out.print("[BOLD]");
+    		
+    		if(hit.isItalicize())
+    			System.out.print("[ITAL]");
+    	
+    		System.out.println(": " + lexicon.getWord(hit.getWordId()));	
+    	}
+    	
+    	
+    	hitList = fe.getAnchorList();
+    	
+    	for (int i = 0; i < hitList.size(); i++) {
+    		AnchorHit hit = (AnchorHit) hitList.get(i);
+    		
+    		System.out.print("[" + hit.getPosition() + "]");
+    		
+    		if(hit.isBold())
+    			System.out.print("[BOLD]");
+    		
+    		if(hit.isItalicize())
+    			System.out.print("[ITAL]");
+    	
+    		System.out.println(": " + lexicon.getWord(hit.getWordId()));
+    		
+    	}
+    
+    	System.out.println(fe.getTitle());
+    }
 }

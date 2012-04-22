@@ -5,7 +5,6 @@ import com.yippee.db.model.AnchorHit;
 import com.yippee.db.model.DocAug;
 import com.yippee.db.model.Hit;
 import com.yippee.util.Configuration;
-import com.yippee.util.FancyExtractor;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
@@ -51,7 +50,8 @@ public class Indexer extends Thread {
 				
 				docAug = dam.poll();
 				
-				pollDelay *= 2;
+				if (pollDelay <= 60000)
+					pollDelay *= 2;
 			}
 				
 			System.out.println("Retrieved: " + docAug.getId());
