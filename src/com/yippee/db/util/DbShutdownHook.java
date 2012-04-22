@@ -16,22 +16,24 @@ public class DbShutdownHook extends Thread {
 	
 	private Environment env;
 	private EntityStore store;
+	private String envName;
 	
 	public DbShutdownHook(Environment e, EntityStore s){
 		env = e;
+		envName = e.getConfig().getNodeName();
 		store = s;
 	}
 	
 	@Override
 	public void run(){
 		if(env != null){
-			try{
+			try{				
 				store.close();
 				env.cleanLog();
 				env.close();
-				System.out.println("Database closed.");
+				System.out.println("Environment closed: " + envName);
 			}catch (DatabaseException dbe){
-				System.out.println("Database not shutdown properly.");
+				System.out.println("Environment not shutdown properly: " + envName);
 			}
 		}
 	}

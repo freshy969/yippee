@@ -4,11 +4,12 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
-import com.yippee.db.model.DocAug;
-import com.yippee.db.model.Hit;
-import com.yippee.db.model.HitList;
-import com.yippee.db.model.RobotsTxt;
-import com.yippee.db.model.Word;
+import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.crawler.model.RobotsTxt;
+import com.yippee.db.indexer.model.Hit;
+import com.yippee.db.indexer.model.HitList;
+import com.yippee.db.indexer.model.Word;
+
 import org.apache.log4j.Logger;
 
 /**
