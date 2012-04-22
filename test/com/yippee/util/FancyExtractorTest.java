@@ -1,8 +1,8 @@
 package com.yippee.util;
 
-import com.yippee.db.model.AnchorHit;
-import com.yippee.db.model.DocAug;
-import com.yippee.db.model.Hit;
+import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.indexer.model.AnchorHit;
+import com.yippee.db.indexer.model.Hit;
 import com.yippee.indexer.Lexicon;
 import com.yippee.indexer.Parser;
 import org.apache.log4j.Logger;

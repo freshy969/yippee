@@ -1,6 +1,7 @@
 package com.yippee.indexer;
 
-import com.yippee.db.model.Hit;
+import com.yippee.db.indexer.model.Hit;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -60,8 +61,4 @@ public class HitFactoryTest {
         assertTrue(!h.getCaps());
     }*/
     
-    @After
-    public void tearDown(){
-        mLexicon.close();
-    }
 }

@@ -3,8 +3,8 @@ package com.yippee.indexer;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.yippee.db.managers.DocAugManager;
-import com.yippee.db.model.DocAug;
+import com.yippee.db.crawler.DocAugManager;
+import com.yippee.db.crawler.model.DocAug;
 
 import java.util.ArrayList;
 import java.util.Random;

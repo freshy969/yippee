@@ -46,9 +46,4 @@ public class LexiconTest {
         assertTrue(Arrays.equals(id, id2));
     }
     
-    
-    @After
-    public void tearDown(){
-        mLexicon.close();
-    }
 }
