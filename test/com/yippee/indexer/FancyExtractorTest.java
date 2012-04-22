@@ -1,8 +1,7 @@
 package com.yippee.indexer;
 
-import com.yippee.db.model.AnchorHit;
-import com.yippee.db.model.DocAug;
-import com.yippee.db.model.Hit;
+import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.indexer.model.*;
 import com.yippee.indexer.Lexicon;
 import com.yippee.indexer.Parser;
 
