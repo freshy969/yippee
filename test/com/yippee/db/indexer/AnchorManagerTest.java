@@ -1,7 +1,9 @@
-package com.yippee.db.managers;
+package com.yippee.db.indexer;
 
-import com.yippee.db.model.AnchorHit;
-import com.yippee.db.model.Hit;
+import com.yippee.db.indexer.AnchorManager;
+import com.yippee.db.indexer.model.AnchorHit;
+import com.yippee.db.indexer.model.Hit;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -31,7 +33,7 @@ public class AnchorManagerTest {
 	
 	@Before
     public void setUp(){    
-       anchorManager = new AnchorManager("db/test");
+       anchorManager = new AnchorManager("db/test/indexer");
        //String docID, byte[] wordID, int position, String URL
        h1 = new AnchorHit("doc5",wordid1,2,url);
        h2 = new AnchorHit("doc2",wordid2,67,url);

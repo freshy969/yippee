@@ -1,6 +1,8 @@
-package com.yippee.db.managers;
+package com.yippee.db.crawler;
 
-import com.yippee.db.model.DocAug;
+import com.yippee.db.crawler.DocAugManager;
+import com.yippee.db.crawler.model.DocAug;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -9,6 +11,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class DocAugManagerTest {
@@ -27,7 +30,7 @@ public class DocAugManagerTest {
         docAug.setTime(new Date());
         docAug.setUrl("http://this.is.ate.st");
         docAug.setId("1");
-        docAugManager = new DocAugManager("db/test");
+        docAugManager = new DocAugManager("db/test/crawler");
     }
 
     @Test
@@ -41,7 +44,15 @@ public class DocAugManagerTest {
 
     @Test
     public void testDelete(){
+    	//Make sure its still in there
+    	//assertEquals(docAugManager.read("1").getId(), docAug.getId());
+
+    	//Delete it
         assertTrue(docAugManager.delete("1"));
+        
+        //Make sure its not in there.
+    	//assertNull(docAugManager.read("1"));
+
     }
 
     @Test

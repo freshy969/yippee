@@ -1,4 +1,4 @@
-package com.yippee.db.model;
+package com.yippee.db.crawler.model;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;

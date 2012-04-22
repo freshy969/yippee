@@ -1,6 +1,8 @@
-package com.yippee.db.managers;
+package com.yippee.db.crawler;
 
-import com.yippee.db.model.RobotsTxt;
+import com.yippee.db.crawler.RobotsManager;
+import com.yippee.db.crawler.model.RobotsTxt;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -23,7 +25,7 @@ public class RobotsManagerTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		rm = new RobotsManager("db/test");
+		rm = new RobotsManager("db/test/crawler");
 		
 		robots = new RobotsTxt();
 		robots.setCrawlDelay(10);
@@ -32,37 +34,32 @@ public class RobotsManagerTest {
 		
 		rm.create(robots);
 	}
-	
-//	@After
-//	public void tearDown(){
-//		rm.delete(robots.getHost());
-//		rm.close();
-//	}
+
 	
 	@Test
 	public void testConstructor(){
 		assertTrue(rm instanceof RobotsManager);
 	}
 	
-//	@Test
-//	public void testCreateReturnsFalseForRobotsTxtWithoutInitializedFields(){
-//		RobotsTxt emptyRobots = new RobotsTxt();
-//		assertFalse(rm.create(emptyRobots));
-//	}
-//	
-//	@Test
-//	public void testCreatePutsWellFormedRobotsTxtIntoDb(){
-//		RobotsTxt newRobots = new RobotsTxt();
-//
-//		newRobots = new RobotsTxt();
-//		newRobots.setCrawlDelay(10);
-//		newRobots.setDisallows(new HashSet<String>());
-//		newRobots.setHost("cis.upenn.edu");
-//		assertTrue(rm.create(newRobots));
-//		
-//		rm.delete(newRobots.getHost());
-//	}
-//	
+	@Test
+	public void testCreateReturnsFalseForRobotsTxtWithoutInitializedFields(){
+		RobotsTxt emptyRobots = new RobotsTxt();
+		assertFalse(rm.create(emptyRobots));
+	}
+	
+	@Test
+	public void testCreatePutsWellFormedRobotsTxtIntoDb(){
+		RobotsTxt newRobots = new RobotsTxt();
+
+		newRobots = new RobotsTxt();
+		newRobots.setCrawlDelay(10);
+		newRobots.setDisallows(new HashSet<String>());
+		newRobots.setHost("cis.upenn.edu");
+		assertTrue(rm.create(newRobots));
+		
+		rm.delete(newRobots.getHost());
+	}
+	
 //	@Test
 //	public void testCreateReturnsFalseForADuplicate(){
 //		RobotsTxt newRobots = new RobotsTxt();
@@ -80,19 +77,19 @@ public class RobotsManagerTest {
 //		
 //		assertFalse(rm.create(duplicate));
 //	}
-//	
-//	@Test
-//	public void testCanExtractStoredRobotsTxtFromDb(){
-//		RobotsTxt readFromDb = new RobotsTxt();;
-//		assertTrue(rm.read("cis.upenn.edu", readFromDb));
-//		
-//		assertEquals(robots.getHost(), readFromDb.getHost());
-//		assertEquals(robots.getCrawlDelay(), readFromDb.getCrawlDelay());
-//		
-//		assertTrue("Extracted Robots has things not in the Robots stored", robots.getDisallows().containsAll(readFromDb.getDisallows()));
-//		assertTrue("Extracted robots is missing items that were stored", readFromDb.getDisallows().containsAll(robots.getDisallows()));
-//	
-//	}
+	
+	@Test
+	public void testCanExtractStoredRobotsTxtFromDb(){
+		RobotsTxt readFromDb = new RobotsTxt();;
+		assertTrue(rm.read("cis.upenn.edu", readFromDb));
+		
+		assertEquals(robots.getHost(), readFromDb.getHost());
+		assertEquals(robots.getCrawlDelay(), readFromDb.getCrawlDelay());
+		
+		assertTrue("Extracted Robots has things not in the Robots stored", robots.getDisallows().containsAll(readFromDb.getDisallows()));
+		assertTrue("Extracted robots is missing items that were stored", readFromDb.getDisallows().containsAll(robots.getDisallows()));
+	
+	}
 //	
 //	@Test
 //	public void testDeleteRemovesRobotsTxtFromDb(){

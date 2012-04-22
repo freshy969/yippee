@@ -1,8 +1,10 @@
-package com.yippee.db.model;
+package com.yippee.db.indexer.model;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.yippee.db.indexer.model.Hit;
 
 import static org.junit.Assert.assertTrue;
 

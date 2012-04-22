@@ -1,4 +1,4 @@
-package com.yippee.db.managers;
+package com.yippee.db.indexer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,20 +12,20 @@ import org.junit.Before;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
-import com.yippee.db.model.AnchorHit;
-import com.yippee.db.model.DocAug;
-import com.yippee.db.model.HitList;
-import com.yippee.db.model.Word;
+import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.indexer.model.AnchorHit;
+import com.yippee.db.indexer.model.Hit;
+import com.yippee.db.indexer.model.HitList;
+import com.yippee.db.indexer.model.Word;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
-import com.yippee.db.model.Hit;
 
 public class AnchorManager {
 	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(AnchorManager.class);
-    private static DBEnv myDbEnv;
+    private static IndexerDBEnv myDbEnv;
     private DAL dao;
 
     /**
@@ -33,7 +33,7 @@ public class AnchorManager {
      * it, if it does not exist.
      */
     public AnchorManager(String location) {
-        myDbEnv = DBEnv.getInstance(location);
+        myDbEnv = IndexerDBEnv.getInstance(location, false);
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }
@@ -51,7 +51,7 @@ public class AnchorManager {
     	
         try {
             // Open the data accessor. This is used to store persistent objects.
-            dao = new DAL(myDbEnv.getEntityStore());
+            dao = new DAL(myDbEnv.getIndexerStore());
         
             if(dao.getAnchorById().contains(new String(h.getWordId()))) {
             	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
@@ -88,7 +88,7 @@ public class AnchorManager {
      * @return
      */
     public HitList getHitList(byte[] wordid){
-        dao = new DAL(myDbEnv.getEntityStore());
+        dao = new DAL(myDbEnv.getIndexerStore());
         
         return dao.getAnchorById().get(new String(wordid));
     }
@@ -98,16 +98,8 @@ public class AnchorManager {
      * @param wordid
      */
     public void deleteWordEntry(byte[] wordid){
-        dao = new DAL(myDbEnv.getEntityStore());
+        dao = new DAL(myDbEnv.getIndexerStore());
         dao.getAnchorById().delete(new String(wordid));
     }
-    
-    /**
-     * Close the database environment
-     */
-    public void close() {
-        myDbEnv.close();
-    }
-
-    
+     
 }

@@ -1,4 +1,4 @@
-package com.yippee.db.model;
+package com.yippee.db.indexer.model;
 
 import java.util.ArrayList;
 import java.util.Collections;

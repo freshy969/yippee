@@ -1,8 +1,10 @@
-package com.yippee.db.model;
+package com.yippee.db.crawler.model;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.yippee.db.crawler.model.RobotsTxt;
 
 import static org.junit.Assert.assertTrue;
 

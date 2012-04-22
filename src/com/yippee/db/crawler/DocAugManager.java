@@ -1,8 +1,8 @@
-package com.yippee.db.managers;
+package com.yippee.db.crawler;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
-import com.yippee.db.model.DocAug;
+import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
 import org.apache.log4j.Logger;
@@ -15,7 +15,7 @@ public class DocAugManager {
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(DocAugManager.class);
-    private static DBEnv myDbEnv;
+    private static CrawlerDBEnv myDbEnv;
     private DAL dao;
 
     /**
@@ -24,8 +24,8 @@ public class DocAugManager {
      * to make sure they do not write to this folder.
      */
     public DocAugManager(String location) {
-        myDbEnv = DBEnv.getInstance(location);
-        dao = new DAL(myDbEnv.getEntityStore());
+        myDbEnv = CrawlerDBEnv.getInstance(location, false);
+        dao = new DAL(myDbEnv.getCrawlerStore());
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }

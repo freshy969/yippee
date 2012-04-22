@@ -1,9 +1,11 @@
-package com.yippee.db.managers;
+package com.yippee.db.indexer;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.yippee.db.indexer.LexiconManager;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +19,7 @@ public class LexiconManagerTest {
 	
 	@Before
     public void setUp(){    
-       lexiconManager = new LexiconManager("db/test","doc/lexicon.txt");
+       lexiconManager = new LexiconManager("db/test/indexer","doc/lexicon.txt");
     }
 
     

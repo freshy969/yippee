@@ -1,4 +1,4 @@
-package com.yippee.db.managers;
+package com.yippee.db.indexer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,19 +12,19 @@ import org.junit.Before;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
-import com.yippee.db.model.DocAug;
-import com.yippee.db.model.HitList;
-import com.yippee.db.model.Word;
+import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.indexer.model.Hit;
+import com.yippee.db.indexer.model.HitList;
+import com.yippee.db.indexer.model.Word;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
-import com.yippee.db.model.Hit;
 
 public class BarrelManager {
 	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(BarrelManager.class);
-    private static DBEnv myDbEnv;
+    private static IndexerDBEnv myDbEnv;
     private DAL dao;
 
     /**
@@ -32,7 +32,7 @@ public class BarrelManager {
      * it, if it does not exist.
      */
     public BarrelManager(String location) {
-        myDbEnv = DBEnv.getInstance(location);
+        myDbEnv = IndexerDBEnv.getInstance(location, false);
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }
@@ -50,7 +50,7 @@ public class BarrelManager {
     	
         try {
             // Open the data accessor. This is used to store persistent objects.
-            dao = new DAL(myDbEnv.getEntityStore());
+            dao = new DAL(myDbEnv.getIndexerStore());
         
             if(dao.getBarrelById().contains(new String(h.getWordId()))) {
             	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
@@ -87,7 +87,7 @@ public class BarrelManager {
      * @return
      */
     public HitList getHitList(byte[] wordid){
-        dao = new DAL(myDbEnv.getEntityStore());
+        dao = new DAL(myDbEnv.getIndexerStore());
         
         return dao.getBarrelById().get(new String(wordid));
     }
@@ -97,16 +97,10 @@ public class BarrelManager {
      * @param wordid
      */
     public void deleteWordEntry(byte[] wordid){
-        dao = new DAL(myDbEnv.getEntityStore());
+        dao = new DAL(myDbEnv.getIndexerStore());
         dao.getBarrelById().delete(new String(wordid));
     }
     
-    /**
-     * Close the database environment
-     */
-    public void close() {
-        myDbEnv.close();
-    }
     
     /**
      * gives hitlist for a given word

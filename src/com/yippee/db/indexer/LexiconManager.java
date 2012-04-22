@@ -1,4 +1,4 @@
-package com.yippee.db.managers;
+package com.yippee.db.indexer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,9 +26,9 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.OperationStatus;
 import com.sleepycat.persist.EntityCursor;
-import com.yippee.db.model.DocAug;
-import com.yippee.db.model.RobotsTxt;
-import com.yippee.db.model.Word;
+import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.crawler.model.RobotsTxt;
+import com.yippee.db.indexer.model.Word;
 import com.yippee.db.util.DAL;
 import com.yippee.db.util.DBEnv;
 
@@ -37,7 +37,7 @@ public class LexiconManager {
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(LexiconManager.class);
-	private static DBEnv myDbEnv;
+	private static IndexerDBEnv myDbEnv;
 	private DAL dao;
 	private static String endOfWordDeliminator = "::";
 	
@@ -46,7 +46,7 @@ public class LexiconManager {
      * it, if it does not exist.
      */
     public LexiconManager(String location, String locationWordList) {
-        myDbEnv = DBEnv.getInstance(location);
+        myDbEnv = IndexerDBEnv.getInstance(location, false);
         // Path to the environment home
         // Environment is <i>not</i> readonly
         // if lexicon database is empty, then fill it. otherwise words already in database env
@@ -109,7 +109,7 @@ public class LexiconManager {
         boolean success = true;
         try {
             // Open the data accessor. This is used to store persistent objects.
-            dao = new DAL(myDbEnv.getEntityStore());
+            dao = new DAL(myDbEnv.getIndexerStore());
             Word w = new Word();
             w.setWord(word);
             w.setId(id.getBytes());
@@ -132,7 +132,7 @@ public class LexiconManager {
      */
     public boolean contains(String word) {
     	word = word.toLowerCase();
-    	dao = new DAL(myDbEnv.getEntityStore());  
+    	dao = new DAL(myDbEnv.getIndexerStore());  
     	return dao.getLexiconById().contains(word);
     }
     
@@ -142,7 +142,7 @@ public class LexiconManager {
      */
     public boolean isEmpty(){
     	boolean result = false;
-    	dao = new DAL(myDbEnv.getEntityStore());  
+    	dao = new DAL(myDbEnv.getIndexerStore());  
     	result = dao.getLexiconById().count()==0;
     	return result;
     }
@@ -157,7 +157,7 @@ public class LexiconManager {
     	byte[] id = null;
         try {
             // open data access layer
-            dao = new DAL(myDbEnv.getEntityStore());
+            dao = new DAL(myDbEnv.getIndexerStore());
             Word w = dao.getLexiconById().get(word);
             if(w!=null)
             	id = w.getId();  
@@ -174,7 +174,7 @@ public class LexiconManager {
      * @return
      */
     public String getWordById(byte[] id) {
-        dao = new DAL(myDbEnv.getEntityStore());
+        dao = new DAL(myDbEnv.getIndexerStore());
         EntityCursor<Word> curs = dao.getLexiconCursor();
         Word w = curs.next();
         String word = null;
@@ -190,12 +190,6 @@ public class LexiconManager {
           return word;
     }
     
-    /**
-     * Close the database environment
-     */
-    public void close() {
-        myDbEnv.close();
-    }
     
     /*************** BELOW ARE MANUAL COMMANDS TO CREATE LEXICON  *****************/
     

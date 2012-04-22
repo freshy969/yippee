@@ -1,4 +1,4 @@
-package com.yippee.db.model;
+package com.yippee.db.indexer.model;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.Persistent;
@@ -20,6 +20,7 @@ public class Hit {
 	private String docIDfrom;
 	private int position;
 	
+				
 	/**
 	 * constructor for a normal Hit - need docID it came from, wordId for that word, and 
 	 * position of word in the document
@@ -148,4 +149,5 @@ public class Hit {
 	public int getPosition() {
 		return position;
 	}
+	
 }
