@@ -1,6 +1,7 @@
 package com.yippee.indexer;
 
-import com.yippee.db.managers.LexiconManager;
+import com.yippee.db.indexer.LexiconManager;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
@@ -84,13 +85,6 @@ public class Lexicon {
 			logger.log(Priority.INFO, word);
 			return true;
 		}
-	}
-	
-	/**
-	 * closes manager
-	 */
-	public void close() {
-		lexiconManager.close();
 	}
 	
 	

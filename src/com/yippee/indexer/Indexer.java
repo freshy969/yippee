@@ -1,9 +1,9 @@
 package com.yippee.indexer;
 
-import com.yippee.db.managers.DocAugManager;
-import com.yippee.db.model.AnchorHit;
-import com.yippee.db.model.DocAug;
-import com.yippee.db.model.Hit;
+import com.yippee.db.crawler.DocAugManager;
+import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.indexer.model.AnchorHit;
+import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
 import com.yippee.util.FancyExtractor;
 import org.apache.log4j.Logger;

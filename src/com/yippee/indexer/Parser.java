@@ -1,6 +1,7 @@
 package com.yippee.indexer;
 
-import com.yippee.db.model.DocAug;
+import com.yippee.db.crawler.model.DocAug;
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;

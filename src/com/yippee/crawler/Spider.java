@@ -1,8 +1,8 @@
 package com.yippee.crawler;
 
 import com.yippee.crawler.frontier.URLFrontier;
-import com.yippee.db.managers.DocAugManager;
-import com.yippee.db.model.DocAug;
+import com.yippee.db.crawler.DocAugManager;
+import com.yippee.db.crawler.model.DocAug;
 import com.yippee.indexer.Parser;
 import com.yippee.util.Configuration;
 import com.yippee.util.LinkTextExtractor;

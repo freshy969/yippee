@@ -1,8 +1,8 @@
 package com.yippee.crawler;
 
 import com.yippee.util.Configuration;
-import com.yippee.db.managers.RobotsManager;
-import com.yippee.db.model.RobotsTxt;
+import com.yippee.db.crawler.RobotsManager;
+import com.yippee.db.crawler.model.RobotsTxt;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -42,7 +42,7 @@ public class RobotsModule {
                 robotsTxt = fetchRobots();
                 rm.create(robotsTxt);
             }
-            rm.close();
+            
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

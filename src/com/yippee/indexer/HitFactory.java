@@ -1,6 +1,7 @@
 package com.yippee.indexer;
 
-import com.yippee.db.model.Hit;
+import com.yippee.db.indexer.model.Hit;
+
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
