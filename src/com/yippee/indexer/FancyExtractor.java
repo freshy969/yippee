@@ -112,21 +112,14 @@ public class FancyExtractor {
 				for (int i = 0; i < stemlist.length; i++) {
 					// Create Hits
 					
-					byte[] wordId = lexicon.getWordId(stemlist[i]);
-					
-					if (wordId == null) {
-						lexicon.addNewWord(stemlist[i]);
-						wordId = lexicon.getWordId(stemlist[i]);
-					}
-					
 					Hit hit;
 								
 					if (anchor) {
-						hit = new AnchorHit(docId, wordId, i, docId);
+						hit = new AnchorHit(docId, stemlist[i], i, docId);
 						anchorList.add(hit);
 					} 
 						
-					hit = new Hit(docId, wordId, pos+i);
+					hit = new Hit(docId, stemlist[i], pos+i);
 						
 					if (ital)
 						hit.setItalicize(true);

@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author tdu2 The Indexer continually polls the database until no documents
@@ -26,9 +27,17 @@ public class Indexer extends Thread {
     static Logger logger = Logger.getLogger(Indexer.class);
 	DocAugManager dam;
 	long pollDelay;
+	NodeIndex nodeIndex;
 	
-	public Indexer() {
+	public Indexer(NodeIndex nodeIndex) {
+		try {
+			this.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dam = new DocAugManager("db/test/indexer");
+		this.nodeIndex = nodeIndex;
 	}
 
 	public void run() {
@@ -70,8 +79,10 @@ public class Indexer extends Thread {
 	    	
 	    	// Read hits test
 	    	ArrayList<Hit> hitList = fe.getHitList();
+	    	nodeIndex.addAllHits(hitList);
+	    	nodeIndex.printIndex();
 	    	
-	    	Lexicon lexicon = new Lexicon("db/test","doc/lexicon.txt");
+/*	    	Lexicon lexicon = new Lexicon("db/test","doc/lexicon.txt");
 	    	
 	    	for (int i = 0; i < hitList.size(); i++) {
 	    		Hit hit = hitList.get(i);
@@ -84,13 +95,13 @@ public class Indexer extends Thread {
 	    		if(hit.isItalicize())
 	    			System.out.print("[ITAL]");
 	    	
-	    		System.out.println(": " + lexicon.getWord(hit.getWordId()));	
-	    	}
+	    		System.out.println(": " + hit.getWord());	
+	    	}*/
 	    	
 	    	
 	    	hitList = fe.getAnchorList();
 	 
-	    	// Read anchors test
+/*	    	// Read anchors test
 	    	for (int i = 0; i < hitList.size(); i++) {
 	    		AnchorHit hit = (AnchorHit) hitList.get(i);
 	    		
@@ -102,12 +113,12 @@ public class Indexer extends Thread {
 	    		if(hit.isItalicize())
 	    			System.out.print("[ITAL]");
 	    	
-	    		System.out.println(": " + lexicon.getWord(hit.getWordId()));
+	    		System.out.println(": " + hit.getWord());
 	    		
 	    	}
 
 	    	// Read title test
-	    	System.out.println("Title: " + fe.getTitle());
+	    	System.out.println("Title: " + fe.getTitle());*/
 	    }
 	}
 }

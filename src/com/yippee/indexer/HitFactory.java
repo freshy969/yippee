@@ -33,7 +33,7 @@ public class HitFactory {
 		for(int i = 0; i < words.length; i++) {
 		
 			String word = words[i];
-			byte[] wordID = lexicon.getWordId(word.toLowerCase());
+			String wordID = lexicon.getWordId(word.toLowerCase()).toString();
 			
 			if (wordID != null) {
 				Hit h = new Hit(docId, wordID, i);

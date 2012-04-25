@@ -11,16 +11,17 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertTrue;
 
 public class BarrelManagerTest {
-    /**
+/*    *//**
      * Create logger in the Log4j hierarchy named by by software component
-     */
+     *//*
     static Logger logger = Logger.getLogger(BarrelManagerTest.class);
 	//test addDocHit
 	//test getHitList
 	BarrelManager barrelManager;
-	byte[] wordid1 = {1,2,3};
-	byte[] wordid2 = {1,0,7};
-	byte[] wordid3 = {7,9,0,7,7};
+	String wordid1 = "";
+	String wordid2 = "";
+	String wordid3 = "";
+	
 	Hit h1;
 	Hit h2;
 	Hit h3;
@@ -35,11 +36,11 @@ public class BarrelManagerTest {
        h3 = new Hit("doc1",wordid1,6);
        h4 = new Hit("doc1",wordid1,7);
        h5 = new Hit("doc1",wordid3,5);
-       /* expect make:
+        expect make:
        		wordid1) h1, h3, h4 -sort-> h3, h4, h1
        		wordid2) h2
        		wordid3) h4      
-       */
+       
     }
 
     
@@ -72,5 +73,5 @@ public class BarrelManagerTest {
     	assertTrue(barrelManager.getHitList(wordid3)==null);
     }
     
-   
+   */
 }

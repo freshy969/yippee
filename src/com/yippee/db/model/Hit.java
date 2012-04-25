@@ -12,7 +12,7 @@ public class Hit {
 	 */
 	
 	private String docID;
-	private byte[] wordID;
+	private String word;
 	private boolean caps = false;
 	private boolean bold = false;
 	private boolean ital = false;
@@ -28,26 +28,12 @@ public class Hit {
 	 * @param wordID
 	 * @param position
 	 */
-	public Hit(String docID, byte[] wordID, int position) {
+	public Hit(String docID, String wordID, int position) {
 		this.docID = docID;
-		this.wordID = wordID;
+		this.word = wordID;
 		this.position = position;
 	}
 	
-	/**
-	 * Constructor for Anchor Hits - need docID it points to, docID it came from, and
-	 * wordId for that word
-	 * 
-	 * @param docPointingTo
-	 * @param docFrom
-	 * @param wordID
-	 */
-	public Hit(String docPointingTo, String docFrom, byte[] wordID) {
-		this.docID = docPointingTo;
-		this.docIDfrom = docFrom;
-		this.wordID = wordID;
-		anchor = true;
-	}
 	
 	public Hit(){}
 	
@@ -137,8 +123,8 @@ public class Hit {
 	 * 
 	 * @return wordId of Hit
 	 */
-	public byte[] getWordId() {
-		return wordID;
+	public String getWord() {
+		return word;
 	}
 	
 	/**

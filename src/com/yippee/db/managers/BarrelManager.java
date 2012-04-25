@@ -52,17 +52,17 @@ public class BarrelManager {
             // Open the data accessor. This is used to store persistent objects.
             dao = new DAL(myDbEnv.getEntityStore());
         
-            if(dao.getBarrelById().contains(new String(h.getWordId()))) {
+            if(dao.getBarrelById().contains(new String(h.getWord()))) {
             	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
-            	HitList hl = dao.getBarrelById().get(new String(h.getWordId()));
+            	HitList hl = dao.getBarrelById().get(h.getWord());
             	hl.addHit(h);
-            	dao.getBarrelById().delete(new String(h.getWordId()));
+            	dao.getBarrelById().delete(h.getWord());
             	//"updates" entry
             	dao.getBarrelById().put(hl);
             	
             } else {
             	//System.out.println("create new entry "+h.getDocId()+", "+new String(h.getWordId()));
-            	HitList hl = new HitList(new String(h.getWordId()));
+            	HitList hl = new HitList(h.getWord());
             	hl.addHit(h);
             	dao.getBarrelById().put(hl);
             }

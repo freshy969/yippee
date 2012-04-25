@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertTrue;
 
 public class AnchorManagerTest {
-    /**
+/*    *//**
      * Create logger in the Log4j hierarchy named by by software component
-     */
+     *//*
 //    static Logger logger = Logger.getLogger(AnchorManagerTest.class);
 	//test addDocHit
 	//test getHitList
 	AnchorManager anchorManager;
-	byte[] wordid1 = {1,2,3};
+	String wordid1 = {1,2,3};
 	byte[] wordid2 = {1,0,7};
 	byte[] wordid3 = {7,9,0,7,7};
 	AnchorHit h1;
@@ -38,11 +38,11 @@ public class AnchorManagerTest {
        h3 = new AnchorHit("doc1",wordid1,6,url);
        h4 = new AnchorHit("doc1",wordid1,7,url);
        h5 = new AnchorHit("doc1",wordid3,5,url);
-       /* expect make:
+        expect make:
        		wordid1) h1, h3, h4 -sort-> h3, h4, h1
        		wordid2) h2
        		wordid3) h4      
-       */
+       
     }
 
     
@@ -74,6 +74,6 @@ public class AnchorManagerTest {
     	assertTrue(anchorManager.getHitList(wordid2)==null);
     	assertTrue(anchorManager.getHitList(wordid3)==null);
     }
-    
+    */
    
 }
