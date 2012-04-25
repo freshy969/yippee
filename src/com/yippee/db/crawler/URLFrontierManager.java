@@ -7,6 +7,8 @@ import java.util.Queue;
 import org.apache.log4j.Logger;
 
 import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
+import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.util.DAL;
 
@@ -48,11 +50,21 @@ public class URLFrontierManager {
     	int lastVersion = Integer.MAX_VALUE;
     	
     	try{
-    		lastVersion = dao.getFrontierStateByVersion().keys().last();
+    		PrimaryIndex<Integer,FrontierSavedState> index = dao.getFrontierStateByVersion();
+    		EntityCursor<Integer> keys = index.keys();
+    		Integer last = keys.last();
+    		
+    		
+    		
+    		if(last != null) lastVersion = last.intValue();
+    		else lastVersion = 0;
+    		
+    		keys.close();
+    		
     	} catch(DatabaseException e){
     		logger.warn("DatabaseException", e);
     	}
-    	
+
 		return lastVersion;
 	}
 

@@ -6,14 +6,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class URLFrontierManagerTest {
+	
+	URLFrontierManager manager;
 
 	@Before
 	public void setUp() throws Exception {
+		manager = new URLFrontierManager("db/test/crawler");
 	}
 
+	
+	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testConstructor() {
+		assertTrue(manager instanceof URLFrontierManager);
 	}
 
 }
