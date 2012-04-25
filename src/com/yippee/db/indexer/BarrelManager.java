@@ -1,23 +1,10 @@
 package com.yippee.db.indexer;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
-import org.junit.Before;
-
 import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
-import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;
-import com.yippee.db.indexer.model.Word;
 import com.yippee.db.util.DAL;
-import com.yippee.db.util.DBEnv;
 
 public class BarrelManager {
 	/**
