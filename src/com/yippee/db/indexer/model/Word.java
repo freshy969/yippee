@@ -3,8 +3,6 @@ package com.yippee.db.indexer.model;
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
 
-import java.util.Date;
-import java.util.Map;
 
 @Entity
 public class Word{
