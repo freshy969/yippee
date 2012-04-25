@@ -14,6 +14,9 @@ public class FrontierSavedState {
 	int version;
 	Map<Integer, Queue<URL>> priorityToURLs;
 	
+	//Default constructor for Berkeley
+	public FrontierSavedState(){}
+	
 	public FrontierSavedState(int version, Map<Integer, Queue<URL>> queues) {
 		//TODO fill this in
 		this.priorityToURLs = queues;
