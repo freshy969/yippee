@@ -9,6 +9,7 @@ import com.yippee.db.crawler.model.DocAug;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 public class IndexerTest {
@@ -110,5 +111,10 @@ class DocCreator extends Thread {
 		}
 		
 		
+	}
+	
+	@Test
+	public void testIndexer() {
+		fail("not yet implemented");
 	}
 }
