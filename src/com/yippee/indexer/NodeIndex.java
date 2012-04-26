@@ -5,9 +5,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.yippee.db.indexer.model.Hit;
 
 public class NodeIndex {
+	 /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(NodeIndex.class);
+	
 	private HashMap<String, ArrayList<Hit>> wordIndex;
 	
 	
@@ -47,7 +54,8 @@ public class NodeIndex {
 		
 		while(iter.hasNext()) {
 			String word = iter.next();
-			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+//			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+			logger.info("[" + word + "=" + wordIndex.get(word).size() + "]");
 		}
 		
 	}
