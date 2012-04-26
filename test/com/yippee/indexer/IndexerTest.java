@@ -23,7 +23,9 @@ public class IndexerTest {
 		DocCreator doccreate = new DocCreator();
 		doccreate.start();
 		
-		Indexer indexer = new Indexer();
+		NodeIndex nodeIndex = new NodeIndex();
+		
+		Indexer indexer = new Indexer(nodeIndex);
 		indexer.start();
 	}
 }
@@ -92,7 +94,7 @@ class DocCreator extends Thread {
 			
 			counter++;
 			try {
-				this.sleep(60000);
+				this.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
