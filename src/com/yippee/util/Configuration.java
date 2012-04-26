@@ -26,7 +26,7 @@ public class Configuration {
     /**
      * the path to berkeleyDB
      */
-    private String berkeleyDBPath;
+    private String berkeleyDBRoot;
 
     /**
      * Store Pastry Engine
@@ -59,7 +59,7 @@ public class Configuration {
         //LOG ARGUMENTS
         logger.info("Server reconfiguration complete:");
         logger.info("Threads \t:" + crawlerThreadNumber);
-        logger.info("Database \t:" + berkeleyDBPath);
+        logger.info("Database \t:" + berkeleyDBRoot);
     }
 
     /**
@@ -102,8 +102,8 @@ public class Configuration {
      *
      * @return the path to berkeleyDB on disk
      */
-    public String getBerkeleyDBPath() {
-        return berkeleyDBPath;
+    public String getBerkeleyDBRoot() {
+        return berkeleyDBRoot;
     }
 
     /**
@@ -111,8 +111,8 @@ public class Configuration {
      *
      * @param berkeleyDB the given path
      */
-    public void setBerkeleyDBPath(String berkeleyDB) {
-        this.berkeleyDBPath = berkeleyDB;
+    public void setBerkeleyDBRoot(String berkeleyDB) {
+        this.berkeleyDBRoot = berkeleyDB;
     }
 
     /**
