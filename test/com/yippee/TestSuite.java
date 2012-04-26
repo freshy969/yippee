@@ -8,6 +8,10 @@ import com.yippee.pastry.YippeePastryAppTest;
 import com.yippee.search.SearchTestSuite;
 import com.yippee.web.WebTestSuite;
 import com.yippee.util.UtilTestSuite;
+import com.yippee.util.Configuration;
+
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -25,4 +29,18 @@ import org.junit.runners.Suite;
         YippeePastryAppTest.class,
         UtilTestSuite.class
 })
-public class TestSuite { }
+public class TestSuite {
+	
+    @BeforeClass
+    public static void setUp() {
+        System.out.println("setting up before running test class");
+        Configuration.getInstance().setBerkeleyDBRoot("db/test");
+    }
+    
+    @AfterClass
+    public static void tearDown(){
+    	//TODO delete test db files here?
+    	System.out.println("tear down after running test class");
+    }
+
+}
