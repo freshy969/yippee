@@ -36,7 +36,7 @@ public class Indexer extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		dam = new DocAugManager("db/test/indexer");
+		dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBPath());
 		this.nodeIndex = nodeIndex;
 	}
 
