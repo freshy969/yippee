@@ -25,7 +25,6 @@ public class FancyExtractor {
 	Stack<String> format;
 	boolean bold, ital, anchor, title;
 	WordStemmer stemmer;
-	HitFactory hitFactory;
 	Lexicon lexicon;
 	String docId, docTitle;
 	int pos = 0;
@@ -112,21 +111,23 @@ public class FancyExtractor {
 				for (int i = 0; i < stemlist.length; i++) {
 					// Create Hits
 					
-					byte[] wordId = lexicon.getWordId(stemlist[i]);
+//					byte[] wordId = lexicon.getWordId(stemlist[i]);
+//					
+//					if (wordId == null) {
+//						lexicon.addNewWord(stemlist[i]);
+//						wordId = lexicon.getWordId(stemlist[i]);
+//					}
 					
-					if (wordId == null) {
-						lexicon.addNewWord(stemlist[i]);
-						wordId = lexicon.getWordId(stemlist[i]);
-					}
+					String word = stemlist[i];
 					
 					Hit hit;
 								
 					if (anchor) {
-						hit = new AnchorHit(docId, wordId, i, docId);
+						hit = new AnchorHit(docId, word, i, docId);
 						anchorList.add(hit);
 					} 
 						
-					hit = new Hit(docId, wordId, pos+i);
+					hit = new Hit(docId, word, pos+i);
 						
 					if (ital)
 						hit.setItalicize(true);

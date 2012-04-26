@@ -15,12 +15,12 @@ public class HitTest {
     static Logger logger = Logger.getLogger(HitTest.class);
 	Hit hit;
 	String docID = "doc123";
-	byte[] wordID = {1,0,1,1};
+	String word = "word";
 	int pos = 0;
 	
     @Before
     public void setUp(){
-    	hit = new Hit(docID,wordID,pos);
+    	hit = new Hit(docID,word,pos);
     }
 	
     @Test
@@ -45,8 +45,8 @@ public class HitTest {
     }
     
     @Test
-    public void testGetWordID(){
-    	assertTrue(hit.getWordId()==wordID);
+    public void testGetWord(){
+    	assertTrue(hit.getWord().equals(word));
     }
 
     @Test

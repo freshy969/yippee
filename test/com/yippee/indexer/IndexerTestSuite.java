@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
  * Include all tests of the Indexer Package
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({   HitFactoryTest.class,
+@Suite.SuiteClasses({  
 						MessageTest.class,
                         IndexerTest.class,
                         LexiconTest.class,

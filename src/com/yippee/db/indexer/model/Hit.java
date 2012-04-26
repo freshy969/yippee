@@ -12,7 +12,7 @@ public class Hit {
 	 */
 	
 	private String docID;
-	private byte[] wordID;
+	private String word;
 	private boolean caps = false;
 	private boolean bold = false;
 	private boolean ital = false;
@@ -26,12 +26,12 @@ public class Hit {
 	 * position of word in the document
 	 * 
 	 * @param docID
-	 * @param wordID
+	 * @param word
 	 * @param position
 	 */
-	public Hit(String docID, byte[] wordID, int position) {
+	public Hit(String docID, String word, int position) {
 		this.docID = docID;
-		this.wordID = wordID;
+		this.word = word;
 		this.position = position;
 	}
 	
@@ -43,10 +43,10 @@ public class Hit {
 	 * @param docFrom
 	 * @param wordID
 	 */
-	public Hit(String docPointingTo, String docFrom, byte[] wordID) {
+	public Hit(String docPointingTo, String docFrom, String word) {
 		this.docID = docPointingTo;
 		this.docIDfrom = docFrom;
-		this.wordID = wordID;
+		this.word = word;
 		anchor = true;
 	}
 	
@@ -138,8 +138,8 @@ public class Hit {
 	 * 
 	 * @return wordId of Hit
 	 */
-	public byte[] getWordId() {
-		return wordID;
+	public String getWord() {
+		return word;
 	}
 	
 	/**

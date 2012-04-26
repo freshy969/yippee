@@ -99,7 +99,7 @@ public class FancyExtractorTest {
     		if(hit.isItalicize())
     			System.out.print("[ITAL]");
     	
-    		System.out.println(": " + lexicon.getWord(hit.getWordId()));	
+    		System.out.println(": " + hit.getWord());	
     	}
     	
     	
@@ -116,7 +116,7 @@ public class FancyExtractorTest {
     		if(hit.isItalicize())
     			System.out.print("[ITAL]");
     	
-    		System.out.println(": " + lexicon.getWord(hit.getWordId()));
+    		System.out.println(": " + hit.getWord());
     		
     	}
     
