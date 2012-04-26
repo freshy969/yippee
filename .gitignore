@@ -32,3 +32,5 @@ build/*
 
 # temp files
 tmp.file
+/db/test/*
+
