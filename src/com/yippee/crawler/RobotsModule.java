@@ -23,6 +23,13 @@ public class RobotsModule {
      * The host url
      */
     private URL robotsURL;
+    private RobotsManager rm;
+    
+    public RobotsModule(){
+    	String relativePath = "crawler";
+    	String dbPath = Configuration.getInstance().getBerkeleyDBRoot() + "/" + relativePath;
+    	rm = new RobotsManager(dbPath);
+    }
 
     /**
      * It checks if the url can be crawled with respect only to disallows and
@@ -35,8 +42,7 @@ public class RobotsModule {
     public boolean alowedToCrawl(URL url) {
         try {
             robotsURL = new URL(url.getProtocol() + "://" + url.getHost() + "/robots.txt");
-            String dbPath = Configuration.getInstance().getBerkeleyDBPath();
-            RobotsManager rm = new RobotsManager(dbPath);
+      
             RobotsTxt robotsTxt = new RobotsTxt();
             if (!rm.read(robotsURL.getHost(),robotsTxt)) {
                 robotsTxt = fetchRobots();
@@ -54,9 +60,6 @@ public class RobotsModule {
      * @return
      */
     public int getCrawlDelay(URL url){
-    	
-    	 String dbPath = Configuration.getInstance().getBerkeleyDBPath();
-         RobotsManager rm = new RobotsManager(dbPath);
          RobotsTxt robotsTxt = new RobotsTxt();
          
          if (!rm.read(robotsURL.getHost(),robotsTxt)) {
@@ -80,11 +83,11 @@ public class RobotsModule {
             urlConnection.setRequestProperty("user-agent", "cis455crawler");
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     urlConnection.getInputStream()));
-            String line;
+            String line = "";
             boolean record = false; // for recording disallows
             // TODO: MAKE INSTANCE VARS
-            Set disallow = new HashSet<String>();
-            String content;
+            Set<String> disallow = new HashSet<String>();
+            String content = "";
             int crawlDelay;
             while ((line = in.readLine()) != null)
                 if ((line.contains("User-agent:")) && (!line.contains("*"))
@@ -97,7 +100,9 @@ public class RobotsModule {
                     if (line.contains("cis455crawler")) // reset recording
                         disallow = new HashSet<String>();
                 }
+            
             // record all directives
+            //FIXME line can only ever be null here. 
             if (line.contains("Disallow:") && record) {
                 String dis = line.split(":")[1].trim();
                 if (dis.startsWith("/")) {

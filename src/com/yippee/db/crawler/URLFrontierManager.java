@@ -30,10 +30,10 @@ public class URLFrontierManager {
      * overwrites or writes to other locations. The rest of the managers check
      * to make sure they do not write to this folder.
      */
-    public URLFrontierManager(String location) {
+    public URLFrontierManager() {
     	// Path to the environment home
         // Environment is NOT readonly
-        myDbEnv = CrawlerDBEnv.getInstance(location, false);
+        myDbEnv = CrawlerDBEnv.getInstance(false);
         dao = new DAL(myDbEnv.getCrawlerStore());
         latestVersion = getLatestVersionNumber();
     }

@@ -19,7 +19,9 @@ public class RobotsManager {
      * it, if it does not exist.
      */
     public RobotsManager(String location) {
-        myDbEnv = CrawlerDBEnv.getInstance(location, false);
+        myDbEnv = CrawlerDBEnv.getInstance(false);
+        dao = new DAL(myDbEnv.getCrawlerStore());
+        
         // Path to the environment home //TODO CHECK IF EXISTS
         // Environment is <i>not</i> readonly
         //myDbEnv.setup(new File(location), false);
@@ -35,7 +37,6 @@ public class RobotsManager {
         boolean success = true;
         try {
             // Open the data accessor. This is used to store persistent objects.
-            dao = new DAL(myDbEnv.getCrawlerStore());
             dao.getRobotsById().put(robotsTxt);
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
@@ -60,7 +61,6 @@ public class RobotsManager {
         try {
             // Open the data accessor. This is used to store
             // persistent objects.
-            dao = new DAL(myDbEnv.getCrawlerStore());
             RobotsTxt temp = dao.getRobotsById().get(host);
             if (temp != null) {
                 temp.getCrawlDelay();
@@ -89,7 +89,6 @@ public class RobotsManager {
         try {
             // Open the data accessor. This is used to store
             // persistent objects.
-            dao = new DAL(myDbEnv.getCrawlerStore());
             result = dao.getRobotsById().delete(host);
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
@@ -104,7 +103,6 @@ public class RobotsManager {
      */
     public boolean isEmpty(){
     	boolean result = false;
-    	dao = new DAL(myDbEnv.getCrawlerStore());            
         result = dao.getRobotsCursor().count() == 0;
     	return result;
     }

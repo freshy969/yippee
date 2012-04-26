@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.yippee.util.Configuration;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -23,6 +25,7 @@ public class RobotsModuleTest {
 	
 	@Before
 	public void setUp(){
+		Configuration.getInstance().setBerkeleyDBRoot("db/test");
 		rm = new RobotsModule();
 	}
 	

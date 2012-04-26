@@ -80,7 +80,7 @@ public class Spider implements Runnable {
                 }
                 logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBRoot());
                 logger.info("1");
-                DocAugManager dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBRoot());
+                DocAugManager dam = new DocAugManager();
                 logger.info("1");
                 dam.push(docAug);
                 logger.info("2");

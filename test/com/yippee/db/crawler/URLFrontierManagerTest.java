@@ -11,17 +11,24 @@ import java.util.Queue;
 import java.util.Set;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.yippee.db.crawler.model.FrontierSavedState;
+import com.yippee.util.Configuration;
 
 public class URLFrontierManagerTest {
 	
 	URLFrontierManager manager;
+	
+	@BeforeClass
+	public static void setUpBeforeClass(){
+    	Configuration.getInstance().setBerkeleyDBRoot("db/test");
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		manager = new URLFrontierManager("db/test/crawler");
+		manager = new URLFrontierManager();
 	}
 
 	
