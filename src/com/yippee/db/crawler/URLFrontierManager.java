@@ -23,7 +23,7 @@ public class URLFrontierManager {
     /**
      * Version of the latest sate saved to the database
      */
-    private int version;
+    protected int latestVersion;
     
     /**
      * The constructor does not take a folder as an argument, to disable
@@ -35,7 +35,7 @@ public class URLFrontierManager {
         // Environment is NOT readonly
         myDbEnv = CrawlerDBEnv.getInstance(location, false);
         dao = new DAL(myDbEnv.getCrawlerStore());
-        version = getLatestVersionNumber();
+        latestVersion = getLatestVersionNumber();
     }
 
     
@@ -76,10 +76,14 @@ public class URLFrontierManager {
      */
 	public boolean storeState(Map<Integer, Queue<URL>> queues){
 		boolean successful = false;
-		FrontierSavedState f = new FrontierSavedState(version + 1, queues);
+		int newVersionNumber = latestVersion + 1;
+		FrontierSavedState f = new FrontierSavedState(newVersionNumber, queues);
 		
 		try{
 			dao.getFrontierStateByVersion().put(f);
+			successful =  true;
+			latestVersion = newVersionNumber;
+			
 		} catch(DatabaseException e){
 			logger.warn("DatabaseException", e);
 			successful = false;
@@ -97,8 +101,21 @@ public class URLFrontierManager {
 	 * @return The saved state with the greatest version number
 	 */
 	public FrontierSavedState loadState(){
-		//Retur
-		return null;
+		FrontierSavedState loadedState = null;
+		try{
+			
+			EntityCursor<FrontierSavedState> cursor  = dao.getFrontierStateByVersion().entities();
+			
+			loadedState = cursor.last();
+			
+			
+			cursor.close();
+		} catch(DatabaseException e){
+			logger.warn("DatabaseException", e);
+			
+		}
+		
+		return loadedState;
 	}
     
     

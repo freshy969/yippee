@@ -23,5 +23,12 @@ public class FrontierSavedState {
 		this.version = version;
 	}
 	
+	public int getVersion(){
+		return version;
+	}
+	
+	public Map<Integer, Queue<URL>> getPriorityMaps(){
+		return priorityToURLs;
+	}
 	
 }
