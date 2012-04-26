@@ -72,6 +72,7 @@ public class Spider implements Runnable {
                 DocAug docAug = new DocAug();
                 docAug.setDoc(httpModule.getContent());
                 docAug.setUrl(urlToCrawl.toString());
+                docAug.setId(urlToCrawl.toString() + "timestamp");
                 try {
                     doc = parser.parseDoc(docAug);
                 } catch (FileNotFoundException e) {
