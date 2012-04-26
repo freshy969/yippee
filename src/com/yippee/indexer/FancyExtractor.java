@@ -25,7 +25,6 @@ public class FancyExtractor {
 	Stack<String> format;
 	boolean bold, ital, anchor, title;
 	WordStemmer stemmer;
-	Lexicon lexicon;
 	String docId, docTitle;
 	int pos = 0;
 	ArrayList<Hit> hitList;
@@ -41,7 +40,6 @@ public class FancyExtractor {
 		title = false;
 		
 		stemmer = new WordStemmer();
-		lexicon = new Lexicon("db/test","doc/lexicon.txt");
 		hitList = new ArrayList();
 		anchorList = new ArrayList();
 		this.docId = docId;

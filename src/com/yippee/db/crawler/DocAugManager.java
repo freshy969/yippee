@@ -23,6 +23,8 @@ public class DocAugManager {
     public DocAugManager(String location) {
         myDbEnv = CrawlerDBEnv.getInstance(location, false);
         dao = new DAL(myDbEnv.getCrawlerStore());
+        System.out.println("DAL: " + dao.toString());
+    	System.out.println("DocINDEX: " + dao.getDocById().toString());
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }
@@ -38,7 +40,7 @@ public class DocAugManager {
         boolean success = true;
         try {
             // Open the data accessor. This is used to store
-            // persistent objects.
+            // persistent objects.m
             dao.getDocById().put(docAug);
         } catch (DatabaseException e) {
             System.out.println("Exception: " + e.toString());

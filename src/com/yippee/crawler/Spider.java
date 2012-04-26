@@ -29,6 +29,7 @@ public class Spider implements Runnable {
     private Spider[] spiders;
     private Araneae araneae;
     private boolean running;
+    DocAugManager dam;
 
     /**
      * The -not so default- constructor. It keeps references to the whole thread
@@ -46,6 +47,7 @@ public class Spider implements Runnable {
         this.spiders = spiders;
         this.araneae = araneae;
         running = true;
+        dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBPath());
     }
 
     /**
@@ -80,8 +82,8 @@ public class Spider implements Runnable {
                 }
                 logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBPath());
                 logger.info("1");
-                DocAugManager dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBPath());
                 logger.info("1");
+                
                 dam.push(docAug);
                 logger.info("2");
                 LinkTextExtractor linkEx = new LinkTextExtractor();
