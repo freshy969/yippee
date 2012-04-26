@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,15 +64,22 @@ public class URLFrontierManagerTest {
 		
 		
 		FrontierSavedState loadedState = manager.loadState();
-		Map<Integer, Queue<URL>> priorities = loadedState.getPriorityMaps();
+		Map<Integer, Set<String>> priorities = loadedState.getPrioritySets();
 		
 		//Only one priority level stored in the state
 		assertEquals(1, priorities.keySet().size());
 		
-		Queue<URL> priorityLevelOne = priorities.get(1);
+		
+		
+		//Get the priority 1 set
+		Set<String> priorityLevelOne = priorities.get(1);
+		
 		//Priority level 1 only has 1 URL
 		assertEquals(1, priorities.get(1).size());
-		assertEquals(new URL("http://crawltest.cis.upenn.edu"), priorityLevelOne.poll());
+		for(String s : priorityLevelOne){
+			System.out.println(s);
+		}
+		assertTrue(priorityLevelOne.contains("http://crawltest.cis.upenn.edu"));
 	}
 	
 }
