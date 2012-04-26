@@ -1,8 +1,6 @@
 package com.yippee.db.indexer.model;
 
-import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.Persistent;
-import com.sleepycat.persist.model.PrimaryKey;
 
 @Persistent
 public class Hit {

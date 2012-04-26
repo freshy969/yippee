@@ -5,8 +5,8 @@ import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.crawler.model.RobotsTxt;
-import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;
 import com.yippee.db.indexer.model.Word;
 
@@ -39,7 +39,11 @@ public class DAL {
     
     // Anchors Accessors
     PrimaryIndex<String, HitList> anchorById;
-
+    
+    /**
+     * FrontierSavedState Accessor
+     */
+    PrimaryIndex<Integer, FrontierSavedState> frontierSavedStateByVersion;
 
     /**
      * Data access layer constructor
@@ -56,8 +60,10 @@ public class DAL {
         lexiconById = store.getPrimaryIndex(String.class, Word.class);
         // Barrel key
         barrelById = store.getPrimaryIndex(String.class, HitList.class);
-     // Anchor key
+        // Anchor key
         anchorById = store.getPrimaryIndex(String.class, HitList.class);
+        //Frontier index
+        frontierSavedStateByVersion = store.getPrimaryIndex(Integer.class, FrontierSavedState.class);
     }
 
     /**
@@ -145,4 +151,9 @@ public class DAL {
     public PrimaryIndex<String, HitList> getAnchorById() {
         return anchorById;
     }
+
+	public PrimaryIndex<Integer, FrontierSavedState> getFrontierStateByVersion() {
+		// TODO Auto-generated method stub
+		return frontierSavedStateByVersion;
+	}
 }

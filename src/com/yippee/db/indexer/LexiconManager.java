@@ -9,28 +9,14 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 
-import com.yippee.indexer.Lexicon;
+
 import org.apache.log4j.Logger;
 
-import rice.pastry.Id;
-
-
-import com.sleepycat.bind.tuple.StringBinding;
-import com.sleepycat.bind.tuple.TupleBinding;
-import com.sleepycat.bind.tuple.TupleOutput;
-import com.sleepycat.je.Cursor;
-import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
-import com.sleepycat.je.OperationStatus;
 import com.sleepycat.persist.EntityCursor;
-import com.yippee.db.crawler.model.DocAug;
-import com.yippee.db.crawler.model.RobotsTxt;
 import com.yippee.db.indexer.model.Word;
 import com.yippee.db.util.DAL;
-import com.yippee.db.util.DBEnv;
 
 public class LexiconManager {
 	/**

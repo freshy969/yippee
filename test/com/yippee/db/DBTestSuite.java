@@ -14,8 +14,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({	RobotsManagerTest.class,
 				RobotsTxtTest.class,
-				BarrelManagerTest.class,
 				DocAugManagerTest.class,
+				BarrelManagerTest.class,
 				LexiconManagerTest.class,
 				HitTest.class
 				})

@@ -4,10 +4,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.util.DAL;
-import com.yippee.db.util.DBEnv;
 import org.apache.log4j.Logger;
-
-import java.io.File;
 import java.util.Iterator;
 
 public class DocAugManager {

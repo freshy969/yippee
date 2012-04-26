@@ -3,10 +3,8 @@ package com.yippee.db.crawler;
 import com.sleepycat.je.DatabaseException;
 import com.yippee.db.crawler.model.RobotsTxt;
 import com.yippee.db.util.DAL;
-import com.yippee.db.util.DBEnv;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 
 public class RobotsManager {
     /**
