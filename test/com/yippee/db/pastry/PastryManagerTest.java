@@ -22,8 +22,23 @@ public class PastryManagerTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testConstructor() {
+		assertTrue(pm instanceof PastryManager);
 	}
 
+	@Test
+	public void testSaveNodeState(){
+		assertTrue(pm.storeState(""));
+	}
+	
+	@Test
+	public void testRetrieveState(){
+		//Make new state
+		
+		//Store state
+		
+		//Load state and assert it matches what was put in
+		fail("not implemented");
+	}
+	
 }
