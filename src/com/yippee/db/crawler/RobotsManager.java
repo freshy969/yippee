@@ -18,7 +18,7 @@ public class RobotsManager {
      * The constructor takes the BerkeleyDB folder as an argument. It recreates
      * it, if it does not exist.
      */
-    public RobotsManager(String location) {
+    public RobotsManager() {
         myDbEnv = CrawlerDBEnv.getInstance(false);
         dao = new DAL(myDbEnv.getCrawlerStore());
         
