@@ -88,7 +88,13 @@ public class Spider implements Runnable {
                 dam.push(docAug);
                 logger.info("2");
                 LinkTextExtractor linkEx = new LinkTextExtractor();
+                linkEx.extract(urlToCrawl.toString(), doc);
                 ArrayList<String> links = linkEx.getLinks();
+                for(String s : links){
+                	System.out.println("Found link: " + s);
+                	urlFrontier.push(new Message(s));
+                }
+                
                 RobotsModule robotsModule = new RobotsModule();
                 for (String newUrl : links){
                     logger.info("Found URL " + newUrl);
