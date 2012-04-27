@@ -30,7 +30,7 @@ public class RobotsManagerTest {
 	
 	@Before
 	public void setUp() throws Exception {		
-		rm = new RobotsManager("db/test/crawler");
+		rm = new RobotsManager();
 		
 		robots = new RobotsTxt();
 		robots.setCrawlDelay(10);
