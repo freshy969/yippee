@@ -26,7 +26,6 @@ public class PastryDBEnv {
     	if(_instance != null) return _instance;
     	else{
     		String location = Configuration.getInstance().getBerkeleyDBRoot() + "/pastry";
-    		System.out.println(location);
     		setup(location, readonly);
     		return _instance;
     	}

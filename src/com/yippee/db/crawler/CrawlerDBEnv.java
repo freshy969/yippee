@@ -26,7 +26,6 @@ public class CrawlerDBEnv {
     	if(_instance != null) return _instance;
     	else{
     		String location = Configuration.getInstance().getBerkeleyDBRoot() + "/crawler";
-    		System.out.println(location);
     		setup(location, readonly);
     		return _instance;
     	}
