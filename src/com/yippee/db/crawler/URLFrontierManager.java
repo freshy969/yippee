@@ -69,7 +69,7 @@ public class URLFrontierManager {
 	}
 
 	/**
-     * Method to put the forntier state in the database
+     * Method to put the frontier state in the database
      * 
      * @param queues - Map of priority to collection of urls
      * @return true if successful
