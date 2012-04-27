@@ -25,11 +25,19 @@ public class SimpleQueueFrontier implements URLFrontier {
 
 	public void push(Message message) {
 		// TODO Auto-generated method stub
-		urls.add(message);
+		if(message != null && message.getURL() != null){
+			System.out.println("Message pushed to frontier: " + message.getURL());
+			urls.add(message);
+		}
+			
 	}
 
 	public boolean save() {
 		// TODO Auto-generated method stub
+		
+		
+		
+		
 		return false;
 	}
 
