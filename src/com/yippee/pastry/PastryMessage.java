@@ -21,6 +21,10 @@ public class PastryMessage implements Message {
      * */
     String content;
     /**
+     * The String containing the url
+     */
+    String referrer;
+    /**
      * The response of the message
      */
     boolean wantResponse = true;

@@ -48,6 +48,7 @@ public class YippeeEngine {
      * A method that sends a ping to a random node in the ring
      */
     public void sendPing(){
+
         yippeePastryApp.send(nodeFactory.nidFactory.generateNodeId(), "PING");
     }
 
