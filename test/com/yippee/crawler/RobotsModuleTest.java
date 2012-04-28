@@ -19,30 +19,30 @@ public class RobotsModuleTest {
      */
     static Logger logger = Logger.getLogger(RobotsModuleTest.class);
 
-	RobotsModule rm;
+    RobotsModule rm;
     private String[] allowed = {
             "http://crawltest.cis.upenn.edu",
     };
-	
-	@Before
-	public void setUp(){
-		Configuration.getInstance().setBerkeleyDBRoot("db/test");
-		rm = new RobotsModule();
-	}
-	
-	@Test
-	public void testModuleFetchesRobotsTxt() throws MalformedURLException{
-		assertTrue(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu")));
-	}
+
+    @Before
+    public void setUp() {
+        Configuration.getInstance().setBerkeleyDBRoot("db/test");
+        rm = new RobotsModule();
+    }
 
     @Test
-    public void testForbidden() throws MalformedURLException{
+    public void testModuleFetchesRobotsTxt() throws MalformedURLException {
+        assertTrue(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu")));
+    }
+
+    @Test
+    public void testForbidden() throws MalformedURLException {
         assertFalse(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu/marie/private")));
     }
 
-	@Test
-	public void testGetCrawlDelay(){
-		fail("Test not implemented");
-	}
+    @Test
+    public void testGetCrawlDelay() {
+        fail("Test not implemented");
+    }
 
 }
