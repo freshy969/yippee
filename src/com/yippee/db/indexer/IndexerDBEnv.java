@@ -9,6 +9,7 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
 import com.yippee.db.util.DbShutdownHook;
+import com.yippee.util.Configuration;
 
 public class IndexerDBEnv {
 
@@ -21,9 +22,10 @@ public class IndexerDBEnv {
 
     private static IndexerDBEnv _instance;
     
-    public static IndexerDBEnv getInstance(String location, boolean readonly){
+    public static IndexerDBEnv getInstance(boolean readonly){
     	if(_instance != null) return _instance;
     	else{
+    		String location = Configuration.getInstance().getBerkeleyDBRoot() + "/indexer";
     		setup(location, readonly);
     		return _instance;
     	}

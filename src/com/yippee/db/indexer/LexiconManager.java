@@ -31,8 +31,8 @@ public class LexiconManager {
      * The constructor takes the BerkeleyDB folder as an argument. It recreates
      * it, if it does not exist.
      */
-    public LexiconManager(String location, String locationWordList) {
-        myDbEnv = IndexerDBEnv.getInstance(location, false);
+    public LexiconManager(String locationWordList) {
+        myDbEnv = IndexerDBEnv.getInstance(false);
         // Path to the environment home
         // Environment is <i>not</i> readonly
         // if lexicon database is empty, then fill it. otherwise words already in database env

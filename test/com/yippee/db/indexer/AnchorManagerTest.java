@@ -3,10 +3,12 @@ package com.yippee.db.indexer;
 import com.yippee.db.indexer.AnchorManager;
 import com.yippee.db.indexer.model.AnchorHit;
 import com.yippee.db.indexer.model.Hit;
+import com.yippee.util.Configuration;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -31,9 +33,14 @@ public class AnchorManagerTest {
 	AnchorHit h5;
 	String url = "page it came from?";
 	
+	@BeforeClass
+	public static void setUpBeforeClass(){
+    	Configuration.getInstance().setBerkeleyDBRoot("db/test");
+	}
+	
 	@Before
     public void setUp(){    
-       anchorManager = new AnchorManager("db/test/indexer");
+       anchorManager = new AnchorManager();
        //String docID, byte[] wordID, int position, String URL
        h1 = new AnchorHit("doc5",wordid1,2,url);
        h2 = new AnchorHit("doc2",wordid2,67,url);
