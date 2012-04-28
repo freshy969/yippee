@@ -37,15 +37,25 @@ public class FrontierFactory {
     public static URLFrontier get(FrontierType type) {
         switch (type){
             case SIMPLE:
-                return new SimpleQueueFrontier();
+            	SimpleQueueFrontier sqf = new SimpleQueueFrontier();
+            	sqf.load();
+                return sqf;
             case MERC_1:
-                return new MercatorCentralized();
+            	MercatorCentralized mc = new MercatorCentralized();
+            	mc.load();
+                return mc;
             case MERC_2:
-                return new MercatorDistributed();
+            	MercatorDistributed md = new MercatorDistributed();
+            	md.load();
+                return md;
             case CORALI:
-                return new CoralliaFrontier();
+            	CoralliaFrontier cf = new CoralliaFrontier();
+            	cf.load();
+                return cf;
             default:
-                return new SimpleQueueFrontier();
+            	SimpleQueueFrontier defaultFrontier = new SimpleQueueFrontier();
+            	defaultFrontier.load();
+                return defaultFrontier;
         }
     }
 }
