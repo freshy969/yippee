@@ -5,8 +5,8 @@ import com.yippee.crawler.Message;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.indexer.IndexWorker;
 import com.yippee.indexer.Indexer;
-import com.yippee.indexer.IndexerHandler;
 import com.yippee.pastry.PingPong;
 import com.yippee.pastry.YippeeEngine;
 import org.apache.log4j.Logger;
@@ -204,7 +204,7 @@ public class EntryPoint {
         // Crawler
         if (!entryPoint.setupCrawler(args)) return;
 
-        IndexerHandler ih = new IndexerHandler();
+        Indexer ih = new Indexer();
         ih.makeThreads();
     }
 

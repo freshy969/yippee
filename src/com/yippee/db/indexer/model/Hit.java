@@ -3,7 +3,7 @@ package com.yippee.db.indexer.model;
 import com.sleepycat.persist.model.Persistent;
 
 @Persistent
-public class Hit {
+public class Hit implements Comparable {
 	/**
 	 * variables we want to keep that we extract from document about each word
 	 * we can add more, if find things are meaningful
@@ -146,6 +146,13 @@ public class Hit {
 	 */
 	public int getPosition() {
 		return position;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		Hit hit = (Hit) o;
+        return getWord().compareTo(hit.getWord()) ;
 	}
 	
 }
