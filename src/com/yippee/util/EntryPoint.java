@@ -5,7 +5,6 @@ import com.yippee.crawler.Message;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
-import com.yippee.indexer.Indexer;
 import com.yippee.indexer.IndexerHandler;
 import com.yippee.pastry.PingPong;
 import com.yippee.pastry.YippeeEngine;
@@ -40,7 +39,6 @@ public class EntryPoint {
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
     final int NO_OF_THREADS = 1;
-    final String BERKELEY_DB = "db/test";
 
     /**
      * The default constructor does the minimum of setting up the logger
@@ -62,7 +60,7 @@ public class EntryPoint {
      * @return true if everything ok; false o/w
      */
     private boolean configure(String[] args) {
-        if (args.length < 3) {
+        if (args.length < 4) {
             System.out.println("There are no arguments;");
             System.out.println("please check README file, or run 'ant usage'");
             logger.error("Error: No arguments");
@@ -71,7 +69,9 @@ public class EntryPoint {
             arguments = args;
             System.out.println("2012, Yippee!");
             cautionMessage();
-            Configuration.getInstance().setBerkeleyDBRoot(BERKELEY_DB);
+            String database = args[4];
+            logger.info("Database relative path to project root: " + database );
+            Configuration.getInstance().setBerkeleyDBRoot(database);
             return true;
         }
     }
