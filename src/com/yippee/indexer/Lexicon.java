@@ -19,8 +19,8 @@ public class Lexicon {
 	LexiconManager lexiconManager;
 	ArrayList<String> wordsToAdd; //eventually turn into a file, initially we can reject unseen words
 	
-	public Lexicon(String dbEnvlocation, String wordListlocation) {
-		lexiconManager = new LexiconManager(dbEnvlocation, wordListlocation);
+	public Lexicon(String wordListlocation) {
+		lexiconManager = new LexiconManager(wordListlocation);
 		wordsToAdd = new ArrayList<String>();
 	}
 	

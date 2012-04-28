@@ -18,8 +18,8 @@ public class BarrelManager {
      * The constructor takes the BerkeleyDB folder as an argument. It recreates
      * it, if it does not exist.
      */
-    public BarrelManager(String location) {
-        myDbEnv = IndexerDBEnv.getInstance(location, false);
+    public BarrelManager() {
+        myDbEnv = IndexerDBEnv.getInstance(false);
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }

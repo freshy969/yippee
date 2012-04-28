@@ -1,8 +1,16 @@
 package com.yippee.crawler.frontier;
 
 import com.yippee.crawler.Message;
+import com.yippee.db.crawler.URLFrontierManager;
+import com.yippee.db.crawler.model.FrontierSavedState;
+
 import org.apache.log4j.Logger;
 
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -12,38 +20,56 @@ public class SimpleQueueFrontier implements URLFrontier {
      */
     static Logger logger = Logger.getLogger(SimpleQueueFrontier.class);
 
-	BlockingQueue<Message> urls;
+	BlockingQueue<URL> urls;
 	
 	public SimpleQueueFrontier(){
-		urls = new LinkedBlockingQueue<Message>();
+		urls = new LinkedBlockingQueue<URL>();
 	}
 
 	public Message pull() throws InterruptedException {
 		// TODO Auto-generated method stub
-		return urls.take();
+		
+		return new Message(urls.take().toString());
 	}
 
 	public void push(Message message) {
 		// TODO Auto-generated method stub
 		if(message != null && message.getURL() != null){
 			System.out.println("Message pushed to frontier: " + message.getURL());
-			urls.add(message);
+			urls.add(message.getURL());
 		}
 			
 	}
 
 	public boolean save() {
-		// TODO Auto-generated method stub
+		URLFrontierManager fm = new URLFrontierManager();
 		
+		Map<Integer, Queue<URL>> queues = new HashMap<Integer, Queue<URL>>();
+		queues.put(0, urls);
 		
-		
-		
-		return false;
+		return fm.storeState(queues);
 	}
 
 	public boolean load() {
-		// TODO Auto-generated method stub
-		return false;
+		URLFrontierManager fm = new URLFrontierManager();
+
+		FrontierSavedState state = fm.loadState();
+		if(state != null){
+			Map<Integer, Set<String>> queues = state.getPrioritySets();
+			
+			for(Integer i : queues.keySet()){
+				Set<String> urlStrings = queues.get(i);
+				for(String s : urlStrings){
+					this.push(new Message(s));
+				}
+			}
+			return true;
+			
+		} else {
+			return false;
+		}
+		
+		
 	}
 
 }

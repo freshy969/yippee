@@ -3,9 +3,11 @@ package com.yippee.db.indexer;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.yippee.db.indexer.LexiconManager;
+import com.yippee.util.Configuration;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,9 +19,14 @@ public class LexiconManagerTest {
 	LexiconManager lexiconManager;
 	String test = "Computer";
 	
+	@BeforeClass
+	public static void setUpBeforeClass(){
+    	Configuration.getInstance().setBerkeleyDBRoot("db/test");
+	}
+	
 	@Before
     public void setUp(){    
-       lexiconManager = new LexiconManager("db/test/indexer","doc/lexicon.txt");
+       lexiconManager = new LexiconManager("doc/lexicon.txt");
     }
 
     

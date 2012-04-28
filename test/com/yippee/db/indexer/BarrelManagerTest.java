@@ -2,10 +2,12 @@ package com.yippee.db.indexer;
 
 import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
+import com.yippee.util.Configuration;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,9 +31,14 @@ public class BarrelManagerTest {
 	Hit h4;
 	Hit h5;
 	
+	@BeforeClass
+	public static void setUpBeforeClass(){
+    	Configuration.getInstance().setBerkeleyDBRoot("db/test");
+	}
+	
 	@Before
     public void setUp(){    
-       barrelManager = new BarrelManager("db/test/indexer");
+       barrelManager = new BarrelManager();
        h1 = new Hit("doc5",wordid1,2);
        h2 = new Hit("doc2",wordid2,67);
        h3 = new Hit("doc1",wordid1,6);

@@ -18,8 +18,8 @@ public class AnchorManager {
      * The constructor takes the BerkeleyDB folder as an argument. It recreates
      * it, if it does not exist.
      */
-    public AnchorManager(String location) {
-        myDbEnv = IndexerDBEnv.getInstance(location, false);
+    public AnchorManager() {
+        myDbEnv = IndexerDBEnv.getInstance(false);
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }
