@@ -9,6 +9,7 @@ import com.yippee.util.Configuration;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,10 +32,14 @@ public class RobotsModuleTest {
 	
 	@Test
 	public void testModuleFetchesRobotsTxt() throws MalformedURLException{
-
 		assertTrue(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu")));
 	}
-	
+
+    @Test
+    public void testForbidden() throws MalformedURLException{
+        assertFalse(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu/marie/private")));
+    }
+
 	@Test
 	public void testGetCrawlDelay(){
 		fail("Test not implemented");
