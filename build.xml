@@ -179,6 +179,7 @@
 
             <batchtest fork="yes">
                 <fileset dir="${tst.dir}" includes="*Test.java"/>
+                <param name="database" value="db/integ/node1"/>
             </batchtest>
         </junit>
     </target>
