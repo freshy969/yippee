@@ -2,6 +2,7 @@ package com.yippee.crawler;
 
 import com.yippee.db.crawler.RobotsManager;
 import com.yippee.db.crawler.model.RobotsTxt;
+import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -27,7 +28,7 @@ public class RobotsModule {
     public RobotsModule() {
         String relativePath = "crawler";
         String dbPath = Configuration.getInstance().getBerkeleyDBRoot() + "/" + relativePath;
-        rm = new RobotsManager(dbPath);
+        rm = new RobotsManager();
     }
 
     /**
@@ -133,68 +134,5 @@ public class RobotsModule {
 
 
         return robotsTxt;
-
-		if (!rm.read(robotsURL.getHost(),robotsTxt)) {
-			//Unsuccessful read
-			robotsTxt = fetchRobots();
-			rm.create(robotsTxt);
-		}
-
-		return robotsTxt.getCrawlDelay();
-	}
-
-	/**
-	 * Fetch robots.txt the host of the url passed to the constructor.
-	 *
-	 * @return the RobotsTxt entity object to be inserted to the database
-	 */
-	private RobotsTxt fetchRobots() {
-		URLConnection urlConnection = null;
-		try {
-			urlConnection = robotsURL.openConnection();
-			urlConnection.setRequestProperty("user-agent", "cis455crawler");
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					urlConnection.getInputStream()));
-			String line = "";
-			boolean record = false; // for recording disallows
-			// TODO: MAKE INSTANCE VARS
-			Set<String> disallow = new HashSet<String>();
-			String content = "";
-			int crawlDelay;
-			while ((line = in.readLine()) != null) {
-				if ((line.contains("User-agent:")) && (!line.contains("*"))
-						&& (!line.contains("cis455crawler"))) {
-					record = false;
-
-				} else if ((line.contains("User-agent:")) && ((line.contains("*"))
-						|| (line.contains("cis455crawler")))) {
-					record = true;
-					if (line.contains("cis455crawler")) // reset recording
-						disallow = new HashSet<String>();
-				}
-
-				// record all directives
-				if (line.contains("Disallow:") && record) {
-					String dis = line.split(":")[1].trim();
-					if (dis.startsWith("/")) {
-						dis = dis.substring(1, dis.length());
-					}
-					if (dis.endsWith("/")) {
-						dis = dis.substring(0, dis.length() - 1);
-					}
-					disallow.add(dis);
-					//logger.info("Disallow: " + dis + " (trimmed)");
-				} else if (line.contains("Crawl-delay:") && record) {
-					crawlDelay = Integer.parseInt(line.split(":")[1].trim());
-				}
-			}
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			//TODO: LOG ERROR
-		}
-
-		return new RobotsTxt();
-
 	}
 }
