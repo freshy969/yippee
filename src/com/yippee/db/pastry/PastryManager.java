@@ -2,10 +2,11 @@ package com.yippee.db.pastry;
 
 import org.apache.log4j.Logger;
 
+import rice.pastry.Id;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.PrimaryIndex;
-import com.yippee.db.crawler.CrawlerDBEnv;
 import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.pastry.model.NodeState;
 import com.yippee.db.util.DAL;
@@ -29,17 +30,18 @@ public class PastryManager {
         myDbEnv = PastryDBEnv.getInstance(false);
         dao = new DAL(myDbEnv.getPastryStore());
         latestVersion = getLatestVersionNumber();
-        // Path to the environment home //TODO CHECK IF EXISTS
-        // Environment is <i>not</i> readonly
-        //myDbEnv.setup(new File(location), false);
     }
 
 
-    //FIXME Store state should take a parameter for the Node ID, but not sure what type that will be
-	public boolean storeState(String id) {
+    /**
+     * Method to store a node's state
+     * @param id Result of getNodeId called on node
+     * @return true if successful, false otherwise
+     */
+	public boolean storeState(Id id) {
 		boolean successful = false;
 		int newVersionNumber = latestVersion + 1;
-		NodeState state = new NodeState();
+		NodeState state = new NodeState(id);
 		
 		try{
 			dao.getNodeStateByVersion().put(state);
@@ -55,6 +57,26 @@ public class PastryManager {
         }
 		
 		return successful;		
+	}
+	
+	/**
+	 * Method to load the latest node saved state from the database
+	 * @return The saved state with the greatest version number
+	 */
+	public NodeState loadState(){
+		NodeState loadedState = null;
+		try{
+			EntityCursor<NodeState> cursor  = dao.getNodeStateByVersion().entities();
+			
+			loadedState = cursor.last();			
+			
+			cursor.close();
+		} catch(DatabaseException e){
+			logger.warn("DatabaseException", e);
+			
+		}
+		
+		return loadedState;
 	}
 	
 	/**
@@ -85,4 +107,5 @@ public class PastryManager {
 
 		return lastVersion;
 	}
+    
 }
