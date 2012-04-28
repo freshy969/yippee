@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Gives back word ID if has word, otherwise keeps log of words hasn't seen before. 
@@ -87,6 +88,9 @@ public class Lexicon {
 		}
 	}
 	
+	public HashMap<String, byte[]> getLexiconMap() {
+		return lexiconManager.getLexiconMap();
+	}
 	
 	//so there aren't any bugs...need to get rid of later
 	public Lexicon() {

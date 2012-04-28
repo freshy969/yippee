@@ -17,11 +17,14 @@ public class NodeIndex {
     static Logger logger = Logger.getLogger(NodeIndex.class);
 	
 	private HashMap<String, ArrayList<Hit>> wordIndex;
-	int capacity = 10000;
-	
+	private int capacity = 10000;
+	private Lexicon lexicon;
+	private HashMap<String, byte[]> lexiconMap;
 	
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
+		lexicon = new Lexicon();
+		lexiconMap = lexicon.getLexiconMap();
 	}
 	
 	/**
@@ -40,6 +43,9 @@ public class NodeIndex {
 			} else {
 				list = new ArrayList<Hit>();
 			}
+			
+//			hit.setWordId(lexicon.);
+			
 			list.add(hit);
 			wordIndex.put(word, list);
 			
@@ -55,14 +61,14 @@ public class NodeIndex {
 		return wordIndex.get(word);
 	}
 
-	public synchronized void printIndex(){
+	public synchronized void printIndex(){		
 		Set<String> keys = wordIndex.keySet();
 		Iterator<String> iter = keys.iterator();
 		
 		while(iter.hasNext()) {
 			String word = iter.next();
 //			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
-			logger.info("[" + word.hashCode() + "=" + wordIndex.get(word).size() + "]");
+			logger.info("[" + lexiconMap.get(word) + "=" + wordIndex.get(word).size() + "]");
 		}
 		
 	}
