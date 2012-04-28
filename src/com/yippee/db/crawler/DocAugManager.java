@@ -23,8 +23,8 @@ public class DocAugManager {
     public DocAugManager() {
         myDbEnv = CrawlerDBEnv.getInstance(false);
         dao = new DAL(myDbEnv.getCrawlerStore());
-        System.out.println("DAL: " + dao.toString());
-    	System.out.println("DocINDEX: " + dao.getDocById().toString());
+//        System.out.println("DAL: " + dao.toString());
+//    	System.out.println("DocINDEX: " + dao.getDocById().toString());
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }

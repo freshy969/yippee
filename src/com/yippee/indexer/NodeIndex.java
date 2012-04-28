@@ -1,6 +1,7 @@
 package com.yippee.indexer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -16,6 +17,7 @@ public class NodeIndex {
     static Logger logger = Logger.getLogger(NodeIndex.class);
 	
 	private HashMap<String, ArrayList<Hit>> wordIndex;
+	int capacity = 10000;
 	
 	
 	public NodeIndex() {
@@ -40,6 +42,11 @@ public class NodeIndex {
 			}
 			list.add(hit);
 			wordIndex.put(word, list);
+			
+			if (wordIndex.size() > capacity) {
+				sendWordsToRing();
+				new HashMap<String, ArrayList<Hit>>();
+			}
 		}
 		
 	}
@@ -55,8 +62,16 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 //			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
-			logger.info("[" + word + "=" + wordIndex.get(word).size() + "]");
+			logger.info("[" + word.hashCode() + "=" + wordIndex.get(word).size() + "]");
 		}
 		
 	}
+	
+	public synchronized void sendWordsToRing() {
+		// HASH keys
+		
+		// Send keys
+		printIndex();		
+	}
+	
 }

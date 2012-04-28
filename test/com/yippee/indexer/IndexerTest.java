@@ -26,7 +26,7 @@ public class IndexerTest {
 		
 		NodeIndex nodeIndex = new NodeIndex();
 		
-		Indexer indexer = new Indexer(nodeIndex);
+		IndexWorker indexer = new IndexWorker(nodeIndex);
 		indexer.start();
 	}
 }

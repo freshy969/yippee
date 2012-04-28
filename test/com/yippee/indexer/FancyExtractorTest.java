@@ -86,7 +86,7 @@ public class FancyExtractorTest {
     	
     	ArrayList<Hit> hitList = fe.getHitList();
     	
-    	Lexicon lexicon = new Lexicon("db/test","doc/lexicon.txt");
+    	Lexicon lexicon = new Lexicon("db/test/indexer","doc/lexicon.txt");
     	
     	for (int i = 0; i < hitList.size(); i++) {
     		Hit hit = hitList.get(i);
