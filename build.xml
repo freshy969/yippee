@@ -141,7 +141,7 @@
             description="Create single-noded crawler">
             <antcall target="run">
                 <param name="localPort" value="9001"/>
-                <param name="database" value=""/>
+                <param name="database" value="db/test"/>
             </antcall>
     </target>
 
