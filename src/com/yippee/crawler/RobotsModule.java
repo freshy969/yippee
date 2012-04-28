@@ -133,7 +133,6 @@ public class RobotsModule {
 
 
         return robotsTxt;
->>>>>>>  Update RobotsModule and tests
 
 		if (!rm.read(robotsURL.getHost(),robotsTxt)) {
 			//Unsuccessful read
