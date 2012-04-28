@@ -73,7 +73,24 @@ public class NodeFactory {
 				}
 			}
 			
-			PastryNode node =  factory.newNode(bootHandle);
+			PastryNode node = null;
+			PastryManager pm = new PastryManager();
+			NodeState state = pm.loadState();
+			//If there's a stored NodeState, use it to get NodeID
+			if(state != null){
+				node = factory.newNode(bootHandle, state.getNodeId());
+				logger.debug("Node Id Loaded: " + node.getId());
+				
+			} else{
+				node =  factory.newNode(bootHandle);
+				logger.debug("Node Id Generated: " + node.getId());
+				//Store the generated nodeID
+				Id id = node.getNodeId();
+				pm.storeState(id);
+			}
+			
+			
+			
 			/*
 			while (!node.isReady()) {
 				Thread.sleep(100);
@@ -95,6 +112,7 @@ public class NodeFactory {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
+	
 	
 	public void shutdownNode(Node n) {
 		((PastryNode) n).destroy();
