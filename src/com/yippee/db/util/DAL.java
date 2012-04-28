@@ -9,6 +9,7 @@ import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.crawler.model.RobotsTxt;
 import com.yippee.db.indexer.model.HitList;
 import com.yippee.db.indexer.model.Word;
+import com.yippee.db.pastry.model.NodeState;
 
 import org.apache.log4j.Logger;
 
@@ -44,6 +45,11 @@ public class DAL {
      * FrontierSavedState Accessor
      */
     PrimaryIndex<Integer, FrontierSavedState> frontierSavedStateByVersion;
+	
+    /**
+     * Pastry node saved state accessor
+     */
+    PrimaryIndex<Integer, NodeState> nodeStateByVersion;
 
     /**
      * Data access layer constructor
@@ -64,6 +70,8 @@ public class DAL {
         anchorById = store.getPrimaryIndex(String.class, HitList.class);
         //Frontier index
         frontierSavedStateByVersion = store.getPrimaryIndex(Integer.class, FrontierSavedState.class);
+        //Pastry Node Saved State Index
+        nodeStateByVersion = store.getPrimaryIndex(Integer.class, NodeState.class);
     }
 
     /**
@@ -156,4 +164,10 @@ public class DAL {
 		// TODO Auto-generated method stub
 		return frontierSavedStateByVersion;
 	}
+
+	public PrimaryIndex<Integer, NodeState> getNodeStateByVersion() {
+		// TODO Auto-generated method stub
+		return nodeStateByVersion;
+	}
+	
 }

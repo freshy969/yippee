@@ -1,8 +1,13 @@
 package com.yippee.pastry;
 
 import org.apache.log4j.Logger;
+
+import com.yippee.db.pastry.PastryManager;
+import com.yippee.db.pastry.model.NodeState;
+
 import rice.environment.Environment;
 import rice.p2p.commonapi.Node;
+
 import rice.pastry.Id;
 import rice.pastry.NodeHandle;
 import rice.pastry.NodeIdFactory;
@@ -40,9 +45,9 @@ public class NodeFactory {
 		this(new Environment(), port);
 	}	
 	
-	NodeFactory(int port, InetSocketAddress bootPort) {
+	NodeFactory(int port, InetSocketAddress bootstrap) {
 		this(port);
-		bootHandle = factory.getNodeHandle(bootPort);
+		bootHandle = factory.getNodeHandle(bootstrap);
 	}
 	
 	NodeFactory(Environment env, int port) {
@@ -50,7 +55,7 @@ public class NodeFactory {
 		this.port = port;
 		nidFactory = new RandomNodeIdFactory(env);
 		try {
-			this.env.getParameters().setString("pastry_socket_allow_loopback","true" );
+			//this.env.getParameters().setString("pastry_socket_allow_loopback","true" );
 			factory = new SocketPastryNodeFactory(nidFactory, port, env);
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe.getMessage(), ioe);
@@ -68,7 +73,24 @@ public class NodeFactory {
 				}
 			}
 			
-			PastryNode node =  factory.newNode(bootHandle);
+			PastryNode node = null;
+			PastryManager pm = new PastryManager();
+			NodeState state = pm.loadState();
+			//If there's a stored NodeState, use it to get NodeID
+			if(state != null){
+				node = factory.newNode(bootHandle, state.getNodeId());
+				logger.debug("Node Id Loaded: " + node.getId());
+				
+			} else{
+				node =  factory.newNode(bootHandle);
+				logger.debug("Node Id Generated: " + node.getId());
+				//Store the generated nodeID
+				Id id = node.getNodeId();
+				pm.storeState(id);
+			}
+			
+			
+			
 			/*
 			while (!node.isReady()) {
 				Thread.sleep(100);
@@ -90,6 +112,7 @@ public class NodeFactory {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
+	
 	
 	public void shutdownNode(Node n) {
 		((PastryNode) n).destroy();

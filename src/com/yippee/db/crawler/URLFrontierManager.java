@@ -30,10 +30,10 @@ public class URLFrontierManager {
      * overwrites or writes to other locations. The rest of the managers check
      * to make sure they do not write to this folder.
      */
-    public URLFrontierManager(String location) {
+    public URLFrontierManager() {
     	// Path to the environment home
         // Environment is NOT readonly
-        myDbEnv = CrawlerDBEnv.getInstance(location, false);
+        myDbEnv = CrawlerDBEnv.getInstance(false);
         dao = new DAL(myDbEnv.getCrawlerStore());
         latestVersion = getLatestVersionNumber();
     }
@@ -69,7 +69,7 @@ public class URLFrontierManager {
 	}
 
 	/**
-     * Method to put the forntier state in the database
+     * Method to put the frontier state in the database
      * 
      * @param queues - Map of priority to collection of urls
      * @return true if successful

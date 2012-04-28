@@ -2,10 +2,12 @@ package com.yippee.db.crawler;
 
 import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
+import com.yippee.util.Configuration;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Date;
@@ -22,15 +24,22 @@ public class DocAugManagerTest {
     DocAugManager docAugManager;
     DocAug docAug;
 
+    
+	@BeforeClass
+	public static void setUpBeforeClass(){
+    	Configuration.getInstance().setBerkeleyDBRoot("db/test");
+	}
+    
     @Before
     public void setUp(){
+    	
         // every time it creates a new docAug, with a new timestamp, thus timestamp notEquals
         docAug = new DocAug();
         docAug.setDoc("<root><this><is><a><doc></doc></a></is></this></root>");
         docAug.setTime(new Date());
         docAug.setUrl("http://this.is.ate.st");
         docAug.setId("1");
-        docAugManager = new DocAugManager("db/test/crawler");
+        docAugManager = new DocAugManager();
     }
 
     @Test

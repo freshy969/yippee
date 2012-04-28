@@ -20,11 +20,11 @@ public class DocAugManager {
      * overwrites or writes to other locations. The rest of the managers check
      * to make sure they do not write to this folder.
      */
-    public DocAugManager(String location) {
-        myDbEnv = CrawlerDBEnv.getInstance(location, false);
+    public DocAugManager() {
+        myDbEnv = CrawlerDBEnv.getInstance(false);
         dao = new DAL(myDbEnv.getCrawlerStore());
-        System.out.println("DAL: " + dao.toString());
-    	System.out.println("DocINDEX: " + dao.getDocById().toString());
+//        System.out.println("DAL: " + dao.toString());
+//    	System.out.println("DocINDEX: " + dao.getDocById().toString());
         // Path to the environment home
         // Environment is <i>not</i> readonly
     }

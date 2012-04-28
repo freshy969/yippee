@@ -1,8 +1,8 @@
 package com.yippee.crawler;
 
-import com.yippee.util.Configuration;
 import com.yippee.db.crawler.RobotsManager;
 import com.yippee.db.crawler.model.RobotsTxt;
+import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -23,6 +23,13 @@ public class RobotsModule {
      * The host url
      */
     private URL robotsURL;
+    private RobotsManager rm;
+
+    public RobotsModule() {
+        String relativePath = "crawler";
+        String dbPath = Configuration.getInstance().getBerkeleyDBRoot() + "/" + relativePath;
+        rm = new RobotsManager();
+    }
 
     /**
      * It checks if the url can be crawled with respect only to disallows and
@@ -33,39 +40,45 @@ public class RobotsModule {
      * @return yes if allowed; no o/w
      */
     public boolean alowedToCrawl(URL url) {
+        boolean result = true;
         try {
             robotsURL = new URL(url.getProtocol() + "://" + url.getHost() + "/robots.txt");
-            String dbPath = Configuration.getInstance().getBerkeleyDBPath();
-            RobotsManager rm = new RobotsManager(dbPath);
+
             RobotsTxt robotsTxt = new RobotsTxt();
-            if (!rm.read(robotsURL.getHost(),robotsTxt)) {
+            if (!rm.read(robotsURL.getHost(), robotsTxt)) {
                 robotsTxt = fetchRobots();
                 rm.create(robotsTxt);
             }
-            
+
+            for (String disallow : robotsTxt.getDisallows()) {
+                if (url.toString().contains(disallow)){
+                    result = false;
+                }
+            }
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            logger.info("Error with robots.txt");
         }
-        return false;
+        return result;
     }
-    
-    /**
-     * 
-     * @return
-     */
-    public int getCrawlDelay(URL url){
-    	
-    	 String dbPath = Configuration.getInstance().getBerkeleyDBPath();
-         RobotsManager rm = new RobotsManager(dbPath);
-         RobotsTxt robotsTxt = new RobotsTxt();
-         
-         if (!rm.read(robotsURL.getHost(),robotsTxt)) {
-        	 //Unsuccessful read
-        	 robotsTxt = fetchRobots();
-             rm.create(robotsTxt);
-         }
 
-    	return robotsTxt.getCrawlDelay();
+    /**
+     * Gets the crawl delay of the given url
+     *
+     * @param url the resource whose delay we need.
+     * @return the crawl delay for this url
+     */
+    public int getCrawlDelay(URL url) {
+        RobotsTxt robotsTxt = new RobotsTxt();
+
+        if (!rm.read(robotsURL.getHost(), robotsTxt)) {
+            //Unsuccessful read
+            robotsTxt = fetchRobots();
+            rm.create(robotsTxt);
+        }
+
+        return robotsTxt.getCrawlDelay();
     }
 
     /**
@@ -75,18 +88,17 @@ public class RobotsModule {
      */
     private RobotsTxt fetchRobots() {
         URLConnection urlConnection = null;
+        RobotsTxt robotsTxt = new RobotsTxt();
         try {
             urlConnection = robotsURL.openConnection();
             urlConnection.setRequestProperty("user-agent", "cis455crawler");
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     urlConnection.getInputStream()));
-            String line;
-            boolean record = false; // for recording disallows
-            // TODO: MAKE INSTANCE VARS
-            Set disallow = new HashSet<String>();
-            String content;
-            int crawlDelay;
-            while ((line = in.readLine()) != null)
+            String line = "";
+            boolean record = false; // indicates true when recording disallows
+            Set<String> disallow = new HashSet<String>();
+            int crawlDelay = 0;
+            while ((line = in.readLine()) != null) {
                 if ((line.contains("User-agent:")) && (!line.contains("*"))
                         && (!line.contains("cis455crawler"))) {
                     record = false;
@@ -97,27 +109,30 @@ public class RobotsModule {
                     if (line.contains("cis455crawler")) // reset recording
                         disallow = new HashSet<String>();
                 }
-            // record all directives
-            if (line.contains("Disallow:") && record) {
-                String dis = line.split(":")[1].trim();
-                if (dis.startsWith("/")) {
-                    dis = dis.substring(1, dis.length());
+                if (line.contains("Disallow:") && record) {
+                    String dis = line.split(":")[1].trim();
+                    if (dis.startsWith("/")) {
+                        dis = dis.substring(1, dis.length());
+                    }
+                    if (dis.endsWith("/")) {
+                        dis = dis.substring(0, dis.length() - 1);
+                    }
+                    disallow.add(dis);
+                    //logger.info("Disallow: " + dis + " (trimmed)");
+                } else if (line.contains("Crawl-delay:") && record) {
+                    crawlDelay = Integer.parseInt(line.split(":")[1].trim());
                 }
-                if (dis.endsWith("/")) {
-                    dis = dis.substring(0, dis.length() - 1);
-                }
-                disallow.add(dis);
-                //logger.info("Disallow: " + dis + " (trimmed)");
-            } else if (line.contains("Crawl-delay:") && record) {
-                crawlDelay = Integer.parseInt(line.split(":")[1].trim());
             }
+            robotsTxt.setCrawlDelay(crawlDelay);
+            robotsTxt.setDisallows(disallow);
+            robotsTxt.setHost(robotsURL.toString());
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
-            //TODO: LOG ERROR
+            logger.info("Error parsing robots.txt for " + robotsURL.toString());
         }
 
-        return new RobotsTxt();
 
-    }
+        return robotsTxt;
+	}
 }

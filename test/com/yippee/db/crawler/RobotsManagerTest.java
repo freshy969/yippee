@@ -2,10 +2,12 @@ package com.yippee.db.crawler;
 
 import com.yippee.db.crawler.RobotsManager;
 import com.yippee.db.crawler.model.RobotsTxt;
+import com.yippee.util.Configuration;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -21,11 +23,14 @@ public class RobotsManagerTest {
 	RobotsManager rm;
 	RobotsTxt robots;
 
-	
+	@BeforeClass
+	public static void setUpBeforeClass(){
+    	Configuration.getInstance().setBerkeleyDBRoot("db/test");
+	}
 	
 	@Before
-	public void setUp() throws Exception {
-		rm = new RobotsManager("db/test/crawler");
+	public void setUp() throws Exception {		
+		rm = new RobotsManager();
 		
 		robots = new RobotsTxt();
 		robots.setCrawlDelay(10);

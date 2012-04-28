@@ -47,7 +47,7 @@ public class Spider implements Runnable {
         this.spiders = spiders;
         this.araneae = araneae;
         running = true;
-        dam = new DocAugManager(Configuration.getInstance().getBerkeleyDBPath());
+        dam = new DocAugManager();
     }
 
     /**
@@ -80,14 +80,21 @@ public class Spider implements Runnable {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBPath());
+                logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBRoot());
                 logger.info("1");
+
                 logger.info("1");
                 
                 dam.push(docAug);
                 logger.info("2");
                 LinkTextExtractor linkEx = new LinkTextExtractor();
+                linkEx.extract(urlToCrawl.toString(), doc);
                 ArrayList<String> links = linkEx.getLinks();
+                for(String s : links){
+                	System.out.println("Found link: " + s);
+                	urlFrontier.push(new Message(s));
+                }
+                
                 RobotsModule robotsModule = new RobotsModule();
                 for (String newUrl : links){
                     logger.info("Found URL " + newUrl);

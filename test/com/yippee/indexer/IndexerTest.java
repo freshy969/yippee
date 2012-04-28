@@ -81,7 +81,7 @@ class DocCreator extends Thread {
 	int counter;
 	
 	public void run() {
-		dam = new DocAugManager("db/test/indexer");
+		dam = new DocAugManager();
 		counter = 0;
 		
 		while (true) {

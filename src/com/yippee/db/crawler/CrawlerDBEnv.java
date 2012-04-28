@@ -9,6 +9,7 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
 import com.yippee.db.util.DbShutdownHook;
+import com.yippee.util.Configuration;
 
 public class CrawlerDBEnv {
 
@@ -21,9 +22,10 @@ public class CrawlerDBEnv {
 
     private static CrawlerDBEnv _instance;
     
-    public static CrawlerDBEnv getInstance(String location, boolean readonly){
+    public static CrawlerDBEnv getInstance(boolean readonly){
     	if(_instance != null) return _instance;
     	else{
+    		String location = Configuration.getInstance().getBerkeleyDBRoot() + "/crawler";
     		setup(location, readonly);
     		return _instance;
     	}

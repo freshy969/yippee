@@ -109,6 +109,15 @@
         </jar>
     </target>
 
+
+    <!--
+    Arguments are:
+        *   local port
+        *   boot ip
+        *   boot port
+        *   url feed file path
+        *   database path
+    -->
     <target name="run" depends="jar">
         <java fork="true" classname="${main-class}">
             <classpath>
@@ -120,6 +129,7 @@
             <arg value="${bootIp}"/>
             <arg value="${bootPort}"/>
             <arg value="feed.url"/>
+            <arg value="${database}"/>
             <arg value="--overwrite"/>
         </java>
     </target>
@@ -131,6 +141,7 @@
             description="Create single-noded crawler">
             <antcall target="run">
                 <param name="localPort" value="9001"/>
+                <param name="database" value="db/test"/>
             </antcall>
     </target>
 
@@ -140,15 +151,19 @@
         <parallel>
             <antcall target="run">
                 <param name="localPort" value="9001"/>
+                <param name="database" value="db/integ/node1"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9002"/>
+                <param name="database" value="db/integ/node2"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9003"/>
+                <param name="database" value="db/integ/node3"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9004"/>
+                <param name="database" value="db/integ/node4"/>
             </antcall>
         </parallel>
     </target>
@@ -164,6 +179,7 @@
 
             <batchtest fork="yes">
                 <fileset dir="${tst.dir}" includes="*Test.java"/>
+                <param name="database" value="db/integ/node1"/>
             </batchtest>
         </junit>
     </target>
