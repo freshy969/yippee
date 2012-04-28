@@ -1,8 +1,13 @@
 package com.yippee.pastry;
 
 import org.apache.log4j.Logger;
+
+import com.yippee.db.pastry.PastryManager;
+import com.yippee.db.pastry.model.NodeState;
+
 import rice.environment.Environment;
 import rice.p2p.commonapi.Node;
+
 import rice.pastry.Id;
 import rice.pastry.NodeHandle;
 import rice.pastry.NodeIdFactory;
@@ -40,9 +45,9 @@ public class NodeFactory {
 		this(new Environment(), port);
 	}	
 	
-	NodeFactory(int port, InetSocketAddress bootPort) {
+	NodeFactory(int port, InetSocketAddress bootstrap) {
 		this(port);
-		bootHandle = factory.getNodeHandle(bootPort);
+		bootHandle = factory.getNodeHandle(bootstrap);
 	}
 	
 	NodeFactory(Environment env, int port) {
