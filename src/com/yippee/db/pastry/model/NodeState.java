@@ -1,6 +1,5 @@
 package com.yippee.db.pastry.model;
 
-
 import rice.p2p.commonapi.Id;
 
 import com.sleepycat.persist.model.Entity;
@@ -11,7 +10,11 @@ public class NodeState {
 	
 	@PrimaryKey
 	int version;
+	
+	//NodeID? (is it even serializable?)
+	//String?
 	String idString;
+	//
 
 	/**
 	 * Default Constructor for Berkeley DB
@@ -22,7 +25,7 @@ public class NodeState {
 		this.idString = id.toStringFull();
 	}
 	
-	public String getNodeIdString(){
+	public String getNodeIdString() {
 		return idString;
 	}
 	
