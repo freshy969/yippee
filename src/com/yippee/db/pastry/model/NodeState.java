@@ -13,7 +13,7 @@ public class NodeState {
 	
 	//NodeID? (is it even serializable?)
 	//String?
-	Id id;
+	String id;
 	//
 
 	/**
@@ -22,11 +22,11 @@ public class NodeState {
 	public NodeState() {}
 	
 	public NodeState(Id id){
-		this.id = id;
+		this.id = new String(id.toByteArray());
 	}
 	
 	public Id getNodeId(){
-		return id;
+		return Id.build(this.id.getBytes());
 	}
 	
 }

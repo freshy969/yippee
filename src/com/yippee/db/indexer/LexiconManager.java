@@ -10,6 +10,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 
 import org.apache.log4j.Logger;
@@ -18,6 +20,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.indexer.model.Word;
 import com.yippee.db.util.DAL;
+import com.yippee.indexer.WordStemmer;
 
 public class LexiconManager {
 	/**
@@ -39,6 +42,8 @@ public class LexiconManager {
         // Environment is <i>not</i> readonly
         // if lexicon database is empty, then fill it. otherwise words already in database env
         lexiconMap = new HashMap<String, byte[]>();
+//        makeLexiconFile("doc/en-common.txt", "doc/lexicon.txt");
+       
         if(isEmpty()){
         	init(locationWordList);
         }
@@ -201,6 +206,7 @@ public class LexiconManager {
     public boolean makeLexiconFile(String locationOfWordList, String nameNewFile) {
     //	locationOfWordList = "doc/en-common.txt";
     //	nameNewFile = "doc/lexicon.txt";
+    	WordStemmer stemmer = new WordStemmer();
         boolean success = true;
         File fileWords = new File(locationOfWordList);
         File fileLex = new File(nameNewFile);
@@ -208,10 +214,23 @@ public class LexiconManager {
 			BufferedReader reader = new BufferedReader(new FileReader(fileWords));
 			FileWriter writer = new FileWriter(fileLex);
 			String word = reader.readLine();
+			HashMap <String, String> map = new HashMap();
+			
 			while(word!=null) {
-				writer.write(word+endOfWordDeliminator+"\n"+new String(assignWordId(word))+"\n\n");
+				word = stemmer.stemWord(word.toLowerCase());
+				String wordID = new String(assignWordId(word));
+				map.put(word, wordID);
 				word = reader.readLine();
 			}
+			
+			Set<String> keys = map.keySet();
+			Iterator<String> iter = keys.iterator();
+			
+			while (iter.hasNext()) {
+				word = iter.next();
+				writer.write(word+endOfWordDeliminator+"\n"+map.get(word)+"\n\n");
+			}
+			
 			reader.close();
 			writer.close();
 			
@@ -249,4 +268,7 @@ public class LexiconManager {
     	return lexiconMap;
     }
     
+    public static void main(String[] args) {
+    	LexiconManager lex = new LexiconManager(null);
+    }
 }
