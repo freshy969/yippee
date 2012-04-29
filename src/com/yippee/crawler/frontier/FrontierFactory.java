@@ -2,6 +2,8 @@ package com.yippee.crawler.frontier;
 
 import org.apache.log4j.Logger;
 
+import com.yippee.util.Configuration;
+
 /**
  * We  use the  Factory  method design  pattern, as  described  by GoF. The
  * factory method pattern is an object-oriented design pattern to implement
@@ -35,13 +37,22 @@ public class FrontierFactory {
      * @return The concrete URLFrontier implementation
      */
     public static URLFrontier get(FrontierType type) {
+    	
+    	int crawlerThreadNumber = Configuration.getInstance().getCrawlerThreadNumber();
+    	
         switch (type){
             case SIMPLE:
             	SimpleQueueFrontier sqf = new SimpleQueueFrontier();
             	sqf.load();
                 return sqf;
             case MERC_1:
-            	MercatorCentralized mc = new MercatorCentralized();
+            	/*
+            	 * TODO 10 is the number of priority levels
+            	 * This is specific to the mercator frontier so should probably not be in Configuration.
+            	 * Where should it go? 
+            	 */            
+            	
+            	MercatorCentralized mc = new MercatorCentralized(10, crawlerThreadNumber);
             	mc.load();
                 return mc;
             case MERC_2:

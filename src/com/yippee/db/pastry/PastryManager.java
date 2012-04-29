@@ -2,12 +2,11 @@ package com.yippee.db.pastry;
 
 import org.apache.log4j.Logger;
 
-import rice.pastry.Id;
+import rice.p2p.commonapi.Id;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.PrimaryIndex;
-import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.pastry.model.NodeState;
 import com.yippee.db.util.DAL;
 

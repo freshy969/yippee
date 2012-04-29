@@ -91,8 +91,14 @@ public class Spider implements Runnable {
                 linkEx.extract(urlToCrawl.toString(), doc);
                 ArrayList<String> links = linkEx.getLinks();
                 for(String s : links){
-                	System.out.println("Found link: " + s);
+                	logger.debug("Found link: " + s);
                 	urlFrontier.push(new Message(s));
+                }
+                
+                //Store state periodically
+                if(System.nanoTime() % 100 == 0){
+                	urlFrontier.save();
+                	logger.debug("Stored frontier state");
                 }
                 
                 RobotsModule robotsModule = new RobotsModule();
