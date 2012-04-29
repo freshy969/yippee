@@ -22,35 +22,40 @@ public class SimpleQueueFrontier implements URLFrontier {
 
 	BlockingQueue<URL> urls;
 	
+	
 	public SimpleQueueFrontier(){
 		urls = new LinkedBlockingQueue<URL>();
 	}
 
-	public Message pull() throws InterruptedException {
-		// TODO Auto-generated method stub
+	public Message pull() throws InterruptedException {	
+		URL url = urls.take();
 		
-		return new Message(urls.take().toString());
+		logger.debug("Giving url to thread: " + url.toString());
+		return new Message(url.toString());
 	}
 
 	public void push(Message message) {
-		// TODO Auto-generated method stub
 		if(message != null && message.getURL() != null){
-			System.out.println("Message pushed to frontier: " + message.getURL());
+			logger.debug("Message pushed to frontier: " + message.getURL());
 			urls.add(message.getURL());
 		}
 			
 	}
 
 	public boolean save() {
+		logger.debug("SimpleQueueFrontier storing state... ");
 		URLFrontierManager fm = new URLFrontierManager();
 		
 		Map<Integer, Queue<URL>> queues = new HashMap<Integer, Queue<URL>>();
 		queues.put(0, urls);
-		
+
 		return fm.storeState(queues);
 	}
 
 	public boolean load() {
+		
+		logger.debug("SimpleQueueFrontier loading state... ");
+
 		URLFrontierManager fm = new URLFrontierManager();
 
 		FrontierSavedState state = fm.loadState();

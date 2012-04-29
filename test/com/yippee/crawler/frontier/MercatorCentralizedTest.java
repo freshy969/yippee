@@ -14,11 +14,14 @@ public class MercatorCentralizedTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		Configuration.getInstance().setBerkeleyDBRoot("db/test");
+		Configuration.getInstance().setCrawlerThreadNumber(20);
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		frontier = new MercatorCentralized();
+		int numCrawlingThreads = Configuration.getInstance().getCrawlerThreadNumber();
+		int numPriorityLevels = 10;
+		frontier = new MercatorCentralized(numPriorityLevels, numCrawlingThreads);
 	}
 
 	@Test

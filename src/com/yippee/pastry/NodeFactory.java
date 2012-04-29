@@ -75,8 +75,9 @@ public class NodeFactory {
 			}
 			
 			PastryNode node = null;
-			PastryManager pm = new PastryManager();
-			NodeState state = pm.loadState();
+			//PastryManager pm = new PastryManager();
+			NodeState state = null; 
+					//pm.loadState();
 			//If there's a stored NodeState, use it to get NodeID
 			if(state != null){
 				/*
@@ -94,8 +95,8 @@ public class NodeFactory {
 				node =  factory.newNode(bootHandle);
 				logger.debug("Node Id Generated: " + node.getId());
 				//Store the generated nodeID
-				Id id = node.getNodeId();
-				pm.storeState(id);
+				//Id id = node.getNodeId();
+				//pm.storeState(id);
 			}
 			
 			
