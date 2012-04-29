@@ -51,6 +51,7 @@ public class IndexWorker extends Thread {
 				try {
 					System.out.println("Waiting... " + pollDelay + "ms");
 					this.sleep(pollDelay);
+					System.out.println("TJ");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
