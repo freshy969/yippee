@@ -12,6 +12,7 @@ import rice.pastry.Id;
 import rice.pastry.NodeHandle;
 import rice.pastry.NodeIdFactory;
 import rice.pastry.PastryNode;
+import rice.pastry.commonapi.PastryIdFactory;
 import rice.pastry.socket.SocketPastryNodeFactory;
 import rice.pastry.standard.RandomNodeIdFactory;
 
@@ -78,7 +79,10 @@ public class NodeFactory {
 			NodeState state = pm.loadState();
 			//If there's a stored NodeState, use it to get NodeID
 			if(state != null){
-				node = factory.newNode(bootHandle, state.getNodeId());
+				PastryIdFactory idFactory = new PastryIdFactory(env);
+				Id id = idFactory.buildId(state.getNodeIdString());
+				
+				node = factory.newNode(bootHandle, state.getNodeIdString());
 				logger.debug("Node Id Loaded: " + node.getId());
 				
 			} else{
@@ -119,9 +123,9 @@ public class NodeFactory {
 		
 	}
 	
-	public Id getIdFromBytes(byte[] material) {
-		return Id.build(material);
-	}
+//	public Id getIdFromBytes(byte[] material) {
+//		return Id.build(material);
+//	}
 	
 	public Id getIdFromString(String keyString) {
 		MessageDigest md = null;
