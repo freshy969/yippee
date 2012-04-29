@@ -2,18 +2,24 @@ package com.yippee.db.pastry;
 
 import static org.junit.Assert.*;
 
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import rice.pastry.Id;
+import rice.environment.Environment;
+import rice.p2p.commonapi.Id;
+import rice.pastry.commonapi.PastryIdFactory;
 
-import com.yippee.db.pastry.model.NodeState;
 import com.yippee.util.Configuration;
 
 public class PastryManagerTest {
 	PastryManager pm;
-
+	PastryIdFactory idFactory;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
     	Configuration.getInstance().setBerkeleyDBRoot("db/test");
@@ -21,7 +27,8 @@ public class PastryManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		pm = new PastryManager();
+		pm = new PastryManager();	 
+		idFactory = new PastryIdFactory(new Environment());
 	}
 
 	@Test
@@ -31,9 +38,8 @@ public class PastryManagerTest {
 
 	@Test
 	public void testSaveNodeState(){
-		//TODO Cant wirte test without some way of generating an Id
-		//Id id = new Id();
-		//assertTrue(pm.storeState(id));
+		Id id = idFactory.buildId("123");
+		assertTrue(pm.storeState(id));
 		
 	}
 	
@@ -46,5 +52,12 @@ public class PastryManagerTest {
 		//Load state and assert it matches what was put in
 		fail("not implemented");
 	}
+	
+	 static void displayInterfaceInformation(NetworkInterface netint) throws SocketException  {
+       System.out.println("Display name: " 
+          + netint.getDisplayName());
+       System.out.println("Hardware address: " 
+          + Arrays.toString(netint.getHardwareAddress()));
+   }
 	
 }
