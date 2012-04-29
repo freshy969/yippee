@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 import org.apache.log4j.Logger;
@@ -26,6 +27,7 @@ public class LexiconManager {
 	private static IndexerDBEnv myDbEnv;
 	private DAL dao;
 	private static String endOfWordDeliminator = "::";
+	HashMap<String, byte[]> lexiconMap;
 	
     /**
      * The constructor takes the BerkeleyDB folder as an argument. It recreates
@@ -36,6 +38,7 @@ public class LexiconManager {
         // Path to the environment home
         // Environment is <i>not</i> readonly
         // if lexicon database is empty, then fill it. otherwise words already in database env
+        lexiconMap = new HashMap<String, byte[]>();
         if(isEmpty()){
         	init(locationWordList);
         }
@@ -60,6 +63,9 @@ public class LexiconManager {
 				//if end of word / wordid block -> create Word object
 				if(word.length()==0 && wordText!=null && wordId!=null) {
 					createWord(wordText, wordId);
+					
+					lexiconMap.put(wordText, wordId.getBytes());
+					
 					wordText = null;
 					wordId = null;
 				}
@@ -72,8 +78,10 @@ public class LexiconManager {
 					if(wordId==null) {wordId=word;}
 					else {wordId+="\n"+word;}
 				}
+				
 				word = reader.readLine();
 			}
+			
 			reader.close();
 		} catch (FileNotFoundException e) {
 			logger.warn("Exception", e);
@@ -237,5 +245,8 @@ public class LexiconManager {
 		return shaDigest;
     }
     
+    public HashMap<String, byte[]> getLexiconMap() {
+    	return lexiconMap;
+    }
     
 }

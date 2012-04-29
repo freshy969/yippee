@@ -10,6 +10,7 @@ public class Hit implements Comparable {
 	 */
 	
 	private String docID;
+	private byte[] wordID;
 	private String word;
 	private boolean caps = false;
 	private boolean bold = false;
@@ -41,7 +42,7 @@ public class Hit implements Comparable {
 	 * @param docFrom
 	 * @param wordID
 	 */
-	public Hit(String docPointingTo, String docFrom, String word) {
+	public Hit(String docPointingTo, String docFrom, String word, byte[] wordId) {
 		this.docID = docPointingTo;
 		this.docIDfrom = docFrom;
 		this.word = word;
@@ -81,6 +82,13 @@ public class Hit implements Comparable {
 	 */
 	public void setAnchor(boolean b){
 		anchor = b;
+	}
+	
+	/**
+	 * 
+	 */
+	public void setWordId(byte[] wordID) {
+		this.wordID = wordID;
 	}
 	
 	
@@ -134,11 +142,20 @@ public class Hit implements Comparable {
 	
 	/**
 	 * 
-	 * @return wordId of Hit
+	 * @return word of Hit
 	 */
 	public String getWord() {
 		return word;
 	}
+	
+	/**
+	 * 
+	 * @return wordId of Hit
+	 */
+	public byte[] getWordId() {
+		return wordID;
+	}
+	
 	
 	/**
 	 * 
