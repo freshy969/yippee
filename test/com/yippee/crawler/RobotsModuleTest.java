@@ -2,6 +2,7 @@ package com.yippee.crawler;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.yippee.util.Configuration;
@@ -24,9 +25,13 @@ public class RobotsModuleTest {
             "http://crawltest.cis.upenn.edu",
     };
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUpBeforeClass() {
         Configuration.getInstance().setBerkeleyDBRoot("db/test");
+    }
+    
+    @Before
+    public void setUp(){
         rm = new RobotsModule();
     }
 
