@@ -100,7 +100,7 @@ public class FancyExtractor {
 					docTitle = sentence;
 				}
 				
-				sentence = removePunctuation(sentence);
+				sentence = removePunctuation(sentence).toLowerCase();
 				
 				String[] stemlist = stemmer.stemList(sentence.split("\\s+"));
 				

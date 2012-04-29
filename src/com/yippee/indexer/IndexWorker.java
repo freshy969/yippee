@@ -30,6 +30,7 @@ public class IndexWorker extends Thread {
 	NodeIndex nodeIndex;
 	
 	public IndexWorker(NodeIndex nodeIndex) {
+		Configuration.getInstance().setBerkeleyDBRoot("db/test");
 		try {
 			this.sleep(1000);
 		} catch (InterruptedException e) {
@@ -62,7 +63,7 @@ public class IndexWorker extends Thread {
 					pollDelay *= 2;
 			}
 				
-			//System.out.println("Retrieved: " + docAug.getId());
+			System.out.println("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
 	    	

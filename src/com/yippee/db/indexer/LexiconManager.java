@@ -37,16 +37,16 @@ public class LexiconManager {
      * it, if it does not exist.
      */
     public LexiconManager(String locationWordList) {
-        myDbEnv = IndexerDBEnv.getInstance(false);
+//        myDbEnv = IndexerDBEnv.getInstance(false);
         // Path to the environment home
         // Environment is <i>not</i> readonly
         // if lexicon database is empty, then fill it. otherwise words already in database env
         lexiconMap = new HashMap<String, byte[]>();
 //        makeLexiconFile("doc/en-common.txt", "doc/lexicon.txt");
        
-        if(isEmpty()){
+//        if(isEmpty()){
         	init(locationWordList);
-        }
+//        }
     }
     
     /**
@@ -67,7 +67,7 @@ public class LexiconManager {
 			while(word!=null) {
 				//if end of word / wordid block -> create Word object
 				if(word.length()==0 && wordText!=null && wordId!=null) {
-					createWord(wordText, wordId);
+//					createWord(wordText, wordId);
 					
 					lexiconMap.put(wordText, wordId.getBytes());
 					
@@ -95,6 +95,7 @@ public class LexiconManager {
 			logger.warn("Exception", e);
             success = false;
 		}
+		
         return success;
     }
     

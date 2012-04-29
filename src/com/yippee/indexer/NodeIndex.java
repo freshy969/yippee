@@ -17,13 +17,13 @@ public class NodeIndex {
     static Logger logger = Logger.getLogger(NodeIndex.class);
 	
 	private HashMap<String, ArrayList<Hit>> wordIndex;
-	private int capacity = 10000;
+	private int capacity = 5;
 	private Lexicon lexicon;
 	private HashMap<String, byte[]> lexiconMap;
 	
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
-		lexicon = new Lexicon();
+		lexicon = new Lexicon("doc/lexicon.txt");
 		lexiconMap = lexicon.getLexiconMap();
 	}
 	
@@ -78,6 +78,17 @@ public class NodeIndex {
 		
 		// Send keys
 		printIndex();		
+	}
+	
+	public synchronized void printAll(){
+		Set<String> keys = wordIndex.keySet();
+		Iterator<String> iter = keys.iterator();
+		
+		while(iter.hasNext()) {
+			String word = iter.next();
+			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+		}
+		
 	}
 	
 }

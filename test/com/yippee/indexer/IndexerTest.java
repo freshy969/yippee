@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
+import com.yippee.util.Configuration;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,10 +25,9 @@ public class IndexerTest {
 		DocCreator doccreate = new DocCreator();
 		doccreate.start();
 		
-		NodeIndex nodeIndex = new NodeIndex();
+		Indexer indexer = new Indexer();
+		indexer.makeThreads();
 		
-		IndexWorker indexer = new IndexWorker(nodeIndex);
-		indexer.start();
 	}
 }
 
@@ -81,6 +81,8 @@ class DocCreator extends Thread {
 	int counter;
 	
 	public void run() {
+		Configuration.getInstance().setBerkeleyDBRoot("db/test");
+		
 		dam = new DocAugManager();
 		counter = 0;
 		
