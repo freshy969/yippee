@@ -49,7 +49,7 @@ public class IndexWorker extends Thread {
 			
 			while(docAug == null) {
 				try {
-//					System.out.println("Waiting... " + pollDelay + "ms");
+					System.out.println("Waiting... " + pollDelay + "ms");
 					this.sleep(pollDelay);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
