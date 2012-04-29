@@ -111,9 +111,15 @@ public class Spider implements Runnable {
                         e.printStackTrace();
                         continue; // skip that url
                     }
-                    if (robotsModule.alowedToCrawl(url)){
-                        Configuration.getInstance().getPastryEngine().sendURL(url);
+                    
+                    try{
+                    	 if (robotsModule.alowedToCrawl(url)){
+                             Configuration.getInstance().getPastryEngine().sendURL(url);
+                         }
+                    }catch(IllegalStateException e){
+                    	logger.warn("IllegalStateException", e);
                     }
+                   
                 }
             } catch (InterruptedException e) {
                 //e.printStackTrace();
