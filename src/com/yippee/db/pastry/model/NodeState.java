@@ -1,6 +1,6 @@
 package com.yippee.db.pastry.model;
 
-import rice.pastry.Id;
+import rice.p2p.commonapi.Id;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
@@ -13,7 +13,7 @@ public class NodeState {
 	
 	//NodeID? (is it even serializable?)
 	//String?
-	String id;
+	String idString;
 	//
 
 	/**
@@ -22,11 +22,11 @@ public class NodeState {
 	public NodeState() {}
 	
 	public NodeState(Id id){
-		this.id = new String(id.toByteArray());
+		this.idString = id.toStringFull();
 	}
 	
-	public Id getNodeId(){
-		return Id.build(this.id.getBytes());
+	public String getNodeIdString() {
+		return idString;
 	}
 	
 }
