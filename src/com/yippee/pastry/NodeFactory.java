@@ -79,11 +79,16 @@ public class NodeFactory {
 			NodeState state = pm.loadState();
 			//If there's a stored NodeState, use it to get NodeID
 			if(state != null){
-				PastryIdFactory idFactory = new PastryIdFactory(env);
-				Id id = idFactory.buildId(state.getNodeIdString());
+				/*
+				 * Commenting this out for now.  We should return to this once
+				 * 	all project components are functional
+				 */
 				
-				node = factory.newNode(bootHandle, state.getNodeIdString());
-				logger.debug("Node Id Loaded: " + node.getId());
+//				PastryIdFactory idFactory = new PastryIdFactory(env);
+//				Id id = idFactory.buildId(state.getNodeIdString());
+//				
+//				node = factory.newNode(bootHandle, state.getNodeIdString());
+//				logger.debug("Node Id Loaded: " + node.getId());
 				
 			} else{
 				node =  factory.newNode(bootHandle);
