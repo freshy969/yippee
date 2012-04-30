@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class LinkTextExtractor {
     /**
@@ -35,13 +34,13 @@ public class LinkTextExtractor {
      *
      *  .. and return link urls
      */
-    public static List extract(URL url, String content){
+    public ArrayList smartExtract(URL url, String content){
         String path = url.getPath();
         String responseText = "";
-        List anchors = new ArrayList<String>();
-        logger.debug("Path to tidyUp:" + path );
+        ArrayList anchors = new ArrayList<String>();
+        System.out.println("Path to tidyUp:" + path);
         if (!path.contains(".") || path.substring(path.lastIndexOf(".")).contains("htm")) {
-            ByteArrayInputStream is = new ByteArrayInputStream(responseText.getBytes());
+            ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             Tidy tidy = new Tidy();
             tidy.setXHTML(true);
@@ -58,14 +57,24 @@ public class LinkTextExtractor {
             Document document = tidy.parseDOM(is, os);
             NodeList links = document.getElementsByTagName("a");
             //TODO: grab qualified name
+            System.out.println("No of links: " + links.getLength());
             for (int i = 0; i <links.getLength(); i++) {
 
                 Node node = links.item(i).getAttributes().getNamedItem("href");
-                logger.info(links.getLength() + "\t"+links.item(i).getLocalName());
+                //System.out.println(links.getLength() + "\t"+links.item(i).getLocalName());
                 if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
-                    anchors.add(node.getNodeValue());      //getAttributes("href");
+                    if (node.getNodeValue().startsWith("http")) {
+                        anchors.add(node.getNodeValue());      //getAttributes("href");
+                    } else {
+                        try {
+                            anchors.add(resolve(url.toString(), node.getNodeValue()));
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                            logger.info("Error extacting URL!");
+                        }
+                    }
                 } else {
-                    logger.info("There was a null href?");
+                    System.out.println("There was a null href?");
                 }
             }
             responseText = os.toString();
