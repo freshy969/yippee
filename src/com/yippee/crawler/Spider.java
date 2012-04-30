@@ -78,7 +78,13 @@ public class Spider implements Runnable {
 
                 dam.push(docAug);
                 LinkTextExtractor linkEx = new LinkTextExtractor();
-                ArrayList<String> links = linkEx.smartExtract(urlToCrawl, content);
+                ArrayList<String> links = null;
+                try {
+                    links = linkEx.smartExtract(urlToCrawl, content);
+                } catch (CrawlerException e) {
+                    System.out.println("ERROR!!!");
+                    continue;
+                }
 
                 //Store state periodically --
                 // TODO: it will either be another thread or a per url basis
@@ -88,11 +94,12 @@ public class Spider implements Runnable {
 //                }
 
                 RobotsModule robotsModule = new RobotsModule();
+                int i = 0;
                 for (String newUrl : links){
-                    if (newUrl.contains("https")) {
+                    if (newUrl == null || newUrl.contains("https")) {
                         continue;
                     }
-                    logger.info("Found URL " + newUrl);
+                    //logger.info("Found URL " + ++i);
                     URL url;
                     try {
                         url = new URL(newUrl);

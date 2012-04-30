@@ -51,7 +51,9 @@ public class LinkTextExtractor {
             tidy.setSmartIndent(true);
             tidy.setIndentAttributes(true);
             tidy.setShowWarnings(false);
+            tidy.setShowErrors(0);
             tidy.setWord2000(true);
+            // Even if errors where found, try to parse as much as possible!
             tidy.setForceOutput(true);
             //tidy.setWrapAttVals(true);
             //tidy.setWraplen(99999999);
@@ -66,8 +68,11 @@ public class LinkTextExtractor {
             //TODO: grab qualified name
             System.out.println("No of links: " + links.getLength());
             for (int i = 0; i <links.getLength(); i++) {
-
+                logger.info("URL:" + i);
                 Node node = links.item(i).getAttributes().getNamedItem("href");
+                if (node == null) {
+                    continue;
+                }
                 //System.out.println(links.getLength() + "\t"+links.item(i).getLocalName());
                 if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
                     if (node.getNodeValue().startsWith("http")) {
@@ -77,7 +82,7 @@ public class LinkTextExtractor {
                             anchors.add(resolve(url.toString(), node.getNodeValue()));
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
-                            logger.info("Error extacting URL!");
+                            System.out.println("Error extacting URL!");
                         }
                     }
                 } else {
