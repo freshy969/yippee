@@ -1,4 +1,4 @@
-package com.yippee.util;
+package com.yippee.crawler;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -34,7 +34,7 @@ public class LinkTextExtractor {
      *
      *  .. and return link urls
      */
-    public ArrayList smartExtract(URL url, String content){
+    public ArrayList smartExtract(URL url, String content) throws CrawlerException {
         String path = url.getPath();
         String responseText = "";
         ArrayList anchors = new ArrayList<String>();
@@ -57,7 +57,9 @@ public class LinkTextExtractor {
             //tidy.setWraplen(99999999);
             Document document = tidy.parseDOM(is, os);
             // the number of errors that occurred in the most recent parse operation.
-            tidy.getParseErrors();
+            if (tidy.getParseErrors() > 0 ){
+                throw new CrawlerException();
+            }
             //
             //document.normalize();
             NodeList links = document.getElementsByTagName("a");
