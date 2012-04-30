@@ -63,30 +63,26 @@ public class Spider implements Runnable {
         while (running && Configuration.getInstance().isUp()) {
             try {
 
-                logger.info("start spider ");
+                
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
                 //url.getURL()
                 Parser parser = new Parser();
                 Document doc = null;
                 HttpModule httpModule = new HttpModule(urlToCrawl);
-
+                String content = httpModule.getContent();
+                
+                
                 DocAug docAug = new DocAug();
-                docAug.setDoc(httpModule.getContent());
+                docAug.setDoc(content);
                 docAug.setUrl(urlToCrawl.toString());
                 docAug.setId(urlToCrawl.toString() + "timestamp");
-                try {
-                    doc = parser.parseDoc(docAug);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+               
                 logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBRoot());
-
                 dam.push(docAug);
-                logger.info("2");
+                
                 LinkTextExtractor linkEx = new LinkTextExtractor();
-                linkEx.extract(urlToCrawl.toString(), doc);
-                ArrayList<String> links = linkEx.getLinks();
+                ArrayList<String> links = linkEx.getLinkStrings(urlToCrawl, content);
 
                 //Store state periodically
                 if(System.nanoTime() % 100 == 0){
@@ -99,7 +95,7 @@ public class Spider implements Runnable {
                     if (newUrl.contains("https")) {
                         continue;
                     }
-                    logger.info("Found URL " + newUrl);
+                    logger.debug("Found URL " + newUrl);
                     URL url;
                     try {
                         url = new URL(newUrl);

@@ -34,10 +34,10 @@ public class LinkTextExtractor {
      *
      *  .. and return link urls
      */
-    public ArrayList smartExtract(URL url, String content){
+    public ArrayList<String> smartExtract(URL url, String content){
         String path = url.getPath();
         String responseText = "";
-        ArrayList anchors = new ArrayList<String>();
+        ArrayList<String> anchors = new ArrayList<String>();
         System.out.println("Path to tidyUp:" + path);
         if (!path.contains(".") || path.substring(path.lastIndexOf(".")).contains("htm")) {
             ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
@@ -136,7 +136,11 @@ public class LinkTextExtractor {
 	}
 	
 
-	public ArrayList<String> getLinks() {
+	public ArrayList<String> getLinkStrings(URL url, String contents) {
+		return smartExtract(url, contents);
+	}
+	
+	public ArrayList<String> getLinks(){
 		return links;
 	}
 	

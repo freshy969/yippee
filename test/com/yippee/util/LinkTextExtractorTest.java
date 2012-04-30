@@ -1,5 +1,6 @@
 package com.yippee.util;
 
+import com.yippee.crawler.HttpModule;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.indexer.Parser;
 import org.apache.log4j.Logger;
@@ -8,6 +9,8 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -569,18 +572,27 @@ public class LinkTextExtractorTest {
         assertEquals(caseOneExpectedUrls.length, links.size());
     }
 
-//    @Test
-//    public void testHead() {
-//        try {
-//            doc = parser.parseDoc(docAugs[0]);
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        LinkTextExtractor linkEx = new LinkTextExtractor();
-//        linkEx.extract(docAugs[0].getUrl(), doc);
-//        ArrayList<String> text = linkEx.getText();
-//        assertEquals(11, text.size());  // not sure what text means
-//        assertTrue("CSE455/CIS555 HW2 Grading Data".equals(text.get(0)));
-//    }
+
+    @Test
+    public void testRealWorldPage() throws MalformedURLException, FileNotFoundException{
+    	URL url = new URL("http://stanford.edu/main");
+    	HttpModule httpModule = new HttpModule(url);
+    	
+    	DocAug docAug = new DocAug();
+        docAug.setDoc(httpModule.getContent());
+        docAug.setUrl(url.toString());
+      
+
+        doc = parser.parseDoc(docAug);
+        
+        LinkTextExtractor linkEx = new LinkTextExtractor();
+        
+        System.out.println(url.toString());
+        linkEx.extract(url.toString(), doc);
+        ArrayList<String> links = linkEx.getLinks();
+        for(String s : links){
+        	System.out.println(s);
+        }
+        fail("Not test written");
+    }
 }
