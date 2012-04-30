@@ -52,9 +52,14 @@ public class LinkTextExtractor {
             tidy.setIndentAttributes(true);
             tidy.setShowWarnings(false);
             tidy.setWord2000(true);
+            tidy.setForceOutput(true);
             //tidy.setWrapAttVals(true);
             //tidy.setWraplen(99999999);
             Document document = tidy.parseDOM(is, os);
+            // the number of errors that occurred in the most recent parse operation.
+            tidy.getParseErrors();
+            //
+            //document.normalize();
             NodeList links = document.getElementsByTagName("a");
             //TODO: grab qualified name
             System.out.println("No of links: " + links.getLength());
