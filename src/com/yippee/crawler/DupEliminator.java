@@ -6,4 +6,15 @@ package com.yippee.crawler;
  */
 public class DupEliminator {
 
+    /**
+     * Tests whether a URL has already been seen in the past.
+     *
+     * @param url the url to be tested
+     * @return true if exists; false o/w
+     */
+    public static boolean exists(String url){
+
+
+    }
+
 }
