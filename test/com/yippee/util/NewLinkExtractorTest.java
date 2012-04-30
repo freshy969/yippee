@@ -1,18 +1,14 @@
 package com.yippee.util;
 
-import com.yippee.db.crawler.model.DocAug;
-import com.yippee.indexer.Parser;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class NewLinkExtractorTest {
     /**
@@ -331,32 +327,8 @@ public class NewLinkExtractorTest {
             "http://crawltest.cis.upenn.edu/2.png",
     };
 
-    DocAug[] docAugs;
-
-    Parser parser;
-    Document doc;
-
     @Before
     public void setUp() throws Exception {
-        docAugs = new DocAug[baseUrls.length];
-        for (int i = 0; i < baseUrls.length; i++) {
-            docAugs[i] = new DocAug();
-            docAugs[i].setDoc(testHTML);
-            docAugs[i].setUrl(baseUrls[i]);
-        }
-        parser = new Parser();
-        doc = null;
-    }
-
-    @Test
-    public void testParser() {
-        try {
-            doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        assertNotNull(doc);
     }
 
     /**
@@ -365,14 +337,7 @@ public class NewLinkExtractorTest {
      */
     @Test
     public void testCaseZeroHref() {
-    	
     	System.out.println("Testing Case 0: " + baseUrls[0]);
-        try {
-            doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
         ArrayList<String> links = null;
         try {
@@ -398,13 +363,6 @@ public class NewLinkExtractorTest {
     @Test
     public void testCaseOneHref() {
     	System.out.println("Testing Case 1: " + baseUrls[1]);
-
-        try {
-            doc = parser.parseDoc(docAugs[1]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
         ArrayList<String> links = null;
         try {
@@ -430,13 +388,6 @@ public class NewLinkExtractorTest {
     @Test
     public void testCaseTwoHref() {
     	System.out.println("Testing Case 2: " + baseUrls[2]);
-
-        try {
-            doc = parser.parseDoc(docAugs[2]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
         ArrayList<String> links = null;
         try {
@@ -461,13 +412,6 @@ public class NewLinkExtractorTest {
     @Test
     public void testCaseThreeHref() {
     	System.out.println("Testing Case 3: " + baseUrls[3]);
-
-        try {
-            doc = parser.parseDoc(docAugs[3]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
         ArrayList<String> links = null;
         try {
