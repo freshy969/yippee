@@ -13,9 +13,5 @@ public class PageRankReducer extends Reducer<Text, IntWritable, Text, IntWritabl
 
     public void reduce(Text key, Iterable<IntWritable> values, Context context)
         throws IOException, InterruptedException {
-
-
     }
-
-
 }
