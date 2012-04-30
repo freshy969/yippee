@@ -8,7 +8,8 @@ import com.yippee.indexer.FancyExtractorTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ FancyExtractorTest.class, 
-				LinkTextExtractorTest.class
+				LinkTextExtractorTest.class,
+                NewLinkExtractorTest.class
 				})
 public class UtilTestSuite {
 
