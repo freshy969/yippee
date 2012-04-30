@@ -1,4 +1,4 @@
-package com.yippee.util;
+package com.yippee.crawler;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -344,7 +344,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[0]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseZeroExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseZeroExpectedUrls[i];
@@ -369,7 +372,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[1]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseOneExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseOneExpectedUrls[i];
@@ -394,7 +400,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[2]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseTwoExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseTwoExpectedUrls[i];
@@ -418,7 +427,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[3]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseThreeExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseThreeExpectedUrls[i];
@@ -443,7 +455,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[4]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseFourExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseFourExpectedUrls[i];
@@ -468,7 +483,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[5]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseFiveExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseFiveExpectedUrls[i];
@@ -493,7 +511,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[6]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseSixExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseSixExpectedUrls[i];
@@ -512,7 +533,10 @@ public class NewLinkExtractorTest {
             links = linkEx.smartExtract(new URL(baseUrls[0]), testHTML);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(caseOneExpectedUrls.length, links.size());
     }
 }

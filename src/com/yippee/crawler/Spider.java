@@ -5,11 +5,9 @@ import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.indexer.Parser;
 import com.yippee.util.Configuration;
-import com.yippee.util.LinkTextExtractor;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,40 +60,41 @@ public class Spider implements Runnable {
         logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
         while (running && Configuration.getInstance().isUp()) {
             try {
-
-                
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
                 //url.getURL()
                 Parser parser = new Parser();
                 Document doc = null;
                 HttpModule httpModule = new HttpModule(urlToCrawl);
+
+
                 String content = httpModule.getContent();
-                
-                
+
+                if (!httpModule.isValid()) continue; // There was an error!
+
                 DocAug docAug = new DocAug();
                 docAug.setDoc(content);
                 docAug.setUrl(urlToCrawl.toString());
                 docAug.setId(urlToCrawl.toString() + "timestamp");
-               
-                logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBRoot());
-                dam.push(docAug);
-                
-                LinkTextExtractor linkEx = new LinkTextExtractor();
-                ArrayList<String> links = linkEx.getLinkStrings(urlToCrawl, content);
 
-                //Store state periodically
-                if(System.nanoTime() % 100 == 0){
-                	urlFrontier.save();
-                	logger.debug("Stored frontier state");
+                dam.push(docAug);
+                LinkTextExtractor linkEx = new LinkTextExtractor();
+                ArrayList<String> links = null;
+                try {
+                    links = linkEx.smartExtract(urlToCrawl, content);
+                } catch (CrawlerException e) {
+                    System.out.println("ERROR!!!");
+                    continue;
                 }
-                
+
+
                 RobotsModule robotsModule = new RobotsModule();
+                int i = 0;
                 for (String newUrl : links){
-                    if (newUrl.contains("https")) {
+                    if (newUrl == null || newUrl.contains("https")) {
                         continue;
                     }
-                    logger.debug("Found URL " + newUrl);
+
                     URL url;
                     try {
                         url = new URL(newUrl);

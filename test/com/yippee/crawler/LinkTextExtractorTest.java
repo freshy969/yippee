@@ -1,4 +1,4 @@
-package com.yippee.util;
+package com.yippee.crawler;
 
 import com.yippee.crawler.HttpModule;
 import com.yippee.db.crawler.model.DocAug;
