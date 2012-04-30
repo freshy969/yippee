@@ -40,7 +40,7 @@ public class SimpleQueueFrontier implements URLFrontier {
 
 	public void push(Message message) {
 		if(message != null && message.getURL() != null){
-			logger.debug("Message pushed to frontier: " + message.getURL());
+			logger.debug("URL pushed to frontier: " + message.getURL());
 			synchronized(urls){
 				urls.add(message.getURL());
 			}
@@ -50,7 +50,7 @@ public class SimpleQueueFrontier implements URLFrontier {
 	}
 
 	public boolean save() {
-		logger.info("SimpleQueueFrontier storing state... ");
+		logger.debug("SimpleQueueFrontier storing state... ");
 		URLFrontierManager fm = new URLFrontierManager();
 		
 		Map<Integer, Queue<URL>> queues = new HashMap<Integer, Queue<URL>>();
@@ -68,7 +68,7 @@ public class SimpleQueueFrontier implements URLFrontier {
 
 	public boolean load() {
 		
-		logger.info("SimpleQueueFrontier loading state... ");
+		logger.debug("SimpleQueueFrontier loading state... ");
 
 		URLFrontierManager fm = new URLFrontierManager();
 
