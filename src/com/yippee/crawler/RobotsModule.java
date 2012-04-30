@@ -91,7 +91,7 @@ public class RobotsModule {
      */
     private RobotsTxt fetchRobots() {
         HttpURLConnection urlConnection = null;
-        RobotsTxt robotsTxt = null;
+        RobotsTxt robotsTxt = new RobotsTxt();
         try {
 
 
@@ -100,7 +100,6 @@ public class RobotsModule {
             urlConnection.setRequestProperty("user-agent", "cis455crawler");
 
             if (urlConnection.getResponseCode() == 200) {
-                robotsTxt = new RobotsTxt();
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         urlConnection.getInputStream()));
 
