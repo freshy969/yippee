@@ -45,6 +45,11 @@ public class RobotsModuleTest {
         assertFalse(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu/marie/private")));
     }
 
+        @Test
+    public void testNoRobts() throws MalformedURLException {
+        assertTrue(rm.alowedToCrawl(new URL("http://n.vasilak.is")));
+    }
+
     @Test
     public void testGetCrawlDelay() {
         fail("Test not implemented");

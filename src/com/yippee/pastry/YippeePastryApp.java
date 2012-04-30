@@ -54,10 +54,10 @@ public class YippeePastryApp implements Application {
                 // push to the urlFrontier or that node
                 String urlString = om.content;
                 logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
-//                com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
-//                if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
-//                    urlFrontier.push(msg);
-//                }
+                com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
+                if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
+                    urlFrontier.push(msg);
+                }
             }
         } else {
             if (om.content.equals("PONG")) {
