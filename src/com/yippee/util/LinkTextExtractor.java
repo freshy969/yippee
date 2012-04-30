@@ -58,7 +58,6 @@ public class LinkTextExtractor {
             Document document = tidy.parseDOM(is, os);
             NodeList links = document.getElementsByTagName("a");
             //TODO: grab qualified name
-            boolean weHadNull = false;
             for (int i = 0; i <links.getLength(); i++) {
 
                 Node node = links.item(i).getAttributes().getNamedItem("href");
@@ -66,8 +65,7 @@ public class LinkTextExtractor {
                 if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
                     anchors.add(node.getNodeValue());      //getAttributes("href");
                 } else {
-                    System.out.println("There was a null href?");
-                    weHadNull = true;
+                    logger.info("There was a null href?");
                 }
             }
             responseText = os.toString();
