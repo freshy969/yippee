@@ -5,6 +5,7 @@ import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.crawler.model.DuplicateURL;
 import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.crawler.model.RobotsTxt;
 import com.yippee.db.indexer.model.HitList;
@@ -31,21 +32,25 @@ public class DAL {
      */
     PrimaryIndex<String, RobotsTxt> robotsById;
     /**
+     * DuplicateURL Accessors
+     */
+    PrimaryIndex<String, DuplicateURL> duplicateByURL;
+    /**
      * Lexicon Accessors
      */
     PrimaryIndex<String, Word> lexiconById;
-
-    // Barrel Accessors
+    /**
+     * Barrel Accessors
+     */
     PrimaryIndex<String, HitList> barrelById;
-    
-    // Anchors Accessors
+    /**
+     * Anchors Accessors
+     */
     PrimaryIndex<String, HitList> anchorById;
-    
     /**
      * FrontierSavedState Accessor
      */
     PrimaryIndex<Integer, FrontierSavedState> frontierSavedStateByVersion;
-	
     /**
      * Pastry node saved state accessor
      */
@@ -62,6 +67,8 @@ public class DAL {
         docById = store.getPrimaryIndex(String.class, DocAug.class);
         // Robots key
         robotsById = store.getPrimaryIndex(String.class, RobotsTxt.class);
+        // Duplicate key
+        duplicateByURL = store.getPrimaryIndex(String.class, DuplicateURL.class);
         // Lexicon key
         lexiconById = store.getPrimaryIndex(String.class, Word.class);
         // Barrel key
@@ -108,7 +115,16 @@ public class DAL {
     public PrimaryIndex<String, RobotsTxt> getRobotsById() {
         return robotsById;
     }
-    
+
+    /**
+     * Access DuplicateURL primary index outside package.
+     *
+     * @return the duplicateByURL index
+     */
+    public PrimaryIndex<String, DuplicateURL> getDuplicateByURL() {
+        return duplicateByURL;
+    }
+
     /**
      * Get a cursor for the Lexicon Index
      * @return Word entity cursor

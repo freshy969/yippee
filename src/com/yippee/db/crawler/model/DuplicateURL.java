@@ -34,4 +34,8 @@ public class DuplicateURL {
     public void setHits(int hits) {
         this.hits = hits;
     }
+
+    public void addHit(){
+        hits++;
+    }
 }
