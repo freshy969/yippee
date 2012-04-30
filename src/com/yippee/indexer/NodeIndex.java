@@ -68,7 +68,7 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 //			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
-			logger.info("[" + lexiconMap.get(word) + "=" + wordIndex.get(word).size() + "]");
+			logger.info("[" + word + ", " + lexiconMap.get(word) + "=" + wordIndex.get(word).size() + "]");
 		}
 		
 	}
