@@ -68,7 +68,7 @@ public class LinkTextExtractor {
             //TODO: grab qualified name
             System.out.println("No of links: " + links.getLength());
             for (int i = 0; i <links.getLength(); i++) {
-                logger.info("URL:" + i);
+                logger.debug("URL:" + i);
                 Node node = links.item(i).getAttributes().getNamedItem("href");
                 if (node == null) {
                     continue;

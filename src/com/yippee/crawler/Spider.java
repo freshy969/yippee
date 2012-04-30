@@ -62,11 +62,12 @@ public class Spider implements Runnable {
             try {
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
-                //url.getURL()
-                Parser parser = new Parser();
-                Document doc = null;
+                
+                logger.info("Pulled url: " + urlToCrawl);
+                
                 HttpModule httpModule = new HttpModule(urlToCrawl);
 
+                logger.info("Got content from url: " + urlToCrawl);
 
                 String content = httpModule.getContent();
 
@@ -75,19 +76,22 @@ public class Spider implements Runnable {
                 DocAug docAug = new DocAug();
                 docAug.setDoc(content);
                 docAug.setUrl(urlToCrawl.toString());
-                docAug.setId(urlToCrawl.toString() + "timestamp");
+                docAug.setId(urlToCrawl.toString() + " timestamp");
 
+                logger.info("About to push to DocManager");
                 dam.push(docAug);
                 LinkTextExtractor linkEx = new LinkTextExtractor();
                 ArrayList<String> links = null;
                 try {
+                	logger.info("About to extract links");
                     links = linkEx.smartExtract(urlToCrawl, content);
                 } catch (CrawlerException e) {
                     System.out.println("ERROR!!!");
                     continue;
                 }
+                logger.info("Done extracting links");
 
-
+                logger.info("Asking robots for each link");
                 RobotsModule robotsModule = new RobotsModule();
                 int i = 0;
                 for (String newUrl : links){
@@ -104,7 +108,7 @@ public class Spider implements Runnable {
                     }
                     
                     try{
-                    	 if (robotsModule.alowedToCrawl(url)){
+                    	if (robotsModule.alowedToCrawl(url)){
                              Configuration.getInstance().getPastryEngine().sendURL(url);
                          }
                     }catch(IllegalStateException e){
