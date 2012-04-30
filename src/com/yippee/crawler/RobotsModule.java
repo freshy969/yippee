@@ -22,6 +22,9 @@ public class RobotsModule {
      * The host url
      */
     private URL robotsURL;
+    /**
+     * The robots.txt database manager
+     */
     private RobotsManager rm;
 
     public RobotsModule() {
@@ -139,15 +142,15 @@ public class RobotsModule {
                 logger.debug("Fetch robots done\n\n");
                 in.close();
             } else {
-                logger.debug("Host did not have robots.txt file at: " + robotsURL);
+                logger.debug("No robots.txt at: " + robotsURL+"; storing dummy constraints");
+                robotsTxt.setCrawlDelay(0);
+                robotsTxt.setDisallows(new HashSet<String>());
+                robotsTxt.setHost(robotsURL.toString());
             }
-
         } catch (IOException e) {
             e.printStackTrace();
             logger.info("Error parsing robots.txt for " + robotsURL.toString());
         }
-
-
         return robotsTxt;
     }
 }
