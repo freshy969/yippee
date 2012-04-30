@@ -92,7 +92,7 @@ public class Spider implements Runnable {
                 }
                 
                 //Store state periodically
-                if(System.nanoTime() % 100 == 0){
+                if(System.nanoTime() % 10000 == 0){
                 	urlFrontier.save();
                 	logger.debug("Stored frontier state");
                 }
