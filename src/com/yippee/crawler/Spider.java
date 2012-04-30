@@ -87,11 +87,7 @@ public class Spider implements Runnable {
                 LinkTextExtractor linkEx = new LinkTextExtractor();
                 linkEx.extract(urlToCrawl.toString(), doc);
                 ArrayList<String> links = linkEx.getLinks();
-//                for(String s : links){
-//                	logger.debug("Found link: " + s);
-//                	urlFrontier.push(new Message(s));
-//                }
-                
+
                 //Store state periodically
                 if(System.nanoTime() % 100 == 0){
                 	urlFrontier.save();
