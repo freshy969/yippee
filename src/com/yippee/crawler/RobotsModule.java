@@ -57,8 +57,6 @@ public class RobotsModule {
                     }
                 }
             }
-
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
             logger.info("Error with robots.txt");
@@ -93,8 +91,6 @@ public class RobotsModule {
         HttpURLConnection urlConnection = null;
         RobotsTxt robotsTxt = new RobotsTxt();
         try {
-
-
             logger.debug("Starting fetch robots");
             urlConnection = (HttpURLConnection) robotsURL.openConnection();
             urlConnection.setRequestProperty("user-agent", "cis455crawler");
