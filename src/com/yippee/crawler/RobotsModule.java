@@ -91,7 +91,7 @@ public class RobotsModule {
         HttpURLConnection urlConnection = null;
         RobotsTxt robotsTxt = new RobotsTxt();
         try {
-            logger.debug("Starting fetch robots");
+            logger.debug("["+robotsURL.toString()+"] Starting fetch robots");
             urlConnection = (HttpURLConnection) robotsURL.openConnection();
             urlConnection.setRequestProperty("user-agent", "cis455crawler");
 
@@ -99,7 +99,7 @@ public class RobotsModule {
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         urlConnection.getInputStream()));
 
-                logger.debug("Robots were fetched");
+                logger.debug("["+robotsURL.toString()+"] Robots were fetched");
 
                 String line = "";
                 boolean record = false; // indicates true when recording disallows
@@ -116,27 +116,35 @@ public class RobotsModule {
                         if (line.contains("cis455crawler")) // reset recording
                             disallow = new HashSet<String>();
                     }
+
                     if (line.contains("Disallow:") && record) {
-                        String dis = line.split(":")[1].trim();
-                        if (dis.startsWith("/")) {
-                            dis = dis.substring(1, dis.length());
+                        String[] disArray = line.split(":");
+                        if (disArray.length>2) {
+                            String dis = line.split(":")[1].trim();
+                            if (dis.startsWith("/")) {
+                                dis = dis.substring(1, dis.length());
+                            }
+                            if (dis.endsWith("/")) {
+                                dis = dis.substring(0, dis.length() - 1);
+                            }
+                            disallow.add(dis);
                         }
-                        if (dis.endsWith("/")) {
-                            dis = dis.substring(0, dis.length() - 1);
-                        }
-                        disallow.add(dis);
                         //logger.info("Disallow: " + dis + " (trimmed)");
                     } else if (line.contains("Crawl-delay:") && record) {
-                        crawlDelay = Integer.parseInt(line.split(":")[1].trim());
+                        String[] crawlArray = line.split(":");
+                        if (crawlArray.length>2) {
+                            crawlDelay = Integer.parseInt(crawlArray[1].trim());
+                        }
                     }
                 }
+
                 robotsTxt.setCrawlDelay(crawlDelay);
                 robotsTxt.setDisallows(disallow);
                 robotsTxt.setHost(robotsURL.toString());
-                logger.debug("Fetch robots done\n\n");
+                logger.debug("["+robotsURL.toString()+"] Fetch robots done\n\n");
                 in.close();
             } else {
-                logger.debug("No robots.txt at: " + robotsURL+"; storing dummy constraints");
+                logger.debug("No robots.txt at: " + robotsURL.toString()+"; storing dummy constraints");
                 robotsTxt.setCrawlDelay(0);
                 robotsTxt.setDisallows(new HashSet<String>());
                 robotsTxt.setHost(robotsURL.toString());
