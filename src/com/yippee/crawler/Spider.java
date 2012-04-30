@@ -9,7 +9,6 @@ import com.yippee.util.LinkTextExtractor;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,8 +61,6 @@ public class Spider implements Runnable {
         logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
         while (running && Configuration.getInstance().isUp()) {
             try {
-
-                logger.info("start spider ");
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
                 //url.getURL()
@@ -71,29 +68,26 @@ public class Spider implements Runnable {
                 Document doc = null;
                 HttpModule httpModule = new HttpModule(urlToCrawl);
 
+                String content = httpModule.getContent();
+
+                if (!httpModule.isValid()) continue; // There was an error!
+
                 DocAug docAug = new DocAug();
-                docAug.setDoc(httpModule.getContent());
+                docAug.setDoc(content);
                 docAug.setUrl(urlToCrawl.toString());
                 docAug.setId(urlToCrawl.toString() + "timestamp");
-                try {
-                    doc = parser.parseDoc(docAug);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBRoot());
 
                 dam.push(docAug);
-                logger.info("2");
                 LinkTextExtractor linkEx = new LinkTextExtractor();
-                linkEx.extract(urlToCrawl.toString(), doc);
-                ArrayList<String> links = linkEx.getLinks();
+                ArrayList<String> links = linkEx.smartExtract(urlToCrawl, content);
 
-                //Store state periodically
-                if(System.nanoTime() % 100 == 0){
-                	urlFrontier.save();
-                	logger.debug("Stored frontier state");
-                }
-                
+                //Store state periodically --
+                // TODO: it will either be another thread or a per url basis
+//                if(System.nanoTime() % 100 == 0){
+//                	urlFrontier.save();
+//                	logger.debug("Stored frontier state");
+//                }
+
                 RobotsModule robotsModule = new RobotsModule();
                 for (String newUrl : links){
                     if (newUrl.contains("https")) {
