@@ -7,6 +7,7 @@
     <property name="lib.dir" value="${basedir}/lib"/>
     <property name="src.dir" value="${basedir}/src"/>
     <property name="tst.dir" value="${basedir}/test"/>
+    <property name="db.dir" value="${basedir}/db"/>
     <property name="out.dir" value="${basedir}/build"/>
     <property name="jar.dir" value="${basedir}/build"/>
     <property name="bootPort" value="9001"/>
@@ -91,6 +92,15 @@
 
     <target name="clean">
         <delete dir="${out.dir}"/>
+    </target>
+
+    <target name="clean-database">
+        <delete dir="${db.dir}/integ/">
+                <exclude name="**/.gitignore"/>
+        </delete>
+        <delete dir="${db.dir}/test/">
+                <exclude name="**/*.gitignore"/>
+        </delete>
     </target>
 
     <target name="compile">
