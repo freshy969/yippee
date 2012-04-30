@@ -94,7 +94,7 @@
         <delete dir="${out.dir}"/>
     </target>
 
-    <target name="clean-database">
+    <target name="clean-database" description="Clean test and integ DBs">
         <delete dir="${db.dir}/integ/">
                 <exclude name="**/.gitignore"/>
         </delete>
