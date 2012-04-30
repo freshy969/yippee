@@ -97,11 +97,10 @@ public class RobotsModule {
 
             logger.debug("Starting fetch robots");
             urlConnection = (HttpURLConnection) robotsURL.openConnection();
+            urlConnection.setRequestProperty("user-agent", "cis455crawler");
 
             if (urlConnection.getResponseCode() == 200) {
                 robotsTxt = new RobotsTxt();
-
-                urlConnection.setRequestProperty("user-agent", "cis455crawler");
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         urlConnection.getInputStream()));
 
