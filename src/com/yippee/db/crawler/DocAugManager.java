@@ -42,7 +42,7 @@ public class DocAugManager {
             // Open the data accessor. This is used to store
             // persistent objects.m
             dao.getDocById().put(docAug);
-            logger.debug("Stored DocAug: " + docAug.getUrl());
+            logger.info("Stored DocAug: " + docAug.getUrl());
         } catch (DatabaseException e) {
             System.out.println("Exception: " + e.toString());
             e.printStackTrace();

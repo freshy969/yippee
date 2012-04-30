@@ -63,7 +63,6 @@ public class Spider implements Runnable {
         while (running && Configuration.getInstance().isUp()) {
             try {
 
-                logger.info("start spider ");
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
                 //url.getURL()
@@ -80,13 +79,10 @@ public class Spider implements Runnable {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBRoot());
-                logger.info("1");
-
-                logger.info("1");
-                
+                logger.info("Pushing something to: " + Configuration.getInstance().getBerkeleyDBRoot());
+                logger.info("\t from URL: " + urlToCrawl.toString());
                 dam.push(docAug);
-                logger.info("2");
+                
                 LinkTextExtractor linkEx = new LinkTextExtractor();
                 linkEx.extract(urlToCrawl.toString(), doc);
                 ArrayList<String> links = linkEx.getLinks();
@@ -103,7 +99,7 @@ public class Spider implements Runnable {
                 
                 RobotsModule robotsModule = new RobotsModule();
                 for (String newUrl : links){
-                    logger.info("Found URL " + newUrl);
+                    logger.debug("Found URL " + newUrl);
                     URL url;
                     try {
                         url = new URL(newUrl);
