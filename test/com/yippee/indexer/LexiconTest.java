@@ -4,6 +4,7 @@ package com.yippee.indexer;
 import com.yippee.indexer.Lexicon;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
@@ -21,29 +22,27 @@ public class LexiconTest {
     static Logger logger = Logger.getLogger(LexiconTest.class);
 	Lexicon mLexicon;
 	String test = "word";
+	HashMap<String, byte[]> lexiconMap;
 	
     @Before
     public void setUp(){
         mLexicon = new Lexicon("doc/lexicon.txt");
+        lexiconMap = mLexicon.getLexiconMap();
     }
 	
     @Test
     public void testIsInLexicon(){
-        assertTrue(mLexicon.isInLexicon(test));
+        assertTrue(lexiconMap.containsKey(test));
     }
     
-    @Test
-    public void testGetWord(){
-    	byte[] id = mLexicon.getWordId(test);
-    	String word = mLexicon.getWord(id);
-        assertTrue(word.equals(test));
-    }
     
     @Test
     public void testGetWordId(){
-    	byte[] id = mLexicon.getWordId(test);
-    	byte[] id2 = mLexicon.getWordId(test);
+    	byte[] id = lexiconMap.get(test);
+    	byte[] id2 = lexiconMap.get(test);
         assertTrue(Arrays.equals(id, id2));
     }
+    
+    
     
 }

@@ -51,7 +51,7 @@ public class NodeFactory {
 		this.port = port;
 		nidFactory = new RandomNodeIdFactory(env);
 		try {
-			//this.env.getParameters().setString("pastry_socket_allow_loopback","true" );
+			this.env.getParameters().setString("pastry_socket_allow_loopback","true" );
 			factory = new SocketPastryNodeFactory(nidFactory, port, env);
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe.getMessage(), ioe);

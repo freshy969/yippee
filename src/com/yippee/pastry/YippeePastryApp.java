@@ -1,5 +1,7 @@
 package com.yippee.pastry;
 
+import java.nio.ByteBuffer;
+
 import com.yippee.crawler.frontier.URLFrontier;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
@@ -31,6 +33,8 @@ public class YippeePastryApp implements Application {
         logger.info("Register Application");
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "Yippee App");
+        
+        endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
     }
 
