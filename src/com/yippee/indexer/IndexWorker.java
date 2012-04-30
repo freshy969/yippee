@@ -63,7 +63,7 @@ public class IndexWorker extends Thread {
 					pollDelay *= 2;
 			}
 				
-			System.out.println("Retrieved: " + docAug.getId());
+//			System.out.println("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
 	    	
