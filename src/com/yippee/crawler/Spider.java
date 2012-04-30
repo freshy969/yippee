@@ -81,19 +81,16 @@ public class Spider implements Runnable {
                     e.printStackTrace();
                 }
                 logger.info("Pushing something " + Configuration.getInstance().getBerkeleyDBRoot());
-                logger.info("1");
 
-                logger.info("1");
-                
                 dam.push(docAug);
                 logger.info("2");
                 LinkTextExtractor linkEx = new LinkTextExtractor();
                 linkEx.extract(urlToCrawl.toString(), doc);
                 ArrayList<String> links = linkEx.getLinks();
-                for(String s : links){
-                	logger.debug("Found link: " + s);
-                	urlFrontier.push(new Message(s));
-                }
+//                for(String s : links){
+//                	logger.debug("Found link: " + s);
+//                	urlFrontier.push(new Message(s));
+//                }
                 
                 //Store state periodically
                 if(System.nanoTime() % 100 == 0){
@@ -103,6 +100,9 @@ public class Spider implements Runnable {
                 
                 RobotsModule robotsModule = new RobotsModule();
                 for (String newUrl : links){
+                    if (newUrl.contains("https")) {
+                        continue;
+                    }
                     logger.info("Found URL " + newUrl);
                     URL url;
                     try {
