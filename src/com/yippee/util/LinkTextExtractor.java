@@ -1,13 +1,18 @@
 package com.yippee.util;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.tidy.Tidy;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LinkTextExtractor {
     /**
@@ -21,6 +26,57 @@ public class LinkTextExtractor {
 		links = new ArrayList<String>();
 		text = new ArrayList<String>();
 	}
+
+    /**
+     * Do a number of housekeeping for .html pages:
+     *  *   Tidy-up markup
+     *  *   Extract links
+     *  *   normalize links
+     *
+     *  .. and return link urls
+     */
+    public static List extract(URL url, String content){
+        String path = url.getPath();
+        String responseText = "";
+        List anchors = new ArrayList<String>();
+        logger.debug("Path to tidyUp:" + path );
+        if (!path.contains(".") || path.substring(path.lastIndexOf(".")).contains("htm")) {
+            ByteArrayInputStream is = new ByteArrayInputStream(responseText.getBytes());
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            Tidy tidy = new Tidy();
+            tidy.setXHTML(true);
+            tidy.setDocType("strict");
+            tidy.setMakeClean(true);
+            tidy.setQuiet(false);
+            tidy.setIndentContent(true);
+            tidy.setSmartIndent(true);
+            tidy.setIndentAttributes(true);
+            tidy.setShowWarnings(false);
+            tidy.setWord2000(true);
+            //tidy.setWrapAttVals(true);
+            //tidy.setWraplen(99999999);
+            Document document = tidy.parseDOM(is, os);
+            NodeList links = document.getElementsByTagName("a");
+            //TODO: grab qualified name
+            boolean weHadNull = false;
+            for (int i = 0; i <links.getLength(); i++) {
+
+                Node node = links.item(i).getAttributes().getNamedItem("href");
+                logger.info(links.getLength() + "\t"+links.item(i).getLocalName());
+                if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
+                    anchors.add(node.getNodeValue());      //getAttributes("href");
+                } else {
+                    System.out.println("There was a null href?");
+                    weHadNull = true;
+                }
+            }
+            responseText = os.toString();
+        }
+        responseText = responseText.replaceAll("<!DOCTYPE((.|\n|\r)*?)\">", "");
+        return anchors;
+    }
+
+
 	
 	/**
 	 * Recursively extracts all <a> tags in an HTML document and returns them as a list to be added to the queue to be crawled
