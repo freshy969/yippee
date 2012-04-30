@@ -136,7 +136,7 @@ public class EntryPoint {
             }
         } else { // load URLFrontier from database
             logger.warn("No overwrite -- loading frontier from the database");
-            urlFrontier.load();
+            //urlFrontier.load();
         }
         if (success) {
             Configuration.getInstance().getPastryEngine().sendPing();
