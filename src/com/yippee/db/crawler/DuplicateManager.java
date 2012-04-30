@@ -13,7 +13,7 @@ public class DuplicateManager {
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */
-    static Logger logger = Logger.getLogger(RobotsManager.class);
+    static Logger logger = Logger.getLogger(DuplicateManager.class);
     private static CrawlerDBEnv myDbEnv;
     private DAL dao;
 
