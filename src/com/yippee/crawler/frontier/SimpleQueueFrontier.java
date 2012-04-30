@@ -7,12 +7,12 @@ import com.yippee.db.crawler.model.FrontierSavedState;
 import org.apache.log4j.Logger;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class SimpleQueueFrontier implements URLFrontier {
 	/**
@@ -20,15 +20,19 @@ public class SimpleQueueFrontier implements URLFrontier {
      */
     static Logger logger = Logger.getLogger(SimpleQueueFrontier.class);
 
-	BlockingQueue<URL> urls;
+	ArrayList<URL> urls;
 	
 	
 	public SimpleQueueFrontier(){
-		urls = new LinkedBlockingQueue<URL>();
+		urls = new ArrayList<URL>();
 	}
 
 	public Message pull() throws InterruptedException {	
-		URL url = urls.take();
+		URL url = null;
+		synchronized(urls){
+			url = urls.remove(0); 
+		}
+		 
 		
 		logger.debug("Giving url to thread: " + url.toString());
 		return new Message(url.toString());
@@ -37,24 +41,34 @@ public class SimpleQueueFrontier implements URLFrontier {
 	public void push(Message message) {
 		if(message != null && message.getURL() != null){
 			logger.debug("Message pushed to frontier: " + message.getURL());
-			urls.add(message.getURL());
+			synchronized(urls){
+				urls.add(message.getURL());
+			}
+			
 		}
 			
 	}
 
 	public boolean save() {
-		logger.debug("SimpleQueueFrontier storing state... ");
+		logger.info("SimpleQueueFrontier storing state... ");
 		URLFrontierManager fm = new URLFrontierManager();
 		
 		Map<Integer, Queue<URL>> queues = new HashMap<Integer, Queue<URL>>();
-		queues.put(0, urls);
+		Queue<URL> tempQueue = new LinkedList<URL>();
+		synchronized(urls){
+			for(URL url : urls){
+				tempQueue.add(url);
+			}
+		}
+		
+		queues.put(0, tempQueue);
 
 		return fm.storeState(queues);
 	}
 
 	public boolean load() {
 		
-		logger.debug("SimpleQueueFrontier loading state... ");
+		logger.info("SimpleQueueFrontier loading state... ");
 
 		URLFrontierManager fm = new URLFrontierManager();
 
