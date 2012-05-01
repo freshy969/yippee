@@ -28,7 +28,6 @@ public class Hit implements Serializable {
 	private boolean anchor = false;
 	private String docIDfrom;
 	private int position;
-	
 				
 	/**
 	 * constructor for a normal Hit - need docID it came from, wordId for that word, and 

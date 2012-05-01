@@ -7,6 +7,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -87,12 +88,13 @@ public class HitTest {
 			list.add(h2);
 			list.add(h3);
 			out.writeObject(list);
-			byte[] yourBytes = bos.toByteArray();
+			byte[] b = bos.toByteArray();
+			ByteBuffer yourBytes = ByteBuffer.wrap(b);
 			out.close();
 			bos.close();
 			
 			//RECEIVE
-			ByteArrayInputStream bis = new ByteArrayInputStream(yourBytes);
+			ByteArrayInputStream bis = new ByteArrayInputStream(yourBytes.array());
 			ObjectInput in;
 			in = new ObjectInputStream(bis);
 			ArrayList<Hit> o = (ArrayList<Hit>)in.readObject();
