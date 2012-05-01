@@ -70,7 +70,7 @@ public class Spider implements Runnable {
                 logger.info("Got content from url: " + urlToCrawl);
 
                 String content = httpModule.getContent();
-                logger.info("Downloaded content: \n" + content + "\n\n");
+                
                 if (!httpModule.isValid()) continue; // There was an error!
 
                 DocAug docAug = new DocAug();

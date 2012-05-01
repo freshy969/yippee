@@ -47,7 +47,7 @@ public class LinkTextExtractor {
         if (!path.contains(".") || path.substring(path.lastIndexOf(".")).contains("htm")) {
         	
         	logger.info("Made it inside conditional");
-        	logger.info("Contents: \n" + content);
+        	
         	
             ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -67,6 +67,10 @@ public class LinkTextExtractor {
             //tidy.setWrapAttVals(true);
             //tidy.setWraplen(99999999);
             Document document = tidy.parseDOM(is, os);
+            
+            //Tidy is returning null for some pages which otherwise seem ok
+            // eg. wordpress.com
+            if(document == null) return anchors;
             
             logger.info("Document made by tidy: " + document);
             
@@ -88,11 +92,11 @@ public class LinkTextExtractor {
                 if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
                     if (node.getNodeValue().startsWith("http")) {
                     	
-                    	logger.info("About to add to anchor list: " + node.getNodeName());
+                    	logger.info("About to add to anchor list: " + node.getNodeValue());
                         anchors.add(node.getNodeValue());      //getAttributes("href");
                     } else {
                         try {
-                        	logger.info("About to add to achnor list (resolved):\n\t\t" + url.toString() + " + " + node.getNodeName());
+                        	logger.info("About to add to achnor list (resolved):\n\t\t" + url.toString() + " + " + node.getNodeValue());
                         	
                             anchors.add(resolve(url.toString(), node.getNodeValue()));
                         } catch (MalformedURLException e) {
