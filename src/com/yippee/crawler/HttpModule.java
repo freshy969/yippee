@@ -86,6 +86,7 @@ public class HttpModule {
      * @return content as a string
      */
     public String getContent() {
+    	content = "";
         if (content == null) {
             try {
 

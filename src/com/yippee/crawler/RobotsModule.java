@@ -12,6 +12,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class RobotsModule {
     /**
@@ -26,9 +28,11 @@ public class RobotsModule {
      * The robots.txt database manager
      */
     private RobotsManager rm;
+    private ConcurrentMap<String, RobotsTxt> robotsCache;
 
     public RobotsModule() {
         rm = new RobotsManager();
+        robotsCache = new ConcurrentHashMap<String, RobotsTxt>();
     }
 
     /**
@@ -43,7 +47,15 @@ public class RobotsModule {
         boolean result = true;
         try {
             robotsURL = new URL(url.getProtocol() + "://" + url.getHost() + "/robots.txt");
-
+            
+            if(robotsCache.containsKey(url.getHost())){
+            	//answer from cache
+            	logger.info("Robots cache hit for: " + url.getHost());
+            	return robotsCache.get(url.getHost()).allowedToCrawl(url);
+            }
+            
+            
+            //Not in cache, check DB
             RobotsTxt robotsTxt = new RobotsTxt();
             if (!rm.read(robotsURL.getHost(), robotsTxt)) {
                 robotsTxt = fetchRobots();
@@ -51,11 +63,13 @@ public class RobotsModule {
 
             if (robotsTxt != null) {
                 rm.create(robotsTxt);
+                
                 for (String disallow : robotsTxt.getDisallows()) {
                     if (url.toString().contains(disallow)) {
                         result = false;
                     }
                 }
+                
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

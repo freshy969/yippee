@@ -70,7 +70,7 @@ public class Spider implements Runnable {
                 logger.info("Got content from url: " + urlToCrawl);
 
                 String content = httpModule.getContent();
-
+                logger.info("Downloaded content: \n" + content + "\n\n");
                 if (!httpModule.isValid()) continue; // There was an error!
 
                 DocAug docAug = new DocAug();
@@ -85,13 +85,23 @@ public class Spider implements Runnable {
                 try {
                 	logger.info("About to extract links");
                     links = linkEx.smartExtract(urlToCrawl, content);
+                    
+                    
                 } catch (CrawlerException e) {
                     System.out.println("ERROR!!!");
                     continue;
+                } catch(NullPointerException e){
+                	System.out.println("Null Pointer in ");
+                	logger.info("NullPointer in LinkExtractor", e);
+                	continue;
                 }
                 logger.info("Done extracting links");
+                
+                
+                if(links.size() > 0) logger.info("Found some links");
 
                 logger.info("Asking robots for each link");
+                
                 RobotsModule robotsModule = new RobotsModule();
                 int i = 0;
                 for (String newUrl : links){
@@ -102,6 +112,9 @@ public class Spider implements Runnable {
                     URL url;
                     try {
                         url = new URL(newUrl);
+                        
+                        logger.info("About to ask robots about: " + url);
+                        
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                         continue; // skip that url
