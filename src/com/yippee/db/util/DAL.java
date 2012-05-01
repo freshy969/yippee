@@ -8,6 +8,7 @@ import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.crawler.model.DuplicateURL;
 import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.crawler.model.RobotsTxt;
+import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.HitList;
 import com.yippee.db.indexer.model.Word;
 import com.yippee.db.pastry.model.NodeState;
@@ -55,6 +56,10 @@ public class DAL {
      * Pastry node saved state accessor
      */
     PrimaryIndex<Integer, NodeState> nodeStateByVersion;
+    /**
+     * DocEntry state accessor
+     */
+    PrimaryIndex<String, DocEntry> docEntryByURL;
 
     /**
      * Data access layer constructor
@@ -79,6 +84,8 @@ public class DAL {
         frontierSavedStateByVersion = store.getPrimaryIndex(Integer.class, FrontierSavedState.class);
         //Pastry Node Saved State Index
         nodeStateByVersion = store.getPrimaryIndex(Integer.class, NodeState.class);
+        //DocEntry index
+        docEntryByURL = store.getPrimaryIndex(String.class, DocEntry.class);
     }
 
     /**
@@ -186,4 +193,8 @@ public class DAL {
 		return nodeStateByVersion;
 	}
 	
+	public PrimaryIndex<String, DocEntry> getDocEntryByURL() {
+		// TODO Auto-generated method stub
+		return docEntryByURL;
+	}	
 }
