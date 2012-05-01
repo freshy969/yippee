@@ -43,7 +43,7 @@ public class RobotsModule {
      * @param url the url to be crawled
      * @return yes if allowed; no o/w
      */
-    public boolean alowedToCrawl(URL url) {
+    public boolean allowedToCrawl(URL url) {
         boolean result = true;
         try {
             robotsURL = new URL(url.getProtocol() + "://" + url.getHost() + "/robots.txt");

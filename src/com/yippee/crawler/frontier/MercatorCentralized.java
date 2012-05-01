@@ -150,7 +150,7 @@ public class MercatorCentralized implements URLFrontier{
 			URL url = message.getURL();
 
 			//Get queue of priority returned by prioritizer, add url to that queue
-			if(robots.alowedToCrawl(url))
+			if(robots.allowedToCrawl(url))
 				frontEndQueues.get((prioritizer.getPriority(url))).add(url);
 
 

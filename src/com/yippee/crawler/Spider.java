@@ -121,7 +121,7 @@ public class Spider implements Runnable {
                     }
                     
                     try{
-                    	if (robotsModule.alowedToCrawl(url)){
+                    	if (robotsModule.allowedToCrawl(url)){
                              Configuration.getInstance().getPastryEngine().sendURL(url);
                          }
                     }catch(IllegalStateException e){

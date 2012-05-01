@@ -37,17 +37,17 @@ public class RobotsModuleTest {
 
     @Test
     public void testModuleFetchesRobotsTxt() throws MalformedURLException {
-        assertTrue(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu")));
+        assertTrue(rm.allowedToCrawl(new URL("http://crawltest.cis.upenn.edu")));
     }
 
     @Test
     public void testForbidden() throws MalformedURLException {
-        assertFalse(rm.alowedToCrawl(new URL("http://crawltest.cis.upenn.edu/marie/private")));
+        assertFalse(rm.allowedToCrawl(new URL("http://crawltest.cis.upenn.edu/marie/private")));
     }
 
         @Test
     public void testNoRobts() throws MalformedURLException {
-        assertTrue(rm.alowedToCrawl(new URL("http://n.vasilak.is")));
+        assertTrue(rm.allowedToCrawl(new URL("http://n.vasilak.is")));
     }
 
     @Test
