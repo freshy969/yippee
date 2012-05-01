@@ -60,17 +60,31 @@ public class RobotsModule {
             if (!rm.read(robotsURL.getHost(), robotsTxt)) {
                 robotsTxt = fetchRobots();
             }
-
+            
+            //Put this robots in the database
             if (robotsTxt != null) {
                 rm.create(robotsTxt);
                 
-                for (String disallow : robotsTxt.getDisallows()) {
-                    if (url.toString().contains(disallow)) {
-                        result = false;
-                    }
-                }
-                
+            } else{
+            	//Create a default object for this host 
+            	robotsTxt = new RobotsTxt();
+            	
+            	robotsTxt.setHost(url.getHost());
+            	robotsTxt.setDisallows(new HashSet<String>());
+            	robotsTxt.setCrawlDelay(0);
+            	rm.create(robotsTxt);
             }
+            
+            
+            //Answer the query
+            //TODO this isnt the right way to handle this.
+            for (String disallow : robotsTxt.getDisallows()) {
+                if (url.toString().contains(disallow)) {
+                    result = false;
+                }
+            }
+            
+            
         } catch (MalformedURLException e) {
             e.printStackTrace();
             logger.info("Error with robots.txt");
@@ -166,6 +180,9 @@ public class RobotsModule {
         } catch (IOException e) {
             e.printStackTrace();
             logger.info("Error parsing robots.txt for " + robotsURL.toString());
+            
+            //If there's a problem, return null
+            return null;
         }
         return robotsTxt;
     }
