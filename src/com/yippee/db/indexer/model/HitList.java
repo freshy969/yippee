@@ -14,6 +14,10 @@ public class HitList {
 	private String id;
 	
 	private byte[] wordId;
+	private float idf;
+	private float df;
+//	private HashMap<Doc, float> tfMap;
+	
 	
 	/**
 	 * list of hits for that word
