@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -177,6 +178,12 @@ public class RobotsModule {
                 robotsTxt.setDisallows(new HashSet<String>());
                 robotsTxt.setHost(robotsURL.toString());
             }
+        } catch (UnknownHostException e){
+        	//e.printStackTrace();
+            logger.info("Unknown host exception.  Skipping url: " + robotsURL.toString());
+            
+            //If there's a problem, return null
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
             logger.info("Error parsing robots.txt for " + robotsURL.toString());

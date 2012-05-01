@@ -45,10 +45,7 @@ public class LinkTextExtractor {
         ArrayList<String> anchors = new ArrayList<String>();
         System.out.println("Path to tidyUp:" + path);
         if (!path.contains(".") || path.substring(path.lastIndexOf(".")).contains("htm")) {
-        	
-        	logger.info("Made it inside conditional");
-        	
-        	
+
             ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             Tidy tidy = new Tidy();
@@ -92,11 +89,11 @@ public class LinkTextExtractor {
                 if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
                     if (node.getNodeValue().startsWith("http")) {
                     	
-                    	logger.info("About to add to anchor list: " + node.getNodeValue());
+                    	//logger.info("About to add to anchor list: " + node.getNodeValue());
                         anchors.add(node.getNodeValue());      //getAttributes("href");
                     } else {
                         try {
-                        	logger.info("About to add to achnor list (resolved):\n\t\t" + url.toString() + " + " + node.getNodeValue());
+                        	//logger.info("About to add to anchor list (resolved):\n\t\t" + url.toString() + " + " + node.getNodeValue());
                         	
                             anchors.add(resolve(url.toString(), node.getNodeValue()));
                         } catch (MalformedURLException e) {

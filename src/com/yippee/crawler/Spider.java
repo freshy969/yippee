@@ -113,7 +113,7 @@ public class Spider implements Runnable {
                     try {
                         url = new URL(newUrl);
                         
-                        logger.info("About to ask robots about: " + url);
+                        //logger.info("About to ask robots about: " + url);
                         
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
