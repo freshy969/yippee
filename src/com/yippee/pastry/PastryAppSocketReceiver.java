@@ -1,6 +1,7 @@
 package com.yippee.pastry;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
@@ -17,7 +18,7 @@ public class PastryAppSocketReceiver implements AppSocketReceiver {
 	private Endpoint endpoint;
 	private ByteBuffer in;
 	private Node node;
-	private int MSG_LENGTH;
+	private int MSG_LENGTH = 1024;
 	private ArrayList<Hit> hitList;
 	
 	public PastryAppSocketReceiver(Node node, Endpoint endpoint){
@@ -25,8 +26,9 @@ public class PastryAppSocketReceiver implements AppSocketReceiver {
 		this.node = node;
 		this.endpoint = endpoint;
         //setting up for AppSocket
-        MSG_LENGTH = node.getLocalNodeHandle().getId().toByteArray().length; 
+        //MSG_LENGTH = node.getLocalNodeHandle().getId().toByteArray().length; 
         in = ByteBuffer.allocate(MSG_LENGTH);
+       
 	}
 
 	@Override
@@ -37,31 +39,26 @@ public class PastryAppSocketReceiver implements AppSocketReceiver {
 	@Override
 	public void receiveSelectResult(AppSocket socket, boolean canRead, boolean canWrite)
 			throws IOException {
-		in.clear();
- 	        try {
- 	          // read from the socket into ins
- 	          long ret = socket.read(in);   
- 	         
- 	          if (ret != MSG_LENGTH) {
- 	            // if you sent any kind of long message, you would need to handle this case better
- 	            System.out.println("Error, we only received part of a message."+ret+" from "+socket);
- 	            return;
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			in.clear();
+ 	        try { 
+ 	          while(socket.read(in)>0){
+ 	        	  bos.write(in.array());
+ 	        	  in.clear();
  	          }
- 	           
- 	          System.out.println(node.getLocalNodeHandle()+" Received message from "+node.getIdFactory().buildId(in.array()));       
+ 	          bos.close();
  	        } catch (IOException ioe) {
  	          ioe.printStackTrace();
  	        }
  	        
  	        //parse what read in
 			try {
-	 	        ByteArrayInputStream bis = new ByteArrayInputStream(in.array());
+	 	        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
 				ObjectInput objectInput = new ObjectInputStream(bis);
 				hitList = (ArrayList<Hit>)objectInput.readObject();
 				bis.close();
 				objectInput.close();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

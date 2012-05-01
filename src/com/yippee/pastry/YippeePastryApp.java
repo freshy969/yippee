@@ -1,8 +1,12 @@
 package com.yippee.pastry;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.db.indexer.model.Hit;
+import com.yippee.pastry.PastryAppSocketSender;
+
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
@@ -93,6 +97,12 @@ public class YippeePastryApp implements Application {
         message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
+    
+    public void sendSocketDirect(NodeHandle nh, ArrayList<Hit> list) {
+    	logger.info(this + " sending hit list direct to " + nh);
+        endpoint.connect(nh, new PastryAppSocketSender(node,endpoint,list), 30000);
+    }
+    
 
     /**
      * This is always true in our application.

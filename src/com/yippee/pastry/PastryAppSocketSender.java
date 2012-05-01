@@ -1,9 +1,12 @@
 package com.yippee.pastry;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -22,13 +25,30 @@ public class PastryAppSocketSender implements AppSocketReceiver {
 	private int MSG_LENGTH;
 	private ArrayList<Hit> hitList;
 	
-	public PastryAppSocketSender(Node node, Endpoint endpoint){
-		hitList = new ArrayList<Hit>();
+	public PastryAppSocketSender(Node node, Endpoint endpoint, ArrayList<Hit> hitList){
+		this.hitList = hitList;
 		this.node = node;
 		this.endpoint = endpoint;
         //setting up for AppSocket
-		out = ByteBuffer.wrap(node.getLocalNodeHandle().getId().toByteArray());  
+		this.out = convertToByteBuffer(hitList);
 
+	}
+	
+	public ByteBuffer convertToByteBuffer(ArrayList<Hit> list){
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutput out2;
+		try {
+			out2 = new ObjectOutputStream(bos);
+			out2.writeObject(list);
+			byte[] b = bos.toByteArray();
+			ByteBuffer yourBytes = ByteBuffer.wrap(b);
+			out2.close();
+			bos.close();
+			return yourBytes;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return null;
 	}
 
 	@Override
@@ -52,7 +72,6 @@ public class PastryAppSocketSender implements AppSocketReceiver {
  	        } catch (IOException ioe) {
  	           ioe.printStackTrace();
  	        }
-
 	}
 
 	@Override

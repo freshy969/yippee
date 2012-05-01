@@ -1,9 +1,14 @@
 package com.yippee.pastry;
 
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.db.indexer.model.Hit;
+
 import org.apache.log4j.Logger;
 
+import rice.p2p.commonapi.NodeHandle;
+
 import java.net.*;
+import java.util.ArrayList;
 
 /**
  * YippeeEngine makes use of the YippeePastryApp to create an application instance
@@ -69,4 +74,8 @@ public class YippeeEngine {
     public void setupURLFrontier(URLFrontier urlFrontier){
         yippeePastryApp.setupURLFrontier(urlFrontier);
     }
+    
+    public void sendObject(NodeHandle nh, ArrayList<Hit> list ){
+           yippeePastryApp.sendSocketDirect(nh, list);
+       }
 }
