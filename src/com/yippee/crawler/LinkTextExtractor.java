@@ -38,8 +38,9 @@ public class LinkTextExtractor {
     	logger.info("smartExtract started on: " + url);
     	
         String path = url.getPath();
+        //TODO What is path
         if(path == null) path = "";
-        logger.info("path: '" + path + "'");
+       // logger.info("path: '" + path + "'");
         
         String responseText = "";
         ArrayList<String> anchors = new ArrayList<String>();
@@ -69,7 +70,7 @@ public class LinkTextExtractor {
             // eg. wordpress.com
             if(document == null) return anchors;
             
-            logger.info("Document made by tidy: " + document);
+            logger.debug("Document made by tidy: " + document);
             
             // the number of errors that occurred in the most recent parse operation.
             if (tidy.getParseErrors() > 0 ){
@@ -79,7 +80,7 @@ public class LinkTextExtractor {
             //document.normalize();
             NodeList links = document.getElementsByTagName("a");
             //TODO: grab qualified name
-            logger.info("No of links: " + links.getLength());
+            logger.debug("No of links: " + links.getLength());
             for (int i = 0; i <links.getLength(); i++) {
                 Node node = links.item(i).getAttributes().getNamedItem("href");
                 if (node == null) {
@@ -98,11 +99,11 @@ public class LinkTextExtractor {
                             anchors.add(resolve(url.toString(), node.getNodeValue()));
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
-                            System.out.println("Error extacting URL!");
+                            logger.debug("Error extacting URL!");
                         }
                     }
                 } else {
-                    System.out.println("There was a null href?");
+                    logger.debug("There was a null href?");
                 }
             }
             responseText = os.toString();
@@ -148,7 +149,7 @@ public class LinkTextExtractor {
 						links.add(link);
 					}catch(MalformedURLException e){
 						//Do nothing with this link, absolute url could not be formed
-						//TODO Add logging here
+						logger.warn("MalformedURLException", e);
 					}
 					
 
