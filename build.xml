@@ -161,6 +161,7 @@
     <target name="project-test-crawler" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
             <antcall target="run">
+                <param name="localPort" value="9000"/>
                 <param name="localPort" value="9001"/>
                 <param name="database" value="db/test"/>
                 <param name="service" value="-C"/>
@@ -170,6 +171,7 @@
     <target name="project-test-indexer" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
             <antcall target="run">
+                <param name="localPort" value="10000"/>
                 <param name="localPort" value="10001"/>
                 <param name="database" value="db/test"/>
                 <param name="service" value="-I"/>
