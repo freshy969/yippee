@@ -11,6 +11,9 @@ import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class FancyExtractorTest {
     /**
@@ -84,30 +87,38 @@ public class FancyExtractorTest {
     	
     	fe.extract("http://crawltest.cis.upenn.edu", doc);    
     	
-    	ArrayList<Hit> hitList = fe.getHitList();
+    	HashMap<String, ArrayList<Hit>> hitMap = fe.getHitList();
     	
-    	Lexicon lexicon = new Lexicon("doc/lexicon.txt");
+    	Set<String> keys = hitMap.keySet();
+    	Iterator<String> iter = keys.iterator();
     	
-    	for (int i = 0; i < hitList.size(); i++) {
-    		Hit hit = hitList.get(i);
-    		
-    		System.out.print("[" + hit.getPosition() + "]");
-    		
-    		if(hit.isBold())
-    			System.out.print("[BOLD]");
-    		
-    		if(hit.isItalicize())
-    			System.out.print("[ITAL]");
+    	while(iter.hasNext()) {
     	
-    		System.out.println(": " + hit.getWord());	
+    		String word = iter.next();
+	    	ArrayList<Hit> hitList = hitMap.get(word); 
+	    	
+//	    	Lexicon lexicon = new Lexicon("doc/lexicon.txt");
+	    	
+	    	for (int i = 0; i < hitList.size(); i++) {
+	    		Hit hit = hitList.get(i);
+	    		
+	    		System.out.print("[" + hit.getPosition() + "]");
+	    		
+	    		if(hit.isBold())
+	    			System.out.print("[BOLD]");
+	    		
+	    		if(hit.isItalicize())
+	    			System.out.print("[ITAL]");
+	    	
+	    		System.out.println(": " + hit.getWord());	
+	    	}
     	}
     	
+	    ArrayList<Hit> anchorHitList = fe.getAnchorList();
     	
-    	hitList = fe.getAnchorList();
-    	
-    	for (int i = 0; i < hitList.size(); i++) {
-    		AnchorHit hit = (AnchorHit) hitList.get(i);
-    		
+    	for (int i = 0; i < anchorHitList.size(); i++) {
+    		AnchorHit hit = (AnchorHit) anchorHitList.get(i);
+		
     		System.out.print("[" + hit.getPosition() + "]");
     		
     		if(hit.isBold())
@@ -119,7 +130,8 @@ public class FancyExtractorTest {
     		System.out.println(": " + hit.getWord());
     		
     	}
-    
+	
+    	
     	System.out.println(fe.getTitle());
     }
 }

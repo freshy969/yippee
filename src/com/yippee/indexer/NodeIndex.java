@@ -17,44 +17,44 @@ public class NodeIndex {
      */
     static Logger logger = Logger.getLogger(NodeIndex.class);
 	
-	private HashMap<String, HitList> wordIndex;
+	private HashMap<String, ArrayList<Hit>> wordIndex;
 	private int capacity = 3;
-	private Lexicon lexicon;
-	private HashMap<String, byte[]> lexiconMap;
+//	private Lexicon lexicon;
+//	private HashMap<String, byte[]> lexiconMap;
 	
 	public NodeIndex() {
-		wordIndex = new HashMap<String, HitList>();
-		lexicon = new Lexicon("doc/lexicon.txt");
-		lexiconMap = lexicon.getLexiconMap();
+		wordIndex = new HashMap<String, ArrayList<Hit>>();
+//		lexicon = new Lexicon("doc/lexicon.txt");
+//		lexiconMap = lexicon.getLexiconMap();
 	}
 	
 	/**
 	 * adds all hits from a document into wordIndex
 	 * if word isnt there, make new entry. otherwise append the Hit
 	 * 
-	 * @param hits
+	 * @param hitMap
 	 */
-	public synchronized void addAllHits(HashMap<String, ArrayList<Hit>> hits) {
-		Set<String> keys = hits.keySet();
+	public synchronized void addAllHits(HashMap<String, ArrayList<Hit>> hitMap) {
+		Set<String> keys = hitMap.keySet();
 		Iterator<String> iter = keys.iterator();
 		
 		while(iter.hasNext()) {
 			
 			String word = iter.next();
 	
-			ArrayList<Hit> hitList = hits.get(word); 
+			ArrayList<Hit> hitList = hitMap.get(word); 
 			
-			HitList list;
+			ArrayList<Hit> list;
 			
 			if(wordIndex.containsKey(word)){
 				list = wordIndex.get(word);
 			} else {
-				list = new HitList(word);
+				list = new ArrayList<Hit>();
 			}
 			
 //			hit.setWordId(lexicon.);
 						
-			list.addHitList(hitList);
+			list.addAll(hitList);
 			
 			wordIndex.put(word, list);
 			
@@ -66,7 +66,7 @@ public class NodeIndex {
 		
 	}
 	
-	public synchronized HitList getHitList(String word){
+	public synchronized ArrayList<Hit> getHitList(String word){
 		return wordIndex.get(word);
 	}
 
@@ -77,7 +77,7 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 //			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
-			logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).getHitList().size() + "]");
+			logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class NodeIndex {
 		
 		while(iter.hasNext()) {
 			String word = iter.next();
-			System.out.println("[" + word + "=" + wordIndex.get(word).getHitList().size() + "]");
+			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
 		}
 		
 	}
