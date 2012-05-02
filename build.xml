@@ -150,6 +150,7 @@
             <arg value="${bootPort}"/>
             <arg value="feed.url"/>
             <arg value="${database}"/>
+            <arg value="${service}"/>
             <arg value="--overwrite"/>
         </java>
     </target>
@@ -162,6 +163,7 @@
             <antcall target="run">
                 <param name="localPort" value="9001"/>
                 <param name="database" value="db/test"/>
+                <param name="service" value="-C"/>
             </antcall>
     </target>
 
@@ -172,18 +174,22 @@
             <antcall target="run">
                 <param name="localPort" value="9001"/>
                 <param name="database" value="db/integ/node1"/>
+                <param name="service" value="-CI"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9002"/>
                 <param name="database" value="db/integ/node2"/>
+                <param name="service" value="-CI"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9003"/>
                 <param name="database" value="db/integ/node3"/>
+                <param name="service" value="-CI"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9004"/>
                 <param name="database" value="db/integ/node4"/>
+                <param name="service" value="-CI"/>
             </antcall>
         </parallel>
     </target>
