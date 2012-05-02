@@ -56,7 +56,8 @@ public class PoliteSimpleQueue implements URLFrontier {
 	 * Switches current queue with next.  Called as a result of current being empty.
 	 */
 	private void switchQueues() {
-
+		logger.info("Switching queues in PoliteSimpleQueue");
+		
 		//lock on current is always grabbed first
 		synchronized(current){
 			synchronized(next){
@@ -80,7 +81,7 @@ public class PoliteSimpleQueue implements URLFrontier {
 	}
 
 	public boolean save() {
-		logger.debug("PoliteSimpleQueue storing state... ");
+		logger.info("PoliteSimpleQueue storing state... ");
 		URLFrontierManager fm = new URLFrontierManager();
 		
 		Map<Integer, Queue<URL>> queues = new HashMap<Integer, Queue<URL>>();
@@ -110,7 +111,7 @@ public class PoliteSimpleQueue implements URLFrontier {
 
 	public boolean load() {
 		
-		logger.debug("PoliteSimpleQueue loading state... ");
+		logger.info("PoliteSimpleQueue loading state... ");
 
 		URLFrontierManager fm = new URLFrontierManager();
 
