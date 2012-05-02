@@ -18,134 +18,137 @@ import java.util.ArrayList;
  * crawling URLs from the URLFrontier at will.
  */
 public class Spider implements Runnable {
-    /**
-     * Create logger in the Log4j hierarchy named by by software component
-     */
-    static Logger logger = Logger.getLogger(Spider.class);
-    private URLFrontier urlFrontier;
-    private String id;
-    private Spider[] spiders;
-    private Araneae araneae;
-    private boolean running;
-    DocAugManager dam;
-    RobotsModule robotsModule;
+	/**
+	 * Create logger in the Log4j hierarchy named by by software component
+	 */
+	static Logger logger = Logger.getLogger(Spider.class);
+	private URLFrontier urlFrontier;
+	private String id;
+	private Spider[] spiders;
+	private Araneae araneae;
+	private boolean running;
+	DocAugManager dam;
+	RobotsModule robotsModule;
 
-    /**
-     * The -not so default- constructor. It keeps references to the whole thread
-     * pool of araneae (in order to shutdown if needed from the Frontier), the
-     * URLFrontier, its own thread it and the other spiders.
-     *
-     * @param urlFrontier
-     * @param id
-     * @param spiders
-     * @param araneae
-     */
-    public Spider(URLFrontier urlFrontier, String id, Spider[] spiders, Araneae araneae) {
-        this.urlFrontier = urlFrontier;
-        this.id = id;
-        this.spiders = spiders;
-        this.araneae = araneae;
-        running = true;
-        dam = new DocAugManager();
-        robotsModule = new RobotsModule();
-    }
+	/**
+	 * The -not so default- constructor. It keeps references to the whole thread
+	 * pool of araneae (in order to shutdown if needed from the Frontier), the
+	 * URLFrontier, its own thread it and the other spiders.
+	 *
+	 * @param urlFrontier
+	 * @param id
+	 * @param spiders
+	 * @param araneae
+	 */
+	public Spider(URLFrontier urlFrontier, String id, Spider[] spiders, Araneae araneae) {
+		this.urlFrontier = urlFrontier;
+		this.id = id;
+		this.spiders = spiders;
+		this.araneae = araneae;
+		running = true;
+		dam = new DocAugManager();
+		robotsModule = new RobotsModule();
+	}
 
-    /**
-     * The run method is a standard entry point to run or execute in each
-     * worker  thread. The Runnable  interface defines  this method, run,
-     * meant to contain the code executed in the thread.
-     * <p/>
-     * In our case, when the spider runs simply downloads page content, based
-     * on a number of conditions.
-     */
-    public void run() {
-        logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
-        while (running && Configuration.getInstance().isUp()) {
-            try {
+	/**
+	 * The run method is a standard entry point to run or execute in each
+	 * worker  thread. The Runnable  interface defines  this method, run,
+	 * meant to contain the code executed in the thread.
+	 * <p/>
+	 * In our case, when the spider runs simply downloads page content, based
+	 * on a number of conditions.
+	 */
+	public void run() {
+		logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
+		while (running && Configuration.getInstance().isUp()) {
+			try {
 
-            	logger.info("About to pull a URL");
-                Message msg = urlFrontier.pull();
-                
-                URL urlToCrawl = msg.getURL();
-                
+				logger.info("About to pull a URL");
+				Message msg = urlFrontier.pull();
 
-                logger.info("Pulled url: " + urlToCrawl);
-                
+				URL urlToCrawl = msg.getURL();
+				if(urlToCrawl == null){
+					Thread.sleep(2000);
+					continue;
+				}
 
-                HttpModule httpModule = new HttpModule(urlToCrawl);
+				logger.info("Pulled url: " + urlToCrawl);
 
-                logger.info("Got content from url: " + urlToCrawl);
 
-                String content = httpModule.getContent();
-                
-                if (!httpModule.isValid()) continue; // There was an error!
+				HttpModule httpModule = new HttpModule(urlToCrawl);
 
-                DocAug docAug = new DocAug();
-                docAug.setDoc(content);
-                docAug.setUrl(urlToCrawl.toString());
+				logger.info("Got content from url: " + urlToCrawl);
 
-                docAug.setId(urlToCrawl.toString() + " timestamp");
+				String content = httpModule.getContent();
 
-                logger.info("About to push to DocManager");
-                dam.push(docAug);
-                LinkTextExtractor linkEx = new LinkTextExtractor();
-                ArrayList<String> links = null;
-                try {
-                	logger.info("About to extract links");
-                    links = linkEx.smartExtract(urlToCrawl, content);
-                    
-                    
-                } catch (CrawlerException e) {
-                    logger.info("Crawler Exception: ", e);
-                    continue;
-                } catch(NullPointerException e){
-                	System.out.println("Null Pointer in ");
-                	logger.info("NullPointer in LinkExtractor", e);
-                	continue;
+				if (!httpModule.isValid()) continue; // There was an error!
 
-                }
-                logger.info("Done extracting links");
-                
-                
-                if(links.size() > 0) logger.info("Found some links");
+				DocAug docAug = new DocAug();
+				docAug.setDoc(content);
+				docAug.setUrl(urlToCrawl.toString());
 
-                logger.info("Asking robots for each link");
-                
-                int i = 0;
-                for (String newUrl : links){
-                    if (newUrl == null || newUrl.contains("https")) {
-                        continue;
-                    }
+				docAug.setId(urlToCrawl.toString() + " timestamp");
 
-                    URL url;
-                    try {
-                        url = new URL(newUrl);
-                        
-                        //logger.info("About to ask robots about: " + url);
-                        
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                        continue; // skip that url
-                    }
-                    
+				logger.info("About to push to DocManager");
+				dam.push(docAug);
+				LinkTextExtractor linkEx = new LinkTextExtractor();
+				ArrayList<String> links = null;
+				try {
+					logger.info("About to extract links");
+					links = linkEx.smartExtract(urlToCrawl, content);
 
-                    try{
-                    	if (robotsModule.allowedToCrawl(url)){
-                             Configuration.getInstance().getPastryEngine().sendURL(url);
-                         }
-                    }catch(IllegalStateException e){
-                    	logger.warn("IllegalStateException", e);
-                    }
-                   
-                }
-            } catch (InterruptedException e) {
-                //e.printStackTrace();
-                logger.debug("Thread " + Thread.currentThread().getName() + ": Shutting down..");
-                running = false;
-                break;
-            }
 
-        }
+				} catch (CrawlerException e) {
+					logger.info("Crawler Exception: ", e);
+					continue;
+				} catch(NullPointerException e){
+					System.out.println("Null Pointer in ");
+					logger.info("NullPointer in LinkExtractor", e);
+					continue;
 
-    }
+				}
+				logger.info("Done extracting links");
+
+
+				if(links.size() > 0) logger.info("Found some links");
+
+				logger.info("Asking robots for each link");
+
+				int i = 0;
+				for (String newUrl : links){
+					if (newUrl == null || newUrl.contains("https")) {
+						continue;
+					}
+
+					URL url;
+					try {
+						url = new URL(newUrl);
+
+						//logger.info("About to ask robots about: " + url);
+
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+						continue; // skip that url
+					}
+
+
+					try{
+						if (robotsModule.allowedToCrawl(url)){
+							Configuration.getInstance().getPastryEngine().sendURL(url);
+						}
+					}catch(IllegalStateException e){
+						logger.warn("IllegalStateException", e);
+					}
+
+				}
+			} catch (InterruptedException e) {
+				//e.printStackTrace();
+				logger.debug("Thread " + Thread.currentThread().getName() + ": Shutting down..");
+				running = false;
+				break;
+			}
+
+		}
+
+	}
 }
