@@ -80,7 +80,9 @@ public class PoliteSimpleQueue implements URLFrontier {
 		if(message != null && message.getURL() != null){
 			synchronized(next){
 				next.add(message.getURL());
+				
 				if(counter.addAndGet(1) % 100 == 0) this.save(); 
+				logger.info("" + counter.get());
 			}	
 		}
 	}
