@@ -1,18 +1,16 @@
-package com.yippee.util;
+package com.yippee.crawler;
 
-import com.yippee.db.crawler.model.DocAug;
-import com.yippee.indexer.Parser;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class LinkTextExtractorTest {
+public class NewLinkExtractorTest {
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */
@@ -329,32 +327,8 @@ public class LinkTextExtractorTest {
             "http://crawltest.cis.upenn.edu/2.png",
     };
 
-    DocAug[] docAugs;
-
-    Parser parser;
-    Document doc;
-
     @Before
     public void setUp() throws Exception {
-        docAugs = new DocAug[baseUrls.length];
-        for (int i = 0; i < baseUrls.length; i++) {
-            docAugs[i] = new DocAug();
-            docAugs[i].setDoc(testHTML);
-            docAugs[i].setUrl(baseUrls[i]);
-        }
-        parser = new Parser();
-        doc = null;
-    }
-
-    @Test
-    public void testParser() {
-        try {
-            doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        assertNotNull(doc);
     }
 
     /**
@@ -363,25 +337,24 @@ public class LinkTextExtractorTest {
      */
     @Test
     public void testCaseZeroHref() {
-    	
     	System.out.println("Testing Case 0: " + baseUrls[0]);
-        try {
-            doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[0].getUrl(), doc);
-
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[0]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseZeroExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseZeroExpectedUrls[i];
             String actual = links.get(i);
             if (!expected.equals(actual))
-                System.out.println(caseZeroExpectedUrls[i] + "\t\t" + links.get(i));
-            assertEquals(caseZeroExpectedUrls[i], links.get(i));
+                System.out.println(expected + "\t\t" + actual);
+            assertEquals(expected, actual);
         }
     }
 
@@ -393,17 +366,16 @@ public class LinkTextExtractorTest {
     @Test
     public void testCaseOneHref() {
     	System.out.println("Testing Case 1: " + baseUrls[1]);
-
-        try {
-            doc = parser.parseDoc(docAugs[1]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[1].getUrl(), doc);
-
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[1]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseOneExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseOneExpectedUrls[i];
@@ -422,17 +394,16 @@ public class LinkTextExtractorTest {
     @Test
     public void testCaseTwoHref() {
     	System.out.println("Testing Case 2: " + baseUrls[2]);
-
-        try {
-            doc = parser.parseDoc(docAugs[2]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[2].getUrl(), doc);
-
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[2]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseTwoExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseTwoExpectedUrls[i];
@@ -450,17 +421,16 @@ public class LinkTextExtractorTest {
     @Test
     public void testCaseThreeHref() {
     	System.out.println("Testing Case 3: " + baseUrls[3]);
-
-        try {
-            doc = parser.parseDoc(docAugs[3]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[3].getUrl(), doc);
-
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[3]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseThreeExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseThreeExpectedUrls[i];
@@ -479,16 +449,16 @@ public class LinkTextExtractorTest {
     public void testCaseFourHref() {
     	System.out.println("Testing Case 4: " + baseUrls[4]);
 
-        try {
-            doc = parser.parseDoc(docAugs[4]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[4].getUrl(), doc);
-
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[4]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseFourExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseFourExpectedUrls[i];
@@ -507,16 +477,16 @@ public class LinkTextExtractorTest {
     public void testCaseFiveHref() {
     	System.out.println("Testing Case 5: " + baseUrls[5]);
 
-        try {
-            doc = parser.parseDoc(docAugs[5]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[5].getUrl(), doc);
-
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[5]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseFiveExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseFiveExpectedUrls[i];
@@ -535,16 +505,16 @@ public class LinkTextExtractorTest {
     public void testCaseSixHref() {
     	System.out.println("Testing Case 6: " + baseUrls[6]);
 
-        try {
-            doc = parser.parseDoc(docAugs[6]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[6].getUrl(), doc);
-
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[6]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(links.size(), caseSixExpectedUrls.length);
         for (int i = 0; i < links.size(); i++) {
             String expected = caseSixExpectedUrls[i];
@@ -557,30 +527,16 @@ public class LinkTextExtractorTest {
 
     @Test
     public void testNumber() {
-        try {
-            doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[0].getUrl(), doc);
-        ArrayList<String> links = linkEx.getLinks();
+        ArrayList<String> links = null;
+        try {
+            links = linkEx.smartExtract(new URL(baseUrls[0]), testHTML);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         assertEquals(caseOneExpectedUrls.length, links.size());
     }
-
-//    @Test
-//    public void testHead() {
-//        try {
-//            doc = parser.parseDoc(docAugs[0]);
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        LinkTextExtractor linkEx = new LinkTextExtractor();
-//        linkEx.extract(docAugs[0].getUrl(), doc);
-//        ArrayList<String> text = linkEx.getText();
-//        assertEquals(11, text.size());  // not sure what text means
-//        assertTrue("CSE455/CIS555 HW2 Grading Data".equals(text.get(0)));
-//    }
 }

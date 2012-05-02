@@ -9,6 +9,7 @@ import com.yippee.db.indexer.model.AnchorHit;
 import com.yippee.db.indexer.model.Hit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -27,7 +28,7 @@ public class FancyExtractor {
 	WordStemmer stemmer;
 	String docId, docTitle;
 	int pos = 0;
-	ArrayList<Hit> hitList;
+	HashMap<String, ArrayList<Hit>> hitList;
 	ArrayList<Hit> anchorList; 
 	
 	public FancyExtractor(String docId) {
@@ -40,7 +41,7 @@ public class FancyExtractor {
 		title = false;
 		
 		stemmer = new WordStemmer();
-		hitList = new ArrayList();
+		hitList = new HashMap<String, ArrayList<Hit>>();
 		anchorList = new ArrayList();
 		this.docId = docId;
 	}
@@ -133,9 +134,19 @@ public class FancyExtractor {
 					if (bold)				
 						hit.setBold(true);
 			
-					hitList.add(hit);
 					
+					ArrayList<Hit> list;
+					
+					if (hitList.containsValue(word)) {
+						list = hitList.get(word);
 						
+					} else {
+						list = new ArrayList<Hit>();
+					}
+					
+					list.add(hit);
+					
+					hitList.put(word, list);	
 				}
 				
 				pos += stemlist.length;
@@ -174,7 +185,7 @@ public class FancyExtractor {
 		return docTitle;
 	}
 	
-	public ArrayList<Hit> getHitList() {
+	public HashMap<String, ArrayList<Hit>> getHitList() {
 		return hitList;
 	}
 	
@@ -191,7 +202,6 @@ public class FancyExtractor {
 	}
 	
 	public String removePunctuation(String input) {
-		
 		String result = input.replaceAll("[,;@/!<>#\\.\\*\\?\\[\\]\\(\\)]| - ", " ");
 		
 		return result;

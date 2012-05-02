@@ -32,7 +32,7 @@ public class Araneae {
      */
     public Araneae(URLFrontier urlFrontier){
         int size = Configuration.getInstance().getCrawlerThreadNumber();
-        logger.debug("Creating " + size +" threads");
+        logger.info("Creating " + size +" threads");
         spiders = new Spider[size];
         threads = new Thread[size];
         for (int i=0; i<size; i++){

@@ -1,9 +1,19 @@
 package com.yippee.db.indexer.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import com.sleepycat.persist.model.Persistent;
 
 @Persistent
-public class Hit implements Comparable {
+public class Hit implements Serializable {
 	/**
 	 * variables we want to keep that we extract from document about each word
 	 * we can add more, if find things are meaningful
@@ -18,7 +28,6 @@ public class Hit implements Comparable {
 	private boolean anchor = false;
 	private String docIDfrom;
 	private int position;
-	
 				
 	/**
 	 * constructor for a normal Hit - need docID it came from, wordId for that word, and 
@@ -165,7 +174,7 @@ public class Hit implements Comparable {
 		return position;
 	}
 
-	@Override
+	//@Override
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub
 		Hit hit = (Hit) o;

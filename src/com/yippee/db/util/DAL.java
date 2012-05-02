@@ -5,8 +5,10 @@ import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.crawler.model.DocAug;
+import com.yippee.db.crawler.model.DuplicateURL;
 import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.crawler.model.RobotsTxt;
+import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.HitList;
 import com.yippee.db.indexer.model.Word;
 import com.yippee.db.pastry.model.NodeState;
@@ -31,25 +33,33 @@ public class DAL {
      */
     PrimaryIndex<String, RobotsTxt> robotsById;
     /**
+     * DuplicateURL Accessors
+     */
+    PrimaryIndex<String, DuplicateURL> duplicateByURL;
+    /**
      * Lexicon Accessors
      */
     PrimaryIndex<String, Word> lexiconById;
-
-    // Barrel Accessors
+    /**
+     * Barrel Accessors
+     */
     PrimaryIndex<String, HitList> barrelById;
-    
-    // Anchors Accessors
+    /**
+     * Anchors Accessors
+     */
     PrimaryIndex<String, HitList> anchorById;
-    
     /**
      * FrontierSavedState Accessor
      */
     PrimaryIndex<Integer, FrontierSavedState> frontierSavedStateByVersion;
-	
     /**
      * Pastry node saved state accessor
      */
     PrimaryIndex<Integer, NodeState> nodeStateByVersion;
+    /**
+     * DocEntry state accessor
+     */
+    PrimaryIndex<String, DocEntry> docEntryByURL;
 
     /**
      * Data access layer constructor
@@ -62,6 +72,8 @@ public class DAL {
         docById = store.getPrimaryIndex(String.class, DocAug.class);
         // Robots key
         robotsById = store.getPrimaryIndex(String.class, RobotsTxt.class);
+        // Duplicate key
+        duplicateByURL = store.getPrimaryIndex(String.class, DuplicateURL.class);
         // Lexicon key
         lexiconById = store.getPrimaryIndex(String.class, Word.class);
         // Barrel key
@@ -72,6 +84,8 @@ public class DAL {
         frontierSavedStateByVersion = store.getPrimaryIndex(Integer.class, FrontierSavedState.class);
         //Pastry Node Saved State Index
         nodeStateByVersion = store.getPrimaryIndex(Integer.class, NodeState.class);
+        //DocEntry index
+        docEntryByURL = store.getPrimaryIndex(String.class, DocEntry.class);
     }
 
     /**
@@ -108,7 +122,16 @@ public class DAL {
     public PrimaryIndex<String, RobotsTxt> getRobotsById() {
         return robotsById;
     }
-    
+
+    /**
+     * Access DuplicateURL primary index outside package.
+     *
+     * @return the duplicateByURL index
+     */
+    public PrimaryIndex<String, DuplicateURL> getDuplicateByURL() {
+        return duplicateByURL;
+    }
+
     /**
      * Get a cursor for the Lexicon Index
      * @return Word entity cursor
@@ -170,4 +193,8 @@ public class DAL {
 		return nodeStateByVersion;
 	}
 	
+	public PrimaryIndex<String, DocEntry> getDocEntryByURL() {
+		// TODO Auto-generated method stub
+		return docEntryByURL;
+	}	
 }

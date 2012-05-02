@@ -5,11 +5,9 @@ import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.indexer.Parser;
 import com.yippee.util.Configuration;
-import com.yippee.util.LinkTextExtractor;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ public class Spider implements Runnable {
     private Araneae araneae;
     private boolean running;
     DocAugManager dam;
+    RobotsModule robotsModule;
 
     /**
      * The -not so default- constructor. It keeps references to the whole thread
@@ -48,6 +47,7 @@ public class Spider implements Runnable {
         this.araneae = araneae;
         running = true;
         dam = new DocAugManager();
+        robotsModule = new RobotsModule();
     }
 
     /**
@@ -62,81 +62,80 @@ public class Spider implements Runnable {
         logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
         while (running && Configuration.getInstance().isUp()) {
             try {
-            	
+
+            	logger.info("About to pull a URL");
                 Message msg = urlFrontier.pull();
                 
                 URL urlToCrawl = msg.getURL();
                 
-                logger.info("Got url to crawl: " + urlToCrawl.toString());
+
+                logger.info("Pulled url: " + urlToCrawl);
                 
-                Parser parser = new Parser();
-                Document doc = null;
+
                 HttpModule httpModule = new HttpModule(urlToCrawl);
 
+                logger.info("Got content from url: " + urlToCrawl);
+
+                String content = httpModule.getContent();
+                
+                if (!httpModule.isValid()) continue; // There was an error!
+
                 DocAug docAug = new DocAug();
-                docAug.setDoc(httpModule.getContent());
+                docAug.setDoc(content);
                 docAug.setUrl(urlToCrawl.toString());
-                docAug.setId(urlToCrawl.toString() + " + timestamp");
-                try {
-                    logger.info("About to parse doc: " + urlToCrawl.toString());
 
-                    doc = parser.parseDoc(docAug);
-                    
-                    logger.info("Doc parsed: " + urlToCrawl.toString());
+                docAug.setId(urlToCrawl.toString() + " timestamp");
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                logger.debug("Pushing something to: " + Configuration.getInstance().getBerkeleyDBRoot());
-                logger.debug("\t from URL: " + urlToCrawl.toString());
+                logger.info("About to push to DocManager");
                 dam.push(docAug);
-                
                 LinkTextExtractor linkEx = new LinkTextExtractor();
-                logger.info("About to extract links from: " + urlToCrawl.toString());
-                linkEx.extract(urlToCrawl.toString(), doc);
-                logger.info("Done extracting links from: " + urlToCrawl.toString());
+                ArrayList<String> links = null;
+                try {
+                	logger.info("About to extract links");
+                    links = linkEx.smartExtract(urlToCrawl, content);
+                    
+                    
+                } catch (CrawlerException e) {
+                    logger.info("Crawler Exception: ", e);
+                    continue;
+                } catch(NullPointerException e){
+                	System.out.println("Null Pointer in ");
+                	logger.info("NullPointer in LinkExtractor", e);
+                	continue;
 
-                ArrayList<String> links = linkEx.getLinks();
-                
-                boolean foundLinks = links.size() > 0;
-                if(foundLinks)  logger.info("Found links on: " + urlToCrawl.toString());
-                else logger.info("Found no links on: " + urlToCrawl.toString());
-                
-                for(String s : links){
-                	logger.debug("Found link: " + s);
-                	urlFrontier.push(new Message(s));
-                	foundLinks = true;
                 }
+                logger.info("Done extracting links");
                 
-               
                 
-                //Store state periodically
-                if(System.nanoTime() % 10000 == 0){
-                	urlFrontier.save();
-                	logger.info("Stored frontier state");
-                }
+                if(links.size() > 0) logger.info("Found some links");
+
+                logger.info("Asking robots for each link");
                 
-                RobotsModule robotsModule = new RobotsModule();
-                logger.info("About to send found links.");
+                int i = 0;
                 for (String newUrl : links){
+                    if (newUrl == null || newUrl.contains("https")) {
+                        continue;
+                    }
+
                     URL url;
                     try {
                         url = new URL(newUrl);
+                        
+                        //logger.info("About to ask robots about: " + url);
+                        
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                         continue; // skip that url
                     }
                     
-                    //For now, bypass checking robots
-                    Configuration.getInstance().getPastryEngine().sendURL(url);
-                    
-//                    try{
-//                    	 if (robotsModule.alowedToCrawl(url)){
-//                             Configuration.getInstance().getPastryEngine().sendURL(url);
-//                         }
-//                    }catch(IllegalStateException e){
-//                    	logger.warn("IllegalStateException", e);
-//                    }
+
+                    try{
+                    	if (robotsModule.allowedToCrawl(url)){
+                             Configuration.getInstance().getPastryEngine().sendURL(url);
+                         }
+                    }catch(IllegalStateException e){
+                    	logger.warn("IllegalStateException", e);
+                    }
                    
                 }
             } catch (InterruptedException e) {

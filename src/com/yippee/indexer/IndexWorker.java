@@ -1,7 +1,9 @@
 package com.yippee.indexer;
 
 import com.yippee.db.crawler.DocAugManager;
+import com.yippee.db.indexer.DocEntryManager;
 import com.yippee.db.indexer.model.AnchorHit;
+import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
@@ -26,6 +28,7 @@ public class IndexWorker extends Thread {
      */
     static Logger logger = Logger.getLogger(IndexWorker.class);
 	DocAugManager dam;
+	DocEntryManager dem;
 	long pollDelay;
 	NodeIndex nodeIndex;
 	
@@ -38,6 +41,7 @@ public class IndexWorker extends Thread {
 			e.printStackTrace();
 		}
 		dam = new DocAugManager();
+		dem = new DocEntryManager();
 		this.nodeIndex = nodeIndex;
 	}
 
@@ -63,7 +67,7 @@ public class IndexWorker extends Thread {
 					pollDelay *= 2;
 			}
 				
-			System.out.println("Retrieved: " + docAug.getId());
+			logger.info("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
 	    	
@@ -78,46 +82,16 @@ public class IndexWorker extends Thread {
 	    	fe.extract(docAug.getUrl(), doc);
 	    	
 	    	// Read hits test
-	    	ArrayList<Hit> hitList = fe.getHitList();
+	    	HashMap<String, ArrayList<Hit>> hitList = fe.getHitList();
 	    	nodeIndex.addAllHits(hitList);
+	    	nodeIndex.printIndex();
 	    	
-/*	    	Lexicon lexicon = new Lexicon("db/test","doc/lexicon.txt");
+	    	ArrayList<Hit> anchorList = fe.getAnchorList();
 	    	
-	    	for (int i = 0; i < hitList.size(); i++) {
-	    		Hit hit = hitList.get(i);
-	    		
-	    		System.out.print("[" + hit.getPosition() + "]");
-	    		
-	    		if(hit.isBold())
-	    			System.out.print("[BOLD]");
-	    		
-	    		if(hit.isItalicize())
-	    			System.out.print("[ITAL]");
+	    	String docTitle = fe.getTitle();
 	    	
-	    		System.out.println(": " + hit.getWord());	
-	    	}*/
-	    	
-	    	
-	    	hitList = fe.getAnchorList();
-	 
-/*	    	// Read anchors test
-	    	for (int i = 0; i < hitList.size(); i++) {
-	    		AnchorHit hit = (AnchorHit) hitList.get(i);
-	    		
-	    		System.out.print("[" + hit.getPosition() + "]");
-	    		
-	    		if(hit.isBold())
-	    			System.out.print("[BOLD]");
-	    		
-	    		if(hit.isItalicize())
-	    			System.out.print("[ITAL]");
-	    	
-	    		System.out.println(": " + hit.getWord());
-	    		
-	    	}
-
-	    	// Read title test
-	    	System.out.println("Title: " + fe.getTitle());*/
+	    	DocEntry docEntry = new DocEntry(docTitle, docAug.getUrl(), null , docAug.getTime());
+	    	dem.addDocEntry(docEntry);
 	    }
 	}
 }

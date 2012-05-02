@@ -106,6 +106,12 @@
         <delete dir="${log.dir}">
                 <exclude name="**/log4j.properties"/>
         </delete>
+        <touch file="${log.dir}/root.log"/>
+        <touch file="${log.dir}/util.log"/>
+        <touch file="${log.dir}/crawler.log"/>
+        <touch file="${log.dir}/pastry.log"/>
+        <touch file="${log.dir}/indexer.log"/>
+        <touch file="${log.dir}/pagerank.log"/>
     </target>
 
     <target name="compile">
@@ -123,7 +129,6 @@
             </manifest>
         </jar>
     </target>
-
 
     <!--
     Arguments are:

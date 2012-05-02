@@ -5,8 +5,6 @@ import com.yippee.crawler.Message;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
-import com.yippee.indexer.IndexWorker;
-import com.yippee.indexer.Indexer;
 import com.yippee.pastry.PingPong;
 import com.yippee.pastry.YippeeEngine;
 import org.apache.log4j.Logger;
@@ -28,7 +26,8 @@ import java.util.Scanner;
  * TODO: We can add a config.properties file to read configuration from there on startup
  */
 public class EntryPoint {
-    /**
+    
+	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(EntryPoint.class);
@@ -40,7 +39,8 @@ public class EntryPoint {
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
     final int NO_OF_THREADS = 1;
-
+    final int SIZE_OF_ROBOTS_CACHE = 100;
+    
     /**
      * The default constructor does the minimum of setting up the logger
      * properties for the rest of the components (even if we are going to log
@@ -116,8 +116,15 @@ public class EntryPoint {
      * @return true if everything ok; false o/w;
      */
     private boolean setupCrawler(String[] args) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Configuration.getInstance().setRobotsCacheSize(SIZE_OF_ROBOTS_CACHE);
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
         URLFrontier urlFrontier = FrontierFactory.get(FrontierType.SIMPLE);
+        Configuration.getInstance().getPastryEngine().setupURLFrontier(urlFrontier);
         boolean success = true;
         // only overwrite database with new seeds iff an overwrite flag was given
         if (args[args.length-1].equals("--overwrite")) {
@@ -131,7 +138,7 @@ public class EntryPoint {
             }
         } else { // load URLFrontier from database
             logger.warn("No overwrite -- loading frontier from the database");
-            urlFrontier.load();
+            //urlFrontier.load();
         }
         if (success) {
             Configuration.getInstance().getPastryEngine().sendPing();
@@ -145,8 +152,12 @@ public class EntryPoint {
         return success;
     }
 
-
-    // TODO: NEED TO REDISTRIBUTE SEEDS AMONG PASTRY NODES -- this could be a good test
+    /**
+     *
+     * @param urlFrontier
+     * @param seed
+     * @return
+     */
     private boolean seed(URLFrontier urlFrontier, String seed) {
 
         File seedFile = new File(seed);
@@ -205,8 +216,8 @@ public class EntryPoint {
         // Crawler
         if (!entryPoint.setupCrawler(args)) return;
 
-        Indexer ih = new Indexer();
-        ih.makeThreads();
+//        Indexer ih = new Indexer();
+//        ih.makeThreads();
     }
 
 }

@@ -1,18 +1,13 @@
 package com.yippee.pastry;
 
-import org.apache.log4j.Logger;
-
-import com.yippee.db.pastry.PastryManager;
 import com.yippee.db.pastry.model.NodeState;
-
+import org.apache.log4j.Logger;
 import rice.environment.Environment;
 import rice.p2p.commonapi.Node;
-
 import rice.pastry.Id;
 import rice.pastry.NodeHandle;
 import rice.pastry.NodeIdFactory;
 import rice.pastry.PastryNode;
-import rice.pastry.commonapi.PastryIdFactory;
 import rice.pastry.socket.SocketPastryNodeFactory;
 import rice.pastry.standard.RandomNodeIdFactory;
 
@@ -61,7 +56,6 @@ public class NodeFactory {
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe.getMessage(), ioe);
 		}
-		
 	}
 	
 	public Node getNode() {

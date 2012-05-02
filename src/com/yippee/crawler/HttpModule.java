@@ -33,6 +33,10 @@ public class HttpModule {
      * The hash-map containing the headers
      */
     private Map<String, List<String>> headers = new HashMap<String, List<String>>();
+    /**
+     * Keep log if an error has occurred or something weird happened
+     */
+    private boolean valid = true;
 
     /**
      * Default constructor. Builds the connection but does not issue the call,
@@ -47,6 +51,7 @@ public class HttpModule {
             connection.addRequestProperty("User-Agent", "cis455crawler");
         } catch (IOException e) {
             logger.warn("ERROR trying to open" + url.toString());
+            valid = false;
         }
     }
 
@@ -62,6 +67,7 @@ public class HttpModule {
             connection.setRequestMethod(action);
         } catch (ProtocolException e) {
             logger.warn("Protocol Exception");
+            valid = false;
         }
     }
 
@@ -90,19 +96,34 @@ public class HttpModule {
                     headers.put(header.getKey(), header.getValue());
                 }
                 // Returning an empty string is not exactly what we want
-                if (status != 200) return null;
+                if (status != 200) {
+                    valid = false;
+                    return null;
+                }
                 BufferedReader inputReader = new BufferedReader(new
                         InputStreamReader(connection.getInputStream()));
                 String inputLine;
+                content = "";
                 while ((inputLine = inputReader.readLine()) != null) {
                     content += inputLine;
                 }
                 inputReader.close();
             } catch (IOException e) {
-                logger.warn("Error reading page content");
+
+                logger.warn("Error reading page content ", e);
+                content = "";
+                valid = false;
             }
         }
         return content;
+    }
+
+    /**
+     * Keep track if an error has ever occurred or not, and send this to the user.
+     * @return
+     */
+    public boolean isValid(){
+        return valid;
     }
 
 }

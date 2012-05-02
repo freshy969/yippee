@@ -1,6 +1,12 @@
 package com.yippee.pastry;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.db.indexer.model.Hit;
+import com.yippee.pastry.PastryAppSocketSender;
+
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
@@ -31,6 +37,8 @@ public class YippeePastryApp implements Application {
         logger.info("Register Application");
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "Yippee App");
+        
+        endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
     }
 
@@ -54,10 +62,10 @@ public class YippeePastryApp implements Application {
                 // push to the urlFrontier or that node
                 String urlString = om.content;
                 logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
-//                com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
-//                if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
-//                    urlFrontier.push(msg);
-//                }
+                com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
+                if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
+                    urlFrontier.push(msg);
+                }
             }
         } else {
             if (om.content.equals("PONG")) {
@@ -89,6 +97,12 @@ public class YippeePastryApp implements Application {
         message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
+    
+    public void sendSocketDirect(NodeHandle nh, ArrayList<Hit> list) {
+    	logger.info(this + " sending hit list direct to " + nh);
+        endpoint.connect(nh, new PastryAppSocketSender(node,endpoint,list), 30000);
+    }
+    
 
     /**
      * This is always true in our application.

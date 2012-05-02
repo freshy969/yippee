@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.yippee.db.indexer.model.Hit;
+import com.yippee.db.indexer.model.HitList;
 
 public class NodeIndex {
 	 /**
@@ -16,13 +17,13 @@ public class NodeIndex {
      */
     static Logger logger = Logger.getLogger(NodeIndex.class);
 	
-	private HashMap<String, ArrayList<Hit>> wordIndex;
-	private int capacity = 5;
+	private HashMap<String, HitList> wordIndex;
+	private int capacity = 3;
 	private Lexicon lexicon;
 	private HashMap<String, byte[]> lexiconMap;
 	
 	public NodeIndex() {
-		wordIndex = new HashMap<String, ArrayList<Hit>>();
+		wordIndex = new HashMap<String, HitList>();
 		lexicon = new Lexicon("doc/lexicon.txt");
 		lexiconMap = lexicon.getLexiconMap();
 	}
@@ -33,31 +34,39 @@ public class NodeIndex {
 	 * 
 	 * @param hits
 	 */
-	public synchronized void addAllHits(ArrayList<Hit> hits) {
-		for(int i = 0; i<hits.size(); i++){
-			Hit hit = hits.get(i);
-			String word = hit.getWord();
-			ArrayList<Hit> list;
+	public synchronized void addAllHits(HashMap<String, ArrayList<Hit>> hits) {
+		Set<String> keys = hits.keySet();
+		Iterator<String> iter = keys.iterator();
+		
+		while(iter.hasNext()) {
+			
+			String word = iter.next();
+	
+			ArrayList<Hit> hitList = hits.get(word); 
+			
+			HitList list;
+			
 			if(wordIndex.containsKey(word)){
-				list = wordIndex.get(word);			
+				list = wordIndex.get(word);
 			} else {
-				list = new ArrayList<Hit>();
+				list = new HitList(word);
 			}
 			
 //			hit.setWordId(lexicon.);
+						
+			list.addHitList(hitList);
 			
-			list.add(hit);
 			wordIndex.put(word, list);
 			
-			if (wordIndex.size() > capacity) {
-				sendWordsToRing();
-				new HashMap<String, ArrayList<Hit>>();
-			}
+//			if (wordIndex.size() > capacity) {
+//				sendWordsToRing();
+//				new HashMap<String, ArrayList<Hit>>();
+//			}
 		}
 		
 	}
 	
-	public synchronized ArrayList<Hit> getHitList(String word){
+	public synchronized HitList getHitList(String word){
 		return wordIndex.get(word);
 	}
 
@@ -68,9 +77,8 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 //			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
-			logger.info("[" + lexiconMap.get(word) + "=" + wordIndex.get(word).size() + "]");
+			logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).getHitList().size() + "]");
 		}
-		
 	}
 	
 	public synchronized void sendWordsToRing() {
@@ -81,12 +89,13 @@ public class NodeIndex {
 	}
 	
 	public synchronized void printAll(){
+		
 		Set<String> keys = wordIndex.keySet();
 		Iterator<String> iter = keys.iterator();
 		
 		while(iter.hasNext()) {
 			String word = iter.next();
-			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+			System.out.println("[" + word + "=" + wordIndex.get(word).getHitList().size() + "]");
 		}
 		
 	}

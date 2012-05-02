@@ -87,17 +87,21 @@ class DocCreator extends Thread {
 		counter = 0;
 		
 		while (true) {
+			
 			DocAug doc = new DocAug();
+			
 			doc.setId(String.valueOf(counter) + "ID");
 			doc.setUrl(String.valueOf(counter) + ".com");
 			doc.setDoc(testHTML);
+			
 			System.out.println("Creating doc: " + counter);
 						
 			dam.create(doc);
 			
 			counter++;
+
 			try {
-				this.sleep(100);
+				this.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
