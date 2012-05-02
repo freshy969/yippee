@@ -123,7 +123,7 @@ public class EntryPoint {
         }
         Configuration.getInstance().setRobotsCacheSize(SIZE_OF_ROBOTS_CACHE);
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
-        URLFrontier urlFrontier = FrontierFactory.get(FrontierType.SIMPLE);
+        URLFrontier urlFrontier = FrontierFactory.get(FrontierType.POLITE_SIMPLE);
         Configuration.getInstance().getPastryEngine().setupURLFrontier(urlFrontier);
         boolean success = true;
         // only overwrite database with new seeds iff an overwrite flag was given

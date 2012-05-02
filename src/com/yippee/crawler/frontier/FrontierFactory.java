@@ -51,7 +51,6 @@ public class FrontierFactory {
             	 * This is specific to the mercator frontier so should probably not be in Configuration.
             	 * Where should it go? 
             	 */            
-            	
             	MercatorCentralized mc = new MercatorCentralized(10, crawlerThreadNumber);
             	mc.load();
                 return mc;
@@ -63,6 +62,11 @@ public class FrontierFactory {
             	CoralliaFrontier cf = new CoralliaFrontier();
             	cf.load();
                 return cf;
+                
+            case POLITE_SIMPLE:
+            	PoliteSimpleQueue psq = new PoliteSimpleQueue();
+            	psq.load();
+            	return psq;
             default:
             	SimpleQueueFrontier defaultFrontier = new SimpleQueueFrontier();
             	defaultFrontier.load();
