@@ -28,6 +28,7 @@ public class Spider implements Runnable {
     private Araneae araneae;
     private boolean running;
     DocAugManager dam;
+    RobotsModule robotsModule;
 
     /**
      * The -not so default- constructor. It keeps references to the whole thread
@@ -46,6 +47,7 @@ public class Spider implements Runnable {
         this.araneae = araneae;
         running = true;
         dam = new DocAugManager();
+        robotsModule = new RobotsModule();
     }
 
     /**
@@ -102,7 +104,6 @@ public class Spider implements Runnable {
 
                 logger.info("Asking robots for each link");
                 
-                RobotsModule robotsModule = new RobotsModule();
                 int i = 0;
                 for (String newUrl : links){
                     if (newUrl == null || newUrl.contains("https")) {

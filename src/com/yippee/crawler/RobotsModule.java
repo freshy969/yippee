@@ -22,18 +22,16 @@ public class RobotsModule {
      */
     static Logger logger = Logger.getLogger(RobotsModule.class);
     /**
-     * The host url
-     */
-    private URL robotsURL;
-    /**
      * The robots.txt database manager
      */
     private RobotsManager rm;
-    private ConcurrentMap<String, RobotsTxt> robotsCache;
+    private RobotsTxtCache robotsCache;
 
     public RobotsModule() {
-        rm = new RobotsManager();
-        robotsCache = new ConcurrentHashMap<String, RobotsTxt>();
+        
+    	rm = new RobotsManager();
+        robotsCache = new RobotsTxtCache();
+        
     }
 
     /**
@@ -41,51 +39,36 @@ public class RobotsModule {
      * <i>not</i> crawl-delay. If needed, it fetches robots.txt and stores all
      * information to the database
      *
-     * @param url the url to be crawled
+     * @param urlInQuestion the url to be crawled
      * @return yes if allowed; no o/w
      */
-    public boolean allowedToCrawl(URL url) {
+    public boolean allowedToCrawl(URL urlInQuestion) {
         boolean result = true;
+        URL robotsURL = null;
         try {
-            robotsURL = new URL(url.getProtocol() + "://" + url.getHost() + "/robots.txt");
+            robotsURL = new URL(urlInQuestion.getProtocol() + "://" + urlInQuestion.getHost() + "/robots.txt");
             
-            if(robotsCache.containsKey(url.getHost())){
+            if(robotsCache.containsKey(urlInQuestion.getHost())){
             	//answer from cache
-            	logger.info("Robots cache hit for: " + url.getHost());
-            	return robotsCache.get(url.getHost()).allowedToCrawl(url);
+            	logger.info("Robots cache hit for: " + urlInQuestion.getHost());
+            	return robotsCache.get(urlInQuestion.getHost()).allowedToCrawl(urlInQuestion);
             }
-            
             
             //Not in cache, check DB
             RobotsTxt robotsTxt = new RobotsTxt();
-            if (!rm.read(robotsURL.getHost(), robotsTxt)) {
-                robotsTxt = fetchRobots();
-            }
-            
-            //Put this robots in the database
-            if (robotsTxt != null) {
-                rm.create(robotsTxt);
-                
-            } else{
-            	//Create a default object for this host 
-            	robotsTxt = new RobotsTxt();
-            	
-            	robotsTxt.setHost(url.getHost());
-            	robotsTxt.setDisallows(new HashSet<String>());
-            	robotsTxt.setCrawlDelay(0);
-            	rm.create(robotsTxt);
-            }
-            
+            robotsTxt = getRobotsNotInCache(urlInQuestion, robotsURL, robotsTxt);
+
+        	//Return result
+        	return robotsTxt.allowedToCrawl(urlInQuestion);
             
             //Answer the query
             //TODO this isnt the right way to handle this.
-            for (String disallow : robotsTxt.getDisallows()) {
-                if (url.toString().contains(disallow)) {
-                    result = false;
-                }
-            }
-            
-            
+        	//Replace by the above
+//            for (String disallow : robotsTxt.getDisallows()) {
+//                if (url.toString().contains(disallow)) {
+//                    result = false;
+//                }
+//            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
             logger.info("Error with robots.txt");
@@ -93,22 +76,60 @@ public class RobotsModule {
         return result;
     }
 
+	private RobotsTxt getRobotsNotInCache(URL urlInQuestion, URL robotsURL,
+			RobotsTxt robotsTxt) {
+		if (!rm.read(robotsURL.getHost(), robotsTxt)) {
+			//Robots NOT in DB
+		    
+			//Fetch thme 
+			robotsTxt = fetchRobots(robotsURL);
+		    
+			//Add them to DB
+			 if (robotsTxt != null && robotsTxt.getHost() != null) {
+		         rm.create(robotsTxt);
+		         
+		     } else{
+		     	//Create a default object for this host 
+		     	robotsTxt = new RobotsTxt();
+		     	
+		     	robotsTxt.setHost(urlInQuestion.getHost());
+		     	robotsTxt.setDisallows(new HashSet<String>());
+		     	robotsTxt.setCrawlDelay(0);
+		     	rm.create(robotsTxt);
+		     }
+		} 
+		
+		//Put robotsTxt in cache
+		robotsCache.put(urlInQuestion.getHost(), robotsTxt);
+		return robotsTxt;
+	}
+
     /**
      * Gets the crawl delay of the given url
      *
-     * @param url the resource whose delay we need.
+     * @param urlInQuestion the resource whose delay we need.
      * @return the crawl delay for this url
      */
-    public int getCrawlDelay(URL url) {
+    public int getCrawlDelay(URL urlInQuestion) {
+    	
+    	 if(robotsCache.containsKey(urlInQuestion.getHost())){
+         	//answer from cache
+         	logger.info("Robots cache hit for: " + urlInQuestion.getHost());
+         	return robotsCache.get(urlInQuestion.getHost()).getCrawlDelay();
+         }
+    	
         RobotsTxt robotsTxt = new RobotsTxt();
+        URL robotsURL;
+		try {
+			robotsURL = new URL(urlInQuestion.getProtocol() + "://" + urlInQuestion.getHost() + "/robots.txt");
+	        robotsTxt = getRobotsNotInCache(urlInQuestion, robotsURL, robotsTxt);
+	        return robotsTxt.getCrawlDelay();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
 
-        if (!rm.read(robotsURL.getHost(), robotsTxt)) {
-            //Unsuccessful read
-            robotsTxt = fetchRobots();
-            rm.create(robotsTxt);
-        }
-
-        return robotsTxt.getCrawlDelay();
     }
 
     /**
@@ -116,7 +137,7 @@ public class RobotsModule {
      *
      * @return the RobotsTxt entity object to be inserted to the database
      */
-    private RobotsTxt fetchRobots() {
+    private RobotsTxt fetchRobots(URL robotsURL) {
         HttpURLConnection urlConnection = null;
         RobotsTxt robotsTxt = new RobotsTxt();
         try {
@@ -178,6 +199,7 @@ public class RobotsModule {
                 robotsTxt.setDisallows(new HashSet<String>());
                 robotsTxt.setHost(robotsURL.toString());
             }
+            
         } catch (UnknownHostException e){
         	//e.printStackTrace();
             logger.info("Unknown host exception.  Skipping url: " + robotsURL.toString());

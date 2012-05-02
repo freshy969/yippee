@@ -27,6 +27,11 @@ public class Configuration {
      * the path to berkeleyDB
      */
     private String berkeleyDBRoot;
+    
+    /**
+     * Size of RobotsTxtCache
+     */
+    private int robotsCacheSize;
 
     /**
      * Store Pastry Engine
@@ -132,5 +137,20 @@ public class Configuration {
     public void setPastryEngine(YippeeEngine engine) {
         this.pastryEngine = engine;
     }
+
+	/**
+	 * 
+	 * @return the robotsCacheSize
+	 */
+	public int getRobotsCacheSize() {
+		return robotsCacheSize;
+	}
+
+	/**
+	 * @param robotsCacheSize the robotsCacheSize to set
+	 */
+	public void setRobotsCacheSize(int robotsCacheSize) {
+		this.robotsCacheSize = robotsCacheSize;
+	}
 
 }

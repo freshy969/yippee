@@ -26,7 +26,8 @@ import java.util.Scanner;
  * TODO: We can add a config.properties file to read configuration from there on startup
  */
 public class EntryPoint {
-    /**
+    
+	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(EntryPoint.class);
@@ -38,7 +39,8 @@ public class EntryPoint {
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
     final int NO_OF_THREADS = 1;
-
+    final int SIZE_OF_ROBOTS_CACHE = 100;
+    
     /**
      * The default constructor does the minimum of setting up the logger
      * properties for the rest of the components (even if we are going to log
@@ -119,6 +121,7 @@ public class EntryPoint {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Configuration.getInstance().setRobotsCacheSize(SIZE_OF_ROBOTS_CACHE);
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
         URLFrontier urlFrontier = FrontierFactory.get(FrontierType.SIMPLE);
         Configuration.getInstance().getPastryEngine().setupURLFrontier(urlFrontier);
