@@ -67,7 +67,7 @@ public class IndexWorker extends Thread {
 					pollDelay *= 2;
 			}
 				
-//			System.out.println("Retrieved: " + docAug.getId());
+			logger.info("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
 	    	
@@ -82,10 +82,11 @@ public class IndexWorker extends Thread {
 	    	fe.extract(docAug.getUrl(), doc);
 	    	
 	    	// Read hits test
-	    	ArrayList<Hit> hitList = fe.getHitList();
+	    	HashMap<String, ArrayList<Hit>> hitList = fe.getHitList();
 	    	nodeIndex.addAllHits(hitList);
+	    	nodeIndex.printIndex();
 	    	
-	    	hitList = fe.getAnchorList();
+	    	ArrayList<Hit> anchorList = fe.getAnchorList();
 	    	
 	    	String docTitle = fe.getTitle();
 	    	

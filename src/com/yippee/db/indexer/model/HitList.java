@@ -18,7 +18,6 @@ public class HitList {
 	private float df;
 //	private HashMap<Doc, float> tfMap;
 	
-	
 	/**
 	 * list of hits for that word
 	 */
@@ -36,6 +35,10 @@ public class HitList {
 	
 	public void addHit(Hit hit) {
 		hitList.add(hit);
+	}
+	
+	public void addHitList(ArrayList<Hit> hits) {
+		hitList.addAll(hits);
 	}
 	
 	public byte[] getWordId() {
