@@ -5,6 +5,7 @@ import com.yippee.crawler.Message;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.indexer.Indexer;
 import com.yippee.pastry.PingPong;
 import com.yippee.pastry.YippeeEngine;
 import org.apache.log4j.Logger;
@@ -210,14 +211,28 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
         EntryPoint entryPoint = new EntryPoint();
-        // Pastry
-        if (!entryPoint.configure(args)) return;
-        entryPoint.setUpSubstrate();
-        // Crawler
-        if (!entryPoint.setupCrawler(args)) return;
-
-//        Indexer ih = new Indexer();
-//        ih.makeThreads();
+        // Start indexer
+        if (args[5].contains("C")) {
+            System.out.println("Starting crawler");
+            Configuration.getInstance().setService("C");
+            // Pastry
+            if (!entryPoint.configure(args)) return;
+            entryPoint.setUpSubstrate();
+            // Crawler
+            if (!entryPoint.setupCrawler(args)) return;
+        }
+        // Start indexer, and if crawler is not started, launch pastry
+        if (args[5].contains("I")) {
+            System.out.println("Starting indexer");
+            Configuration.getInstance().setService("I");
+            if (!args[5].contains("C")) {
+                // Pastry
+                if (!entryPoint.configure(args)) return;
+                entryPoint.setUpSubstrate();
+            }
+            Indexer ih = new Indexer();
+            ih.makeThreads();
+        }
     }
 
 }
