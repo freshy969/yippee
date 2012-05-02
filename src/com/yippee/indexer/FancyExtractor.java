@@ -202,7 +202,7 @@ public class FancyExtractor {
 	}
 	
 	public String removePunctuation(String input) {
-		String result = input.replaceAll("[,;@/!<>#\\.\\*\\?\\[\\]\\(\\)]| - ", " ");
+		String result = input.replaceAll("[,:;@/!<>#\\.\\*\\?\\[\\]\\(\\)]| - ", " ");
 		
 		return result;
 	}

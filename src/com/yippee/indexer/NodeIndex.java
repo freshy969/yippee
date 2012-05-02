@@ -19,13 +19,13 @@ public class NodeIndex {
 	
 	private HashMap<String, ArrayList<Hit>> wordIndex;
 	private int capacity = 3;
-	private Lexicon lexicon;
-	private HashMap<String, byte[]> lexiconMap;
+//	private Lexicon lexicon;
+//	private HashMap<String, byte[]> lexiconMap;
 	
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
-		lexicon = new Lexicon("doc/lexicon.txt");
-		lexiconMap = lexicon.getLexiconMap();
+//		lexicon = new Lexicon("doc/lexicon.txt");
+//		lexiconMap = lexicon.getLexiconMap();
 	}
 	
 	/**
