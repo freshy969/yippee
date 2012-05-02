@@ -211,6 +211,7 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
         EntryPoint entryPoint = new EntryPoint();
+        p(args);
         // Start indexer
         if (args[5].contains("C")) {
             System.out.println("Starting crawler");
@@ -234,5 +235,12 @@ public class EntryPoint {
             ih.makeThreads();
         }
     }
+
+    private static void p(String[] args) {
+        for (int i = 0; i<args.length; i++) {
+            System.out.println(args[i]);
+        }
+    }
+
 
 }
