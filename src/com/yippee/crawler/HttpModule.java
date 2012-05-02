@@ -103,6 +103,7 @@ public class HttpModule {
                 BufferedReader inputReader = new BufferedReader(new
                         InputStreamReader(connection.getInputStream()));
                 String inputLine;
+                content = "";
                 while ((inputLine = inputReader.readLine()) != null) {
                     content += inputLine;
                 }

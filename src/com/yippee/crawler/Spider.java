@@ -28,6 +28,7 @@ public class Spider implements Runnable {
     private Araneae araneae;
     private boolean running;
     DocAugManager dam;
+    RobotsModule robotsModule;
 
     /**
      * The -not so default- constructor. It keeps references to the whole thread
@@ -46,6 +47,7 @@ public class Spider implements Runnable {
         this.araneae = araneae;
         running = true;
         dam = new DocAugManager();
+        robotsModule = new RobotsModule();
     }
 
     /**
@@ -60,35 +62,49 @@ public class Spider implements Runnable {
         logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
         while (running && Configuration.getInstance().isUp()) {
             try {
+            	logger.info("About to pull a URL");
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
-                //url.getURL()
-                Parser parser = new Parser();
-                Document doc = null;
+                
+                logger.info("Pulled url: " + urlToCrawl);
+                
                 HttpModule httpModule = new HttpModule(urlToCrawl);
 
+                logger.info("Got content from url: " + urlToCrawl);
 
                 String content = httpModule.getContent();
-
+                
                 if (!httpModule.isValid()) continue; // There was an error!
 
                 DocAug docAug = new DocAug();
                 docAug.setDoc(content);
                 docAug.setUrl(urlToCrawl.toString());
-                docAug.setId(urlToCrawl.toString() + "timestamp");
+                docAug.setId(urlToCrawl.toString() + " timestamp");
 
+                logger.info("About to push to DocManager");
                 dam.push(docAug);
                 LinkTextExtractor linkEx = new LinkTextExtractor();
                 ArrayList<String> links = null;
                 try {
+                	logger.info("About to extract links");
                     links = linkEx.smartExtract(urlToCrawl, content);
+                    
+                    
                 } catch (CrawlerException e) {
-                    System.out.println("ERROR!!!");
+                    logger.info("Crawler Exception: ", e);
                     continue;
+                } catch(NullPointerException e){
+                	System.out.println("Null Pointer in ");
+                	logger.info("NullPointer in LinkExtractor", e);
+                	continue;
                 }
+                logger.info("Done extracting links");
+                
+                
+                if(links.size() > 0) logger.info("Found some links");
 
-
-                RobotsModule robotsModule = new RobotsModule();
+                logger.info("Asking robots for each link");
+                
                 int i = 0;
                 for (String newUrl : links){
                     if (newUrl == null || newUrl.contains("https")) {
@@ -98,13 +114,16 @@ public class Spider implements Runnable {
                     URL url;
                     try {
                         url = new URL(newUrl);
+                        
+                        //logger.info("About to ask robots about: " + url);
+                        
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                         continue; // skip that url
                     }
                     
                     try{
-                    	 if (robotsModule.alowedToCrawl(url)){
+                    	if (robotsModule.allowedToCrawl(url)){
                              Configuration.getInstance().getPastryEngine().sendURL(url);
                          }
                     }catch(IllegalStateException e){

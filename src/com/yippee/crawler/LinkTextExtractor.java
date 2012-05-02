@@ -35,11 +35,17 @@ public class LinkTextExtractor {
      *  .. and return link urls
      */
     public ArrayList<String> smartExtract(URL url, String content) throws CrawlerException {
+    	logger.info("smartExtract started on: " + url);
+    	
         String path = url.getPath();
+        if(path == null) path = "";
+        logger.info("path: '" + path + "'");
+        
         String responseText = "";
         ArrayList<String> anchors = new ArrayList<String>();
         System.out.println("Path to tidyUp:" + path);
         if (!path.contains(".") || path.substring(path.lastIndexOf(".")).contains("htm")) {
+
             ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             Tidy tidy = new Tidy();
@@ -58,6 +64,13 @@ public class LinkTextExtractor {
             //tidy.setWrapAttVals(true);
             //tidy.setWraplen(99999999);
             Document document = tidy.parseDOM(is, os);
+            
+            //Tidy is returning null for some pages which otherwise seem ok
+            // eg. wordpress.com
+            if(document == null) return anchors;
+            
+            logger.info("Document made by tidy: " + document);
+            
             // the number of errors that occurred in the most recent parse operation.
             if (tidy.getParseErrors() > 0 ){
                 throw new CrawlerException();
@@ -66,9 +79,8 @@ public class LinkTextExtractor {
             //document.normalize();
             NodeList links = document.getElementsByTagName("a");
             //TODO: grab qualified name
-            System.out.println("No of links: " + links.getLength());
+            logger.info("No of links: " + links.getLength());
             for (int i = 0; i <links.getLength(); i++) {
-                logger.info("URL:" + i);
                 Node node = links.item(i).getAttributes().getNamedItem("href");
                 if (node == null) {
                     continue;
@@ -76,9 +88,13 @@ public class LinkTextExtractor {
                 //System.out.println(links.getLength() + "\t"+links.item(i).getLocalName());
                 if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
                     if (node.getNodeValue().startsWith("http")) {
+                    	
+                    	//logger.info("About to add to anchor list: " + node.getNodeValue());
                         anchors.add(node.getNodeValue());      //getAttributes("href");
                     } else {
                         try {
+                        	//logger.info("About to add to anchor list (resolved):\n\t\t" + url.toString() + " + " + node.getNodeValue());
+                        	
                             anchors.add(resolve(url.toString(), node.getNodeValue()));
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
@@ -92,6 +108,7 @@ public class LinkTextExtractor {
             responseText = os.toString();
         }
         responseText = responseText.replaceAll("<!DOCTYPE((.|\n|\r)*?)\">", "");
+        logger.info("Done extracting normally");
         return anchors;
     }
 
