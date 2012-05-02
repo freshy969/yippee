@@ -79,7 +79,7 @@ public class LinkTextExtractor {
             //document.normalize();
             NodeList links = document.getElementsByTagName("a");
             //TODO: grab qualified name
-            System.out.println("No of links: " + links.getLength());
+            logger.info("No of links: " + links.getLength());
             for (int i = 0; i <links.getLength(); i++) {
                 Node node = links.item(i).getAttributes().getNamedItem("href");
                 if (node == null) {
@@ -108,6 +108,7 @@ public class LinkTextExtractor {
             responseText = os.toString();
         }
         responseText = responseText.replaceAll("<!DOCTYPE((.|\n|\r)*?)\">", "");
+        logger.info("Done extracting normally");
         return anchors;
     }
 

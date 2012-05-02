@@ -62,6 +62,7 @@ public class Spider implements Runnable {
         logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
         while (running && Configuration.getInstance().isUp()) {
             try {
+            	logger.info("About to pull a URL");
                 Message msg = urlFrontier.pull();
                 URL urlToCrawl = msg.getURL();
                 
@@ -90,7 +91,7 @@ public class Spider implements Runnable {
                     
                     
                 } catch (CrawlerException e) {
-                    System.out.println("ERROR!!!");
+                    logger.info("Crawler Exception: ", e);
                     continue;
                 } catch(NullPointerException e){
                 	System.out.println("Null Pointer in ");
