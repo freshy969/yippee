@@ -214,6 +214,7 @@ public class EntryPoint {
         // Start indexer
         if (args[5].contains("C")) {
             System.out.println("Starting crawler");
+            Configuration.getInstance().setService("C");
             // Pastry
             if (!entryPoint.configure(args)) return;
             entryPoint.setUpSubstrate();
@@ -223,6 +224,7 @@ public class EntryPoint {
         // Start indexer, and if crawler is not started, launch pastry
         if (args[5].contains("I")) {
             System.out.println("Starting indexer");
+            Configuration.getInstance().setService("I");
             if (!args[5].contains("C")) {
                 // Pastry
                 if (!entryPoint.configure(args)) return;
