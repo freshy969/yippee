@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
@@ -17,20 +18,23 @@ import com.yippee.db.crawler.URLFrontierManager;
 import com.yippee.db.crawler.model.FrontierSavedState;
 
 public class PoliteSimpleQueue implements URLFrontier {
-	
-	private Random rand;
-	private ArrayList<URL> current;
-	private ArrayList<URL> next;
-
 	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(PoliteSimpleQueue.class);
+	
+	private Random rand;
+	private ArrayList<URL> current;
+	private ArrayList<URL> next;
+	private AtomicInteger counter;
+	
     
     public PoliteSimpleQueue(){
+    	counter = new AtomicInteger();
     	rand = new Random(System.nanoTime());
     	current = new ArrayList<URL>();
     	next = new ArrayList<URL>();
+    	
     }
 	
 	public Message pull() throws InterruptedException {
@@ -76,6 +80,7 @@ public class PoliteSimpleQueue implements URLFrontier {
 		if(message != null && message.getURL() != null){
 			synchronized(next){
 				next.add(message.getURL());
+				if(counter.addAndGet(1) % 100 == 0) this.save(); 
 			}	
 		}
 	}
@@ -101,6 +106,7 @@ public class PoliteSimpleQueue implements URLFrontier {
 				}
 			}
 			
+			counter.set(0);
 		}
 		
 		queues.put(1, currentQueue);
