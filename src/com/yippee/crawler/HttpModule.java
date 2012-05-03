@@ -93,7 +93,11 @@ public class HttpModule {
                 logger.debug("code "+status);
                 for (Map.Entry<String, List<String>> header :
                         connection.getHeaderFields().entrySet()) {
-                    headers.put(header.getKey(), header.getValue());
+                	
+                	if(header.getKey() != null) {
+                		headers.put(header.getKey().toLowerCase(), header.getValue());
+                	}
+
                 }
                 // Returning an empty string is not exactly what we want
                 if (status != 200) {
