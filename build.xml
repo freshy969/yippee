@@ -29,7 +29,7 @@
 
             Ant target details:
 
-            1. ant project-test-pastry -DbootIp=[ip]
+            1. ant project-test-pastry -DbIp=[ip]
 
                 [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
@@ -41,7 +41,8 @@
 
                 Refer to the README file for more information.
 
-            2. ant project-test-crawler -DbootIp=[ip]
+
+            2. ant project-test-crawler -DbIp=[ip]
 
                 [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
@@ -51,7 +52,17 @@
             when running the ant target. To get the result of ifconfig you can do
             `ifconfig`; for instance, to launch the first target, I can always do
             ant project-test-pastry \
-            -DbootIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
+            -DbIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
+
+
+            3. ant project-prod-crawler -DbIp=[ip] -Dbport=[port] -Dlport=[port]
+
+                [ip]:   External ip (e.g., the one returned by ifconfig/ipconfig
+                [port]: Port of the bootstrap node and localnode (they must be
+                        the same for bootstrap node).
+
+                The project run target sets up one pastry node running the crawler.
+
         </echo>
 
     </target>
@@ -68,14 +79,14 @@
 
     <condition property="params.set">
         <and>
-            <isset property="bootIp"/>
+            <isset property="bIp"/>
         </and>
     </condition>
 
     <target name="check">
         <fail unless="params.set">
-            Must specify the parameter bootIp: Run "ant [target]
-            -DbootIp=[external ip]
+            Must specify the parameter bIp: Run "ant [target]
+            -DbIp=[external ip]
         </fail>
     </target>
 
@@ -87,7 +98,7 @@
     <target name="sanity-check" depends="check">
         <echo>" Root:. . . . .${project.root}"</echo>
         <echo>" Lib: . . . . .${lib.dir}"</echo>
-        <echo>" Pastry Ip: . .${bootIp}"</echo>
+        <echo>" Pastry Ip: . .${bIp}"</echo>
         <echo>" Pastry Port: .${bootPort}"</echo>
     </target>
 
@@ -114,13 +125,13 @@
         <touch file="${log.dir}/pagerank.log"/>
     </target>
 
-    <target name="compile">
+    <target name="compile" depends="pastry-conf">
         <mkdir dir="${out.dir}/classes"/>
         <javac srcdir="${src.dir}" destdir="${out.dir}/classes"
                classpathref="classpath"/>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="jar" depends="compile, pastry-revert">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar"
              basedir="${out.dir}/classes">
@@ -130,6 +141,27 @@
         </jar>
     </target>
 
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+
+    <target name="pastry-conf" if="isWindows">
+        <echo message="Patching for TJ...." />
+        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );'>
+          <include name="**/*.java"/>
+          <replacetoken>/*[tj-let-ant-resolve]*/</replacetoken>
+        </replace>
+        <!-- do whatever you want to do here for Mac systems -->
+    </target>
+
+    <target name="pastry-revert" if="isWindows">
+        <echo message="Reverting for TJ...." />
+        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/'>
+          <include name="**/*.java"/>
+          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );</replacetoken>
+        </replace>
+        <!-- do whatever you want to do here for Mac systems -->
+    </target>
     <!--
     Arguments are:
         *   local port
@@ -146,7 +178,7 @@
             </classpath>
             <!-- in case we need to add arguments -->
             <arg value="${localPort}"/>
-            <arg value="${bootIp}"/>
+            <arg value="${bIp}"/>
             <arg value="${bootPort}"/>
             <arg value="feed.url"/>
             <arg value="${database}"/>
@@ -161,9 +193,19 @@
     <target name="project-test-crawler" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
             <antcall target="run">
-                <param name="localPort" value="9000"/>
                 <param name="localPort" value="9001"/>
+                <param name="bootPort" value="9001"/>
                 <param name="database" value="db/test"/>
+                <param name="service" value="-C"/>
+            </antcall>
+    </target>
+
+    <target name="project-prod-crawler" depends="project-clean,sanity-check"
+            description="Create single-noded crawler">
+            <antcall target="run">
+                <param name="localPort" value="${lport}"/>
+                <param name="bootPort" value="${bport}"/>
+                <param name="database" value="db/prod"/>
                 <param name="service" value="-C"/>
             </antcall>
     </target>
@@ -171,8 +213,8 @@
     <target name="project-test-indexer" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
             <antcall target="run">
-                <param name="localPort" value="10000"/>
                 <param name="localPort" value="10001"/>
+                <param name="bootPort" value="10001"/>
                 <param name="database" value="db/test"/>
                 <param name="service" value="-I"/>
             </antcall>

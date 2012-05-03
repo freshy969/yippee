@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -82,7 +83,12 @@ public class RobotsModule {
 			//Robots NOT in DB
 		    
 			//Fetch thme 
-			robotsTxt = fetchRobots(robotsURL);
+			try{
+				robotsTxt = fetchRobots(robotsURL);
+			}catch(ConnectException e){
+				logger.warn("Connect exception:" + robotsURL);
+			}
+			
 		    
 			//Add them to DB
 			 if (robotsTxt != null && robotsTxt.getHost() != null) {
@@ -137,7 +143,7 @@ public class RobotsModule {
      *
      * @return the RobotsTxt entity object to be inserted to the database
      */
-    private RobotsTxt fetchRobots(URL robotsURL) {
+    private RobotsTxt fetchRobots(URL robotsURL) throws ConnectException {
         HttpURLConnection urlConnection = null;
         RobotsTxt robotsTxt = new RobotsTxt();
         try {

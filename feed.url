@@ -1,5 +1,10 @@
 # This file contains the feed urls. Comments should start with a #
 #
+# .org
+http://www.dmoz.org
+#
+#
+#
 #.edu
 http://www.upenn.edu
 http://www.stanford.edu
@@ -10,6 +15,7 @@ http://www.princeton.edu/main
 #
 # .com
 #
+http://dir.yahoo.com
 http://www.cnn.com
 http://www.bbc.com
 http://www.yahoo.com
