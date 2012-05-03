@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;
+import com.yippee.util.Configuration;
 
 public class NodeIndex {
 	 /**
@@ -58,10 +59,11 @@ public class NodeIndex {
 			
 			wordIndex.put(word, list);
 			
-//			if (wordIndex.size() > capacity) {
-//				sendWordsToRing();
-//				new HashMap<String, ArrayList<Hit>>();
-//			}
+			if (wordIndex.size() > capacity) {
+				sendWordsToRing();
+				printIndex();
+				wordIndex = new HashMap<String, ArrayList<Hit>>();
+			}
 		}
 		
 	}
@@ -83,9 +85,15 @@ public class NodeIndex {
 	
 	public synchronized void sendWordsToRing() {
 		// HASH keys
+		Set<String> keys = wordIndex.keySet();
+		Iterator<String> iter = keys.iterator();
 		
-		// Send keys
-		printIndex();		
+		while(iter.hasNext()) {
+			String word = iter.next();
+			ArrayList<Hit> list = wordIndex.get(word);
+			Configuration.getInstance().getPastryEngine().sendList(word,list);
+		}
+			
 	}
 	
 	public synchronized void printAll(){
