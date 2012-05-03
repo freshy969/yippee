@@ -60,7 +60,12 @@ public class DAL {
      * DocEntry state accessor
      */
     PrimaryIndex<String, DocEntry> docEntryByURL;
+    /**
+     * DocAug archive accessor
+     */
+    PrimaryIndex<String, DocAug> docArcByURL;
 
+    
     /**
      * Data access layer constructor
      *
@@ -86,6 +91,8 @@ public class DAL {
         nodeStateByVersion = store.getPrimaryIndex(Integer.class, NodeState.class);
         //DocEntry index
         docEntryByURL = store.getPrimaryIndex(String.class, DocEntry.class);
+        // Doc Archive Index
+        docArcByURL = store.getPrimaryIndex(String.class, DocAug.class);
     }
 
     /**
@@ -197,4 +204,13 @@ public class DAL {
 		// TODO Auto-generated method stub
 		return docEntryByURL;
 	}	
+	
+	/**
+     * We need a getter to access the DocAug Primary index outside the package.
+     *
+     * @return the userByName index
+     */
+    public PrimaryIndex<String, DocAug> getDocArcByURL() {
+        return docArcByURL;
+    }
 }

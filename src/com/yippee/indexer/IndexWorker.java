@@ -1,6 +1,7 @@
 package com.yippee.indexer;
 
 import com.yippee.db.crawler.DocAugManager;
+import com.yippee.db.indexer.DocArchiveManager;
 import com.yippee.db.indexer.DocEntryManager;
 import com.yippee.db.indexer.model.AnchorHit;
 import com.yippee.db.indexer.model.DocEntry;
@@ -28,6 +29,7 @@ public class IndexWorker extends Thread {
      */
     static Logger logger = Logger.getLogger(IndexWorker.class);
 	DocAugManager dam;
+	DocArchiveManager darcm;
 	DocEntryManager dem;
 	long pollDelay;
 	NodeIndex nodeIndex;
@@ -41,6 +43,7 @@ public class IndexWorker extends Thread {
 			e.printStackTrace();
 		}
 		dam = new DocAugManager();
+		darcm = new DocArchiveManager();
 		dem = new DocEntryManager();
 		this.nodeIndex = nodeIndex;
 	}
@@ -92,6 +95,7 @@ public class IndexWorker extends Thread {
 	    	
 	    	DocEntry docEntry = new DocEntry(docTitle, docAug.getUrl(), null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
+	    	darcm.store(docAug);
 	    }
 	}
 }
