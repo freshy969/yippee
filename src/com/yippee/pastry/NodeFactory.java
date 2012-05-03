@@ -52,7 +52,7 @@ public class NodeFactory {
 		nidFactory = new RandomNodeIdFactory(env);
 		try {
 			/*[tj-let-ant-resolve]*/
-			factory = new SocketPastryNodeFactory(nidFactory, InetAddress.getLocalHost(), port, env);
+			factory = new SocketPastryNodeFactory(nidFactory, port, env);
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe.getMessage(), ioe);
 		}
