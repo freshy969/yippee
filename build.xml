@@ -29,7 +29,7 @@
 
             Ant target details:
 
-            1. ant project-test-pastry -DbootIp=[ip]
+            1. ant project-test-pastry -DbIp=[ip]
 
                 [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
@@ -41,7 +41,8 @@
 
                 Refer to the README file for more information.
 
-            2. ant project-test-crawler -DbootIp=[ip]
+
+            2. ant project-test-crawler -DbIp=[ip]
 
                 [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
@@ -52,6 +53,16 @@
             `ifconfig`; for instance, to launch the first target, I can always do
             ant project-test-pastry \
             -DbootIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
+
+
+            3. ant project-prod-crawler -DbIp=[ip] -Dbport=[port] -Dlport[port]
+
+                [ip]:   External ip (e.g., the one returned by ifconfig/ipconfig
+                [port]: Port of the bootstrap node and localnode (they must be
+                        the same for bootstrap node).
+
+                The project run target sets up one pastry node running the crawler.
+
         </echo>
 
     </target>
@@ -167,7 +178,7 @@
             </classpath>
             <!-- in case we need to add arguments -->
             <arg value="${localPort}"/>
-            <arg value="${bootIp}"/>
+            <arg value="${bIp}"/>
             <arg value="${bootPort}"/>
             <arg value="feed.url"/>
             <arg value="${database}"/>
@@ -185,6 +196,16 @@
                 <param name="localPort" value="9001"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/test"/>
+                <param name="service" value="-C"/>
+            </antcall>
+    </target>
+
+    <target name="project-prod-crawler" depends="project-clean,sanity-check"
+            description="Create single-noded crawler">
+            <antcall target="run">
+                <param name="localPort" value="${lport}"/>
+                <param name="bootPort" value="${bport"/>
+                <param name="database" value="db/prod"/>
                 <param name="service" value="-C"/>
             </antcall>
     </target>
