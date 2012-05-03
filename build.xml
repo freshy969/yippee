@@ -131,7 +131,7 @@
     </target>
 
     <condition property="isWindows">
-        <os family="unix" />
+        <os family="windows" />
     </condition>
 
     <target name="pastry-conf" if="isWindows">
