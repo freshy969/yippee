@@ -1,8 +1,11 @@
 package com.yippee.db.indexer;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 import com.sleepycat.je.DatabaseException;
 import com.yippee.db.indexer.model.AnchorHit;
+import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;
 import com.yippee.db.util.DAL;
 
@@ -31,26 +34,30 @@ public class AnchorManager {
 	 * @param h
 	 * @return
 	 */
-    public boolean addAnchorHit(AnchorHit h){
+    public boolean addAnchorHits(ArrayList<AnchorHit> list){
     	
     	boolean success = true;
     	
         try {
             // Open the data accessor. This is used to store persistent objects.
             dao = new DAL(myDbEnv.getIndexerStore());
-        
-            if(dao.getAnchorById().contains(h.getWord())) {
+            String word = list.get(0).getWord();
+            if(dao.getAnchorById().contains(word)) {
             	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
-            	HitList hl = dao.getAnchorById().get(h.getWord());
-            	hl.addHit(h);
-            	dao.getAnchorById().delete(h.getWord());
+            	HitList hl = dao.getAnchorById().get(word);
+            	ArrayList<Hit> temp = hl.getHitList();
+            	temp.addAll(list);
+            	hl.setHitList(temp);
+            	dao.getAnchorById().delete(word);
             	//"updates" entry
             	dao.getAnchorById().put(hl);
             	
             } else {
             	//System.out.println("create new entry "+h.getDocId()+", "+new String(h.getWordId()));
-            	HitList hl = new HitList(h.getWord());
-            	hl.addHit(h);
+            	HitList hl = new HitList(word);
+            	ArrayList<Hit> temp = hl.getHitList();
+            	temp.addAll(list);
+            	hl.setHitList(temp);
             	dao.getAnchorById().put(hl);
             }
             
@@ -73,19 +80,19 @@ public class AnchorManager {
      * @param wordid
      * @return
      */
-    public HitList getHitList(byte[] wordid){
+    public HitList getHitList(String wordid){
         dao = new DAL(myDbEnv.getIndexerStore());
         
-        return dao.getAnchorById().get(new String(wordid));
+        return dao.getAnchorById().get(wordid);
     }
     
     /**
      * deletes word entry, should only be used for test
      * @param wordid
      */
-    public void deleteWordEntry(byte[] wordid){
+    public void deleteWordEntry(String wordid){
         dao = new DAL(myDbEnv.getIndexerStore());
-        dao.getAnchorById().delete(new String(wordid));
+        dao.getAnchorById().delete(wordid);
     }
      
 }

@@ -59,32 +59,42 @@ public class BarrelManagerTest {
     
     @Test
     public void testAddDoc(){
-        assertTrue(barrelManager.addDocHit(h1));
-        assertTrue(barrelManager.addDocHit(h2));
-        assertTrue(barrelManager.addDocHit(h3));
-        assertTrue(barrelManager.addDocHit(h4));
-        assertTrue(barrelManager.addDocHit(h5));
+    	ArrayList<Hit> hl = new ArrayList();
+    	hl.add(h1);
+        assertTrue(barrelManager.addDocHits(hl));
+        hl = new ArrayList();
+    	hl.add(h2);
+        assertTrue(barrelManager.addDocHits(hl));
+        hl = new ArrayList();
+    	hl.add(h3);
+        assertTrue(barrelManager.addDocHits(hl));
+        hl = new ArrayList();
+    	hl.add(h4);
+        assertTrue(barrelManager.addDocHits(hl));
+        hl = new ArrayList();
+    	hl.add(h5);
+        assertTrue(barrelManager.addDocHits(hl));
     }
     
-//    @Test
-//    public void testGetHitList(){
-//    	ArrayList<Hit> hits = barrelManager.getHitList(wordid1).getHitList();  
-//    	assertTrue(hits.size()==3);
-//    	ArrayList<Hit> hits2 = barrelManager.getHitList(wordid2).getHitList();  	
-//    	assertTrue(hits2.size()==1);
-//    	ArrayList<Hit> hits3 = barrelManager.getHitList(wordid3).getHitList();  	
-//    	assertTrue(hits3.size()==1);
-//    }
-//    
-//    @Test 
-//    public void testDelete() {
-//    	barrelManager.deleteWordEntry(wordid1);
-//    	barrelManager.deleteWordEntry(wordid2);
-//    	barrelManager.deleteWordEntry(wordid3);
-//    	assertTrue(barrelManager.getHitList(wordid1)==null);
-//    	assertTrue(barrelManager.getHitList(wordid2)==null);
-//    	assertTrue(barrelManager.getHitList(wordid3)==null);
-//    }
+    @Test
+   public void testGetHitList(){
+    	ArrayList<Hit> hits = barrelManager.getHitList(wordid1).getHitList();  
+    	assertTrue(hits.size()==3);
+    	ArrayList<Hit> hits2 = barrelManager.getHitList(wordid2).getHitList();  	
+    	assertTrue(hits2.size()==1);
+    	ArrayList<Hit> hits3 = barrelManager.getHitList(wordid3).getHitList();  	
+    	assertTrue(hits3.size()==1);
+    }
+    
+    @Test 
+    public void testDelete() {
+    	barrelManager.deleteWordEntry(wordid1);
+    	barrelManager.deleteWordEntry(wordid2);
+    	barrelManager.deleteWordEntry(wordid3);
+    	assertTrue(barrelManager.getHitList(wordid1)==null);
+    	assertTrue(barrelManager.getHitList(wordid2)==null);
+    	assertTrue(barrelManager.getHitList(wordid3)==null);
+    }
     
    
 }

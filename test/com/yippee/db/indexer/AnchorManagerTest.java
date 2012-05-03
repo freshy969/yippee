@@ -3,6 +3,7 @@ package com.yippee.db.indexer;
 import com.yippee.db.indexer.AnchorManager;
 import com.yippee.db.indexer.model.AnchorHit;
 import com.yippee.db.indexer.model.Hit;
+import com.yippee.db.indexer.model.HitList;
 import com.yippee.util.Configuration;
 
 import org.apache.log4j.Logger;
@@ -13,6 +14,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AnchorManagerTest {
@@ -57,32 +59,48 @@ public class AnchorManagerTest {
     
     @Test
     public void testAddDoc(){
-        assertTrue(anchorManager.addAnchorHit(h1));
-        assertTrue(anchorManager.addAnchorHit(h2));
-        assertTrue(anchorManager.addAnchorHit(h3));
-        assertTrue(anchorManager.addAnchorHit(h4));
-        assertTrue(anchorManager.addAnchorHit(h5));
+    	ArrayList<AnchorHit> ah = new ArrayList<AnchorHit>();
+    	ah.add(h1);
+        assertTrue(anchorManager.addAnchorHits(ah));
+        ah = new ArrayList<AnchorHit>();
+    	ah.add(h2);
+        assertTrue(anchorManager.addAnchorHits(ah));
+        ah = new ArrayList<AnchorHit>();
+    	ah.add(h3);
+        assertTrue(anchorManager.addAnchorHits(ah));
+        ah = new ArrayList<AnchorHit>();
+    	ah.add(h4);
+        assertTrue(anchorManager.addAnchorHits(ah));
+        ah = new ArrayList<AnchorHit>();
+    	ah.add(h5);
+        assertTrue(anchorManager.addAnchorHits(ah));
     }
     
-//    @Test
-//    public void testGetHitList(){
-//    	ArrayList<Hit> hits = anchorManager.getHitList(wordid1).getHitList();  	
-//    	assertTrue(hits.size()==3);
-//    	ArrayList<Hit> hits2 = anchorManager.getHitList(wordid2).getHitList();  	
-//    	assertTrue(hits2.size()==1);
-//    	ArrayList<Hit> hits3 = anchorManager.getHitList(wordid3).getHitList();  	
-//    	assertTrue(hits3.size()==1);
-//    }
-//    
-//    @Test 
-//    public void testDelete() {
-//    	anchorManager.deleteWordEntry(wordid1);
-//    	anchorManager.deleteWordEntry(wordid2);
-//    	anchorManager.deleteWordEntry(wordid3);
-//    	assertTrue(anchorManager.getHitList(wordid1)==null);
-//    	assertTrue(anchorManager.getHitList(wordid2)==null);
-//    	assertTrue(anchorManager.getHitList(wordid3)==null);
-//    }
-//    
+    @Test
+    public void testGetHitList(){
+    	ArrayList<Hit> hits = anchorManager.getHitList(wordid1).getHitList();  	
+    	assertTrue(hits.size()==3);
+    	ArrayList<Hit> hits2 = anchorManager.getHitList(wordid2).getHitList();  	
+    	assertTrue(hits2.size()==1);
+    	ArrayList<Hit> hits3 = anchorManager.getHitList(wordid3).getHitList();  	
+    	assertTrue(hits3.size()==1);
+    }
+    
+    @Test
+    public void testGetContent(){
+    	HitList hits2 = anchorManager.getHitList(wordid2);  	
+    	assertEquals(url,hits2.getHitList().get(0).getDocCameFrom());
+    }
+    
+    @Test 
+    public void testDelete() {
+    	anchorManager.deleteWordEntry(wordid1);
+    	anchorManager.deleteWordEntry(wordid2);
+    	anchorManager.deleteWordEntry(wordid3);
+    	assertTrue(anchorManager.getHitList(wordid1)==null);
+    	assertTrue(anchorManager.getHitList(wordid2)==null);
+    	assertTrue(anchorManager.getHitList(wordid3)==null);
+    }
+    
    
 }
