@@ -136,7 +136,7 @@
 
     <target name="pastry-conf" if="isWindows">
         <echo message="Patching for TJ...." />
-        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ");'>
+        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );'>
           <include name="**/*.java"/>
           <replacetoken>// /*[tj-let-ant-resolve]*/</replacetoken>
         </replace>
@@ -147,7 +147,7 @@
         <echo message="Reverting for TJ...." />
         <replace dir="${src.dir}" value='// /*[tj-let-ant-resolve]*/'>
           <include name="**/*.java"/>
-          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ");</replacetoken>
+          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );</replacetoken>
         </replace>
         <!-- do whatever you want to do here for Mac systems -->
     </target>
