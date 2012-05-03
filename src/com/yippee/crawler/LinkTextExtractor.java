@@ -64,10 +64,18 @@ public class LinkTextExtractor {
             tidy.setForceOutput(true);
             //tidy.setWrapAttVals(true);
             //tidy.setWraplen(99999999);
-            Document document = tidy.parseDOM(is, os);
+            Document document = null;
+            try{
+            	document = tidy.parseDOM(is, os);
+            } catch(StringIndexOutOfBoundsException e){
+            	logger.warn("Tidy: StringIndexOutOfBoundsException");
+            	logger.debug("Tidy: StringIndexOutOfBoundsException", e);
+            }
+            
             
             //Tidy is returning null for some pages which otherwise seem ok
             // eg. wordpress.com
+            
             if(document == null) return anchors;
             
             logger.debug("Document made by tidy: " + document);
