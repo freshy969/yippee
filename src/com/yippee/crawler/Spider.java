@@ -63,7 +63,7 @@ public class Spider implements Runnable {
 		while (running && Configuration.getInstance().isUp()) {
 			try {
 
-				logger.info("About to pull a URL");
+				logger.debug("About to pull a URL");
 				Message msg = urlFrontier.pull();
 
 				URL urlToCrawl = msg.getURL();
@@ -77,7 +77,7 @@ public class Spider implements Runnable {
 
 				HttpModule httpModule = new HttpModule(urlToCrawl);
 
-				logger.info("Got content from url: " + urlToCrawl);
+				logger.debug("Got content from url: " + urlToCrawl);
 
 				String content = httpModule.getContent();
 
@@ -94,7 +94,7 @@ public class Spider implements Runnable {
 				LinkTextExtractor linkEx = new LinkTextExtractor();
 				ArrayList<String> links = null;
 				try {
-					logger.info("About to extract links");
+					logger.debug("About to extract links");
 					links = linkEx.smartExtract(urlToCrawl, content);
 
 
@@ -107,10 +107,10 @@ public class Spider implements Runnable {
 					continue;
 
 				}
-				logger.info("Done extracting links");
+				logger.debug("Done extracting links");
 
 
-				if(links.size() > 0) logger.info("Found some links");
+				if(links.size() > 0) logger.info("Found some links on:" + urlToCrawl);
 
 				logger.info("Asking robots for each link");
 

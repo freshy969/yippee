@@ -27,16 +27,20 @@ public class Configuration {
      * the path to berkeleyDB
      */
     private String berkeleyDBRoot;
-    
     /**
      * Size of RobotsTxtCache
      */
     private int robotsCacheSize;
-
     /**
      * Store Pastry Engine
      */
     private YippeeEngine pastryEngine;
+
+    /**
+     * The currently running service, that is, indexer, page rank or crawler
+     */
+    private String service = "";
+
 
     /**
      * Load a thread-safe (yet lazy!) singleton
@@ -153,4 +157,21 @@ public class Configuration {
 		this.robotsCacheSize = robotsCacheSize;
 	}
 
+    /**
+     * Get the service string
+     *
+     * @return
+     */
+    public String getService() {
+        return service;
+    }
+
+    /**
+     * Set the service string
+     *
+     * @param service
+     */
+    public void setService(String service) {
+        this.service += service;
+    }
 }

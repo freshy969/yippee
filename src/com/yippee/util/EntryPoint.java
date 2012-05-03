@@ -40,7 +40,7 @@ public class EntryPoint {
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
     final int NO_OF_THREADS = 1;
-    final int SIZE_OF_ROBOTS_CACHE = 100;
+    final int SIZE_OF_ROBOTS_CACHE = 512;
     
     /**
      * The default constructor does the minimum of setting up the logger
@@ -211,9 +211,11 @@ public class EntryPoint {
      */
     public static void main(String[] args) {
         EntryPoint entryPoint = new EntryPoint();
+        p(args);
         // Start indexer
         if (args[5].contains("C")) {
             System.out.println("Starting crawler");
+            Configuration.getInstance().setService("C");
             // Pastry
             if (!entryPoint.configure(args)) return;
             entryPoint.setUpSubstrate();
@@ -223,6 +225,7 @@ public class EntryPoint {
         // Start indexer, and if crawler is not started, launch pastry
         if (args[5].contains("I")) {
             System.out.println("Starting indexer");
+            Configuration.getInstance().setService("I");
             if (!args[5].contains("C")) {
                 // Pastry
                 if (!entryPoint.configure(args)) return;
@@ -232,5 +235,12 @@ public class EntryPoint {
             ih.makeThreads();
         }
     }
+
+    private static void p(String[] args) {
+        for (int i = 0; i<args.length; i++) {
+            System.out.println(args[i]);
+        }
+    }
+
 
 }

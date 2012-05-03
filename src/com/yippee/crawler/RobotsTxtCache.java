@@ -23,7 +23,7 @@ public class RobotsTxtCache extends LinkedHashMap<String, RobotsTxt> {
 	@Override
 	public boolean removeEldestEntry(Map.Entry<String, RobotsTxt> eldest) {
 		boolean result = this.size() > capacity;
-		if(result) logger.info("Cache eviction");
+		if(result) logger.debug("Cache eviction");
 		return result;
 	}
 }

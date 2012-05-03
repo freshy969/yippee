@@ -109,7 +109,7 @@ public class LinkTextExtractor {
             responseText = os.toString();
         }
         responseText = responseText.replaceAll("<!DOCTYPE((.|\n|\r)*?)\">", "");
-        logger.info("Done extracting normally");
+        logger.debug("Done extracting normally");
         return anchors;
     }
 

@@ -114,7 +114,7 @@ public class RobotsModule {
     	
     	 if(robotsCache.containsKey(urlInQuestion.getHost())){
          	//answer from cache
-         	logger.info("Robots cache hit for: " + urlInQuestion.getHost());
+         	logger.debug("Robots cache hit for: " + urlInQuestion.getHost());
          	return robotsCache.get(urlInQuestion.getHost()).getCrawlDelay();
          }
     	
