@@ -1,6 +1,11 @@
 package com.yippee.pastry;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
+
+import com.yippee.db.indexer.model.Hit;
+
 import rice.p2p.commonapi.Message;
 import rice.p2p.commonapi.NodeHandle;
 
@@ -28,6 +33,8 @@ public class PastryMessage implements Message {
      * The response of the message
      */
     boolean wantResponse = true;
+    
+    ArrayList<Hit> hitList;
 
     /**
      * The message constructor (needs to keep the handle from which it was sent
@@ -39,6 +46,13 @@ public class PastryMessage implements Message {
     public PastryMessage(NodeHandle from, String content) {
         this.from = from;
         this.content = content;
+        this.hitList = new ArrayList<Hit>();
+    }
+    
+    public PastryMessage(NodeHandle from, String word, ArrayList<Hit> hitList){
+    	this.from = from;
+    	this.content = word;
+    	this.hitList = hitList;
     }
 
     /**

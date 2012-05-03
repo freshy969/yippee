@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.PastryAppSocketSender;
 
@@ -27,6 +28,8 @@ public class YippeePastryApp implements Application {
      * The urlFrontier in which
      */
     private URLFrontier urlFrontier;
+    
+    private BarrelManager barrelManager;
 
     /**
      * Constructor
@@ -37,8 +40,8 @@ public class YippeePastryApp implements Application {
         logger.info("Register Application");
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "Yippee App");
-        
-        endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
+        barrelManager = new BarrelManager();
+       // endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
     }
 
@@ -70,7 +73,9 @@ public class YippeePastryApp implements Application {
         } else {
             if (om.content.equals("PONG")) {
                 logger.debug("Received PONG from node " + om.from.getId());
-            }
+            } else if(om.hitList.size()>0) { //message with hitlist in it
+        		logger.info("Saving in barrels");
+        	}
         }
 	}
 
@@ -102,6 +107,13 @@ public class YippeePastryApp implements Application {
     	logger.info(this + " sending hit list direct to " + nh);
         endpoint.connect(nh, new PastryAppSocketSender(node,endpoint,list), 30000);
     }
+    
+    public void sendList(Id idToSendTo, String word, ArrayList<Hit> list) {
+    	logger.info(this + " sending hit list for ["+word+"] to " + idToSendTo);
+    	PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), word, list);
+    	message.wantResponse = false;
+        endpoint.route(idToSendTo, message, null);
+    }    
     
 
     /**

@@ -75,7 +75,7 @@ public class YippeeEngine {
         yippeePastryApp.setupURLFrontier(urlFrontier);
     }
     
-    public void sendObject(NodeHandle nh, ArrayList<Hit> list ){
-           yippeePastryApp.sendSocketDirect(nh, list);
-       }
+    public void sendList(String word, ArrayList<Hit> list){
+    	yippeePastryApp.sendList(nodeFactory.getIdFromString(word), word,list);
+    }
 }
