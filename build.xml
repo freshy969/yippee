@@ -52,10 +52,10 @@
             when running the ant target. To get the result of ifconfig you can do
             `ifconfig`; for instance, to launch the first target, I can always do
             ant project-test-pastry \
-            -DbootIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
+            -DbIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
 
 
-            3. ant project-prod-crawler -DbIp=[ip] -Dbport=[port] -Dlport[port]
+            3. ant project-prod-crawler -DbIp=[ip] -Dbport=[port] -Dlport=[port]
 
                 [ip]:   External ip (e.g., the one returned by ifconfig/ipconfig
                 [port]: Port of the bootstrap node and localnode (they must be
@@ -79,14 +79,14 @@
 
     <condition property="params.set">
         <and>
-            <isset property="bootIp"/>
+            <isset property="bIp"/>
         </and>
     </condition>
 
     <target name="check">
         <fail unless="params.set">
-            Must specify the parameter bootIp: Run "ant [target]
-            -DbootIp=[external ip]
+            Must specify the parameter bIp: Run "ant [target]
+            -DbIp=[external ip]
         </fail>
     </target>
 
@@ -98,7 +98,7 @@
     <target name="sanity-check" depends="check">
         <echo>" Root:. . . . .${project.root}"</echo>
         <echo>" Lib: . . . . .${lib.dir}"</echo>
-        <echo>" Pastry Ip: . .${bootIp}"</echo>
+        <echo>" Pastry Ip: . .${bIp}"</echo>
         <echo>" Pastry Port: .${bootPort}"</echo>
     </target>
 
@@ -204,7 +204,7 @@
             description="Create single-noded crawler">
             <antcall target="run">
                 <param name="localPort" value="${lport}"/>
-                <param name="bootPort" value="${bport"/>
+                <param name="bootPort" value="${bport}"/>
                 <param name="database" value="db/prod"/>
                 <param name="service" value="-C"/>
             </antcall>
