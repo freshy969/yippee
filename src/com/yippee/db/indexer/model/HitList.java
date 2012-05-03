@@ -3,6 +3,7 @@ package com.yippee.db.indexer.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
@@ -16,7 +17,7 @@ public class HitList {
 	private byte[] wordId;
 	private float idf;
 	private float df;
-//	private HashMap<Doc, float> tfMap;
+	private HashMap<String, Float> tfMap;
 	
 	/**
 	 * list of hits for that word
@@ -27,10 +28,20 @@ public class HitList {
 		id = i;
 		wordId = i.getBytes();
 		hitList = new ArrayList<Hit>();
+		tfMap = new HashMap<String, Float>(); 
 	}
 	
 	public HitList() {
 		hitList = new ArrayList<Hit>();
+		tfMap = new HashMap<String, Float>(); 
+	}
+	
+	public HashMap<String, Float> getTfMap(){
+		return tfMap;
+	}
+	
+	public void setTfMap(HashMap<String, Float> map){
+		tfMap = map;
 	}
 	
 	public float getIdf(){
