@@ -51,10 +51,11 @@ public class Hit implements Serializable {
 	 * @param docFrom
 	 * @param wordID
 	 */
-	public Hit(String docPointingTo, String docFrom, String word, byte[] wordId) {
+	public Hit(String docPointingTo, String docFrom, String word, int position) {
 		this.docID = docPointingTo;
 		this.docIDfrom = docFrom;
 		this.word = word;
+		this.position = position;
 		anchor = true;
 	}
 	

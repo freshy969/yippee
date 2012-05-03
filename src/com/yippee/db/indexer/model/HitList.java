@@ -41,6 +41,10 @@ public class HitList {
 		hitList.addAll(hits);
 	}
 	
+	public void setHitList(ArrayList<Hit> hits) {
+		hitList = hits;
+	}
+	
 	public byte[] getWordId() {
 		return wordId;
 	}
