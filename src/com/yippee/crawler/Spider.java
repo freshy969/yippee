@@ -78,7 +78,7 @@ public class Spider implements Runnable {
 				HttpModule httpModule = new HttpModule(urlToCrawl);
 
 				logger.debug("Got content from url: " + urlToCrawl);
-
+				
 				String content = httpModule.getContent();
 
 				if (!httpModule.isValid()) continue; // There was an error!
