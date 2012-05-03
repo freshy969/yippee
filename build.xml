@@ -11,7 +11,6 @@
     <property name="log.dir" value="${basedir}/log"/>
     <property name="out.dir" value="${basedir}/build"/>
     <property name="jar.dir" value="${basedir}/build"/>
-    <property name="bootPort" value="9001"/>
 
     <target name="usage" description="Print the usage of ant scripts">
         <echo>

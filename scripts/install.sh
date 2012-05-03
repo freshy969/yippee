@@ -21,7 +21,7 @@ function e {
 ##
 function usage {
   e
-  e 'Please run ./usage <uname>'
+  e 'Please run ./install <uname>'
   e
   e '  <uname>: your username at Penn'
 }
