@@ -53,6 +53,8 @@ public class PoliteSimpleQueue implements URLFrontier {
 			toSend = current.remove(rand.nextInt(current.size()));
 		}
 		
+		this.next.add(toSend);
+		
 		return new Message(toSend.toString()) ;
 	}
 
