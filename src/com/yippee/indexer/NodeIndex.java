@@ -19,14 +19,14 @@ public class NodeIndex {
     static Logger logger = Logger.getLogger(NodeIndex.class);
 	
 	private HashMap<String, ArrayList<Hit>> wordIndex;
-	private int capacity = 3;
-//	private Lexicon lexicon;
-//	private HashMap<String, byte[]> lexiconMap;
+	private int capacity = 10;
+	//private Lexicon lexicon;
+	//private HashMap<String, byte[]> lexiconMap;
 	
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
-//		lexicon = new Lexicon("doc/lexicon.txt");
-//		lexiconMap = lexicon.getLexiconMap();
+		//lexicon = new Lexicon("doc/lexicon.txt");
+		//lexiconMap = lexicon.getLexiconMap();
 	}
 	
 	/**
@@ -42,6 +42,7 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			
 			String word = iter.next();
+			//if(!lexiconMap.containsKey(word)){} else{
 	
 			ArrayList<Hit> hitList = hitMap.get(word); 
 			
@@ -58,13 +59,16 @@ public class NodeIndex {
 			list.addAll(hitList);
 			
 			wordIndex.put(word, list);
+			}
+		//}
 			
 			if (wordIndex.size() > capacity) {
+				logger.info("REACHED CAPACITY, SENDING TO RING");
 				sendWordsToRing();
 				printIndex();
 				wordIndex = new HashMap<String, ArrayList<Hit>>();
 			}
-		}
+		
 		
 	}
 	

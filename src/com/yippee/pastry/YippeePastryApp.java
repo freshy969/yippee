@@ -75,6 +75,7 @@ public class YippeePastryApp implements Application {
                 logger.debug("Received PONG from node " + om.from.getId());
             } else if(om.hitList.size()>0) { //message with hitlist in it
         		logger.info("Saving in barrels");
+        		barrelManager.addDocHits(om.hitList);
         	}
         }
 	}

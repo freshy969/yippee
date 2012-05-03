@@ -1,8 +1,11 @@
 package com.yippee.db.indexer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+
+import com.sleepycat.je.Cursor;
 import com.sleepycat.je.DatabaseException;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;
@@ -41,10 +44,18 @@ public class BarrelManager {
             // Open the data accessor. This is used to store persistent objects.
             dao = new DAL(myDbEnv.getIndexerStore());
             String word = list.get(0).getWord();
+            int size = 0;
+            float df = 0;
+            HashMap<String, Float> tfMap;
             if(dao.getBarrelById().contains(word)) {
             	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
             	HitList hl = dao.getBarrelById().get(word);
             	hl.addHitList(list);
+            	//df = updateDf(hl.getTfMap(),list);
+            	tfMap = updatetfMap(hl.getTfMap(),list);
+            	df = new Float(tfMap.size());
+            	hl.setDf(df);
+            	hl.setTfMap(tfMap);
             	dao.getBarrelById().delete(word);
             	//"updates" entry
             	dao.getBarrelById().put(hl);
@@ -53,8 +64,15 @@ public class BarrelManager {
             	//System.out.println("create new entry "+h.getDocId()+", "+new String(h.getWordId()));
             	HitList hl = new HitList(word);
             	hl.addHitList(list);
+            	//df = updateDf(new HashMap<String, Float>(),list);
+            	tfMap = updatetfMap(new HashMap<String, Float>(),list);
+            	df = new Float(tfMap.size());
+            	hl.setTfMap(tfMap);
+            	hl.setDf(df);
             	dao.getBarrelById().put(hl);
             }
+            	size = dao.getBarrelById().get(word).getHitList().size();
+            logger.info("Barrel entry for ["+word+"] "+"total hits: "+size+" | DF: "+df+" = "+tfMap.size());
             
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
@@ -69,6 +87,29 @@ public class BarrelManager {
         return success;
     }
     
+    public float updateDf(HashMap<String, Float> current, ArrayList<Hit> list){   	
+
+    	for(int i=0; i<list.size(); i++){
+    		if(!current.containsKey(list.get(i).getDocId())){
+    			current.put(list.get(i).getDocId(),new Float(0));
+    		}
+    	}
+    	return new Float(current.size());
+    }
+    
+    public HashMap<String, Float> updatetfMap(HashMap<String, Float> current, ArrayList<Hit> list){   	
+    	for(int i=0; i<list.size(); i++){
+    		String doc = list.get(i).getDocId();
+    		if(current.containsKey(doc)){
+    			Float f = current.remove(doc);
+    			current.put(doc, f+1);
+    		} else {
+    			current.put(doc, new Float(1));
+    		}
+    	}
+    	return current;
+    }
+    
     /**
      * gives hitlist for a given word
      * aka a HitList object
@@ -79,6 +120,11 @@ public class BarrelManager {
         dao = new DAL(myDbEnv.getIndexerStore());
         
         return dao.getBarrelById().get(word);
+    }
+    
+    public int getBarrelSize(){
+        dao = new DAL(myDbEnv.getIndexerStore());
+        return dao.getBarrelById().map().size();
     }
     
     /**

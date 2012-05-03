@@ -50,11 +50,6 @@ public class BarrelManagerTest {
        		wordid3) h4      
        */
     }
-	
-	@Test
-	public void testTrue(){
-		assertTrue(true);
-	}
 
     
     @Test
@@ -96,5 +91,11 @@ public class BarrelManagerTest {
     	assertTrue(barrelManager.getHitList(wordid3)==null);
     }
     
-   
+	@Test
+	public void testSize(){
+	//	ArrayList<Hit> hits = barrelManager.getHitList("channel").getHitList();  
+    	assertTrue(barrelManager.getBarrelSize()>0);
+	//	assertTrue(true);
+	}
+    
 }
