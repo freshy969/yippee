@@ -236,10 +236,26 @@ public class EntryPoint {
         }
     }
 
+    /**
+     * Print out startup variables, before running the node
+     * [java] 9000            Boot
+     * [java] 158.130.105.157
+     * [java] 9000
+     * [java] feed.url
+     * [java] db/prod
+     * [java] -C
+     * [java] --overwrite
+     *
+     * @param args
+     */
     private static void p(String[] args) {
-        for (int i = 0; i<args.length; i++) {
-            System.out.println(args[i]);
-        }
+        System.out.println("Boot port... " + args[0]);
+        System.out.println("Boot ip..... " + args[1]);
+        System.out.println("Local port.. " + args[2]);
+        System.out.println("Feed file... " + args[3]);
+        System.out.println("Database.... " + args[4]);
+        System.out.println("Service..... " + args[5]);
+        System.out.println("Other....... " + args[6]);
     }
 
 

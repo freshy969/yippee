@@ -98,7 +98,6 @@
         <echo>" Root:. . . . .${project.root}"</echo>
         <echo>" Lib: . . . . .${lib.dir}"</echo>
         <echo>" Pastry Ip: . .${bIp}"</echo>
-        <echo>" Pastry Port: .${bootPort}"</echo>
     </target>
 
     <target name="clean">
@@ -170,6 +169,7 @@
         *   database path
     -->
     <target name="run" depends="jar">
+        <echo>" Pastry Port: .${bootPort}"</echo>
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
