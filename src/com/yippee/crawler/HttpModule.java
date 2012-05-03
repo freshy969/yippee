@@ -129,5 +129,17 @@ public class HttpModule {
     public boolean isValid(){
         return valid;
     }
+    
+    public String getContentType(){
+    	String retVal = "";
+    	List<String> values = headers.get("content-type");
+    	if(values != null){
+    		for(String s : values){
+    			retVal += s;
+    		}
+    	}
+    	
+    	return retVal;
+    }
 
 }
