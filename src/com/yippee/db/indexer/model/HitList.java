@@ -33,6 +33,22 @@ public class HitList {
 		hitList = new ArrayList<Hit>();
 	}
 	
+	public float getIdf(){
+		return idf;
+	}
+
+	public void setIdf(float f){
+		this.idf = f;
+	}
+
+	public float getDf(){
+		return df;
+	}
+
+	public void setDf(float f){
+		this.df = f;
+	}
+	
 	public void addHit(Hit hit) {
 		hitList.add(hit);
 	}
