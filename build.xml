@@ -120,7 +120,7 @@
                classpathref="classpath"/>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="jar" depends="compile, pastry-revert">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar"
              basedir="${out.dir}/classes">
@@ -147,7 +147,7 @@
         <echo message="Reverting for TJ...." />
         <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/'>
           <include name="**/*.java"/>
-          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" ); System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );</replacetoken>
+          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );</replacetoken>
         </replace>
         <!-- do whatever you want to do here for Mac systems -->
     </target>
