@@ -114,13 +114,13 @@
         <touch file="${log.dir}/pagerank.log"/>
     </target>
 
-    <target name="compile">
+    <target name="compile" depends="pastry-conf">
         <mkdir dir="${out.dir}/classes"/>
         <javac srcdir="${src.dir}" destdir="${out.dir}/classes"
                classpathref="classpath"/>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="jar" depends="compile, pastry-revert">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar"
              basedir="${out.dir}/classes">
@@ -130,6 +130,27 @@
         </jar>
     </target>
 
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+
+    <target name="pastry-conf" if="isWindows">
+        <echo message="Patching for TJ...." />
+        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );'>
+          <include name="**/*.java"/>
+          <replacetoken>/*[tj-let-ant-resolve]*/</replacetoken>
+        </replace>
+        <!-- do whatever you want to do here for Mac systems -->
+    </target>
+
+    <target name="pastry-revert" if="isWindows">
+        <echo message="Reverting for TJ...." />
+        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/'>
+          <include name="**/*.java"/>
+          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );</replacetoken>
+        </replace>
+        <!-- do whatever you want to do here for Mac systems -->
+    </target>
     <!--
     Arguments are:
         *   local port
@@ -161,8 +182,8 @@
     <target name="project-test-crawler" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
             <antcall target="run">
-                <param name="localPort" value="9000"/>
                 <param name="localPort" value="9001"/>
+                <param name="bootPort" value="9001"/>
                 <param name="database" value="db/test"/>
                 <param name="service" value="-C"/>
             </antcall>
@@ -171,8 +192,8 @@
     <target name="project-test-indexer" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
             <antcall target="run">
-                <param name="localPort" value="10000"/>
                 <param name="localPort" value="10001"/>
+                <param name="bootPort" value="10001"/>
                 <param name="database" value="db/test"/>
                 <param name="service" value="-I"/>
             </antcall>
