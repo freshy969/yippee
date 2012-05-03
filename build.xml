@@ -114,7 +114,7 @@
         <touch file="${log.dir}/pagerank.log"/>
     </target>
 
-    <target name="compile">
+    <target name="compile" depends="pastry-conf">
         <mkdir dir="${out.dir}/classes"/>
         <javac srcdir="${src.dir}" destdir="${out.dir}/classes"
                classpathref="classpath"/>
@@ -130,6 +130,27 @@
         </jar>
     </target>
 
+    <condition property="isWindows">
+        <os family="unix" />
+    </condition>
+
+    <target name="pastry-conf" if="isWindows">
+        <echo message="Patching for TJ...." />
+        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ");'>
+          <include name="**/*.java"/>
+          <replacetoken>// /*[tj-let-ant-resolve]*/</replacetoken>
+        </replace>
+        <!-- do whatever you want to do here for Mac systems -->
+    </target>
+
+    <target name="pastry-revert" if="isWindows">
+        <echo message="Reverting for TJ...." />
+        <replace dir="${src.dir}" value='// /*[tj-let-ant-resolve]*/'>
+          <include name="**/*.java"/>
+          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ");</replacetoken>
+        </replace>
+        <!-- do whatever you want to do here for Mac systems -->
+    </target>
     <!--
     Arguments are:
         *   local port
