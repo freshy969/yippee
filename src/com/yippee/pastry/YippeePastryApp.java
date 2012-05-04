@@ -129,7 +129,7 @@ public class YippeePastryApp implements Application {
 	 * @param message
 	 */
 	private void handleIndexerMessage(Id targetId, IndexerMessage message) {
-		logger.info("Saving in barrels");
+		logger.debug("Saving in barrels");
 		barrelManager.addDocHits(message.getHitList());		
 	}
 
@@ -144,7 +144,7 @@ public class YippeePastryApp implements Application {
      */
     private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
         String urlString = message.getUrl();
-        logger.info("Pushing [" + urlString + "] to the URLFRONTIER");
+        logger.debug("Pushing [" + urlString + "] to the URLFRONTIER");
         com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
         if (msg.getType() == com.yippee.crawler.Message.Type.NEW) {
             urlFrontier.push(msg);
@@ -164,7 +164,7 @@ public class YippeePastryApp implements Application {
     void sendCrawlerMessage(URL url){
         Id id = nodeFactory.getIdFromString(url.getHost());
         String content = url.toString();
-        logger.info("Sending URL "+content+"to node closest to"+url.getHost());
+        logger.debug("Sending URL "+content+"to node closest to"+url.getHost());
     }
 
     /**
@@ -172,19 +172,19 @@ public class YippeePastryApp implements Application {
      */
     public void sendDirect(NodeHandle nh, String msgString) {
 
-        logger.info(this + " sending direct to " + nh);
+        logger.debug(this + " sending direct to " + nh);
         PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
         //     message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
 
     public void sendSocketDirect(NodeHandle nh, ArrayList<Hit> list) {
-        logger.info(this + " sending hit list direct to " + nh);
+        logger.debug(this + " sending hit list direct to " + nh);
         endpoint.connect(nh, new PastryAppSocketSender(node, endpoint, list), 30000);
     }
 
     public void sendList(Id idToSendTo, String word, ArrayList<Hit> list) {
-        logger.info(this + " sending hit list for [" + word + "] to " + idToSendTo);
+        logger.debug(this + " sending hit list for [" + word + "] to " + idToSendTo);
         IndexerMessage message = new IndexerMessage(node.getLocalNodeHandle(), word, list);
         //	message.wantResponse = false;
         endpoint.route(idToSendTo, message, null);
