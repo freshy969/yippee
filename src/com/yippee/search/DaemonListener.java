@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.log4j.Logger;
+
+import com.yippee.pastry.message.PastryMessage;
 import com.yippee.util.SocketQueue;
 
 /**
@@ -11,13 +14,18 @@ import com.yippee.util.SocketQueue;
  *
  */
 public class DaemonListener implements Runnable {
-	int port;
+	 /**
+     * Create logger in the Log4j hierarchy named by by software component
+     */
+    static Logger logger = Logger.getLogger(DaemonListener.class);
+	
+    int port;
 	SocketQueue queue;
 	
 	public DaemonListener(int port, SocketQueue queue) {
 		this.port = port;
 		this.queue = queue;
-		System.out.println("Listening on port: " + port);
+		logger.info("Listening on port: " + port);
 	}
 	
     public void run() {
