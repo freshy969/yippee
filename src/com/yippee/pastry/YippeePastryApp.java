@@ -11,6 +11,7 @@ import com.yippee.util.SocketQueue;
 import com.yippee.pastry.message.CrawlerMessage;
 import com.yippee.pastry.message.IndexerMessage;
 import com.yippee.pastry.message.PastryMessage;
+import com.yippee.pastry.message.PingPongMessage;
 import com.yippee.pastry.message.QueryMessage;
 
 import org.apache.log4j.Logger;
@@ -118,7 +119,7 @@ public class YippeePastryApp implements Application {
         }
 	}
 
-    private void handlePingPongMessage(Id id, PingPongService message) {
+    private void handlePingPongMessage(Id id, PingPongMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
