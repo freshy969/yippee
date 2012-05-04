@@ -1,4 +1,4 @@
-package com.yippee.pastry;
+package com.yippee.search;
 
 import java.io.IOException;
 import java.net.ServerSocket;
