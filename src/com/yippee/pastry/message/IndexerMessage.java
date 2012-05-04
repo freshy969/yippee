@@ -1,8 +1,6 @@
 package com.yippee.pastry.message;
 
 import java.util.ArrayList;
-
-import rice.p2p.commonapi.Message;
 import rice.p2p.commonapi.NodeHandle;
 
 import com.yippee.db.indexer.model.Hit;
@@ -10,7 +8,7 @@ import com.yippee.db.indexer.model.Hit;
 /**
  * The Pastry Message class delivered by pastry, used by the indexer
  */
-public class IndexerMessage implements Message{
+public class IndexerMessage implements rice.p2p.commonapi.Message{
 	   NodeHandle from;
 	    /**
 	     * The actual content of the message

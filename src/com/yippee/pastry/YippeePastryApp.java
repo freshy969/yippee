@@ -85,13 +85,14 @@ public class YippeePastryApp implements Application {
     }
 
 
-    private void handlePingPongMessage(Id id, PingPongMessage message) {
+    private void handlePingPongMessage(Id targetId, PingPongMessage message) {
         if (message.isWantResponse()) { // if it is a query
             if (message.getContent().equals("PING")) {
-                logger.debug("Received PING to ID " + id + " from node " +
-                        message.getFrom().getId() + "; returning PONG");
+                logger.debug(	"Received PING to ID " + targetId + " from node " +
+                				message.getFrom().getId() + "; returning PONG");
                 sendDirect(message.getFrom(), "PONG");
             } else {// else for other queries
+            	
             }
         } else {
             if (message.getContent().equals("PONG")) {

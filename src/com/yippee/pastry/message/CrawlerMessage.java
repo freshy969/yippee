@@ -9,7 +9,7 @@ import rice.p2p.commonapi.NodeHandle;
  * An implementation of the pastry application message sent around nodes. The
  * Pastry Message class delivered by pastry, used by the crawler
  */
-public class CrawlerMessage implements Message{
+public class CrawlerMessage implements rice.p2p.commonapi.Message{
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */
