@@ -1,21 +1,14 @@
 package com.yippee.pastry;
 
-import java.util.ArrayList;
-
 import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
-import com.yippee.pastry.PastryAppSocketSender;
+import com.yippee.pastry.message.*;
 import com.yippee.util.SocketQueue;
-
-import com.yippee.pastry.message.CrawlerMessage;
-import com.yippee.pastry.message.IndexerMessage;
-import com.yippee.pastry.message.PastryMessage;
-import com.yippee.pastry.message.PingPongMessage;
-import com.yippee.pastry.message.QueryMessage;
-
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
+
+import java.util.ArrayList;
 
 public class YippeePastryApp implements Application {
     /**
@@ -34,7 +27,7 @@ public class YippeePastryApp implements Application {
      * The urlFrontier in which
      */
     private URLFrontier urlFrontier;
-    
+
     private BarrelManager barrelManager;
 
 	private SocketQueue queryQueue;
@@ -99,7 +92,7 @@ public class YippeePastryApp implements Application {
             }
         } else {
             if (message.getContent().equals("PONG")) {
-                logger.debug("Received PONG from node " + om.from.getId());
+                logger.debug("Received PONG from node " + message.getFrom().getId());
             }
         }
 	}
