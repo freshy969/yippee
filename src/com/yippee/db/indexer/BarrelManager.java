@@ -69,8 +69,8 @@ public class BarrelManager {
             	hl.setDf(df);*/
             	dao.getBarrelById().put(hl);
             }
-           // logger.info("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap().size()+" | tf: "+hl.getTfMap());
-            System.out.println("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap().size()+" | tf: "+hl.getTfMap());
+           logger.info("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap()+" | tf: "+hl.getTfMap());
+           // System.out.println("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap()+" | tf: "+hl.getTfMap());
 
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
@@ -85,28 +85,6 @@ public class BarrelManager {
         return success;
     }
     
-    public float updateDf(HashMap<String, Float> current, ArrayList<Hit> list){   	
-
-    	for(int i=0; i<list.size(); i++){
-    		if(!current.containsKey(list.get(i).getDocId())){
-    			current.put(list.get(i).getDocId(),new Float(0));
-    		}
-    	}
-    	return new Float(current.size());
-    }
-    
-    public HashMap<String, Float> updatetfMap(HashMap<String, Float> current, ArrayList<Hit> list){   	
-    	for(int i=0; i<list.size(); i++){
-    		String doc = list.get(i).getDocId();
-    		if(current.containsKey(doc)){
-    			Float f = current.remove(doc);
-    			current.put(doc, f+1);
-    		} else {
-    			current.put(doc, new Float(1));
-    		}
-    	}
-    	return current;
-    }
     
     /**
      * gives hitlist for a given word
