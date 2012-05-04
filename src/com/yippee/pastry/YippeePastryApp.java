@@ -91,50 +91,48 @@ public class YippeePastryApp implements Application {
 
     /**
      * Called as a result of deliver recieving a PingPongMessage
+     *
      * @param targetId
      * @param message
      */
     private void handlePingPongMessage(Id targetId, PingPongMessage message) {
 
-            if (message.getContent().equals("PING")) {
-                logger.debug(	"Received PING to ID " + targetId + " from node " +
-                				message.getFrom().getId() + "; returning PONG");
-                
-                sendDirect(message.getFrom(), "PONG");
-                
-            } else if (message.getContent().equals("PONG")) {
-                logger.debug("Received PONG from node " + message.getFrom().getId());
-                
-            } else {
-            	logger.error("Malformed PingPongMessage");
-            	logger.error(message);
-            }
-        
+        if (message.getContent().equals("PING")) {
+            logger.debug("Received PING to ID " + targetId + " from node " +
+                    message.getFrom().getId() + "; returning PONG");
+
+            PingPongMessage reply = new PingPongMessage(node.getLocalNodeHandle(), "PONG");
+            sendDirect(message.getFrom(), reply);
+        } else if (message.getContent().equals("PONG")) {
+            logger.debug("Received PONG from node " + message.getFrom().getId());
+
+        } else {
+            logger.error("Malformed PingPongMessage");
+            logger.error(message);
+        }
     }
 
-   
+
     /**
-     * 
      * @param targetId
      * @param message
      */
-	private void handleQueryMessage(Id targetId, QueryMessage message) {
-		// TODO Auto-generated method stub
-		
-	}
+    private void handleQueryMessage(Id targetId, QueryMessage message) {
+        // TODO Auto-generated method stub
 
-	/**
-	 * Called as a result of deliver receiving an IndexerMessage
-	 * @param targetId
-	 * @param message
-	 */
-	private void handleIndexerMessage(Id targetId, IndexerMessage message) {
-		logger.debug("Saving in barrels");
-		barrelManager.addDocHits(message.getHitList());		
-	}
+    }
 
+    /**
+     * Called as a result of deliver receiving an IndexerMessage
+     *
+     * @param targetId
+     * @param message
+     */
+    private void handleIndexerMessage(Id targetId, IndexerMessage message) {
+        logger.debug("Saving in barrels");
+        barrelManager.addDocHits(message.getHitList());
+    }
 
-	
 
     /**
      * Handle the crawler messages
@@ -161,19 +159,17 @@ public class YippeePastryApp implements Application {
         endpoint.route(destination, message, null);
     }
 
-    void sendCrawlerMessage(URL url){
+    void sendCrawlerMessage(URL url) {
         Id id = nodeFactory.getIdFromString(url.getHost());
         String content = url.toString();
-        logger.debug("Sending URL "+content+"to node closest to"+url.getHost());
+        logger.debug("Sending URL " + content + "to node closest to" + url.getHost());
     }
 
     /**
      * Called to directly send a message to the node handle
      */
-    public void sendDirect(NodeHandle nh, String msgString) {
-
+    public void sendDirect(NodeHandle nh, Message message) {
         logger.debug(this + " sending direct to " + nh);
-        PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
         //     message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
