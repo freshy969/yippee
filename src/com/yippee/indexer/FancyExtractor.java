@@ -8,6 +8,8 @@ import org.w3c.dom.NodeList;
 import com.yippee.db.indexer.model.AnchorHit;
 import com.yippee.db.indexer.model.Hit;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -53,7 +55,7 @@ public class FancyExtractor {
 	 * @param parent the parent node of this node
 	 * @return All links found in this branch
 	 */
-	public void extract (String url, Node parent) {
+	public void extract (String url, Node parent) throws MalformedURLException {
 		
 		NodeList nodes = parent.getChildNodes();
 //		ArrayList<String> links = new ArrayList<String>(); 
@@ -69,12 +71,8 @@ public class FancyExtractor {
 					// Found a link
 					String link =  attr.getNamedItem("href").getNodeValue();
 					
-					// Prepend url if relative 
-					if (!link.startsWith("http")) {
-						int tmp = url.lastIndexOf("/");
-						url = url.substring(0, tmp + 1);
-						link = url + link;
-					}
+					if (!link.startsWith("http"))
+						link = resolve(docId, link);
 					
 					links.add(link);
 					format.push("a");
@@ -207,5 +205,57 @@ public class FancyExtractor {
 		String result = input.replaceAll("[,:;@/!<>#\\.\\*\\?\\[\\]\\(\\)]| - ", " ");
 		
 		return result;
+	}
+	
+	public String resolve(String baseURL, String relativeURL) throws MalformedURLException {
+		//Does baseURL end in slash?
+		if(baseURL.endsWith("/")){
+			if(relativeURL.startsWith("/")){
+				//Case 1A
+				//Use URL class to get the root of baseURL (i.e., up to the end of the host)
+				return relativeStartsWithSlash(baseURL, relativeURL);
+				
+			} else if(relativeURL.startsWith("?") || relativeURL.startsWith("#")){
+				return baseURL + relativeURL;
+			} else{
+				//RelativeURL doesn't start with slash
+				//Case 1 B, C & D
+				return baseURL + relativeURL;
+			}
+		}else {
+			//baseURL Doesn't End With Slash
+			if(relativeURL.startsWith("/")){
+				//Case 2A (Same as case 1A
+				return relativeStartsWithSlash(baseURL, relativeURL);
+				
+			} else if(relativeURL.startsWith("?") || relativeURL.startsWith("#")){
+				return baseURL + relativeURL;
+			}else{
+				//Cases 2 B, C & D
+				//base Does NOT end in slash
+				URL url = new URL(baseURL);
+				//System.out.println("Stripped baseURL: " + baseURL.substring(url.getProtocol().length() + 3));
+				
+				if( baseURL.substring(url.getProtocol().length() + 3).contains("/") ){
+					
+					//Has slash other than protocol
+					//Append relative URL to last slash in baseURL
+					return baseURL.substring(0, baseURL.lastIndexOf('/') + 1) + relativeURL;
+					
+				}else {
+					//No other / besides protocol
+					return baseURL + "/" + relativeURL;
+				}
+				
+			}
+		}
+		
+	}
+
+	private String relativeStartsWithSlash(String baseURL, String relativeURL)
+			throws MalformedURLException {
+		URL url = new URL(baseURL);
+		int port = url.getPort();
+		return url.getProtocol() + "://" + url.getHost() + ((port == 80 || port == -1) ? "" : ":" + url.getPort()) + relativeURL;
 	}
 }
