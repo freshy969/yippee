@@ -87,7 +87,7 @@ public class Spider implements Runnable {
 				docAug.setDoc(content);
 				docAug.setUrl(urlToCrawl.toString());
 
-				docAug.setId(urlToCrawl.toString() + " timestamp");
+				docAug.setId(urlToCrawl.toString());
 
 				logger.info("About to push to DocManager");
 				dam.push(docAug);

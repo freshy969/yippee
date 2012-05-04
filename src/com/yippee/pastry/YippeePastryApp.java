@@ -98,7 +98,7 @@ public class YippeePastryApp implements Application {
     private void handlePingPongMessage(Id targetId, PingPongMessage message) {
 
         if (message.getContent().equals("PING")) {
-            logger.debug("Received PING to ID " + targetId + " from node " +
+            logger.debug("Received PING at ID " + targetId + " from node " +
                     message.getFrom().getId() + "; returning PONG");
 
             PingPongMessage reply = new PingPongMessage(node.getLocalNodeHandle(), "PONG");
