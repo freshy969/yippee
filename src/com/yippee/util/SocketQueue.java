@@ -45,7 +45,7 @@ public class SocketQueue {
 	 * @return Socket to be processed
 	 * @throws InterruptedException
 	 */
-	protected synchronized Socket take() throws InterruptedException {
+	public synchronized Socket take() throws InterruptedException {
 		// Worker is ready!
 		if (reqList.size() == CAPACITY)
 			notify();

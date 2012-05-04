@@ -1,6 +1,10 @@
 package com.yippee.pastry;
 
 import com.yippee.crawler.frontier.URLFrontier;
+
+import java.util.HashMap;
+import java.util.UUID;
+
 import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.message.*;
@@ -9,6 +13,7 @@ import com.yippee.util.SocketQueue;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -37,6 +42,7 @@ public class YippeePastryApp implements Application {
     private BarrelManager barrelManager;
 
     private SocketQueue queryQueue;
+    private HashMap<UUID, Socket> socketMap;
 
     /**
      * Constructor
@@ -52,6 +58,7 @@ public class YippeePastryApp implements Application {
         // endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
         queryQueue = new SocketQueue(100);
+        socketMap = new HashMap<UUID, Socket>();
     }
 
     public void setupURLFrontier(URLFrontier urlFrontier) {
@@ -186,6 +193,10 @@ public class YippeePastryApp implements Application {
         endpoint.route(idToSendTo, message, null);
     }
 
+    public void sendQuery(Id idToSendTo, QueryMessage message) {
+        logger.debug(this + " sending query for [" + message.getQuery() + "] to " + idToSendTo);
+        endpoint.route(idToSendTo, message, null);
+    }
 
     /**
      * This is always true in our application.
@@ -202,5 +213,21 @@ public class YippeePastryApp implements Application {
      * We do not make use of this method for now.
      */
     public void update(NodeHandle arg0, boolean arg1) {
+    }
+    
+    public Socket getSocket(UUID id) {
+    	return socketMap.get(id);
+    }
+    
+    public void putSocket(UUID id, Socket socket) {
+    	socketMap.put(id, socket);
+    }
+    
+    public Node getNode() {
+    	return node;
+    }
+    
+    public NodeFactory getNodeFactory() {
+    	return nodeFactory;
     }
 }
