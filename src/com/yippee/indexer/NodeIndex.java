@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -20,13 +21,26 @@ public class NodeIndex {
 	
 	private HashMap<String, ArrayList<Hit>> wordIndex;
 	private int capacity = 10;
-	//private Lexicon lexicon;
-	//private HashMap<String, byte[]> lexiconMap;
+	private Lexicon lexicon;
+	private HashMap<String, byte[]> lexiconMap;
+	private ArrayList<String> stopWords;
+	
 	
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
-		//lexicon = new Lexicon("doc/lexicon.txt");
-		//lexiconMap = lexicon.getLexiconMap();
+		lexicon = new Lexicon("doc/lexicon.txt");
+		lexiconMap = lexicon.getLexiconMap();
+		//stopWords = new ArrayList<String>();
+		//initializeStopWords();
+	}
+	
+	public void initializeStopWords() {
+		stopWords.add("and");
+		stopWords.add("it");
+		stopWords.add("the");
+		stopWords.add("of");
+		stopWords.add("to");
+		stopWords.add("a");
 	}
 	
 	/**
@@ -42,7 +56,9 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			
 			String word = iter.next();
-			//if(!lexiconMap.containsKey(word)){} else{
+			if((!lexiconMap.containsKey(word) 
+					&& !word.matches("\\d+")) 
+				/*	|| stopWords.contains(word)*/){} else{
 	
 			ArrayList<Hit> hitList = hitMap.get(word); 
 			
@@ -60,7 +76,7 @@ public class NodeIndex {
 			
 			wordIndex.put(word, list);
 			}
-		//}
+		}
 			
 			if (wordIndex.size() > capacity) {
 				logger.info("REACHED CAPACITY, SENDING TO RING");
