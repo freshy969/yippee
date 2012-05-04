@@ -6,12 +6,12 @@
 ##
 ##
 ##.edu
-#http://www.upenn.edu
-#http://www.stanford.edu
-#http://mit.edu
-#http://www.harvard.edu
-#http://berkeley.edu
-#http://www.princeton.edu/main
+http://www.upenn.edu
+http://www.stanford.edu
+http://mit.edu
+http://www.harvard.edu
+http://berkeley.edu
+http://www.princeton.edu/main
 ##
 ## .com
 ##
@@ -52,5 +52,5 @@
 ##
 ## .it
 ##
-http://www.gazzetta.it
+#http://www.gazzetta.it
 ##

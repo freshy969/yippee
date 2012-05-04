@@ -3,10 +3,8 @@ package com.yippee.crawler;
 import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
-import com.yippee.indexer.Parser;
 import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
 
 import java.net.MalformedURLException;
 import java.net.URL;
