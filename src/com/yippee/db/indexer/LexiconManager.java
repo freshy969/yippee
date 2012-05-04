@@ -31,6 +31,7 @@ public class LexiconManager {
 	private DAL dao;
 	private static String endOfWordDeliminator = "::";
 	HashMap<String, byte[]> lexiconMap;
+	HashMap<String, String> stopWordMap;
 	
     /**
      * The constructor takes the BerkeleyDB folder as an argument. It recreates
@@ -42,10 +43,12 @@ public class LexiconManager {
         // Environment is <i>not</i> readonly
         // if lexicon database is empty, then fill it. otherwise words already in database env
         lexiconMap = new HashMap<String, byte[]>();
+        stopWordMap = new HashMap<String, String>();
 //        makeLexiconFile("doc/en-common.txt", "doc/lexicon.txt");
        
 //        if(isEmpty()){
         	init(locationWordList);
+        	fillStopMap();
 //        }
     }
     
@@ -190,8 +193,40 @@ public class LexiconManager {
           return word;
     }
     
+    public HashMap<String,String> getStopList(){
+    	return stopWordMap;
+    }
+    
     
     /*************** BELOW ARE MANUAL COMMANDS TO CREATE LEXICON  *****************/
+    
+    public boolean fillStopMap() {
+        boolean success = true;
+        File f = new File("doc/stop.txt");
+        WordStemmer stemmer = new WordStemmer();
+        try {
+			BufferedReader reader = new BufferedReader(new FileReader(f));
+			String word = reader.readLine();
+			while(word!=null) {
+				if(word.length()==0) {
+				}
+				else {
+					stopWordMap.put(stemmer.stemWord(word.toLowerCase()), "");
+				}
+				word = reader.readLine();
+			}
+			
+			reader.close();
+		} catch (FileNotFoundException e) {
+			logger.warn("Exception", e);
+            success = false;
+		} catch (IOException e) {
+			logger.warn("Exception", e);
+            success = false;
+		}
+		
+        return success;
+    }
     
     /**
      * makes the lexicon file from a list of words
@@ -270,6 +305,13 @@ public class LexiconManager {
     }
     
     public static void main(String[] args) {
-    	LexiconManager lex = new LexiconManager(null);
+    	LexiconManager lex = new LexiconManager("doc/lexicon.txt");
+    	HashMap<String,String> s =lex.getStopList();
+    	Iterator<String> keys = s.keySet().iterator();
+    	
+    	while(keys.hasNext()){
+    		System.out.println(keys.next());
+    	}
+    	
     }
 }
