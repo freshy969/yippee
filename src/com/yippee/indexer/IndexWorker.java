@@ -1,11 +1,10 @@
 package com.yippee.indexer;
 
 import com.yippee.db.crawler.DocAugManager;
+import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.indexer.DocArchiveManager;
 import com.yippee.db.indexer.DocEntryManager;
-import com.yippee.db.indexer.model.AnchorHit;
 import com.yippee.db.indexer.model.DocEntry;
-import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
@@ -29,6 +28,10 @@ public class IndexWorker extends Thread {
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(IndexWorker.class);
+    /**
+     * This is the logger which appends for the page rank
+     */
+    static Logger linkLogger = Logger.getLogger(IndexWorker.class + ".hadoop");
 	DocAugManager dam;
 	DocArchiveManager darcm;
 	DocEntryManager dem;
@@ -43,6 +46,7 @@ public class IndexWorker extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        linkLogger.warn("Start writing .hadoop file (csv?)");
 		dam = new DocAugManager();
 		darcm = new DocArchiveManager();
 		dem = new DocEntryManager();

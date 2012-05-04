@@ -23,10 +23,6 @@ public class FancyExtractor {
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(FancyExtractor.class);
-    /**
-     * This is the logger which appends for the page rank
-     */
-    static Logger linkLogger = Logger.getLogger(FancyExtractor.class + ".hadoop");
 	ArrayList<String> links;
 	ArrayList<String> text;
 	Stack<String> format;
@@ -45,7 +41,6 @@ public class FancyExtractor {
 		ital = false;
 		anchor = false;
 		title = false;
-		linkLogger.warn("Start writing .hadoop file (csv?)");
 		stemmer = new WordStemmer();
 		hitList = new HashMap<String, ArrayList<Hit>>();
 		anchorList = new ArrayList();
