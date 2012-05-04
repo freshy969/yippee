@@ -1,21 +1,14 @@
 package com.yippee.crawler.frontier;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.log4j.Logger;
-
 import com.yippee.crawler.Message;
 import com.yippee.db.crawler.URLFrontierManager;
 import com.yippee.db.crawler.model.FrontierSavedState;
+import org.apache.log4j.Logger;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PoliteSimpleQueue implements URLFrontier {
 	/**
@@ -51,6 +44,7 @@ public class PoliteSimpleQueue implements URLFrontier {
 		synchronized(current){
 			if(current.isEmpty()) return null;
 			toSend = current.remove(rand.nextInt(current.size()));
+            logger.info("Pull queue length: " + current.size());
 		}
 		
 		this.next.add(toSend);
@@ -85,6 +79,7 @@ public class PoliteSimpleQueue implements URLFrontier {
 				
 				if(counter.addAndGet(1) % 1000000 == 0) this.save(); 
 				logger.debug("" + counter.get());
+                logger.info("Push queue length" + next.size());
 			}	
 		}
 	}

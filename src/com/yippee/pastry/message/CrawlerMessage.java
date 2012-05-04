@@ -1,8 +1,6 @@
 package com.yippee.pastry.message;
 
 import org.apache.log4j.Logger;
-import rice.p2p.commonapi.Message;
-import rice.p2p.commonapi.NodeHandle;
 
 /**
  *
@@ -15,27 +13,17 @@ public class CrawlerMessage implements rice.p2p.commonapi.Message{
      */
     static Logger logger = Logger.getLogger(CrawlerMessage.class);
     /**
-     * The handle of the node from which the message was sent
-     */
-    NodeHandle from;
-    /**
      * The actual url of the message
      */
     String url;
-    /**
-     * The response of the message
-     */
-    boolean wantResponse = true;
 
     /**
      * The message constructor (needs to keep the handle from which it was sent
      * and the actual content to deliver)
      *
-     * @param from the handle of the node from which it was sent
      * @param url the actual content to deliver
      */
-    public CrawlerMessage(NodeHandle from, String url) {
-        this.from = from;
+    public CrawlerMessage(String url) {
         this.url = url;
     }
 
@@ -46,24 +34,6 @@ public class CrawlerMessage implements rice.p2p.commonapi.Message{
      */
     public int getPriority() {
         return 0;
-    }
-
-    /**
-     * Get the node handle
-     *
-     * @return the node handle
-     */
-    public NodeHandle getFrom() {
-        return from;
-    }
-
-    /**
-     * Set the from handle.
-     *
-     * @param from the node handle to be sent
-     */
-    public void setFrom(NodeHandle from) {
-        this.from = from;
     }
 
     /**

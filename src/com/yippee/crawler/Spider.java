@@ -117,6 +117,7 @@ public class Spider implements Runnable {
 				int i = 0;
 				for (String newUrl : links){
 					if (newUrl == null || newUrl.contains("https")) {
+                        logger.info("Skip: " + newUrl);
 						continue;
 					}
 
@@ -127,7 +128,7 @@ public class Spider implements Runnable {
 						//logger.info("About to ask robots about: " + url);
 
 					} catch (MalformedURLException e) {
-						e.printStackTrace();
+						logger.warn("Malformed URL Exception");
 						continue; // skip that url
 					}
 
@@ -135,7 +136,9 @@ public class Spider implements Runnable {
 					try{
 						if (robotsModule.allowedToCrawl(url)){
 							Configuration.getInstance().getPastryEngine().sendURL(url);
-						}
+						} else {
+                            logger.info("Robots returned false");
+                        }
 					}catch(IllegalStateException e){
 						logger.warn("IllegalStateException", e);
 					}

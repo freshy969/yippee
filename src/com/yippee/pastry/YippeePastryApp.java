@@ -160,9 +160,11 @@ public class YippeePastryApp implements Application {
     }
 
     void sendCrawlerMessage(URL url) {
-        Id id = nodeFactory.getIdFromString(url.getHost());
+        Id destination = nodeFactory.getIdFromString(url.getHost());
         String content = url.toString();
+        CrawlerMessage message = new CrawlerMessage(content);
         logger.debug("Sending URL " + content + "to node closest to" + url.getHost());
+        endpoint.route(destination, message, null);
     }
 
     /**
