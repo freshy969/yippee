@@ -6,13 +6,12 @@ import org.apache.log4j.Logger;
 
 import com.yippee.db.indexer.model.Hit;
 
-import rice.p2p.commonapi.Message;
 import rice.p2p.commonapi.NodeHandle;
 
 /**
  * An implementation of the pastry application message sent around nodes.
  */
-public class PastryMessage implements Message {
+public class PastryMessage implements rice.p2p.commonapi.Message {
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */

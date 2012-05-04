@@ -4,10 +4,12 @@ import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.message.*;
+import com.yippee.search.DaemonListener;
 import com.yippee.util.SocketQueue;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 public class YippeePastryApp implements Application {
@@ -24,14 +26,18 @@ public class YippeePastryApp implements Application {
      */
     private Endpoint endpoint;
     /**
+     * The node factory
+     */
+    private NodeFactory nodeFactory;
+    /**
      * The urlFrontier in which
      */
     private URLFrontier urlFrontier;
 
     private BarrelManager barrelManager;
 
-	private SocketQueue queryQueue;
-    
+    private SocketQueue queryQueue;
+
     /**
      * Constructor
      *
@@ -39,150 +45,147 @@ public class YippeePastryApp implements Application {
      */
     public YippeePastryApp(NodeFactory nodeFactory) {
         logger.info("Register Application");
+        this.nodeFactory = nodeFactory;
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "Yippee App");
         barrelManager = new BarrelManager();
-       // endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
+        // endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
-		queryQueue = new SocketQueue(100);
+        queryQueue = new SocketQueue(100);
     }
 
-    public void setupURLFrontier(URLFrontier urlFrontier){
+    public void setupURLFrontier(URLFrontier urlFrontier) {
         this.urlFrontier = urlFrontier;
     }
-    
-	/**
-	 * Starts the daemon thread
-	 * 
-	 * @param port port on which the daemon listens
-	 */
-	public void startDaemonListener(int port) {
-		Thread daemon = new Thread(new DaemonListener(port, queryQueue));
-		daemon.setDaemon(true);
-		daemon.start();
-	}
-    
+
+    /**
+     * Starts the daemon thread
+     *
+     * @param port port on which the daemon listens
+     */
+    public void startDaemonListener(int port) {
+        Thread daemon = new Thread(new DaemonListener(port, queryQueue));
+        daemon.setDaemon(true);
+        daemon.start();
+    }
+
     /**
      * Called when the Pastry application receives a message. It pushes the url
      * to the URLFrontier (maybe through a duplicate URL eliminator).
      */
-	public void deliver(Id targetId, Message message) {
-		
-		if(message instanceof CrawlerMessage){
-			handleCrawlerMessage(targetId, (CrawlerMessage) message);
-		} else if(message instanceof IndexerMessage){
-			handleIndexerMessage(targetId, (IndexerMessage) message);
-		} else if(message instanceof QueryMessage){
-			handleQueryMessage(targetId, (QueryMessage) message);
-		} else if(message instanceof PingPongMessage){
-			handlePingPongMessage(targetId, (PingPongMessage) message);
-		}else {
-			logger.error("Unknown pastry message received!");
-			logger.error(message);
-		}
+    public void deliver(Id targetId, Message message) {
 
-	}
-
-  
-    private void handlePingPongMessage(Id targetId, PingPongMessage message) {
-		// TODO Auto-generated method stub
-    	
-		
-		
-/*		
-        PastryMessage om = (PastryMessage) message;
-        logger.debug("Received message " + om.content + " from " + om.from);
-        if (om.wantResponse) { // if it is a query
-
-            if (om.content.equals("PING")) {
-                logger.debug("Received PING to ID " + targetId + " from node " +
-                        om.from.getId() + "; returning PONG");
-                sendDirect(om.from, "PONG");
-
-    private void handlePingPongMessage(Id id, PingPongMessage message) {
-		if (message.isWantResponse()) { // if it is a query
-            if (message.getContent().equals("PING")) {
-                logger.debug("Received PING to ID " + id + " from node " +
-                        message.getFrom().getId() + "; returning PONG");
-                sendDirect(message.getFrom(), "PONG");
-
-            } else {// else for other queries
-            }
+        if (message instanceof CrawlerMessage) {
+            handleCrawlerMessage(targetId, (CrawlerMessage) message);
+        } else if (message instanceof IndexerMessage) {
+            handleIndexerMessage(targetId, (IndexerMessage) message);
+        } else if (message instanceof QueryMessage) {
+            handleQueryMessage(targetId, (QueryMessage) message);
+        } else if (message instanceof PingPongMessage) {
+            handlePingPongMessage(targetId, (PingPongMessage) message);
         } else {
-
-            if (om.content.equals("PONG")) {
-                logger.debug("Received PONG from node " + om.from.getId());
-            } else if(om.hitList.size()>0) { //message with hitlist in it
-        		logger.info("Saving in barrels");
-        		barrelManager.addDocHits(om.hitList);
-        	}
-
-            if (message.getContent().equals("PONG")) {
-                logger.debug("Received PONG from node " + message.getFrom().getId());
-            }
+            logger.error("Unknown pastry message received!");
+            logger.error(message);
         }
+    }
 
-        }*/
-		
+    /**
+     * Called as a result of deliver recieving a PingPongMessage
+     *
+     * @param targetId
+     * @param message
+     */
+    private void handlePingPongMessage(Id targetId, PingPongMessage message) {
 
-	}
+        if (message.getContent().equals("PING")) {
+            logger.debug("Received PING to ID " + targetId + " from node " +
+                    message.getFrom().getId() + "; returning PONG");
 
-	private void handleQueryMessage(Id targetId, QueryMessage message) {
-		// TODO Auto-generated method stub
-		
-	}
+            PingPongMessage reply = new PingPongMessage(node.getLocalNodeHandle(), "PONG");
+            sendDirect(message.getFrom(), reply);
+        } else if (message.getContent().equals("PONG")) {
+            logger.debug("Received PONG from node " + message.getFrom().getId());
 
-	private void handleIndexerMessage(Id targetId, IndexerMessage message) {
-		logger.info("Saving in barrels");
-		barrelManager.addDocHits(message.getHitList());		
-	}
+        } else {
+            logger.error("Malformed PingPongMessage");
+            logger.error(message);
+        }
+    }
 
 
-	private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
-		String urlString = message.getUrl();
-        logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
+    /**
+     * @param targetId
+     * @param message
+     */
+    private void handleQueryMessage(Id targetId, QueryMessage message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * Called as a result of deliver receiving an IndexerMessage
+     *
+     * @param targetId
+     * @param message
+     */
+    private void handleIndexerMessage(Id targetId, IndexerMessage message) {
+        logger.debug("Saving in barrels");
+        barrelManager.addDocHits(message.getHitList());
+    }
+
+
+    /**
+     * Handle the crawler messages
+     *
+     * @param targetId the target node
+     * @param message  the actual crawler message
+     */
+    private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
+        String urlString = message.getUrl();
+        logger.debug("Pushing [" + urlString + "] to the URLFRONTIER");
         com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
-        if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
+        if (msg.getType() == com.yippee.crawler.Message.Type.NEW) {
             urlFrontier.push(msg);
         }
-	}
+    }
 
-	/**
+    /**
      * Called to route a message to the id
      */
-    void send(Id idToSendTo, String msgString) {
-        if (msgString.equals("PING")) {
-            logger.debug("Sending PING to " + idToSendTo);
-        } else {
-            logger.info(this + " sending to " + idToSendTo);
-        }
-        PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
-        endpoint.route(idToSendTo, message, null);
+    void sendPingPongMessage() {
+        Id destination = nodeFactory.nidFactory.generateNodeId();
+        logger.debug("Sending PING to " + destination);
+        PingPongMessage message = new PingPongMessage(node.getLocalNodeHandle(), "PING");
+        endpoint.route(destination, message, null);
+    }
+
+    void sendCrawlerMessage(URL url) {
+        Id id = nodeFactory.getIdFromString(url.getHost());
+        String content = url.toString();
+        logger.debug("Sending URL " + content + "to node closest to" + url.getHost());
     }
 
     /**
      * Called to directly send a message to the node handle
      */
-    public void sendDirect(NodeHandle nh, String msgString) {
-
-        logger.info(this + " sending direct to " + nh);
-        PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
-   //     message.wantResponse = false;
+    public void sendDirect(NodeHandle nh, Message message) {
+        logger.debug(this + " sending direct to " + nh);
+        //     message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
-    
+
     public void sendSocketDirect(NodeHandle nh, ArrayList<Hit> list) {
-    	logger.info(this + " sending hit list direct to " + nh);
-        endpoint.connect(nh, new PastryAppSocketSender(node,endpoint,list), 30000);
+        logger.debug(this + " sending hit list direct to " + nh);
+        endpoint.connect(nh, new PastryAppSocketSender(node, endpoint, list), 30000);
     }
-    
+
     public void sendList(Id idToSendTo, String word, ArrayList<Hit> list) {
-    	logger.info(this + " sending hit list for ["+word+"] to " + idToSendTo);
-    	IndexerMessage message = new IndexerMessage(node.getLocalNodeHandle(), word, list);
-    //	message.wantResponse = false;
+        logger.debug(this + " sending hit list for [" + word + "] to " + idToSendTo);
+        IndexerMessage message = new IndexerMessage(node.getLocalNodeHandle(), word, list);
+        //	message.wantResponse = false;
         endpoint.route(idToSendTo, message, null);
-    }    
-    
+    }
+
 
     /**
      * This is always true in our application.
@@ -190,13 +193,14 @@ public class YippeePastryApp implements Application {
      * @param routeMessage a message
      * @return true always
      */
-	public boolean forward(RouteMessage routeMessage) {
-		return true;
-	}
+    public boolean forward(RouteMessage routeMessage) {
+        return true;
+    }
 
     /**
      * Called when we hear about a new neighbor.
      * We do not make use of this method for now.
      */
-	public void update(NodeHandle arg0, boolean arg1) {}
+    public void update(NodeHandle arg0, boolean arg1) {
+    }
 }
