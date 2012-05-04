@@ -78,4 +78,22 @@ public class PingPongMessage {
         this.content = content;
     }
 
+    /**
+     * If you need a response
+     *
+     * @return
+     */
+    public boolean isWantResponse() {
+        return wantResponse;
+    }
+
+    /**
+     * Set the response
+     *
+     * @param wantResponse
+     */
+    public void setWantResponse(boolean wantResponse) {
+        this.wantResponse = wantResponse;
+    }
+
 }

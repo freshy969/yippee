@@ -87,6 +87,7 @@ public class YippeePastryApp implements Application {
 			logger.error("Unknown pastry message received!");
 			logger.error(message);
 		}
+<<<<<<< HEAD
 		
 		
 		
@@ -96,18 +97,19 @@ public class YippeePastryApp implements Application {
         PastryMessage om = (PastryMessage) message;
         logger.debug("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
+=======
+	}
+
+    private void handlePingPongMessage(Id id, PingPongMessage message) {
+		if (message.get) { // if it is a query
+>>>>>>> Update Message
             if (om.content.equals("PING")) {
                 logger.debug("Received PING to ID " + id + " from node " +
                         om.from.getId() + "; returning PONG");
                 sendDirect(om.from, "PONG");
             } else {// else for other queries
                 // push to the urlFrontier or that node
-                String urlString = om.content;
-                logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
-                com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
-                if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
-                    urlFrontier.push(msg);
-                }
+
             }
         } else {
             if (om.content.equals("PONG")) {
@@ -116,12 +118,7 @@ public class YippeePastryApp implements Application {
         		logger.info("Saving in barrels");
         		barrelManager.addDocHits(om.hitList);
         	}
-        }*/
-	}
-
-    private void handlePingPongMessage(Id id, PingPongMessage message) {
-		// TODO Auto-generated method stub
-		
+        }
 	}
 
 	private void handleQueryMessage(Id id, QueryMessage message) {
@@ -135,7 +132,12 @@ public class YippeePastryApp implements Application {
 	}
 
 	private void handleCrawlerMessage(Id id, CrawlerMessage message) {
-		// TODO Auto-generated method stub
+		String urlString = message.getUrl();
+        logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
+        com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
+        if (msg.getType() == com.yippee.crawler.Message.Type.NEW){
+            urlFrontier.push(msg);
+        }
 		
 	}
 
