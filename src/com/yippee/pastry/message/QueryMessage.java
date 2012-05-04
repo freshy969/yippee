@@ -1,11 +1,9 @@
 package com.yippee.pastry.message;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.yippee.db.indexer.model.Hit;
 
 import rice.p2p.commonapi.Message;
 import rice.p2p.commonapi.NodeHandle;
@@ -15,6 +13,10 @@ import rice.p2p.commonapi.NodeHandle;
  */
 public class QueryMessage implements Message {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3698500143061850653L;
+	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(PastryMessage.class);

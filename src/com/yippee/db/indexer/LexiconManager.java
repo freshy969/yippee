@@ -250,7 +250,7 @@ public class LexiconManager {
 			BufferedReader reader = new BufferedReader(new FileReader(fileWords));
 			FileWriter writer = new FileWriter(fileLex);
 			String word = reader.readLine();
-			HashMap <String, String> map = new HashMap();
+			HashMap <String, String> map = new HashMap<String, String>();
 			
 			while(word!=null) {
 				word = stemmer.stemWord(word.toLowerCase());

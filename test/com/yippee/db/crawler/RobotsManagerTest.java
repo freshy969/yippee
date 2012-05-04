@@ -5,7 +5,6 @@ import com.yippee.db.crawler.model.RobotsTxt;
 import com.yippee.util.Configuration;
 
 import org.apache.log4j.Logger;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

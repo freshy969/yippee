@@ -1,5 +1,13 @@
 package com.yippee.indexer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
@@ -7,11 +15,7 @@ import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.util.Configuration;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
 
 public class IndexerTest {
     /**
@@ -31,7 +35,7 @@ public class IndexerTest {
 	}
 }
 
-class DocCreator extends Thread {
+class DocCreator extends Thread {	
 	
     String testHTML = "<HTML><HEAD><TITLE>CSE455/CIS555 HW2 Grading Data</TITLE></HEAD>" +
             "<H3>XML to be crawled</H3>" +
@@ -80,12 +84,33 @@ class DocCreator extends Thread {
 	DocAugManager dam;
 	int counter;
 	
+	public void connect(){
+		try {
+			URL u = new URL("http://www.princeton.edu/main#content");
+			URLConnection conn = u.openConnection();
+			conn.getContent();
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputLine;
+			StringBuffer buff = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) 
+				buff.append(inputLine);
+			in.close();
+			testHTML = new String(buff);
+		} catch (MalformedURLException e) {
+			System.out.println("malformed url...really?");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public void run() {
 		Configuration.getInstance().setBerkeleyDBRoot("db/test");
 		
 		dam = new DocAugManager();
 		counter = 0;
-		
+		connect();
 		while (true) {
 			
 			DocAug doc = new DocAug();

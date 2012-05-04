@@ -43,7 +43,7 @@ public class FancyExtractor {
 		title = false;
 		stemmer = new WordStemmer();
 		hitList = new HashMap<String, ArrayList<Hit>>();
-		anchorList = new ArrayList();
+		anchorList = new ArrayList<Hit>();
 		this.docId = docId;
 	}
 	
@@ -61,6 +61,10 @@ public class FancyExtractor {
 		
 		for (int z = 0; z < nodes.getLength(); z++) {
 			Node child = nodes.item(z);
+			
+			// Skip bad tags which we can't recognize!
+			if (child.getNodeName() == null)
+				continue;
 			
 			if (child.getNodeName().equals("a")) {
 				// Links

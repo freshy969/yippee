@@ -7,10 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 /**
  * @author tdu2 This class takes a DocAug object from the manager queue and

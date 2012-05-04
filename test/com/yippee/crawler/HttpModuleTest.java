@@ -2,7 +2,6 @@ package com.yippee.crawler;
 
 import junit.framework.TestCase;
 import org.apache.log4j.Logger;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
@@ -14,10 +13,6 @@ public class HttpModuleTest extends TestCase{
      */
     static Logger logger = Logger.getLogger(HttpModuleTest.class);
 
-    @Before
-    public void setUp() throws Exception {
-
-    }
 
     /**
      * This is malformed -- the content should be nothing

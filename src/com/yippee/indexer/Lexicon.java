@@ -81,7 +81,7 @@ public class Lexicon {
 		if(lexiconManager.contains(word)) {return false;}
 		else {
 			wordsToAdd.add(word);
-			byte[] wordId = lexiconManager.assignWordId(word);
+			byte[] wordId = LexiconManager.assignWordId(word);
 			lexiconManager.createWord(word, new String (wordId));
 			logger.log(Priority.INFO, word);
 			return true;

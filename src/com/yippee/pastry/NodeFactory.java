@@ -58,6 +58,7 @@ public class NodeFactory {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	public Node getNode() {
 		try {
 			synchronized (this) {

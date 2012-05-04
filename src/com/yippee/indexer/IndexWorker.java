@@ -10,7 +10,6 @@ import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public class IndexWorker extends Thread {
 	public IndexWorker(NodeIndex nodeIndex) {
 		Configuration.getInstance().setBerkeleyDBRoot("db/test");
 		try {
-			this.sleep(1000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,6 +52,7 @@ public class IndexWorker extends Thread {
 		this.nodeIndex = nodeIndex;
 	}
 
+	@Override
 	public void run() {
 		
 		while(true) {
@@ -63,7 +63,7 @@ public class IndexWorker extends Thread {
 			while(docAug == null) {
 				try {
 //					System.out.println("Waiting... " + pollDelay + "ms");
-					this.sleep(pollDelay);
+					Thread.sleep(pollDelay);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -88,6 +88,7 @@ public class IndexWorker extends Thread {
 			} catch (MalformedURLException e) {
 				logger.warn("MalformedURL in: " + docAug.getUrl());				
 			} catch (NullPointerException e) {
+				//e.printStackTrace();
 				logger.warn("NullPointerException in: " + docAug.getUrl());
 			}
 	    	
@@ -103,7 +104,7 @@ public class IndexWorker extends Thread {
 	    	
 	    	String docTitle = fe.getTitle();
 	    	
-	    	DocEntry docEntry = new DocEntry(docTitle, docAug.getUrl(), null , docAug.getTime());
+	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
 	    	darcm.store(docAug);
 	    }		

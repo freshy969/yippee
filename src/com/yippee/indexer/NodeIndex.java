@@ -1,16 +1,13 @@
 package com.yippee.indexer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
 import com.yippee.db.indexer.model.Hit;
-import com.yippee.db.indexer.model.HitList;
 import com.yippee.util.Configuration;
 
 public class NodeIndex {
@@ -66,7 +63,7 @@ public class NodeIndex {
 		if (wordIndex.size() > capacity) {
 			logger.info("REACHED CAPACITY, SENDING TO RING");
 			sendWordsToRing();
-			printIndex();
+			printAll();
 			wordIndex = new HashMap<String, ArrayList<Hit>>();
 		}		
 	}
@@ -94,7 +91,7 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 			ArrayList<Hit> list = wordIndex.get(word);
-			Configuration.getInstance().getPastryEngine().sendList(word,list);
+			//Configuration.getInstance().getPastryEngine().sendList(word,list);
 		}
 			
 	}
