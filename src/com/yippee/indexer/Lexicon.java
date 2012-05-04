@@ -91,6 +91,10 @@ public class Lexicon {
 	public HashMap<String, byte[]> getLexiconMap() {
 		return lexiconManager.getLexiconMap();
 	}
+
+	public HashMap<String, String> getStopList() {
+		return lexiconManager.getStopList();
+	}
 	
 	//so there aren't any bugs...need to get rid of later
 	public Lexicon() {
