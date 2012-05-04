@@ -121,12 +121,14 @@ public class PoliteSimpleQueue implements URLFrontier {
 
 	public boolean load() {
 		
-		logger.info("PoliteSimpleQueue loading state... ");
 
 		URLFrontierManager fm = new URLFrontierManager();
 
 		FrontierSavedState state = fm.loadState();
 		if(state != null){
+
+			logger.info("PoliteSimpleQueue loading state... ");
+
 			Map<Integer, Set<String>> queues = state.getPrioritySets();
 			
 			for(Integer i : queues.keySet()){
