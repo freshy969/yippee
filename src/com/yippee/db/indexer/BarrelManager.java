@@ -44,36 +44,34 @@ public class BarrelManager {
             // Open the data accessor. This is used to store persistent objects.
             dao = new DAL(myDbEnv.getIndexerStore());
             String word = list.get(0).getWord();
-            int size = 0;
-            float df = 0;
-            HashMap<String, Float> tfMap;
+            HitList hl;
             if(dao.getBarrelById().contains(word)) {
             	//System.out.println("in here already "+h.getDocId()+", "+new String(h.getWordId()));
-            	HitList hl = dao.getBarrelById().get(word);
+            	hl = dao.getBarrelById().get(word);
             	hl.addHitList(list);
             	//df = updateDf(hl.getTfMap(),list);
-            	tfMap = updatetfMap(hl.getTfMap(),list);
+/*            	tfMap = updatetfMap(hl.getTfMap(),list);
             	df = new Float(tfMap.size());
             	hl.setDf(df);
-            	hl.setTfMap(tfMap);
+            	hl.setTfMap(tfMap);*/
             	dao.getBarrelById().delete(word);
             	//"updates" entry
             	dao.getBarrelById().put(hl);
             	
             } else {
             	//System.out.println("create new entry "+h.getDocId()+", "+new String(h.getWordId()));
-            	HitList hl = new HitList(word);
+            	hl = new HitList(word);
             	hl.addHitList(list);
-            	//df = updateDf(new HashMap<String, Float>(),list);
+            /*	//df = updateDf(new HashMap<String, Float>(),list);
             	tfMap = updatetfMap(new HashMap<String, Float>(),list);
             	df = new Float(tfMap.size());
             	hl.setTfMap(tfMap);
-            	hl.setDf(df);
+            	hl.setDf(df);*/
             	dao.getBarrelById().put(hl);
             }
-            	size = dao.getBarrelById().get(word).getHitList().size();
-            logger.info("Barrel entry for ["+word+"] "+"total hits: "+size+" | DF: "+df+" = "+tfMap.size());
-            
+           // logger.info("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap().size()+" | tf: "+hl.getTfMap());
+            System.out.println("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap().size()+" | tf: "+hl.getTfMap());
+
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
             success = false;

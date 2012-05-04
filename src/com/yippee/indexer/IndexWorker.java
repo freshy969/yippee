@@ -86,10 +86,9 @@ public class IndexWorker extends Thread {
 	    	
 	    	// Read hits test
 	    	HashMap<String, ArrayList<Hit>> hitList = fe.getHitList();
+	 	    	
 	    	nodeIndex.addAllHits(hitList);
 	    	nodeIndex.printIndex();
-	    	
-	    	ArrayList<Hit> anchorList = fe.getAnchorList();
 	    	
 	    	String docTitle = fe.getTitle();
 	    	
