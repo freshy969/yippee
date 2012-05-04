@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
-  "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
-<web-app>
+<web-app version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-  <display-name>Yippee Servlet</display-name>
-  <description>Searches yippee engine using keywords.</description>
+    <display-name>Yippee Servlet</display-name>
+    <description>Searches yippee engine using keywords.</description>
 
-  <servlet>
-    <servlet-name>YippeeSearch</servlet-name>
-    <servlet-class>com.yippee.web.YippeeSearch</servlet-class>
-    
-    <load-on-startup/>
-	<init-param>
-		<param-name>cacheServer</param-name>
-		<param-value>158.130.102.94</param-value>
-	</init-param>
-	<init-param>
-		<param-name>cacheServerPort</param-name>
-		<param-value>8888</param-value>
-	</init-param>
+    <context-param>
+        <param-name>cacheServer</param-name>
+        <param-value>158.130.102.94</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cacheServerPort</param-name>
+        <param-value>8888</param-value>
+    </context-param>
 
-    
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>YippeeSearch</servlet-name>
-    <url-pattern>yippee</url-pattern>
-  </servlet-mapping>
-  
+    <servlet>
+        <servlet-name>YippeeSearch</servlet-name>
+        <servlet-class>com.yippee.web.YippeeSearch</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>YippeeSearch</servlet-name>
+        <url-pattern>yippee</url-pattern>
+    </servlet-mapping>
+
 </web-app>
