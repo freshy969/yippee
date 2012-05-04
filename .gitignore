@@ -36,3 +36,5 @@ tmp.file
 # build.properties
 build.properties
 
+# hadoop files
+*.hadoop
