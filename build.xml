@@ -70,6 +70,7 @@
 
     <!-- one of the many ways of doing so -->
     <property name="main-class" value="com.yippee.util.EntryPoint"/>
+    <property name="hadoop-class" value="com.yippee.pagerank.PageRank"/>
 
     <!-- We are going to make this modular -->
     <property name="server" value="tomcat"/>
@@ -137,6 +138,16 @@
              basedir="${out.dir}/classes">
             <manifest>
                 <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="hadoop-jar" depends="compile, pastry-revert">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar"
+             basedir="${out.dir}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="${hadoop-class}"/>
             </manifest>
         </jar>
     </target>

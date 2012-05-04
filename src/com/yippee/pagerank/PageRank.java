@@ -13,15 +13,15 @@ import java.io.IOException;
  * The MapReduce Configuration class, responsible for setting up the environment,
  * configuring inputs and outputs and launching the job.
  */
-public class PageRankConfig {
+public class PageRank{
 
     /**
      * The constructor is responsible for configuring the job.
      */
-    public PageRankConfig(String input, String output) throws IOException,
+    public PageRank(String input, String output) throws IOException,
             ClassNotFoundException, InterruptedException {
         Job job = new Job();
-        job.setJarByClass(PageRankConfig.class);
+        job.setJarByClass(PageRank.class);
 
         FileInputFormat.addInputPath(job, new Path(input));
         FileOutputFormat.setOutputPath(job, new Path(output));
@@ -36,7 +36,12 @@ public class PageRankConfig {
     }
 
     public static void main(String[] args) throws  Exception{
-        PageRankConfig config = new PageRankConfig(args[0], args[1]);
+        if (args.length<3) {
+            System.out.println("Usage: PageRank <input> <output>");
+            System.out.println("You gave: [" + args[1] +"] [" + args[2]);
+            System.exit(0);
+        }
+        PageRank pr = new PageRank(args[1], args[2]);
 
     }
 
