@@ -89,21 +89,27 @@ public class YippeePastryApp implements Application {
         }
     }
 
+    /**
+     * Called as a result of deliver recieving a PingPongMessage
+     * @param targetId
+     * @param message
+     */
     private void handlePingPongMessage(Id targetId, PingPongMessage message) {
 
-        if (message.isWantResponse()) { // if it is a query
             if (message.getContent().equals("PING")) {
                 logger.debug(	"Received PING to ID " + targetId + " from node " +
                 				message.getFrom().getId() + "; returning PONG");
+                
                 sendDirect(message.getFrom(), "PONG");
-            } else {// else for other queries
-            	
-            }
-        } else {
-            if (message.getContent().equals("PONG")) {
+                
+            } else if (message.getContent().equals("PONG")) {
                 logger.debug("Received PONG from node " + message.getFrom().getId());
+                
+            } else {
+            	logger.error("Malformed PingPongMessage");
+            	logger.error(message);
             }
-        }
+        
     }
 
    
