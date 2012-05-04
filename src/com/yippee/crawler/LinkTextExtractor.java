@@ -42,18 +42,18 @@ public class LinkTextExtractor {
         if(path == null) path = "";
        // logger.info("path: '" + path + "'");
         
-        String responseText = "";
+       // String responseText = "";
         ArrayList<String> anchors = new ArrayList<String>();
-        System.out.println("Path to tidyUp:" + path);
+        //System.out.println("Path to tidyUp:" + path);
         if (!path.contains(".") || path.substring(path.lastIndexOf(".")).contains("htm")) {
 
             ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+          //  ByteArrayOutputStream os = new ByteArrayOutputStream();
             Tidy tidy = new Tidy();
             tidy.setXHTML(true);
             tidy.setDocType("strict");
             tidy.setMakeClean(true);
-            tidy.setQuiet(false);
+            tidy.setQuiet(true);
             tidy.setIndentContent(true);
             tidy.setSmartIndent(true);
             tidy.setIndentAttributes(true);
@@ -66,7 +66,7 @@ public class LinkTextExtractor {
             //tidy.setWraplen(99999999);
             Document document = null;
             try{
-            	document = tidy.parseDOM(is, os);
+            	document = tidy.parseDOM(is, null);
             } catch(StringIndexOutOfBoundsException e){
             	logger.warn("Tidy: StringIndexOutOfBoundsException");
             	logger.debug("Tidy: StringIndexOutOfBoundsException", e);
@@ -114,9 +114,9 @@ public class LinkTextExtractor {
                     logger.debug("There was a null href?");
                 }
             }
-            responseText = os.toString();
+           // responseText = os.toString();
         }
-        responseText = responseText.replaceAll("<!DOCTYPE((.|\n|\r)*?)\">", "");
+        //responseText = responseText.replaceAll("<!DOCTYPE((.|\n|\r)*?)\">", "");
         logger.debug("Done extracting normally");
         return anchors;
     }

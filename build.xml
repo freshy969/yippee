@@ -11,7 +11,6 @@
     <property name="log.dir" value="${basedir}/log"/>
     <property name="out.dir" value="${basedir}/build"/>
     <property name="jar.dir" value="${basedir}/build"/>
-    <property name="bootPort" value="9001"/>
 
     <target name="usage" description="Print the usage of ant scripts">
         <echo>
@@ -99,7 +98,6 @@
         <echo>" Root:. . . . .${project.root}"</echo>
         <echo>" Lib: . . . . .${lib.dir}"</echo>
         <echo>" Pastry Ip: . .${bIp}"</echo>
-        <echo>" Pastry Port: .${bootPort}"</echo>
     </target>
 
     <target name="clean">
@@ -171,6 +169,7 @@
         *   database path
     -->
     <target name="run" depends="jar">
+        <echo>" Pastry Port: .${bootPort}"</echo>
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
@@ -226,21 +225,25 @@
         <parallel>
             <antcall target="run">
                 <param name="localPort" value="9001"/>
+                <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node1"/>
                 <param name="service" value="-CI"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9002"/>
+                <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node2"/>
                 <param name="service" value="-CI"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9003"/>
+                <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node3"/>
                 <param name="service" value="-CI"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9004"/>
+                <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node4"/>
                 <param name="service" value="-CI"/>
             </antcall>

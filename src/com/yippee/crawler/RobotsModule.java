@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.HashSet;
@@ -207,16 +208,13 @@ public class RobotsModule {
             }
             
         } catch (UnknownHostException e){
-        	//e.printStackTrace();
             logger.info("Unknown host exception.  Skipping url: " + robotsURL.toString());
-            
-            //If there's a problem, return null
             return null;
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch(SocketException e){
+        	logger.info("Error parsing robots.txt for " + robotsURL.toString());
+        	return null;
+        }catch (IOException e) {
             logger.info("Error parsing robots.txt for " + robotsURL.toString());
-            
-            //If there's a problem, return null
             return null;
         }
         return robotsTxt;
