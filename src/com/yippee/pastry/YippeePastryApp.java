@@ -92,7 +92,7 @@ public class YippeePastryApp implements Application {
 		
 		
 		
-		
+/*		
         PastryMessage om = (PastryMessage) message;
         logger.debug("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
@@ -116,7 +116,7 @@ public class YippeePastryApp implements Application {
         		logger.info("Saving in barrels");
         		barrelManager.addDocHits(om.hitList);
         	}
-        }
+        }*/
 	}
 
     private void handlePingPongMessage(Id targetId, PingPongMessage message) {
@@ -130,8 +130,8 @@ public class YippeePastryApp implements Application {
 	}
 
 	private void handleIndexerMessage(Id targetId, IndexerMessage message) {
-		// TODO Auto-generated method stub
-		
+		logger.info("Saving in barrels");
+		barrelManager.addDocHits(message.getHitList());		
 	}
 
 	private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
@@ -159,7 +159,7 @@ public class YippeePastryApp implements Application {
 
         logger.info(this + " sending direct to " + nh);
         PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
-        message.wantResponse = false;
+   //     message.wantResponse = false;
         endpoint.route(null, message, nh);
     }
     
@@ -170,8 +170,8 @@ public class YippeePastryApp implements Application {
     
     public void sendList(Id idToSendTo, String word, ArrayList<Hit> list) {
     	logger.info(this + " sending hit list for ["+word+"] to " + idToSendTo);
-    	PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), word, list);
-    	message.wantResponse = false;
+    	IndexerMessage message = new IndexerMessage(node.getLocalNodeHandle(), word, list);
+    //	message.wantResponse = false;
         endpoint.route(idToSendTo, message, null);
     }    
     
