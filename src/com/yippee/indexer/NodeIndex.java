@@ -23,25 +23,16 @@ public class NodeIndex {
 	private int capacity = 10;
 	private Lexicon lexicon;
 	private HashMap<String, byte[]> lexiconMap;
-	private ArrayList<String> stopWords;
+	private HashMap<String,String> stopWords;
 	
 	
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
 		lexicon = new Lexicon("doc/lexicon.txt");
 		lexiconMap = lexicon.getLexiconMap();
-		//stopWords = new ArrayList<String>();
-		//initializeStopWords();
+		stopWords = lexicon.getStopList();
 	}
 	
-	public void initializeStopWords() {
-		stopWords.add("and");
-		stopWords.add("it");
-		stopWords.add("the");
-		stopWords.add("of");
-		stopWords.add("to");
-		stopWords.add("a");
-	}
 	
 	/**
 	 * adds all hits from a document into wordIndex
@@ -56,36 +47,28 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			
 			String word = iter.next();
-			if((!lexiconMap.containsKey(word) 
-					&& !word.matches("\\d+")) 
-				/*	|| stopWords.contains(word)*/){} else{
-	
-			ArrayList<Hit> hitList = hitMap.get(word); 
-			
-			ArrayList<Hit> list;
-			
-			if(wordIndex.containsKey(word)){
-				list = wordIndex.get(word);
-			} else {
-				list = new ArrayList<Hit>();
-			}
-			
-//			hit.setWordId(lexicon.);
-						
-			list.addAll(hitList);
-			
-			wordIndex.put(word, list);
+			if((!lexiconMap.containsKey(word) && !word.matches("\\d+")) || stopWords.containsKey(word)){
+				//do nothing
+			} 
+			else{	
+				ArrayList<Hit> hitList = hitMap.get(word); 
+				ArrayList<Hit> list;			
+				if(wordIndex.containsKey(word)){
+					list = wordIndex.get(word);
+				} else {
+					list = new ArrayList<Hit>();
+				}						
+				list.addAll(hitList);
+				wordIndex.put(word, list);
 			}
 		}
 			
-			if (wordIndex.size() > capacity) {
-				logger.info("REACHED CAPACITY, SENDING TO RING");
-				sendWordsToRing();
-				printIndex();
-				wordIndex = new HashMap<String, ArrayList<Hit>>();
-			}
-		
-		
+		if (wordIndex.size() > capacity) {
+			logger.info("REACHED CAPACITY, SENDING TO RING");
+			sendWordsToRing();
+			printIndex();
+			wordIndex = new HashMap<String, ArrayList<Hit>>();
+		}		
 	}
 	
 	public synchronized ArrayList<Hit> getHitList(String word){
