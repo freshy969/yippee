@@ -4,6 +4,7 @@ import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.message.*;
+import com.yippee.search.DaemonListener;
 import com.yippee.util.SocketQueue;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
