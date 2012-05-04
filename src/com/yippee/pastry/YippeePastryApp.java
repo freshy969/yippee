@@ -8,6 +8,7 @@ import com.yippee.util.SocketQueue;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 public class YippeePastryApp implements Application {
@@ -24,6 +25,10 @@ public class YippeePastryApp implements Application {
      */
     private Endpoint endpoint;
     /**
+     * The node factory
+     */
+    private NodeFactory nodeFactory;
+    /**
      * The urlFrontier in which
      */
     private URLFrontier urlFrontier;
@@ -39,6 +44,7 @@ public class YippeePastryApp implements Application {
      */
     public YippeePastryApp(NodeFactory nodeFactory) {
         logger.info("Register Application");
+        this.nodeFactory = nodeFactory;
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "Yippee App");
         barrelManager = new BarrelManager();
@@ -141,14 +147,17 @@ public class YippeePastryApp implements Application {
     /**
      * Called to route a message to the id
      */
-    void send(Id idToSendTo, String msgString) {
-        if (msgString.equals("PING")) {
-            logger.debug("Sending PING to " + idToSendTo);
-        } else {
-            logger.info(this + " sending to " + idToSendTo);
-        }
-        PastryMessage message = new PastryMessage(node.getLocalNodeHandle(), msgString);
-        endpoint.route(idToSendTo, message, null);
+    void sendPingPongMessage() {
+        Id destination = nodeFactory.nidFactory.generateNodeId();
+        logger.debug("Sending PING to " + destination);
+        PingPongMessage message = new PingPongMessage(node.getLocalNodeHandle(), "PING");
+        endpoint.route(destination, message, null);
+    }
+
+    void sendCrawlerMessage(URL url){
+        Id id = nodeFactory.getIdFromString(url.getHost());
+        String content = url.toString();
+        logger.info("Sending URL "+content+"to node closest to"+url.getHost());
     }
 
     /**

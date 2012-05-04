@@ -2,12 +2,12 @@ package com.yippee.pastry;
 
 import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.indexer.model.Hit;
-
 import org.apache.log4j.Logger;
 
-import rice.p2p.commonapi.NodeHandle;
-
-import java.net.*;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -56,16 +56,14 @@ public class YippeeEngine {
      */
     public void sendPing(){
 
-        yippeePastryApp.send(nodeFactory.nidFactory.generateNodeId(), "PING");
+        yippeePastryApp.sendPingPongMessage();
     }
 
     /**
      * A method that distributes a URL to the ring
      */
     public void sendURL(URL url){
-        String content = url.toString();
-        logger.info("Sending URL "+content+"to node closest to"+url.getHost());
-        yippeePastryApp.send(nodeFactory.getIdFromString(url.getHost()), content);
+        yippeePastryApp.sendCrawlerMessage(url);
     }
 
     /**
