@@ -86,9 +86,7 @@ public class YippeePastryApp implements Application {
             logger.error("Unknown pastry message received!");
             logger.error(message);
         }
-
     }
-
 
     private void handlePingPongMessage(Id id, PingPongMessage message) {
         if (message.isWantResponse()) { // if it is a query
