@@ -11,6 +11,7 @@ import java.io.IOException;
  */
 public class PageRankReducer extends Reducer<Text, Text, Text, IntWritable> {
 
+    @Override
     public void reduce(Text key, Iterable<Text> values, Context context)
         throws IOException, InterruptedException {
 

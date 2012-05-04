@@ -36,10 +36,12 @@ public class PageRank{
     }
 
     public static void main(String[] args) throws  Exception{
-        if (args.length!=2) {
+        if (args.length<3) {
             System.out.println("Usage: PageRank <input> <output>");
+            System.out.println("You gave: [" + args[1] +"] [" + args[2]);
+            System.exit(0);
         }
-        PageRank pr = new PageRank(args[0], args[1]);
+        PageRank pr = new PageRank(args[1], args[2]);
 
     }
 
