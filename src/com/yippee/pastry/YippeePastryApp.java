@@ -73,16 +73,16 @@ public class YippeePastryApp implements Application {
      * Called when the Pastry application receives a message. It pushes the url
      * to the URLFrontier (maybe through a duplicate URL eliminator).
      */
-	public void deliver(Id id, Message message) {
+	public void deliver(Id targetId, Message message) {
 		
 		if(message instanceof CrawlerMessage){
-			handleCrawlerMessage(id, (CrawlerMessage) message);
+			handleCrawlerMessage(targetId, (CrawlerMessage) message);
 		} else if(message instanceof IndexerMessage){
-			handleIndexerMessage(id, (IndexerMessage) message);
+			handleIndexerMessage(targetId, (IndexerMessage) message);
 		} else if(message instanceof QueryMessage){
-			handleQueryMessage(id, (QueryMessage) message);
+			handleQueryMessage(targetId, (QueryMessage) message);
 		} else if(message instanceof PingPongMessage){
-			handlePingPongMessage(id, (PingPongMessage) message);
+			handlePingPongMessage(targetId, (PingPongMessage) message);
 		}else {
 			logger.error("Unknown pastry message received!");
 			logger.error(message);
@@ -97,7 +97,7 @@ public class YippeePastryApp implements Application {
         logger.debug("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
             if (om.content.equals("PING")) {
-                logger.debug("Received PING to ID " + id + " from node " +
+                logger.debug("Received PING to ID " + targetId + " from node " +
                         om.from.getId() + "; returning PONG");
                 sendDirect(om.from, "PONG");
             } else {// else for other queries
@@ -119,22 +119,22 @@ public class YippeePastryApp implements Application {
         }
 	}
 
-    private void handlePingPongMessage(Id id, PingPongMessage message) {
+    private void handlePingPongMessage(Id targetId, PingPongMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void handleQueryMessage(Id id, QueryMessage message) {
+	private void handleQueryMessage(Id targetId, QueryMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void handleIndexerMessage(Id id, IndexerMessage message) {
+	private void handleIndexerMessage(Id targetId, IndexerMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void handleCrawlerMessage(Id id, CrawlerMessage message) {
+	private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
