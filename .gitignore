@@ -33,3 +33,6 @@ build/*
 # temp files
 tmp.file
 
+# build.properties
+build.properties
+
