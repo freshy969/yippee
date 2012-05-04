@@ -11,6 +11,8 @@
     <property name="log.dir" value="${basedir}/log"/>
     <property name="out.dir" value="${basedir}/build"/>
     <property name="jar.dir" value="${basedir}/build"/>
+    <property name="web.dir" value="${basedir}/web"/>
+    <property name="bin.dir" value="${basedir}/bin"/>
 
     <target name="usage" description="Print the usage of ant scripts">
         <echo>
@@ -270,6 +272,53 @@
     <!--            Tomcat/Jetty targets (front-end deployment)             -->
     <!-- ================================================================== -->
 
+    <!-- Change this depending on tomcat or jetty; I am using jetty -->
+    <property name="server" value="tomcat"/>
+    <property name="jetty.home" value="/media/w7/Projects/UPenn/cis555/jetty-6.1.26"/>
+    <property name="tomcat.home" value="/home/nikos/Desktop/dsk/latest/apache-tomcat-5.5.35"/>
+
+    <target name="print-vars">
+        <echo>" JETTY HOME: ${jetty.home}"</echo>
+        <echo>" TOMCAT HOME: ${tomcat.home}"</echo>
+    </target>
+
+    <property name="war.name" value="yippee" />
+
+    <!-- add statistics -->
+    <target name="update-info">
+        <exec executable="/bin/sh">
+            <arg line='-c "git log &gt; ${web.dir}/build.properties"'/>
+        </exec>
+        <!-- <property prefix="svn" file="${web.dir}/build.properties"/> -->
+    </target>
+
+    <!-- create war file -->
+    <target name="create-war" depends="compile, update-info" description="Create WAR">
+        <mkdir dir="${basedir}/distribution"/>
+        <war destfile="${basedir}/distribution/${war.name}.war"
+             webxml="${basedir}/web/WEB-INF/web.xml">
+            <classes dir="${bin.dir}">
+                <include name="**/**.*"/>
+            </classes>
+            <lib dir="${lib.dir}">
+                <include name="*"/>
+                <exclude name="servlet-api.jar"/>
+            </lib>
+        </war>
+    </target>
+
+    <!-- deploy war based on Jetty or Tomcat-->
+    <target name="deploy-war" depends="create-war" description="Create and Deploy WAR">
+        <!-- TODO validate whether it is Tomcat or jetty -->
+        <antcall target="tomcat-shutdown"/>
+        <delete dir="${tomcat.home}/webapps/${war.name}"/>
+        <copy todir="${tomcat.home}/webapps">
+            <fileset file="${basedir}/distribution/${war.name}.war"/>
+        </copy>
+        <antcall target="tomcat-startup"/>
+    </target>
+
+    <!-- start tomcat after deploying -->
     <target name="tomcat-startup">
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
@@ -284,6 +333,7 @@
         </java>
     </target>
 
+    <!-- stop tomcat before deploying -->
     <target name="tomcat-shutdown">
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
