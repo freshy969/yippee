@@ -127,17 +127,32 @@ public class YippeePastryApp implements Application {
 
 	}
 
+    /**
+     * 
+     * @param targetId
+     * @param message
+     */
 	private void handleQueryMessage(Id targetId, QueryMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Called as a result of deliver receiving an IndexerMessage
+	 * @param targetId
+	 * @param message
+	 */
 	private void handleIndexerMessage(Id targetId, IndexerMessage message) {
 		logger.info("Saving in barrels");
 		barrelManager.addDocHits(message.getHitList());		
 	}
 
 
+	/**
+	 * Called as a result of deliver receiving a CrawlerMessage
+	 * @param targetId
+	 * @param message
+	 */
 	private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
 		String urlString = message.getUrl();
         logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
