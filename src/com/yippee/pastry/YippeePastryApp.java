@@ -1,21 +1,14 @@
 package com.yippee.pastry;
 
-import java.util.ArrayList;
-
 import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
-import com.yippee.pastry.PastryAppSocketSender;
+import com.yippee.pastry.message.*;
 import com.yippee.util.SocketQueue;
-
-import com.yippee.pastry.message.CrawlerMessage;
-import com.yippee.pastry.message.IndexerMessage;
-import com.yippee.pastry.message.PastryMessage;
-import com.yippee.pastry.message.PingPongMessage;
-import com.yippee.pastry.message.QueryMessage;
-
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
+
+import java.util.ArrayList;
 
 public class YippeePastryApp implements Application {
     /**
@@ -34,7 +27,7 @@ public class YippeePastryApp implements Application {
      * The urlFrontier in which
      */
     private URLFrontier urlFrontier;
-    
+
     private BarrelManager barrelManager;
 
 	private SocketQueue queryQueue;
@@ -91,7 +84,6 @@ public class YippeePastryApp implements Application {
 	}
 
   
-
     private void handlePingPongMessage(Id targetId, PingPongMessage message) {
 		// TODO Auto-generated method stub
     	
@@ -106,11 +98,18 @@ public class YippeePastryApp implements Application {
                 logger.debug("Received PING to ID " + targetId + " from node " +
                         om.from.getId() + "; returning PONG");
                 sendDirect(om.from, "PONG");
-            } else {// else for other queries
-                // push to the urlFrontier or that node
 
+    private void handlePingPongMessage(Id id, PingPongMessage message) {
+		if (message.isWantResponse()) { // if it is a query
+            if (message.getContent().equals("PING")) {
+                logger.debug("Received PING to ID " + id + " from node " +
+                        message.getFrom().getId() + "; returning PONG");
+                sendDirect(message.getFrom(), "PONG");
+
+            } else {// else for other queries
             }
         } else {
+
             if (om.content.equals("PONG")) {
                 logger.debug("Received PONG from node " + om.from.getId());
             } else if(om.hitList.size()>0) { //message with hitlist in it
@@ -118,6 +117,9 @@ public class YippeePastryApp implements Application {
         		barrelManager.addDocHits(om.hitList);
         	}
 
+            if (message.getContent().equals("PONG")) {
+                logger.debug("Received PONG from node " + message.getFrom().getId());
+            }
         }
 
         }*/
