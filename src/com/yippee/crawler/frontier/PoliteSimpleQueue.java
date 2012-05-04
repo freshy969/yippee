@@ -47,7 +47,8 @@ public class PoliteSimpleQueue implements URLFrontier {
             logger.info("Pull queue length: " + current.size());
 		}
 		
-		this.next.add(toSend);
+		//We've decided not to reinsert a URL once its crawled
+		//this.next.add(toSend);
 		
 		return new Message(toSend.toString()) ;
 	}
