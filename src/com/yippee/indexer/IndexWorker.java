@@ -87,6 +87,8 @@ public class IndexWorker extends Thread {
 				fe.extract(docAug.getUrl(), doc);
 			} catch (MalformedURLException e) {
 				logger.warn("MalformedURL in: " + docAug.getUrl());				
+			} catch (NullPointerException e) {
+				logger.warn("NullPointerException in: " + docAug.getUrl());
 			}
 	    	
 	   
