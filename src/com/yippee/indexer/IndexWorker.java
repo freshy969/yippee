@@ -29,7 +29,6 @@ public class IndexWorker extends Thread {
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(IndexWorker.class);
-    static Logger linkLogger = Logger.getLogger(clazz);
 	DocAugManager dam;
 	DocArchiveManager darcm;
 	DocEntryManager dem;
