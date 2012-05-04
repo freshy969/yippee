@@ -34,13 +34,9 @@ public class QueryMessage implements Message {
      */
     boolean wantResponse = true;
 
-    
-
-    
 	@Override
 	public int getPriority() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }
