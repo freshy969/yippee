@@ -88,8 +88,11 @@ public class YippeePastryApp implements Application {
 			logger.error(message);
 		}
 		
-		
-		
+	}
+
+    private void handlePingPongMessage(Id targetId, PingPongMessage message) {
+		// TODO Auto-generated method stub
+    	
 		
 		
 /*		
@@ -117,10 +120,6 @@ public class YippeePastryApp implements Application {
         		barrelManager.addDocHits(om.hitList);
         	}
         }*/
-	}
-
-    private void handlePingPongMessage(Id targetId, PingPongMessage message) {
-		// TODO Auto-generated method stub
 		
 	}
 
