@@ -1,20 +1,20 @@
 package com.yippee.util;
 
 import com.yippee.crawler.Araneae;
-import com.yippee.crawler.Message;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.indexer.Indexer;
 import com.yippee.pastry.PingPongService;
 import com.yippee.pastry.YippeeEngine;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Scanner;
 
 /**
@@ -40,7 +40,7 @@ public class EntryPoint {
     /**
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
-    final int NO_OF_THREADS = 1;
+    final int NO_OF_THREADS = 10;
     final int SIZE_OF_ROBOTS_CACHE = 512;
     
     /**
@@ -161,7 +161,14 @@ public class EntryPoint {
      * @return
      */
     private boolean seed(URLFrontier urlFrontier, String seed) {
-
+        for ( int i = 0; i < 20; i++) {
+            try {
+                Thread.sleep(1000);
+                logger.info("sleeping" + (20-i));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         File seedFile = new File(seed);
         if (!seedFile.exists()) {
             return false;
@@ -177,16 +184,12 @@ public class EntryPoint {
                 String urlString = new StringBuilder(scanner.nextLine()).toString();
                 if (urlString.startsWith("#")) continue;
                 String aLog = "New URL [" + urlString +"]";
-                //URL url = new URL(urlString);
-                //Configuration.getInstance().getPastryEngine().sendURL(url);
-                Message msg = new Message(urlString);
-                if (msg.getType()== Message.Type.NEW){
-                    urlFrontier.push(msg);
-                }
+                URL url = new URL(urlString);
+                Configuration.getInstance().getPastryEngine().sendURL(url);
                 logger.info(aLog);
             }
-        //} catch (MalformedURLException e) {
-        //    e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } finally {
             scanner.close();
         }
