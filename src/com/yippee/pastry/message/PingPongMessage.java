@@ -1,9 +1,10 @@
 package com.yippee.pastry.message;
 
 import org.apache.log4j.Logger;
+import rice.p2p.commonapi.Message;
 import rice.p2p.commonapi.NodeHandle;
 
-public class PingPongMessage {
+public class PingPongMessage implements Message {
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */
