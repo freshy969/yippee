@@ -54,6 +54,22 @@ public class YippeePastryApp implements Application {
      * to the URLFrontier (maybe through a duplicate URL eliminator).
      */
 	public void deliver(Id id, Message message) {
+		
+		if(message instanceof CrawlerMessage){
+			handleCrawlerMessage(id, (CrawlerMessage) message);
+		} else if(message instanceof IndexerMessage){
+			handleIndexerMessage(id, (IndexerMessage) message);
+		} else if(message instanceof QueryMessage){
+			handleQueryMessage(id, (QueryMessage) message);
+		} else {
+			logger.warn("Unknown pastry message received!", message);
+		}
+		
+		
+		
+		
+		
+		
         PastryMessage om = (PastryMessage) message;
         logger.debug("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
@@ -80,7 +96,22 @@ public class YippeePastryApp implements Application {
         }
 	}
 
-    /**
+    private void handleQueryMessage(Id id, QueryMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void handleIndexerMessage(Id id, IndexerMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void handleCrawlerMessage(Id id, CrawlerMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
      * Called to route a message to the id
      */
     void send(Id idToSendTo, String msgString) {
