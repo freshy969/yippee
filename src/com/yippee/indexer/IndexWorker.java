@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,6 +29,7 @@ public class IndexWorker extends Thread {
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(IndexWorker.class);
+    static Logger linkLogger = Logger.getLogger(clazz);
 	DocAugManager dam;
 	DocArchiveManager darcm;
 	DocEntryManager dem;
@@ -75,26 +77,34 @@ public class IndexWorker extends Thread {
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
 	    	
 	    	Document doc = null;
-			try {
-				doc = parser.parseDoc(docAug);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			
+	    	doc = parser.parseDoc(docAug);
+	
+	    	try {
+				fe.extract(docAug.getUrl(), doc);
+			} catch (MalformedURLException e) {
+				logger.warn("MalformedURL in: " + docAug.getUrl());				
 			}
 	    	
-	    	fe.extract(docAug.getUrl(), doc);
-	    	
-	    	// Read hits test
+	   
 	    	HashMap<String, ArrayList<Hit>> hitList = fe.getHitList();
-	 	    	
+	 	    
+	    	// Send hits to ring 
 	    	nodeIndex.addAllHits(hitList);
 	    	nodeIndex.printIndex();
+	    	
+	    	// Write links to file for PageRank
+	    	appendLinks(docAug.getUrl(), fe.getLinks());
 	    	
 	    	String docTitle = fe.getTitle();
 	    	
 	    	DocEntry docEntry = new DocEntry(docTitle, docAug.getUrl(), null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
 	    	darcm.store(docAug);
-	    }
+	    }		
+	}	
+
+	public void appendLinks(String url, ArrayList<String> links) {
+		
 	}
 }

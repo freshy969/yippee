@@ -351,11 +351,9 @@ public class LinkTextExtractorTest {
 
     @Test
     public void testParser() {
-        try {
+   
             doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
 
         assertNotNull(doc);
     }
@@ -368,14 +366,17 @@ public class LinkTextExtractorTest {
     public void testCaseZeroHref() {
     	
     	System.out.println("Testing Case 0: " + baseUrls[0]);
-        try {
-            doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+    	
         LinkTextExtractor linkEx = new LinkTextExtractor();
-        linkEx.extract(docAugs[0].getUrl(), doc);
+        try {
+			linkEx.smartExtract(new URL(docAugs[0].getUrl()), docAugs[0].getDoc());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CrawlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         ArrayList<String> links = linkEx.getLinks();
         assertEquals(links.size(), caseZeroExpectedUrls.length);
@@ -397,12 +398,9 @@ public class LinkTextExtractorTest {
     public void testCaseOneHref() {
     	System.out.println("Testing Case 1: " + baseUrls[1]);
 
-        try {
+     
             doc = parser.parseDoc(docAugs[1]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+       
         LinkTextExtractor linkEx = new LinkTextExtractor();
         linkEx.extract(docAugs[1].getUrl(), doc);
 
@@ -426,12 +424,9 @@ public class LinkTextExtractorTest {
     public void testCaseTwoHref() {
     	System.out.println("Testing Case 2: " + baseUrls[2]);
 
-        try {
+     
             doc = parser.parseDoc(docAugs[2]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+       
         LinkTextExtractor linkEx = new LinkTextExtractor();
         linkEx.extract(docAugs[2].getUrl(), doc);
 
@@ -454,11 +449,9 @@ public class LinkTextExtractorTest {
     public void testCaseThreeHref() {
     	System.out.println("Testing Case 3: " + baseUrls[3]);
 
-        try {
+     
             doc = parser.parseDoc(docAugs[3]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+     
 
         LinkTextExtractor linkEx = new LinkTextExtractor();
         linkEx.extract(docAugs[3].getUrl(), doc);
@@ -482,11 +475,9 @@ public class LinkTextExtractorTest {
     public void testCaseFourHref() {
     	System.out.println("Testing Case 4: " + baseUrls[4]);
 
-        try {
+      
             doc = parser.parseDoc(docAugs[4]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        
 
         LinkTextExtractor linkEx = new LinkTextExtractor();
         linkEx.extract(docAugs[4].getUrl(), doc);
@@ -510,12 +501,9 @@ public class LinkTextExtractorTest {
     public void testCaseFiveHref() {
     	System.out.println("Testing Case 5: " + baseUrls[5]);
 
-        try {
+     
             doc = parser.parseDoc(docAugs[5]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+  
         LinkTextExtractor linkEx = new LinkTextExtractor();
         linkEx.extract(docAugs[5].getUrl(), doc);
 
@@ -538,11 +526,9 @@ public class LinkTextExtractorTest {
     public void testCaseSixHref() {
     	System.out.println("Testing Case 6: " + baseUrls[6]);
 
-        try {
+ 
             doc = parser.parseDoc(docAugs[6]);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
 
         LinkTextExtractor linkEx = new LinkTextExtractor();
         linkEx.extract(docAugs[6].getUrl(), doc);
@@ -560,12 +546,9 @@ public class LinkTextExtractorTest {
 
     @Test
     public void testNumber() {
-        try {
+
             doc = parser.parseDoc(docAugs[0]);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+  
         LinkTextExtractor linkEx = new LinkTextExtractor();
         linkEx.extract(docAugs[0].getUrl(), doc);
         ArrayList<String> links = linkEx.getLinks();

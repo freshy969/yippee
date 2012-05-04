@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -78,14 +79,16 @@ public class FancyExtractorTest {
     	FancyExtractor fe = new FancyExtractor(docAug.getId());
     	
     	Document doc = null;
-		try {
-			doc = parser.parseDoc(docAug);
-		} catch (FileNotFoundException e) {
+		
+		doc = parser.parseDoc(docAug);
+	
+    	
+    	try {
+			fe.extract("http://crawltest.cis.upenn.edu", doc);
+		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-    	
-    	fe.extract("http://crawltest.cis.upenn.edu", doc);    
+		}    
     	
     	HashMap<String, ArrayList<Hit>> hitMap = fe.getHitList();
     	
@@ -132,6 +135,8 @@ public class FancyExtractorTest {
     	}
 	
     	
-    	System.out.println(fe.getTitle());
+    	System.out.println("Title: " + fe.getTitle());
+    	
+    	System.out.println("Links: " + fe.getLinks());
     }
 }

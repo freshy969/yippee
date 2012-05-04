@@ -3,10 +3,8 @@ package com.yippee.crawler;
 import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
-import com.yippee.indexer.Parser;
 import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -87,7 +85,7 @@ public class Spider implements Runnable {
 				docAug.setDoc(content);
 				docAug.setUrl(urlToCrawl.toString());
 
-				docAug.setId(urlToCrawl.toString() + " timestamp");
+				docAug.setId(urlToCrawl.toString());
 
 				logger.info("About to push to DocManager");
 				dam.push(docAug);
@@ -117,6 +115,7 @@ public class Spider implements Runnable {
 				int i = 0;
 				for (String newUrl : links){
 					if (newUrl == null || newUrl.contains("https")) {
+                        logger.info("Skip: " + newUrl);
 						continue;
 					}
 
@@ -127,7 +126,7 @@ public class Spider implements Runnable {
 						//logger.info("About to ask robots about: " + url);
 
 					} catch (MalformedURLException e) {
-						e.printStackTrace();
+						logger.warn("Malformed URL Exception");
 						continue; // skip that url
 					}
 
@@ -135,7 +134,9 @@ public class Spider implements Runnable {
 					try{
 						if (robotsModule.allowedToCrawl(url)){
 							Configuration.getInstance().getPastryEngine().sendURL(url);
-						}
+						} else {
+                            logger.info("Robots returned false");
+                        }
 					}catch(IllegalStateException e){
 						logger.warn("IllegalStateException", e);
 					}

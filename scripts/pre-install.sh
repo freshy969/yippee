@@ -8,8 +8,6 @@
 #
 # Usage: ./pre-install.sh
 #
-# TODO:
-#        *  
 ##
 
 sudo yum update
