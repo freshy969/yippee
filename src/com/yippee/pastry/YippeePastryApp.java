@@ -138,6 +138,12 @@ public class YippeePastryApp implements Application {
 	}
 
 
+    /**
+     * Handle the crawler messages
+     *
+     * @param targetId the target node
+     * @param message the actual crawler message
+     */
 	private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
 		String urlString = message.getUrl();
         logger.info("Pushing ["+ urlString +"] to the URLFRONTIER");
