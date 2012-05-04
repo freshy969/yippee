@@ -1,6 +1,5 @@
 package com.yippee.pastry;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import com.yippee.crawler.frontier.URLFrontier;
@@ -9,6 +8,7 @@ import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.PastryAppSocketSender;
 import com.yippee.util.SocketQueue;
 
+import com.yippee.pastry.message.PastryMessage;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 

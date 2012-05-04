@@ -1,4 +1,4 @@
-package com.yippee.pastry;
+package com.yippee.pastry.message;
 
 import java.util.ArrayList;
 
