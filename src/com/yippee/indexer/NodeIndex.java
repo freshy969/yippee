@@ -63,7 +63,7 @@ public class NodeIndex {
 		if (wordIndex.size() > capacity) {
 			logger.info("REACHED CAPACITY, SENDING TO RING");
 			sendWordsToRing();
-			printIndex();
+			printAll();
 			wordIndex = new HashMap<String, ArrayList<Hit>>();
 		}		
 	}
@@ -91,7 +91,7 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 			ArrayList<Hit> list = wordIndex.get(word);
-			Configuration.getInstance().getPastryEngine().sendList(word,list);
+			//Configuration.getInstance().getPastryEngine().sendList(word,list);
 		}
 			
 	}

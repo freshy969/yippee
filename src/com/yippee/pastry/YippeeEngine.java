@@ -45,6 +45,7 @@ public class YippeeEngine {
             logger.info("Starting ring..");
             yippeePastryApp = new YippeePastryApp(nodeFactory);
     		yippeePastryApp.startDaemonListener(8888);
+    		yippeePastryApp.startQueryDaemon();
     		
         } catch (UnknownHostException e) {
             e.printStackTrace();

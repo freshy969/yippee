@@ -9,6 +9,7 @@ import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.message.*;
 import com.yippee.search.DaemonListener;
+import com.yippee.search.QueryDaemon;
 import com.yippee.util.SocketQueue;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
@@ -40,9 +41,11 @@ public class YippeePastryApp implements Application {
     private URLFrontier urlFrontier;
 
     private BarrelManager barrelManager;
-
-    private SocketQueue queryQueue;
-    private HashMap<UUID, Socket> socketMap;
+    /**
+     * For handling QueryMessages
+     */   
+    private static SocketQueue queryQueue;
+    private static HashMap<UUID, Socket> socketMap;
 
     /**
      * Constructor
@@ -66,7 +69,7 @@ public class YippeePastryApp implements Application {
     }
 
     /**
-     * Starts the daemon thread
+     * Starts the daemon listener thread
      *
      * @param port port on which the daemon listens
      */
@@ -76,6 +79,17 @@ public class YippeePastryApp implements Application {
         daemon.start();
     }
 
+    /**
+     * Starts the daemon query thread
+     *
+     * @param port port on which the daemon listens
+     */
+    public void startQueryDaemon() {
+        Thread daemon = new Thread(new QueryDaemon(this, queryQueue));
+        daemon.setDaemon(true);
+        daemon.start();
+    }
+    
     /**
      * Called when the Pastry application receives a message. It pushes the url
      * to the URLFrontier (maybe through a duplicate URL eliminator).
