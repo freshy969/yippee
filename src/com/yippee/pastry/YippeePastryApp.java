@@ -90,22 +90,17 @@ public class YippeePastryApp implements Application {
 	}
 
     private void handlePingPongMessage(Id id, PingPongMessage message) {
-		if (message.get) { // if it is a query
-            if (om.content.equals("PING")) {
+		if (message.isWantResponse()) { // if it is a query
+            if (message.getContent().equals("PING")) {
                 logger.debug("Received PING to ID " + id + " from node " +
-                        om.from.getId() + "; returning PONG");
-                sendDirect(om.from, "PONG");
+                        message.getFrom().getId() + "; returning PONG");
+                sendDirect(message.getFrom(), "PONG");
             } else {// else for other queries
-                // push to the urlFrontier or that node
-
             }
         } else {
-            if (om.content.equals("PONG")) {
+            if (message.getContent().equals("PONG")) {
                 logger.debug("Received PONG from node " + om.from.getId());
-            } else if(om.hitList.size()>0) { //message with hitlist in it
-        		logger.info("Saving in barrels");
-        		barrelManager.addDocHits(om.hitList);
-        	}
+            }
         }
 	}
 
