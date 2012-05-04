@@ -92,7 +92,7 @@ public class YippeePastryApp implements Application {
 		
 		
 		
-		
+/*		
         PastryMessage om = (PastryMessage) message;
         logger.debug("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
@@ -116,7 +116,7 @@ public class YippeePastryApp implements Application {
         		logger.info("Saving in barrels");
         		barrelManager.addDocHits(om.hitList);
         	}
-        }
+        }*/
 	}
 
     private void handlePingPongMessage(Id id, PingPongMessage message) {
