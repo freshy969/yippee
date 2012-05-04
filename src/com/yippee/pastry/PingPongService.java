@@ -9,11 +9,11 @@ import org.apache.log4j.Logger;
  *
  * boot-up 10 seconds, ping pong every 5 seconds
  */
-public class PingPong implements Runnable {
+public class PingPongService implements Runnable {
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */
-    static Logger logger = Logger.getLogger(PingPong.class);
+    static Logger logger = Logger.getLogger(PingPongService.class);
     /**
      * Toggle whether the node is booting or not.
      */
@@ -22,7 +22,7 @@ public class PingPong implements Runnable {
     /**
      * Constructor -- when object is constructed, starts on the booting process
      */
-    public PingPong() {
+    public PingPongService() {
         booting = true;
     }
 

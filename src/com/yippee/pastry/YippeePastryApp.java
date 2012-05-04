@@ -8,7 +8,11 @@ import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.PastryAppSocketSender;
 import com.yippee.util.SocketQueue;
 
+import com.yippee.pastry.message.CrawlerMessage;
+import com.yippee.pastry.message.IndexerMessage;
 import com.yippee.pastry.message.PastryMessage;
+import com.yippee.pastry.message.QueryMessage;
+
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
@@ -76,8 +80,11 @@ public class YippeePastryApp implements Application {
 			handleIndexerMessage(id, (IndexerMessage) message);
 		} else if(message instanceof QueryMessage){
 			handleQueryMessage(id, (QueryMessage) message);
-		} else {
-			logger.warn("Unknown pastry message received!", message);
+		} else if(message instanceof PingPongMessage){
+			handlePingPongMessage(id, (PingPongMessage) message);
+		}else {
+			logger.error("Unknown pastry message received!");
+			logger.error(message);
 		}
 		
 		
@@ -111,7 +118,12 @@ public class YippeePastryApp implements Application {
         }
 	}
 
-    private void handleQueryMessage(Id id, QueryMessage message) {
+    private void handlePingPongMessage(Id id, PingPongService message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void handleQueryMessage(Id id, QueryMessage message) {
 		// TODO Auto-generated method stub
 		
 	}
