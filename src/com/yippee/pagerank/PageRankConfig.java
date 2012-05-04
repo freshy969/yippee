@@ -36,6 +36,9 @@ public class PageRankConfig {
     }
 
     public static void main(String[] args) throws  Exception{
+        if (args.length!=2) {
+            System.out.println("Usage: PageRank <input> <output>");
+        }
         PageRankConfig config = new PageRankConfig(args[0], args[1]);
 
     }
