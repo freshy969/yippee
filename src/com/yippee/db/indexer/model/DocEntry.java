@@ -17,10 +17,10 @@ public class DocEntry {
 	public DocEntry() {};
 	
 	public DocEntry (String URL, String title, String host, Date lastCrawled) {
-		this.setURL(URL);
-		this.setTitle(title);
-		this.setHost(host);
-		this.setLastCrawled(lastCrawled);
+		this.URL = URL;
+		this.title = title;
+		this.host = host;
+		this.lastCrawled = lastCrawled;
 	}
 	
 	public void update (String title, Date lastCrawled) {

@@ -88,6 +88,7 @@ public class IndexWorker extends Thread {
 			} catch (MalformedURLException e) {
 				logger.warn("MalformedURL in: " + docAug.getUrl());				
 			} catch (NullPointerException e) {
+				//e.printStackTrace();
 				logger.warn("NullPointerException in: " + docAug.getUrl());
 			}
 	    	
@@ -103,7 +104,7 @@ public class IndexWorker extends Thread {
 	    	
 	    	String docTitle = fe.getTitle();
 	    	
-	    	DocEntry docEntry = new DocEntry(docTitle, docAug.getUrl(), null , docAug.getTime());
+	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
 	    	darcm.store(docAug);
 	    }		
