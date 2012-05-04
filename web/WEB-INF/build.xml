@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="yippee" basedir=".">
+<project name="yippee" basedir="../../">
 
     <!-- define project vars -->
     <property name="project.root" location="${basedir}"/>
