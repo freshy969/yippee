@@ -77,9 +77,12 @@ public class PoliteSimpleQueue implements URLFrontier {
 			synchronized(next){
 				next.add(message.getURL());
 				
-				if(counter.addAndGet(1) % 1000000 == 0) this.save(); 
+				if(counter.addAndGet(1) % 1000000 == 0) {
+	                logger.info("Push queue length: " + next.size());
+					this.save(); 
+				}
 				logger.debug("" + counter.get());
-                logger.info("Push queue length" + next.size());
+				
 			}	
 		}
 	}
