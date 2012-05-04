@@ -87,22 +87,10 @@ public class YippeePastryApp implements Application {
 			logger.error("Unknown pastry message received!");
 			logger.error(message);
 		}
-<<<<<<< HEAD
-		
-		
-		
-		
-		
-/*		
-        PastryMessage om = (PastryMessage) message;
-        logger.debug("Received message " + om.content + " from " + om.from);
-        if (om.wantResponse) { // if it is a query
-=======
 	}
 
     private void handlePingPongMessage(Id id, PingPongMessage message) {
 		if (message.get) { // if it is a query
->>>>>>> Update Message
             if (om.content.equals("PING")) {
                 logger.debug("Received PING to ID " + id + " from node " +
                         om.from.getId() + "; returning PONG");
