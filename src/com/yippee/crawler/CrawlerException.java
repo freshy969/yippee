@@ -5,6 +5,10 @@ package com.yippee.crawler;
  */
 class CrawlerException extends Exception {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -535050283386831175L;
+	/**
      * The subtype of the custom exception
      */
     private String subType;

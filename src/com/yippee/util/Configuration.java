@@ -64,7 +64,8 @@ public class Configuration {
     /**
      * logs the current configuration
      */
-    private void printConfiguration() {
+    @SuppressWarnings("unused")
+	private void printConfiguration() {
         //LOG ARGUMENTS
         logger.info("Server reconfiguration complete:");
         logger.info("Threads \t:" + crawlerThreadNumber);

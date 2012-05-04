@@ -1,16 +1,13 @@
 package com.yippee.indexer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
 import com.yippee.db.indexer.model.Hit;
-import com.yippee.db.indexer.model.HitList;
 import com.yippee.util.Configuration;
 
 public class NodeIndex {

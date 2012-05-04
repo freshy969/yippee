@@ -13,6 +13,10 @@ import rice.p2p.commonapi.NodeHandle;
  */
 public class PastryMessage implements rice.p2p.commonapi.Message {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3042916067687359823L;
+	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(PastryMessage.class);

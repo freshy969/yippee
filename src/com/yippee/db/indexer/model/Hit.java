@@ -1,19 +1,15 @@
 package com.yippee.db.indexer.model;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import com.sleepycat.persist.model.Persistent;
 
 @Persistent
 public class Hit implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3874306046142820777L;
 	/**
 	 * variables we want to keep that we extract from document about each word
 	 * we can add more, if find things are meaningful

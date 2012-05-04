@@ -7,11 +7,7 @@ import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.util.Configuration;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
 
 public class IndexerTest {
     /**

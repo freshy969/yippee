@@ -1,11 +1,9 @@
 package com.yippee.db.indexer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-import com.sleepycat.je.Cursor;
 import com.sleepycat.je.DatabaseException;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;

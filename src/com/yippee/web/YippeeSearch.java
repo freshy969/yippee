@@ -2,15 +2,10 @@ package com.yippee.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.net.Socket;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +19,13 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 public class YippeeSearch extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -848966826189202866L;
+
 	// URL-pattern: /yippee
+	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
@@ -42,6 +43,7 @@ public class YippeeSearch extends HttpServlet {
 		response.flushBuffer();
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 

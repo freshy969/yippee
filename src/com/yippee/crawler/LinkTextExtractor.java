@@ -8,7 +8,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;

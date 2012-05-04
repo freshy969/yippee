@@ -1,17 +1,12 @@
 package com.yippee.db.indexer;
 
-import com.yippee.db.indexer.model.AnchorHit;
 import com.yippee.db.indexer.model.DocEntry;
-import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
 
-import org.apache.log4j.Logger;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import static org.junit.Assert.assertTrue;

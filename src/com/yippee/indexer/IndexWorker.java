@@ -10,7 +10,6 @@ import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +52,7 @@ public class IndexWorker extends Thread {
 		this.nodeIndex = nodeIndex;
 	}
 
+	@Override
 	public void run() {
 		
 		while(true) {

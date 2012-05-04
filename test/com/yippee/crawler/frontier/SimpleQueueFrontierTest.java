@@ -2,7 +2,6 @@ package com.yippee.crawler.frontier;
 
 import com.yippee.crawler.Message;
 import com.yippee.db.crawler.URLFrontierManager;
-import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.util.Configuration;
 
 import org.apache.log4j.Logger;

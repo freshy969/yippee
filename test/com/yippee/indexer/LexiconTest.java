@@ -2,18 +2,15 @@ package com.yippee.indexer;
 
 
 import com.yippee.indexer.Lexicon;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 import org.apache.log4j.Logger;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
 
 public class LexiconTest {
     /**

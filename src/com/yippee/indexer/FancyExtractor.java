@@ -43,7 +43,7 @@ public class FancyExtractor {
 		title = false;
 		stemmer = new WordStemmer();
 		hitList = new HashMap<String, ArrayList<Hit>>();
-		anchorList = new ArrayList();
+		anchorList = new ArrayList<Hit>();
 		this.docId = docId;
 	}
 	

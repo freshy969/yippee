@@ -1,10 +1,8 @@
 package com.yippee.db.indexer.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.sleepycat.persist.model.Entity;
-import com.sleepycat.persist.model.Persistent;
 import com.sleepycat.persist.model.PrimaryKey;
 
 @Entity

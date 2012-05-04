@@ -6,6 +6,10 @@ import rice.p2p.commonapi.NodeHandle;
 
 public class PingPongMessage implements Message {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6071983767140664428L;
+	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
     static Logger logger = Logger.getLogger(PastryMessage.class);

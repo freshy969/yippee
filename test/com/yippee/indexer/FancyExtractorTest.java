@@ -2,14 +2,12 @@ package com.yippee.indexer;
 
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.indexer.model.*;
-import com.yippee.indexer.Lexicon;
 import com.yippee.indexer.Parser;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
