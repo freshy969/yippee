@@ -40,7 +40,7 @@ public class IndexWorker extends Thread {
 	public IndexWorker(NodeIndex nodeIndex) {
 		Configuration.getInstance().setBerkeleyDBRoot("db/test");
 		try {
-			this.sleep(1000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,7 +63,7 @@ public class IndexWorker extends Thread {
 			while(docAug == null) {
 				try {
 //					System.out.println("Waiting... " + pollDelay + "ms");
-					this.sleep(pollDelay);
+					Thread.sleep(pollDelay);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
