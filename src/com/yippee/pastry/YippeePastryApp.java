@@ -7,6 +7,7 @@ import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.db.indexer.BarrelManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.PastryAppSocketSender;
+import com.yippee.util.SocketQueue;
 
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
@@ -31,6 +32,8 @@ public class YippeePastryApp implements Application {
     
     private BarrelManager barrelManager;
 
+	private SocketQueue queryQueue;
+    
     /**
      * Constructor
      *
@@ -43,12 +46,24 @@ public class YippeePastryApp implements Application {
         barrelManager = new BarrelManager();
        // endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
+		queryQueue = new SocketQueue(100);
     }
 
     public void setupURLFrontier(URLFrontier urlFrontier){
         this.urlFrontier = urlFrontier;
     }
-
+    
+	/**
+	 * Starts the daemon thread
+	 * 
+	 * @param port port on which the daemon listens
+	 */
+	public void startDaemonListener(int port) {
+		Thread daemon = new Thread(new DaemonListener(port, queryQueue));
+		daemon.setDaemon(true);
+		daemon.start();
+	}
+    
     /**
      * Called when the Pastry application receives a message. It pushes the url
      * to the URLFrontier (maybe through a duplicate URL eliminator).
