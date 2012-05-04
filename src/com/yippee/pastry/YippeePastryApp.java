@@ -8,7 +8,12 @@ import com.yippee.db.indexer.model.Hit;
 import com.yippee.pastry.PastryAppSocketSender;
 import com.yippee.util.SocketQueue;
 
+import com.yippee.pastry.message.CrawlerMessage;
+import com.yippee.pastry.message.IndexerMessage;
 import com.yippee.pastry.message.PastryMessage;
+import com.yippee.pastry.message.PingPongMessage;
+import com.yippee.pastry.message.QueryMessage;
+
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
@@ -69,6 +74,25 @@ public class YippeePastryApp implements Application {
      * to the URLFrontier (maybe through a duplicate URL eliminator).
      */
 	public void deliver(Id id, Message message) {
+		
+		if(message instanceof CrawlerMessage){
+			handleCrawlerMessage(id, (CrawlerMessage) message);
+		} else if(message instanceof IndexerMessage){
+			handleIndexerMessage(id, (IndexerMessage) message);
+		} else if(message instanceof QueryMessage){
+			handleQueryMessage(id, (QueryMessage) message);
+		} else if(message instanceof PingPongMessage){
+			handlePingPongMessage(id, (PingPongMessage) message);
+		}else {
+			logger.error("Unknown pastry message received!");
+			logger.error(message);
+		}
+		
+		
+		
+		
+		
+		
         PastryMessage om = (PastryMessage) message;
         logger.debug("Received message " + om.content + " from " + om.from);
         if (om.wantResponse) { // if it is a query
@@ -95,7 +119,27 @@ public class YippeePastryApp implements Application {
         }
 	}
 
-    /**
+    private void handlePingPongMessage(Id id, PingPongMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void handleQueryMessage(Id id, QueryMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void handleIndexerMessage(Id id, IndexerMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void handleCrawlerMessage(Id id, CrawlerMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
      * Called to route a message to the id
      */
     void send(Id idToSendTo, String msgString) {

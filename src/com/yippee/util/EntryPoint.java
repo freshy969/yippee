@@ -6,8 +6,9 @@ import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
 import com.yippee.indexer.Indexer;
-import com.yippee.pastry.PingPong;
+import com.yippee.pastry.PingPongService;
 import com.yippee.pastry.YippeeEngine;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -98,7 +99,7 @@ public class EntryPoint {
         YippeeEngine yippeeEngine = new YippeeEngine(Integer.parseInt(arguments[0]),
                 arguments[1], Integer.parseInt(arguments[2]));
         Configuration.getInstance().setPastryEngine(yippeeEngine);
-        PingPong pingPong = new PingPong();
+        PingPongService pingPong = new PingPongService();
         new Thread(pingPong, "Ping Pong Thread").start();
         // sleep for a number of seconds so that when the rest of the services
         // launch, pastry is up and running
