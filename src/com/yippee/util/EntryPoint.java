@@ -164,6 +164,7 @@ public class EntryPoint {
         for ( int i = 0; i < 20; i++) {
             try {
                 Thread.sleep(1000);
+                logger.info("sleeping" + (20-i));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
