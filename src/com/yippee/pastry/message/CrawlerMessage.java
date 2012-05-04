@@ -23,10 +23,6 @@ public class CrawlerMessage implements Message{
      */
     String url;
     /**
-     * The String containing the url
-     */
-    String referrer;
-    /**
      * The response of the message
      */
     boolean wantResponse = true;
@@ -50,5 +46,41 @@ public class CrawlerMessage implements Message{
      */
     public int getPriority() {
         return 0;
+    }
+
+    /**
+     * Get the node handle
+     *
+     * @return the node handle
+     */
+    public NodeHandle getFrom() {
+        return from;
+    }
+
+    /**
+     * Set the from handle.
+     *
+     * @param from the node handle to be sent
+     */
+    public void setFrom(NodeHandle from) {
+        this.from = from;
+    }
+
+    /**
+     * Get the url content
+     *
+     * @return the url string
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Setup url content
+     *
+     * @param url the string url
+     */
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
