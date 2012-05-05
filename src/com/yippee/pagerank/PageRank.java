@@ -27,12 +27,13 @@ public class PageRank {
 		@Override
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
-			String[] line = value.toString().split(DEL);
-			if (line.length>1) {
-				String fromPage = line[0].trim();
-				String fromRank = line[1].trim();
-				String toPage = line[2].trim();
-				String toOutNum = line[3].trim();
+            String line = value.toString();
+			String[] parts = line.substring(1,line.length()-1).split(DEL);
+			if (parts.length>1) {
+				String fromPage = parts[0].trim();
+				String fromRank = parts[1].trim();
+				String toPage = parts[2].trim();
+				String toOutNum = parts[3].trim();
 				// This is in order to calculate the pagerank of the 'to' page "C. Imbriano"
 				mapKey.set(toPage);
 				incomingLinks.set("'IN" + DEL + fromPage + DEL + fromRank + DEL + toOutNum + "'");
@@ -60,12 +61,14 @@ public class PageRank {
 			List<String> outgoingLinks = new LinkedList<String>();
 
 			for (Text value : values) {
-				String[] parts = value.toString().split(DEL);
+                String line = value.toString();
+                System.out.println(line);
+				String[] parts = line.substring(1,line.length()-1).split(DEL);
 				if (parts[0].contains("IN")) {
-
+                    //System.out.println("'" + parts[2] + "' | '" + parts[3] + "'");
 					//String fromPage = parts[1].trim();
-					double fromRank = Double.parseDouble(parts[2].trim().substring(1, parts[2].length() - 1));
-					int fromOutNum = Integer.parseInt(parts[3].trim().substring(1, parts[3].length() - 1));
+					double fromRank = Double.parseDouble(parts[2].trim());
+					int fromOutNum = Integer.parseInt(parts[3].trim());
 
 					pagerank += fromRank / fromOutNum;
 
