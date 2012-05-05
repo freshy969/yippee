@@ -27,7 +27,7 @@ public class PageRank {
 		@Override
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
-            String line = value.toString();
+            String line = value.toString().trim();
 			String[] parts = line.substring(1,line.length()-1).split(DEL);
 			if (parts.length>1) {
 				String fromPage = parts[0].trim();
