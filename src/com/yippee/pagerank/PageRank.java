@@ -14,7 +14,7 @@ import java.io.IOException;
 
 //import org.apache.hadoop.util.GenericOptionsParser;
 
-public class WordCount {
+public class PageRank {
 
     public static class TokenizerMapper
             extends Mapper<Object, Text, Text, Text> {
@@ -55,11 +55,11 @@ public class WordCount {
         Configuration conf = new Configuration();
         //String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (args.length != 3) {
-            System.err.println("Usage: wordcount <in> <out>");
+            System.err.println("Usage: PageRank <in> <out>");
             System.exit(2);
         }
-        Job job = new Job(conf, "word count");
-        job.setJarByClass(WordCount.class);
+        Job job = new Job(conf, "PageRank");
+        job.setJarByClass(PageRank.class);
         job.setMapperClass(TokenizerMapper.class);
 //        job.setCombinerClass(IntSumReducer.class);
         job.setReducerClass(IntSumReducer.class);
