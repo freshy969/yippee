@@ -38,12 +38,14 @@ public class DuplicateManager {
             // Open the data accessor. This is used to store persistent objects.
             DuplicateURL temp = dao.getDuplicateByURL().get(url);
             if (temp == null) {
+                logger.debug(url + " is not duplicate");
                 temp = new DuplicateURL();
                 temp.setUrl(url);
                 temp.setHits(1);
                 dao.getDuplicateByURL().put(temp);
                 exists = false;
             } else {
+                logger.debug(url + " is duplicate");
                 temp.addHit();
                 dao.getDuplicateByURL().put(temp);
                 exists = true;

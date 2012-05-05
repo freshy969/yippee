@@ -41,6 +41,12 @@ public class FrontierFactory {
     	int crawlerThreadNumber = Configuration.getInstance().getCrawlerThreadNumber();
     	
         switch (type){
+            case FAST:
+                FastFrontier ff = new FastFrontier();
+                return ff;
+            case BOOST:
+                FastFrontierBoost ffb = new FastFrontierBoost();
+                return ffb;
             case SIMPLE:
             	SimpleQueueFrontier sqf = new SimpleQueueFrontier();
             	sqf.load();

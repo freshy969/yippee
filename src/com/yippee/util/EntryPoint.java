@@ -41,7 +41,7 @@ public class EntryPoint {
     /**
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
-    final int NO_OF_THREADS = 10;
+    final int NO_OF_THREADS = 50;
     final int SIZE_OF_ROBOTS_CACHE = 512;
     
     /**
@@ -126,7 +126,7 @@ public class EntryPoint {
         }
         Configuration.getInstance().setRobotsCacheSize(SIZE_OF_ROBOTS_CACHE);
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
-        URLFrontier urlFrontier = FrontierFactory.get(FrontierType.POLITE_SIMPLE);
+        URLFrontier urlFrontier = FrontierFactory.get(FrontierType.BOOST);
         Configuration.getInstance().getPastryEngine().setupURLFrontier(urlFrontier);
         boolean success = true;
         // only overwrite database with new seeds iff an overwrite flag was given

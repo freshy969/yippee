@@ -3,4 +3,4 @@ package com.yippee.crawler.frontier;
 /**
  * Selects the Frontier Type to be handed to the Frontier Factory.
  */
-public enum FrontierType {POLITE_SIMPLE, SIMPLE, MERC_1, MERC_2, CORALI}
+public enum FrontierType {POLITE_SIMPLE, FAST, BOOST, SIMPLE, MERC_1, MERC_2, CORALI}
