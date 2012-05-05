@@ -19,7 +19,8 @@ public class PageRank {
 	public static class PRMapper
 	extends Mapper<Object, Text, Text, Text> {
 
-		private Text mapKey = new Text();
+		private Text toKey = new Text();
+        private Text fromKey = new Text();
 		private Text incomingLinks = new Text();
 		private Text outgoingLinks = new Text();
 		private static String DEL = "', '";
@@ -27,7 +28,7 @@ public class PageRank {
 		@Override
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
-            String line = value.toString();
+            String line = value.toString().trim();
 			String[] parts = line.substring(1,line.length()-1).split(DEL);
 			if (parts.length>1) {
 				String fromPage = parts[0].trim();
@@ -35,13 +36,14 @@ public class PageRank {
 				String toPage = parts[2].trim();
 				String toOutNum = parts[3].trim();
 				// This is in order to calculate the pagerank of the 'to' page "C. Imbriano"
-				mapKey.set(toPage);
+				toKey.set(toPage);
 				incomingLinks.set("'IN" + DEL + fromPage + DEL + fromRank + DEL + toOutNum + "'");
-				context.write(mapKey, incomingLinks);
+				context.write(toKey, incomingLinks);
 				// This is in order to keep track of outgoing links in order to
 				// scale each page-rank voting power.
-				outgoingLinks.set("'OUT" + DEL + fromPage + "'");
-				context.write(outgoingLinks, mapKey);
+				outgoingLinks.set("'OUT" + DEL + toPage + "'");
+                fromKey.set(fromPage);
+				context.write(fromKey, outgoingLinks);
 			}
 		}
 	}
@@ -61,30 +63,32 @@ public class PageRank {
 			List<String> outgoingLinks = new LinkedList<String>();
 
 			for (Text value : values) {
-                String line = value.toString();
+                String line = value.toString().trim();
                 System.out.println(line);
-				String[] parts = line.substring(1,line.length()-1).split(DEL);
-				if (parts[0].contains("IN")) {
-                    //System.out.println("'" + parts[2] + "' | '" + parts[3] + "'");
-					//String fromPage = parts[1].trim();
-					double fromRank = Double.parseDouble(parts[2].trim());
-					int fromOutNum = Integer.parseInt(parts[3].trim());
-					pagerank += fromRank / fromOutNum;
+                if (line.contains("'")) {
+                    String[] parts = line.substring(1,line.length()-1).split(DEL);
+                    if (parts[0].contains("IN")) {
+                        //System.out.println("'" + parts[2] + "' | '" + parts[3] + "'");
+                        //String fromPage = parts[1].trim();
+                        double fromRank = Double.parseDouble(parts[2].trim());
+                        int fromOutNum = Integer.parseInt(parts[3].trim());
+                        pagerank += fromRank / fromOutNum;
 
-				} else if(parts[0].contains("OUT")) {
-					// This are outgoing links
-					outgoingLinkCount++;
+                    } else if(parts[0].contains("OUT")) {
+                        // This are outgoing links
+                        outgoingLinkCount++;
 
-					String outLink = parts[1].trim();
-					outgoingLinks.add(outLink);
-				}
+                        String outLink = parts[1].trim();
+                        outgoingLinks.add(outLink);
+                    }
+                }
 			}
 
 
 			for(String s : outgoingLinks){
-				outKey.set(targetPage);
-				result.set("'" + pagerank + DEL + s + DEL + outgoingLinkCount + "'");
-				context.write(targetPage, result);
+				outKey.set("");
+				result.set("'" + targetPage + DEL + pagerank + DEL + s + DEL + outgoingLinkCount + "'");
+				context.write(outKey, result);
 			}
 
 		}
