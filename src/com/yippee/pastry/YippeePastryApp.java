@@ -6,14 +6,19 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.yippee.db.indexer.BarrelManager;
+import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.Hit;
+import com.yippee.db.indexer.model.HitList;
 import com.yippee.pastry.message.*;
 import com.yippee.search.DaemonListener;
 import com.yippee.search.QueryDaemon;
+import com.yippee.search.SearchEngine;
 import com.yippee.util.SocketQueue;
 import org.apache.log4j.Logger;
 import rice.p2p.commonapi.*;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,13 +44,17 @@ public class YippeePastryApp implements Application {
      * The urlFrontier in which
      */
     private URLFrontier urlFrontier;
-
+    /**
+     * For storing HitLists
+     */
     private BarrelManager barrelManager;
     /**
      * For handling QueryMessages
      */   
-    private static SocketQueue queryQueue;
+    private static SocketQueue socketQueue;
+    private static HashMap<UUID, String> queryMap;
     private static HashMap<UUID, Socket> socketMap;
+    private static HashMap<UUID, ArrayList<ResultMessage>> resultMap;
 
     /**
      * Constructor
@@ -60,34 +69,16 @@ public class YippeePastryApp implements Application {
         barrelManager = new BarrelManager();
         // endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
-        queryQueue = new SocketQueue(100);
+
+        // Query data structures
+        socketQueue = new SocketQueue(100);
         socketMap = new HashMap<UUID, Socket>();
+        queryMap = new HashMap<UUID, String>();
+        resultMap = new HashMap<UUID, ArrayList<ResultMessage>>();
     }
 
     public void setupURLFrontier(URLFrontier urlFrontier) {
         this.urlFrontier = urlFrontier;
-    }
-
-    /**
-     * Starts the daemon listener thread
-     *
-     * @param port port on which the daemon listens
-     */
-    public void startDaemonListener(int port) {
-        Thread daemon = new Thread(new DaemonListener(port, queryQueue));
-        daemon.setDaemon(true);
-        daemon.start();
-    }
-
-    /**
-     * Starts the daemon query thread
-     *
-     * @param port port on which the daemon listens
-     */
-    public void startQueryDaemon() {
-        Thread daemon = new Thread(new QueryDaemon(this, queryQueue));
-        daemon.setDaemon(true);
-        daemon.start();
     }
     
     /**
@@ -102,6 +93,8 @@ public class YippeePastryApp implements Application {
             handleIndexerMessage(targetId, (IndexerMessage) message);
         } else if (message instanceof QueryMessage) {
             handleQueryMessage(targetId, (QueryMessage) message);
+        } else if (message instanceof ResultMessage) {
+            handleResultMessage(targetId, (ResultMessage) message);
         } else if (message instanceof PingPongMessage) {
             handlePingPongMessage(targetId, (PingPongMessage) message);
         } else {
@@ -135,14 +128,92 @@ public class YippeePastryApp implements Application {
 
 
     /**
+     * Called as a result of deliver receiving a QueryMessage
+     * 
      * @param targetId
      * @param message
      */
     private void handleQueryMessage(Id targetId, QueryMessage message) {
-        // TODO Auto-generated method stub
+    	String query = message.getWord();
+    	
+    	logger.info("Received term: " + query);
+    	
+    	// Null if none found
+    	HitList list = barrelManager.getHitList(query);
+    	
+    	if (list == null) 
+    	   	logger.info("No Hits: \"" + query + "\"");
+    	else
+    		logger.info("Found Hits: \"" + query + "\"=" + list.getHitList().size());
+    	
+    	ResultMessage rm = new ResultMessage(node.getLocalNodeHandle(), list, query, message.getQueryID(), message.queryLength());
+    	
+    	sendResult(message.getNodeHandle().getId(), rm);
+    }
+    
+    /**
+     * Called as a result of deliver receiving a ResultMessage
+     * 
+     * @param targetId
+     * @param message
+     */
+    private void handleResultMessage(Id targetId, ResultMessage message) {
+    	UUID queryID = message.getQueryID();
+    	
+    	putResult(queryID, message);
+    	
+    	ArrayList<ResultMessage> results = getResults(queryID);
+    	
+    	logger.info("Received result: " + message.getWord());
+    	logger.info("Result size: " + results.size());
+    	logger.info("Query size: " + message.queryLength());
+    	
+    	if (results.size() == message.queryLength()) {
+    		results.add(message);
+    		String originalQuery = getQuery(queryID);
+    		
+    		logger.info("Completed query: " + originalQuery);
+    		
+    		// Send statistics to SearchEngine
+    		SearchEngine se = new SearchEngine(results);
+    		
+    		ArrayList<DocEntry> rankedPages = se.getRankings();
+    		
+    		// Return results to the Socket
+    		
+    		Socket client = getSocket(queryID);
+			
+			PrintWriter out;
+			try {
+				out = new PrintWriter(client.getOutputStream());
+				logger.info("Query Completed!\n");
+				
+				out.println("<?xml version=\"1.0\"?>");
+				
+				for (int i = 0; i < results.size(); i++) {
+					ResultMessage rm = results.get(i);
+					out.println("word: " + rm.getWord());
+					if (rm.getHitList() != null) {
+						out.println("tf: " + rm.getHitList().getTfMap());
+						out.println("atf: " + rm.getHitList().getAtfMap());
+					} else {
+						out.println("Word not found!");
+					}
+					out.println("----------------");
+				}
+				
+				out.flush();
+				logger.info("Query Completed!\n");
+				client.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		
+    	}
 
     }
-
+    
     /**
      * Called as a result of deliver receiving an IndexerMessage
      *
@@ -210,7 +281,12 @@ public class YippeePastryApp implements Application {
     }
 
     public void sendQuery(Id idToSendTo, QueryMessage message) {
-        logger.debug(this + " sending query for [" + message.getQuery() + "] to " + idToSendTo);
+        logger.info(this + " sending query for [" + message.getWord() + "] to " + idToSendTo);
+        endpoint.route(idToSendTo, message, null);
+    }
+    
+    public void sendResult(Id idToSendTo, ResultMessage message) {
+        logger.info(this + " sending result for [" + message.getWord() + "] to " + idToSendTo);
         endpoint.route(idToSendTo, message, null);
     }
 
@@ -239,11 +315,60 @@ public class YippeePastryApp implements Application {
     	socketMap.put(id, socket);
     }
     
+    public String getQuery(UUID id) {
+    	return queryMap.get(id);
+    }
+    
+    public void putQuery(UUID id, String keywords) {
+    	queryMap.put(id, keywords);
+    }
+    
+    public ArrayList<ResultMessage> getResults(UUID id) {
+    	return resultMap.get(id);
+    }
+    
+    public void putResult(UUID id, ResultMessage msg) {
+    	ArrayList<ResultMessage> list;
+    	
+    	if (resultMap.get(id) == null)
+    		list = new ArrayList<ResultMessage>();
+    	else
+    		list = resultMap.get(id);
+    	
+    	list.add(msg);
+    	
+    	resultMap.put(id, list);
+    }
+    
+    
+    
     public Node getNode() {
     	return node;
     }
     
     public NodeFactory getNodeFactory() {
     	return nodeFactory;
+    }
+
+    /**
+     * Starts the daemon listener thread
+     *
+     * @param port port on which the daemon listens
+     */
+    public void startDaemonListener(int port) {
+        Thread daemon = new Thread(new DaemonListener(port, socketQueue));
+        daemon.setDaemon(true);
+        daemon.start();
+    }
+
+    /**
+     * Starts the daemon query thread
+     *
+     * @param port port on which the daemon listens
+     */
+    public void startQueryDaemon() {
+        Thread daemon = new Thread(new QueryDaemon(this, socketQueue));
+        daemon.setDaemon(true);
+        daemon.start();
     }
 }

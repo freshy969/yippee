@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
+import com.yippee.indexer.Lexicon;
 import com.yippee.pastry.YippeePastryApp;
 import com.yippee.pastry.message.QueryMessage;
 import com.yippee.util.SocketQueue;
@@ -20,13 +21,14 @@ public class QueryDaemon implements Runnable  {
      */
     static Logger logger = Logger.getLogger(QueryDaemon.class);
 	
-	
 	YippeePastryApp yippeeApp;
 	SocketQueue queue;
+	Lexicon lexicon;
 	
 	public QueryDaemon(YippeePastryApp yippeeApp, SocketQueue queue) {
 		this.yippeeApp = yippeeApp;
 		this.queue = queue;
+		lexicon = new Lexicon();
 		logger.info("Awaiting queries: ...");
 	}
 	
@@ -50,14 +52,21 @@ public class QueryDaemon implements Runnable  {
 				// Encode the socket and store it
 				UUID queryID = UUID.randomUUID();
 				yippeeApp.putSocket(queryID, request);
+				yippeeApp.putQuery(queryID, keywords);
 				
-				// Send query to the ring
-				QueryMessage qm = new QueryMessage(yippeeApp.getNode().getLocalNodeHandle(), keywords, queryID);
+				logger.info("Received query: " + keywords);
 				
-				logger.info("Received query: " + qm.getQuery());
+				String[] wordArray = keywords.split("\\s+");
+
+				// Split query into keywords and send out to ring
+				for (int i = 0; i < wordArray.length; i++) {
+					// Send query to the ring
+					QueryMessage qm = new QueryMessage(yippeeApp.getNode().getLocalNodeHandle(), wordArray[i], queryID, wordArray.length);
+					
+					Id nodeID = yippeeApp.getNodeFactory().getIdFromString(wordArray[i]);			
+					yippeeApp.sendQuery(nodeID, qm);	
+				}
 				
-				Id nodeID = yippeeApp.getNodeFactory().getIdFromString(keywords);			
-				yippeeApp.sendQuery(nodeID, qm);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

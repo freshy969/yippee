@@ -64,7 +64,7 @@ public class YippeeEngine {
      * A method that distributes a URL to the ring
      */
     public void sendURL(URL url){
-        logger.info("About to send crawler message");
+//        logger.info("About to send crawler message");
         yippeePastryApp.sendCrawlerMessage(url);
     }
 

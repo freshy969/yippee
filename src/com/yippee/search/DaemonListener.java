@@ -36,7 +36,7 @@ public class DaemonListener implements Runnable {
         	
             while(true) {
             	Socket client = server.accept();
-            	System.out.println("Daemon received connection from: " + client.getInetAddress().getHostAddress());
+            	logger.info("Daemon received connection from: " + client.getInetAddress().getHostAddress());
             	queue.put(client);
             }   
         } catch (IOException e) {
