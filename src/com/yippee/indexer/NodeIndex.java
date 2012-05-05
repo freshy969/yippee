@@ -121,6 +121,7 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 			ArrayList<Hit> list = wordIndex.get(word);
+
 			if(list.size()>capacity){
 				Configuration.getInstance().getPastryEngine().sendList(word,list);
 				logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
@@ -130,6 +131,9 @@ public class NodeIndex {
 		for(int i=0; i<deleteKeys.size();i++){
 			String k = deleteKeys.get(i);
 			wordIndex.remove(k);
+
+		//	Configuration.getInstance().getPastryEngine().sendList(word,list);
+
 		}
 			
 	}
@@ -141,7 +145,7 @@ public class NodeIndex {
 		
 		while(iter.hasNext()) {
 			String word = iter.next();
-			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+			//System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
 		}
 		
 	}

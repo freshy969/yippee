@@ -8,6 +8,7 @@ import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.w3c.dom.Document;
 
 import java.net.MalformedURLException;
@@ -30,7 +31,7 @@ public class IndexWorker extends Thread {
     /**
      * This is the logger which appends for the page rank
      */
-    static Logger linkLogger = Logger.getLogger(IndexWorker.class + ".hadoop");
+    static Logger linkLogger = Logger.getLogger(IndexWorker.class.getName() + ".hadoop");
 	DocAugManager dam;
 	DocArchiveManager darcm;
 	DocEntryManager dem;
@@ -117,6 +118,14 @@ public class IndexWorker extends Thread {
 	public void appendLinks(String url, ArrayList<String> links) {
 		for (int i = 0; i < links.size(); i++) {
 			logger.warn(url + ", " + links.get(i));
-		}
+		}              PropertyConfigurator.configure("log/log4j.properties");
 	}
+
+    public static void main(String[] args){
+        PropertyConfigurator.configure("log/log4j.properties");
+        System.out.println("woohoo");
+        linkLogger.warn("woohoo");
+        logger.warn("woohoo");
+    }
+
 }
