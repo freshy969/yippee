@@ -21,7 +21,7 @@ public class Spider implements Runnable {
 	 */
 	static Logger logger = Logger.getLogger(Spider.class);
 	private URLFrontier urlFrontier;
-	private String id;
+	private String threadName;
 	private Spider[] spiders;
 	private Araneae araneae;
 	private boolean running;
@@ -34,13 +34,13 @@ public class Spider implements Runnable {
 	 * URLFrontier, its own thread it and the other spiders.
 	 *
 	 * @param urlFrontier
-	 * @param id
+	 * @param threadName
 	 * @param spiders
 	 * @param araneae
 	 */
-	public Spider(URLFrontier urlFrontier, String id, Spider[] spiders, Araneae araneae) {
+	public Spider(URLFrontier urlFrontier, String threadName, Spider[] spiders, Araneae araneae) {
 		this.urlFrontier = urlFrontier;
-		this.id = id;
+		this.threadName = threadName;
 		this.spiders = spiders;
 		this.araneae = araneae;
 		running = true;
