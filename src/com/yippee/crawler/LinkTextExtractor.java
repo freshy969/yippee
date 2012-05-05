@@ -190,29 +190,31 @@ public class LinkTextExtractor {
 	
 	public String resolve(String baseURL, String relativeURL) throws MalformedURLException {
 		//Does baseURL end in slash?
+		String resolvedURL = "";
+		
 		if(baseURL.endsWith("/")){
 			baseURL = baseURL.substring(0, baseURL.length() - 1);
 			
 			if(relativeURL.startsWith("/")){
 				//Case 1A
 				//Use URL class to get the root of baseURL (i.e., up to the end of the host)
-				return relativeStartsWithSlash(baseURL, relativeURL);
+				resolvedURL =  relativeStartsWithSlash(baseURL, relativeURL);
 				
 			} else if(relativeURL.startsWith("?") || relativeURL.startsWith("#")){
-				return baseURL + relativeURL;
+				resolvedURL =  baseURL + relativeURL;
 			} else{
 				//RelativeURL doesn't start with slash
 				//Case 1 B, C & D
-				return baseURL + "/" +  relativeURL;
+				resolvedURL =  baseURL + "/" +  relativeURL;
 			}
 		}else {
 			//baseURL Doesn't End With Slash
 			if(relativeURL.startsWith("/")){
 				//Case 2A (Same as case 1A
-				return relativeStartsWithSlash(baseURL, relativeURL);
+				resolvedURL = relativeStartsWithSlash(baseURL, relativeURL);
 				
 			} else if(relativeURL.startsWith("?") || relativeURL.startsWith("#")){
-				return baseURL + relativeURL;
+				resolvedURL = baseURL + relativeURL;
 			}else{
 				//Cases 2 B, C & D
 				//base Does NOT end in slash
@@ -223,15 +225,17 @@ public class LinkTextExtractor {
 					
 					//Has slash other than protocol
 					//Append relative URL to last slash in baseURL
-					return baseURL.substring(0, baseURL.lastIndexOf('/') + 1) + relativeURL;
+					resolvedURL = baseURL.substring(0, baseURL.lastIndexOf('/') + 1) + relativeURL;
 					
 				}else {
 					//No other / besides protocol
-					return baseURL + "/" + relativeURL;
+					resolvedURL = baseURL + "/" + relativeURL;
 				}
 				
 			}
 		}
+		
+		return (resolvedURL.endsWith("/")) ? resolvedURL.substring(0, resolvedURL.length() - 1) : resolvedURL ;
 		
 	}
 
