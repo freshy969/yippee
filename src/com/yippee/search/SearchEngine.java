@@ -1,6 +1,8 @@
 package com.yippee.search;
 
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,7 +21,6 @@ public class SearchEngine {
     private static SocketQueue socketQueue;
     private static HashMap<UUID, String> queryMap;
     private static HashMap<UUID, Socket> socketMap;
-    private HashMap<String, DocEntry> matchedPages;
     private HashMap<String, Float> tfidf;
     
     private ArrayList<HitList> results;
@@ -29,7 +30,6 @@ public class SearchEngine {
 		results = new ArrayList<HitList>();
 		this.resultMessages = resultMessages;
 		
-		matchedPages = new HashMap<String, DocEntry>();
 		tfidf = new HashMap<String, Float>();
 	}
 
@@ -94,18 +94,37 @@ public class SearchEngine {
 			}
 		}
 		
-		System.out.println(tfidf);
+//		System.out.println(tfidf);
 	}
 	
-	/**
-	 * Get all the documents matched in collection.
-	 * 
-	 * @param URLs
-	 */
-	public void getDocs(ArrayList<String> URLs) {
+	public int getNumDocsMatched() {
+		return tfidf.size();
+	}
+	
+	public HashMap<String, Float> getTfMap(){
+		return tfidf;
+	}
+	
+	public ArrayList<URL> getMatchedUrls() {
+		ArrayList<URL> list = new ArrayList<URL> ();
+		
 		Set<String> keys = tfidf.keySet();
 		Iterator<String> iter = keys.iterator();
-
+		
+		while(iter.hasNext()) {
+			URL url = null;
+			try {
+				url = new URL(iter.next());
+				
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			if (url != null)
+				list.add(url);	
+		}
+		
+		return list;
 	}
 	
 	public ArrayList<DocEntry> getRankings() {
