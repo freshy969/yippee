@@ -24,6 +24,10 @@ public class FastFrontier implements URLFrontier {
      * working on.
      */
     private Queue<String> current = new LinkedList<String>();
+    /**
+     * Pointing out the first time the queue is initialized
+     */
+    private boolean init = true;
 
 
     /**
@@ -33,6 +37,7 @@ public class FastFrontier implements URLFrontier {
      * @throws InterruptedException
      */
     public synchronized Message pull() throws InterruptedException {
+        logger.info("RMV FROM QUEUE " + empty + "|" + current.size());
         // Wait until a request is available.
         while (empty) {
             try {
@@ -49,6 +54,7 @@ public class FastFrontier implements URLFrontier {
             notifyAll();
             empty = true;
         }
+        logger.info("RMVED FROM QUEUE");
         return message;
     }
 
@@ -58,13 +64,18 @@ public class FastFrontier implements URLFrontier {
      * @param message a java Message object containing all the url information
      */
     public void push(Message message) {
-        if (empty) { // even if UPD or NEW it is not empty now
+        logger.info("ADD TO QUEUE");
+        if (empty && !init) { // even if UPD or NEW it is not empty now
             logger.debug("Queue is empty -- notifyAll");
             empty = false;
             notifyAll();
         }
+        if (init) {
+            empty = false;
+            init = false;
+        }
         current.add(message.getURL().toString());
-        logger.debug("Added: " + message.getURL().toString());
+        logger.info("Added: " + message.getURL().toString());
     }
 
     public synchronized boolean save() {
