@@ -69,11 +69,9 @@ public class PageRank {
 					//String fromPage = parts[1].trim();
 					double fromRank = Double.parseDouble(parts[2].trim());
 					int fromOutNum = Integer.parseInt(parts[3].trim());
-
 					pagerank += fromRank / fromOutNum;
 
-
-				} else {
+				} else if(parts[0].contains("OUT")) {
 					// This are outgoing links
 					outgoingLinkCount++;
 
