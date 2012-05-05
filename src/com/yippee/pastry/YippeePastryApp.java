@@ -1,11 +1,14 @@
 package com.yippee.pastry;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import com.yippee.crawler.frontier.URLFrontier;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
 import com.yippee.db.indexer.BarrelManager;
+import com.yippee.db.indexer.DocEntryManager;
 import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;
@@ -21,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class YippeePastryApp implements Application {
@@ -49,13 +53,19 @@ public class YippeePastryApp implements Application {
      */
     private BarrelManager barrelManager;
     /**
-     * For handling QueryMessages
+     * For grabbing Docs
+     */
+    private DocEntryManager docManager;
+    /**
+     * For handling Search
      */   
     private static SocketQueue socketQueue;
     private static HashMap<UUID, String> queryMap;
     private static HashMap<UUID, Socket> socketMap;
-    private static HashMap<UUID, ArrayList<ResultMessage>> resultMap;
-
+    private static HashMap<UUID, ArrayList<ResultMessage>> queryResultMap;
+    private static HashMap<UUID, ArrayList<ResultMessage>> docResultMap;
+    private static HashMap<UUID, HashMap<String, Float>> tfMap;
+    
     /**
      * Constructor
      *
@@ -67,6 +77,7 @@ public class YippeePastryApp implements Application {
         node = nodeFactory.getNode();
         endpoint = node.buildEndpoint(this, "Yippee App");
         barrelManager = new BarrelManager();
+        docManager = new DocEntryManager();
         // endpoint.accept(new PastryAppSocketReceiver(node, endpoint));
         endpoint.register();
 
@@ -74,7 +85,10 @@ public class YippeePastryApp implements Application {
         socketQueue = new SocketQueue(100);
         socketMap = new HashMap<UUID, Socket>();
         queryMap = new HashMap<UUID, String>();
-        resultMap = new HashMap<UUID, ArrayList<ResultMessage>>();
+        queryResultMap = new HashMap<UUID, ArrayList<ResultMessage>>();
+        docResultMap = new HashMap<UUID, ArrayList<ResultMessage>>();
+
+        tfMap = new  HashMap<UUID, HashMap<String, Float>>();
     }
 
     public void setupURLFrontier(URLFrontier urlFrontier) {
@@ -136,19 +150,25 @@ public class YippeePastryApp implements Application {
     private void handleQueryMessage(Id targetId, QueryMessage message) {
     	String query = message.getWord();
     	
-    	logger.info("Received term: " + query);
-    	
-    	// Null if none found
-    	HitList list = barrelManager.getHitList(query);
-    	
-    	if (list == null) 
-    	   	logger.info("No Hits: \"" + query + "\"");
-    	else
-    		logger.info("Found Hits: \"" + query + "\"=" + list.getHitList().size());
-    	
-    	ResultMessage rm = new ResultMessage(node.getLocalNodeHandle(), list, query, message.getQueryID(), message.queryLength());
-    	
-    	sendResult(message.getNodeHandle().getId(), rm);
+    	if (message.isDocQuery()) {
+    		DocEntry de = docManager.getDocEntry(message.getWord());
+        	ResultMessage rm = new ResultMessage(node.getLocalNodeHandle(), de, query, message.getQueryID(), message.queryLength(), true);
+        	sendResult(message.getNodeHandle().getId(), rm);
+    	} else {
+    		
+        	logger.info("Received term: " + query);
+        	
+        	// Null if none found
+        	HitList list = barrelManager.getHitList(query);
+        	
+        	if (list == null) 
+        	   	logger.info("No Hits: \"" + query + "\"");
+        	else
+        		logger.info("Found Hits: \"" + query + "\"=" + list.getHitList().size());
+        	
+        	ResultMessage rm = new ResultMessage(node.getLocalNodeHandle(), list, query, message.getQueryID(), message.queryLength());
+        	sendResult(message.getNodeHandle().getId(), rm);
+    	}
     }
     
     /**
@@ -159,62 +179,76 @@ public class YippeePastryApp implements Application {
      */
     private void handleResultMessage(Id targetId, ResultMessage message) {
     	UUID queryID = message.getQueryID();
-    	
-    	putResult(queryID, message);
-    	
-    	ArrayList<ResultMessage> results = getResults(queryID);
-    	
-//    	logger.info("Received result: " + message.getWord());
-//    	logger.info("Result size: " + results.size());
-//    	logger.info("Query size: " + message.queryLength());
-    	
-    	if (results.size() == message.queryLength()) {
-    		results.add(message);
-    		String originalQuery = getQuery(queryID);
-    		
-    		logger.info("Completed query: " + originalQuery);
-    		
-    		// Send statistics to SearchEngine
-    		SearchEngine se = new SearchEngine(results);
-    		
-    		se.init();
-    		se.calculateTfidf();
-    		
-    		ArrayList<DocEntry> rankedPages = se.getRankings();
-    		
-    		// Return results to the Socket
-    		
-    		Socket client = getSocket(queryID);
-			
-			PrintWriter out;
-			try {
-				out = new PrintWriter(client.getOutputStream());
-				logger.info("Query Completed!\n");
-				
-				out.println("<?xml version=\"1.0\"?>");
-				
-				for (int i = 0; i < results.size(); i++) {
-					ResultMessage rm = results.get(i);
-					out.println("word: " + rm.getWord());
-					if (rm.getHitList() != null) {
-						out.println("tf: " + rm.getHitList().getTfMap());
-						out.println("atf: " + rm.getHitList().getAtfMap());
-					} else {
-						out.println("Word not found!");
-					}
-					out.println("----------------");
-				}
-				
-				out.flush();
-				logger.info("Query Completed!\n");
-				client.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		
-    	}
 
+    	logger.info("Received result: " + message.getWord());
+
+    	if (message.isDocResult()) {
+    		putDocResult(queryID, message);
+	    	ArrayList<ResultMessage> results = getDocResults(queryID);
+
+	    	if (results.size() == message.queryLength()) {
+	    		
+	    		logger.info("Gathered docs: " + results.size());
+	    		
+	    		ArrayList<DocEntry> deList = new ArrayList<DocEntry>();
+	    		
+	    		for (int i = 0; i < results.size(); i++) {
+	    			DocEntry de = results.get(i).getDocEntry();
+	    	
+	    			if (de != null) {
+	    				deList.add(de);
+	    				HashMap<String, Float> tfidf = tfMap.get(queryID);
+		    			
+		    			float value = tfidf.get(de.getURL());
+		    			de.setTfidf(value);
+	    			}
+	    		}
+	    		
+	    		Collections.sort(deList);
+	    		
+	    		// Return results to the Socket
+	    		sendResultToSocket(queryID, deList);
+	    	}
+    		
+    	} else {
+	    	
+	    	putQueryResult(queryID, message);
+	    	
+	    	ArrayList<ResultMessage> results = getQueryResults(queryID);
+	    	
+	    	if (results.size() == message.queryLength()) {
+	    	
+	    		String originalQuery = getQuery(queryID);
+	    		
+	    		logger.info("Completed query: " + originalQuery);
+	    		
+	    		// Send statistics to SearchEngine
+	    		SearchEngine se = new SearchEngine(results);
+	    		
+	    		se.init();
+	    		se.calculateTfidf();
+	    		
+	    		ArrayList<URL> docList = se.getMatchedUrls();
+	    		
+	    		tfMap.put(queryID, se.getTfMap());
+	    		
+	    		// Send DocEntry Query Messages
+	    		for (int i = 0; i < docList.size(); i++) {
+	    			URL url = docList.get(i);
+	    			logger.info(url);	
+	    	        Id destination = nodeFactory.getIdFromString(url.getHost());
+	    	        String content = url.toString();
+	    			
+	    			QueryMessage qm = new QueryMessage(node.getLocalNodeHandle(), content, queryID, docList.size(), true);
+	    			
+	    			logger.debug("Sending Query URL " + content + " DocEntry at " + url.getHost());
+	    			
+	    			sendDocMessage(destination, qm);
+	    		}
+	    		
+	    	}
+
+    	}
     }
     
     /**
@@ -227,8 +261,7 @@ public class YippeePastryApp implements Application {
         logger.debug("Saving in barrels");
         barrelManager.addDocHits(message.getHitList());
     }
-
-
+    
     /**
      * Handle the crawler messages
      *
@@ -262,6 +295,10 @@ public class YippeePastryApp implements Application {
         endpoint.route(destination, message, null);
     }
 
+    void sendDocMessage(Id destination, Message message) {
+        endpoint.route(destination, message, null);
+    }
+    
     /**
      * Called to directly send a message to the node handle
      */
@@ -326,24 +363,39 @@ public class YippeePastryApp implements Application {
     	queryMap.put(id, keywords);
     }
     
-    public ArrayList<ResultMessage> getResults(UUID id) {
-    	return resultMap.get(id);
+    public ArrayList<ResultMessage> getQueryResults(UUID id) {
+    	return queryResultMap.get(id);
     }
     
-    public void putResult(UUID id, ResultMessage msg) {
+    public ArrayList<ResultMessage> getDocResults(UUID id) {
+    	return docResultMap.get(id);
+    }
+    
+    public void putQueryResult(UUID id, ResultMessage msg) {
     	ArrayList<ResultMessage> list;
     	
-    	if (resultMap.get(id) == null)
+    	if (queryResultMap.get(id) == null)
     		list = new ArrayList<ResultMessage>();
     	else
-    		list = resultMap.get(id);
+    		list = queryResultMap.get(id);
     	
     	list.add(msg);
     	
-    	resultMap.put(id, list);
+    	queryResultMap.put(id, list);
     }
     
-    
+    public void putDocResult(UUID id, ResultMessage msg) {
+    	ArrayList<ResultMessage> list;
+    	
+    	if (docResultMap.get(id) == null)
+    		list = new ArrayList<ResultMessage>();
+    	else
+    		list = docResultMap.get(id);
+    	
+    	list.add(msg);
+    	
+    	docResultMap.put(id, list);
+    }
     
     public Node getNode() {
     	return node;
@@ -373,5 +425,44 @@ public class YippeePastryApp implements Application {
         Thread daemon = new Thread(new QueryDaemon(this, socketQueue));
         daemon.setDaemon(true);
         daemon.start();
+    }
+    
+    public void sendResultToSocket(UUID queryID, ArrayList<DocEntry> deList) {
+
+		Socket client = getSocket(queryID);
+		
+		PrintWriter out;
+		try {
+			out = new PrintWriter(client.getOutputStream());
+			logger.info("Query Completed!\n");
+			
+			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+			out.println("<?xml-stylesheet type=\"text/xsl\" href=\"yippee.xsl\"?>");
+			
+			out.println("<documentcollection>");
+
+			out.println("<query>" + StringEscapeUtils.escapeXml(queryMap.get(queryID)) + "</query>");
+			
+			for (int i = 0; i < deList.size(); i++) {
+				DocEntry de = deList.get(i);
+				if (de.getTitle() == null)
+					continue;
+				
+				out.println("<document>");
+				out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
+				out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
+				out.println("<description>" + de.getTfidf() + "</description>");
+				out.println("</document>");
+			}
+			
+			out.println("</documentcollection>");
+			
+			out.flush();
+			logger.info("Query Completed!\n");
+			client.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

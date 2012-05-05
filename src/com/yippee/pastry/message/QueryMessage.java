@@ -40,6 +40,10 @@ public class QueryMessage implements Message {
      * How to check whether query has been fulfilled
      */
     int queryLength;
+    /**
+     * If the query was for a doc
+     */
+    boolean docQuery;
     
 	public QueryMessage(NodeHandle from, String word,
 			UUID socketId, int queryLength) {
@@ -47,9 +51,17 @@ public class QueryMessage implements Message {
 		this.word = word;
 		this.queryId = socketId;
 		this.queryLength = queryLength;
-
 	}
 
+	public QueryMessage(NodeHandle from, String url,
+			UUID queryId, int queryLength, boolean docQuery) {
+		this.from = from;
+		this.word = url;
+		this.queryId = queryId;
+		this.docQuery = true;
+		this.queryLength = queryLength;
+	}
+	
 	public int getPriority() {
 		return 9;
 	}
@@ -68,5 +80,9 @@ public class QueryMessage implements Message {
 	
 	public int queryLength() {
 		return queryLength;
+	}
+	
+	public boolean isDocQuery() {
+		return docQuery;
 	}
 }

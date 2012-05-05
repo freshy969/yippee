@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
+import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.HitList;
 
 
@@ -37,7 +38,7 @@ public class ResultMessage implements Message {
     /**
      * The response of the message
      */
-    boolean wantResponse = true;
+    boolean wantResponse = false;
     /**
      * How to call the socket back once query completes
      */
@@ -46,6 +47,14 @@ public class ResultMessage implements Message {
      * How to check whether query has been fulfilled
      */
     int queryLength;
+    /**
+     * If a docEntry result
+     */
+    boolean docResult;
+    /**
+     * DocEntry result
+     */
+    DocEntry docEntry;
     
 	public ResultMessage(NodeHandle from, HitList hitlist, String word,
 			UUID queryId, int queryLength) {
@@ -56,6 +65,16 @@ public class ResultMessage implements Message {
 		this.queryLength = queryLength;
 	}
 
+	public ResultMessage(NodeHandle from, DocEntry de, String word,
+			UUID queryId, int queryLength, boolean docResult) {
+		this.from = from;
+		this.word = word;
+		this.docEntry = de;
+		this.queryId = queryId;
+		this.queryLength = queryLength;
+		this.docResult = true;
+	}
+	
 	public int getPriority() {
 		return 10;
 	}
@@ -74,5 +93,13 @@ public class ResultMessage implements Message {
 	
 	public int queryLength() {
 		return queryLength;
+	}
+	
+	public boolean isDocResult() {
+		return docResult;
+	}
+	
+	public DocEntry getDocEntry() {
+		return docEntry;
 	}
 }
