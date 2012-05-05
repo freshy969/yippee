@@ -9,9 +9,11 @@ import com.yippee.util.Configuration;
 public class DbStatusCheck {
 	
 	/**
-	 * @param args
+     * The default constructor
+     *
+	 * @param args the database environment
 	 */
-	public static void main(String[] args) {
+	public DbStatusCheck(String[] args) {
 		String dbRootPath = args[0];
 		if(dbRootPath.equals("db/prod") || dbRootPath.equals("db/test"))
 			Configuration.getInstance().setBerkeleyDBRoot(dbRootPath);
@@ -30,7 +32,7 @@ public class DbStatusCheck {
      *
      * @param msg The message to output before playing dead!
      */
-	private static void die(String msg) {
+	private void die(String msg) {
 		System.out.println(msg);
 		System.exit(1);
 	}

@@ -4,6 +4,7 @@ import com.yippee.crawler.Araneae;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
+import com.yippee.db.status.DbStatusCheck;
 import com.yippee.indexer.Indexer;
 import com.yippee.pastry.PingPongService;
 import com.yippee.pastry.YippeeEngine;
@@ -214,6 +215,11 @@ public class EntryPoint {
      *             instance 9001 130.91.140.235 9001 4444 DB/db1
      */
     public static void main(String[] args) {
+        if (args[args.length-1].equals("--status")) {
+            DbStatusCheck check = new DbStatusCheck(args);
+            return;
+        }
+
         EntryPoint entryPoint = new EntryPoint();
         p(args);
         // Pastry
