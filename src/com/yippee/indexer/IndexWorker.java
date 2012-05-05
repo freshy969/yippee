@@ -68,8 +68,11 @@ public class IndexWorker extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				docAug = dam.poll();
+				if(!nodeIndex.isArchiveMode()){
+					docAug = dam.poll();
+				} else {
+					docAug = nodeIndex.poll();
+				}
 				
 				if (pollDelay <= 60000)
 					pollDelay *= 2;
@@ -106,7 +109,8 @@ public class IndexWorker extends Thread {
 	    	
 	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
-	    	darcm.store(docAug);
+	    	if(!nodeIndex.isArchiveMode())
+	    		darcm.store(docAug);
 	    }		
 	}	
 

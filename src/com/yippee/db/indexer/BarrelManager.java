@@ -67,8 +67,8 @@ public class BarrelManager {
             	hl.setDf(df);*/
             	dao.getBarrelById().put(hl);
             }
-           logger.info("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap()+" | tf: "+hl.getTfMap());
-           // System.out.println("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap()+" | tf: "+hl.getTfMap());
+           logger.info("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap().size()+" | tf: "+hl.getTfMap().size());
+          //  System.out.println("Barrel entry for ["+word+"] "+" | DF: "+hl.getDf()+" | atf: "+hl.getAtfMap()+" | tf: "+hl.getTfMap());
 
         } catch (DatabaseException e) {
         	logger.warn("Exception", e);
