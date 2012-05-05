@@ -44,6 +44,9 @@ public class FrontierFactory {
             case FAST:
                 FastFrontier ff = new FastFrontier();
                 return ff;
+            case BOOST:
+                FastFrontierBoost ffb = new FastFrontierBoost();
+                return ffb;
             case SIMPLE:
             	SimpleQueueFrontier sqf = new SimpleQueueFrontier();
             	sqf.load();
