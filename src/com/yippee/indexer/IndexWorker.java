@@ -8,6 +8,7 @@ import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.w3c.dom.Document;
 
 import java.net.MalformedURLException;
@@ -30,7 +31,7 @@ public class IndexWorker extends Thread {
     /**
      * This is the logger which appends for the page rank
      */
-    static Logger linkLogger = Logger.getLogger(IndexWorker.class + ".hadoop");
+    static Logger linkLogger = Logger.getLogger(IndexWorker.class.getName() + ".hadoop");
 	DocAugManager dam;
 	DocArchiveManager darcm;
 	DocEntryManager dem;
@@ -68,8 +69,11 @@ public class IndexWorker extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				docAug = dam.poll();
+				if(!nodeIndex.isArchiveMode()){
+					docAug = dam.poll();
+				} else {
+					docAug = nodeIndex.poll();
+				}
 				
 				if (pollDelay <= 60000)
 					pollDelay *= 2;
@@ -106,13 +110,23 @@ public class IndexWorker extends Thread {
 	    	
 	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
-	    	darcm.store(docAug);
+	    	if(!nodeIndex.isArchiveMode())
+	    		darcm.store(docAug);
 	    }		
 	}	
 
 	public void appendLinks(String url, ArrayList<String> links) {
+        int numLinks = links.size();
 		for (int i = 0; i < links.size(); i++) {
-			logger.warn(url + ", " + links.get(i));
+			logger.warn("'"+url + "', '1', '" + links.get(i) +"', '" + numLinks +"'");
 		}
 	}
+
+    public static void main(String[] args){
+        PropertyConfigurator.configure("log/log4j.properties");
+        System.out.println("woohoo");
+        linkLogger.warn("woohoo");
+        logger.warn("woohoo");
+    }
+
 }

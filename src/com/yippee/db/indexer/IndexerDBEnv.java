@@ -1,6 +1,7 @@
 package com.yippee.db.indexer;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -40,6 +41,8 @@ public class IndexerDBEnv {
 		EnvironmentConfig environmentConfig = new EnvironmentConfig();
 		environmentConfig.setReadOnly(readonly);
 		environmentConfig.setNodeName("Indexer Environment");
+		environmentConfig.setLockTimeout(30, TimeUnit.MINUTES);
+	//	environmentConfig.setTxnTimeout(1, TimeUnit.MINUTES);
 		
 		StoreConfig storeConfig = new StoreConfig();
 		storeConfig.setReadOnly(readonly);

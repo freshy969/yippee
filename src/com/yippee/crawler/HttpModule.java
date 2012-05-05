@@ -114,7 +114,7 @@ public class HttpModule {
                 inputReader.close();
             } catch (IOException e) {
 
-                logger.warn("Error reading page content ", e);
+                //logger.warn("Error reading page content ", e);
                 content = "";
                 valid = false;
             }

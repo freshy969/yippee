@@ -9,6 +9,7 @@ public class Indexer {
 	public Indexer() {
 		lexicon = new Lexicon("doc/lexicon.txt");
 		nodeIndex = new NodeIndex();
+		nodeIndex.setArchiveMode(false);
 		//wordIndex = new WordIndex();
 	}
 	

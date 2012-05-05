@@ -29,7 +29,7 @@ public class DbShutdownHook extends Thread {
 		if(env != null){
 			try{				
 				store.close();
-				env.cleanLog();
+				if(!env.getConfig().getReadOnly()) env.cleanLog();
 				env.close();
 				System.out.println("Environment closed: " + envName);
 			}catch (DatabaseException dbe){

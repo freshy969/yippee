@@ -21,7 +21,6 @@
             For a laconic summary run 'ant -p'.
 
 
-
             Useful ant targets (see below for details):
 
             1. project-test-pastry
@@ -32,37 +31,42 @@
 
             1. ant project-test-pastry -DbIp=[ip]
 
-                [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
+            [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
-                The project run target sets up four pastry nodes, at predefined ports:
-                * 9001 for node 1 (bootstrap)
-                * 9002 for node 2
-                * 9003 for node 3
-                * 9004 for node 4
+            The project run target sets up four pastry nodes, at predefined
+            ports:
+            * 9001 for node 1 (bootstrap)
+            * 9002 for node 2
+            * 9003 for node 3
+            * 9004 for node 4
 
-                Refer to the README file for more information.
+            Refer to the README file for more information.
 
 
             2. ant project-test-crawler -DbIp=[ip]
 
-                [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
+            [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
 
-                The project run target sets up one pastry node running the crawler.
+            The project run target sets up one pastry node running the crawler.
 
-            A an elegant way to get the ip automatically would be to use ifconfig
-            when running the ant target. To get the result of ifconfig you can do
-            `ifconfig`; for instance, to launch the first target, I can always do
+            A an elegant way to get the ip automatically would be to use
+            ifconfig
+            when running the ant target. To get the result of ifconfig you can
+            do
+            `ifconfig`; for instance, to launch the first target, I can always
+            do
             ant project-test-pastry \
-            -DbIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed "s/addr://"`
+            -DbIp=`ifconfig wlan0 | grep addr: | awk '{print $2}' | sed
+            "s/addr://"`
 
 
             3. ant project-prod-crawler -DbIp=[ip] -Dbport=[port] -Dlport=[port]
 
-                [ip]:   External ip (e.g., the one returned by ifconfig/ipconfig
-                [port]: Port of the bootstrap node and localnode (they must be
-                        the same for bootstrap node).
+            [ip]: External ip (e.g., the one returned by ifconfig/ipconfig
+            [port]: Port of the bootstrap node and localnode (they must be
+            the same for bootstrap node).
 
-                The project run target sets up one pastry node running the crawler.
+            The project run target sets up one pastry node running the crawler.
 
         </echo>
 
@@ -71,6 +75,7 @@
     <!-- one of the many ways of doing so -->
     <property name="main-class" value="com.yippee.util.EntryPoint"/>
     <property name="hadoop-class" value="com.yippee.pagerank.PageRank"/>
+    <property name="hadoop-example" value="com.yippee.pagerank.WordCount"/>
 
     <!-- We are going to make this modular -->
     <property name="server" value="tomcat"/>
@@ -108,15 +113,15 @@
     </target>
     <target name="clean-database" description="Clean test and integ DBs">
         <delete dir="${db.dir}/integ/">
-                <exclude name="**/.gitignore"/>
+            <exclude name="**/.gitignore"/>
         </delete>
         <delete dir="${db.dir}/test/">
-                <exclude name="**/.gitignore"/>
+            <exclude name="**/.gitignore"/>
         </delete>
     </target>
     <target name="clean-log">
         <delete dir="${log.dir}">
-                <exclude name="**/log4j.properties"/>
+            <exclude name="**/log4j.properties"/>
         </delete>
         <touch file="${log.dir}/root.log"/>
         <touch file="${log.dir}/util.log"/>
@@ -152,24 +157,39 @@
         </jar>
     </target>
 
+    <target name="hadoop-example" depends="compile, pastry-revert">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar"
+             basedir="${out.dir}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="${hadoop-example}"/>
+            </manifest>
+        </jar>
+    </target>
+
     <condition property="isWindows">
-        <os family="windows" />
+        <os family="windows"/>
     </condition>
 
     <target name="pastry-conf" if="isWindows">
-        <echo message="Patching for TJ...." />
-        <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );'>
-          <include name="**/*.java"/>
-          <replacetoken>/*[tj-let-ant-resolve]*/</replacetoken>
+        <echo message="Patching for TJ...."/>
+        <replace dir="${src.dir}"
+                 value='/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );'>
+            <include name="**/*.java"/>
+            <replacetoken>/*[tj-let-ant-resolve]*/</replacetoken>
         </replace>
         <!-- do whatever you want to do here for Mac systems -->
     </target>
 
     <target name="pastry-revert" if="isWindows">
-        <echo message="Reverting for TJ...." />
+        <echo message="Reverting for TJ...."/>
         <replace dir="${src.dir}" value='/*[tj-let-ant-resolve]*/'>
-          <include name="**/*.java"/>
-          <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is patched for TJ"); this.env.getParameters().setString("pastry_socket_allow_loopback","true" );</replacetoken>
+            <include name="**/*.java"/>
+            <replacetoken>/*[tj-let-ant-resolve]*/ System.out.println("This is
+                patched for TJ");
+                this.env.getParameters().setString("pastry_socket_allow_loopback","true"
+                );
+            </replacetoken>
         </replace>
         <!-- do whatever you want to do here for Mac systems -->
     </target>
@@ -182,7 +202,6 @@
         *   database path
     -->
     <target name="run" depends="jar">
-        <echo>" Pastry Port: .${bootPort}"</echo>
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
@@ -195,7 +214,7 @@
             <arg value="feed.url"/>
             <arg value="${database}"/>
             <arg value="${service}"/>
-            <arg value="--overwrite"/>
+            <arg value="${lastArg}"/>
         </java>
     </target>
 
@@ -204,32 +223,35 @@
 
     <target name="project-test-crawler" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
-            <antcall target="run">
-                <param name="localPort" value="9001"/>
-                <param name="bootPort" value="9001"/>
-                <param name="database" value="db/test"/>
-                <param name="service" value="-C"/>
-            </antcall>
+        <antcall target="run">
+            <param name="localPort" value="9001"/>
+            <param name="bootPort" value="9001"/>
+            <param name="database" value="db/test"/>
+            <param name="service" value="-C"/>
+            <param name="lastArg" value="--overwrite"/>
+        </antcall>
     </target>
 
     <target name="project-prod-crawler" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
-            <antcall target="run">
-                <param name="localPort" value="${lport}"/>
-                <param name="bootPort" value="${bport}"/>
-                <param name="database" value="db/prod"/>
-                <param name="service" value="-C"/>
-            </antcall>
+        <antcall target="run">
+            <param name="localPort" value="${lport}"/>
+            <param name="bootPort" value="${bport}"/>
+            <param name="database" value="db/prod"/>
+            <param name="service" value="-C"/>
+            <param name="lastArg" value="--overwrite"/>
+        </antcall>
     </target>
 
     <target name="project-test-indexer" depends="project-clean,sanity-check"
             description="Create single-noded crawler">
-            <antcall target="run">
-                <param name="localPort" value="10001"/>
-                <param name="bootPort" value="10001"/>
-                <param name="database" value="db/test"/>
-                <param name="service" value="-I"/>
-            </antcall>
+        <antcall target="run">
+            <param name="localPort" value="10001"/>
+            <param name="bootPort" value="10001"/>
+            <param name="database" value="db/test"/>
+            <param name="service" value="-I"/>
+            <param name="lastArg" value="--overwrite"/>
+        </antcall>
     </target>
 
     <!-- start 4 applications in parallel -->
@@ -241,24 +263,65 @@
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node1"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9002"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node2"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9003"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node3"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9004"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node4"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
+            </antcall>
+        </parallel>
+    </target>
+
+    <target name="project-test-single-pastry"
+            depends="project-clean,sanity-check"
+            description="Create a single pastry node">
+        <parallel>
+        <antcall target="run">
+            <param name="localPort" value="${lport}"/>
+            <param name="bootPort" value="${bport}"/>
+            <param name="database" value="db/test"/>
+            <param name="lastArg" value="--overwrite"/>
+            </antcall>
+        </parallel>
+    </target>
+
+    <target name="run-db" depends="jar">
+        <echo>" Pastry Port: .${bootPort}"</echo>
+        <java fork="true" classname="${main-class}">
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="application"/>
+            </classpath>
+            <!-- in case we need to add arguments -->
+            <arg value="${database}"/>
+            <arg value="${lastArg}"/>
+        </java>
+    </target>
+
+    <target name="check-database"
+            depends="project-clean"
+            description="Check the database">
+        <parallel>
+        <antcall target="run-db">
+            <param name="database" value="${B}"/>
+            <param name="lastArg" value="--status"/>
             </antcall>
         </parallel>
     </target>
@@ -285,15 +348,17 @@
 
     <!-- Change this depending on tomcat or jetty; I am using jetty -->
     <property name="server" value="tomcat"/>
-    <property name="jetty.home" value="/media/w7/Projects/UPenn/cis555/jetty-6.1.26"/>
-    <property name="tomcat.home" value="/home/nikos/Desktop/dsk/latest/apache-tomcat-5.5.35"/>
+    <property name="jetty.home"
+              value="/media/w7/Projects/UPenn/cis555/jetty-6.1.26"/>
+    <property name="tomcat.home"
+              value="/home/nikos/Desktop/dsk/latest/apache-tomcat-5.5.35"/>
 
     <target name="print-vars">
         <echo>" JETTY HOME: ${jetty.home}"</echo>
         <echo>" TOMCAT HOME: ${tomcat.home}"</echo>
     </target>
 
-    <property name="war.name" value="yippee" />
+    <property name="war.name" value="yippee"/>
 
     <!-- add statistics -->
     <target name="update-info">
@@ -304,7 +369,8 @@
     </target>
 
     <!-- create war file -->
-    <target name="create-war" depends="compile, update-info" description="Create WAR">
+    <target name="create-war" depends="compile, update-info"
+            description="Create WAR">
         <mkdir dir="${basedir}/distribution"/>
         <war destfile="${basedir}/distribution/${war.name}.war"
              webxml="${basedir}/web/WEB-INF/web.xml">
@@ -319,7 +385,8 @@
     </target>
 
     <!-- deploy war based on Jetty or Tomcat-->
-    <target name="deploy-war" depends="create-war" description="Create and Deploy WAR">
+    <target name="deploy-war" depends="create-war"
+            description="Create and Deploy WAR">
         <!-- TODO validate whether it is Tomcat or jetty -->
         <antcall target="tomcat-shutdown"/>
         <delete dir="${tomcat.home}/webapps/${war.name}"/>

@@ -21,7 +21,7 @@ public class Spider implements Runnable {
 	 */
 	static Logger logger = Logger.getLogger(Spider.class);
 	private URLFrontier urlFrontier;
-	private String id;
+	private String threadName;
 	private Spider[] spiders;
 	private Araneae araneae;
 	private boolean running;
@@ -34,13 +34,13 @@ public class Spider implements Runnable {
 	 * URLFrontier, its own thread it and the other spiders.
 	 *
 	 * @param urlFrontier
-	 * @param id
+	 * @param threadName
 	 * @param spiders
 	 * @param araneae
 	 */
-	public Spider(URLFrontier urlFrontier, String id, Spider[] spiders, Araneae araneae) {
+	public Spider(URLFrontier urlFrontier, String threadName, Spider[] spiders, Araneae araneae) {
 		this.urlFrontier = urlFrontier;
-		this.id = id;
+		this.threadName = threadName;
 		this.spiders = spiders;
 		this.araneae = araneae;
 		running = true;
@@ -58,27 +58,23 @@ public class Spider implements Runnable {
 	 */
 	public void run() {
 		logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
+		
 		while (running && Configuration.getInstance().isUp()) {
 			try {
-
 				logger.debug("About to pull a URL");
 				Message msg = urlFrontier.pull();
-
-				URL urlToCrawl = msg.getURL();
+				URL urlToCrawl = (msg != null) ? msg.getURL() : null;
+				
 				if(urlToCrawl == null){
-					Thread.sleep(2000);
+					Thread.sleep(10000);
 					continue;
 				}
-
-				logger.info("Pulled url: " + urlToCrawl);
-
-
+				logger.debug("Pulled url: " + urlToCrawl);
+				
 				HttpModule httpModule = new HttpModule(urlToCrawl);
-
 				logger.debug("Got content from url: " + urlToCrawl);
 				
 				String content = httpModule.getContent();
-
 				if (!httpModule.isValid()) continue; // There was an error!
 
 				DocAug docAug = new DocAug();
