@@ -58,27 +58,23 @@ public class Spider implements Runnable {
 	 */
 	public void run() {
 		logger.info("Thread " + Thread.currentThread().getName() + ": Starting");
+		
 		while (running && Configuration.getInstance().isUp()) {
 			try {
-
 				logger.debug("About to pull a URL");
 				Message msg = urlFrontier.pull();
-
-				URL urlToCrawl = msg.getURL();
+				URL urlToCrawl = (msg != null) ? msg.getURL() : null;
+				
 				if(urlToCrawl == null){
-					Thread.sleep(2000);
+					Thread.sleep(10000);
 					continue;
 				}
-
-				logger.info("Pulled url: " + urlToCrawl);
-
-
+				logger.debug("Pulled url: " + urlToCrawl);
+				
 				HttpModule httpModule = new HttpModule(urlToCrawl);
-
 				logger.debug("Got content from url: " + urlToCrawl);
 				
 				String content = httpModule.getContent();
-
 				if (!httpModule.isValid()) continue; // There was an error!
 
 				DocAug docAug = new DocAug();
