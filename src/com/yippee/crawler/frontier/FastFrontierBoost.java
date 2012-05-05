@@ -28,21 +28,17 @@ public class FastFrontierBoost implements URLFrontier {
      * @throws InterruptedException
      */
     public synchronized Message pull() {
-        int queueSize = current.size();
-        if (queueSize > 1000) {
-            logger.info(queueSize);
-        }
         String url = current.poll();
-        logger.info("PULL: " + url);
+        logger.debug("PULL: " + url);
         return new Message(url);
     }
 
     public synchronized void push(Message message) {
 
         String url = message.getURL().toString();
-        logger.info(">>>>>>>>TRY: " + url);
+        //logger.info(">>>>>>>>TRY: " + url);
         if (seen.contains(url)) {
-            logger.info("seen!");
+            logger.debug("seen!");
             return;
         }
 
@@ -53,7 +49,7 @@ public class FastFrontierBoost implements URLFrontier {
             logger.info("QUEUE IS FULL: Discarding url:" + url);
             return;
         }
-        logger.info("PUSH: " + url);
+        logger.debug("PUSH: " + url);
         current.add(url);
         seen.add(url);
         return;
@@ -69,7 +65,7 @@ public class FastFrontierBoost implements URLFrontier {
 
     public synchronized boolean isSeen(String url) {
         if (seen.contains(url)) {
-            logger.info("Seen " + url);
+            logger.debug("Seen " + url);
             return true;
         } else return false;
     }
