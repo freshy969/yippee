@@ -1,16 +1,15 @@
 package com.yippee.db.crawler;
 
-import java.net.URL;
-import java.util.Map;
-import java.util.Queue;
-
-import org.apache.log4j.Logger;
-
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.crawler.model.FrontierSavedState;
 import com.yippee.db.util.DAL;
+import org.apache.log4j.Logger;
+
+import java.net.URL;
+import java.util.Map;
+import java.util.Queue;
 
 public class URLFrontierManager {
 
@@ -78,7 +77,6 @@ public class URLFrontierManager {
 		boolean successful = false;
 		int newVersionNumber = latestVersion + 1;
 		FrontierSavedState f = new FrontierSavedState(newVersionNumber, queues);
-		
 		try{
 			dao.getFrontierStateByVersion().put(f);
 			successful =  true;
