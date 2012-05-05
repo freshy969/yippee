@@ -25,6 +25,11 @@ public class DbStatusCheck {
 		System.out.println("DocAugs Count: " + docAugs.count());
 	}
 
+    /**
+     * A vicious little method!
+     *
+     * @param msg The message to output before playing dead!
+     */
 	private static void die(String msg) {
 		System.out.println(msg);
 		System.exit(1);
