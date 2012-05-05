@@ -91,7 +91,7 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 			ArrayList<Hit> list = wordIndex.get(word);
-			//Configuration.getInstance().getPastryEngine().sendList(word,list);
+			Configuration.getInstance().getPastryEngine().sendList(word,list);
 		}
 			
 	}
@@ -103,7 +103,7 @@ public class NodeIndex {
 		
 		while(iter.hasNext()) {
 			String word = iter.next();
-			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+			//System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
 		}
 		
 	}

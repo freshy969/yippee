@@ -38,6 +38,7 @@ public class Parser {
 		
 		Tidy tidy = new Tidy();
 		tidy.setQuiet(true);
+		tidy.setShowErrors(0);
 		tidy.setShowWarnings(false);
 				
 		// Create DOM object from HTML object
