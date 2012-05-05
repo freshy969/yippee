@@ -23,21 +23,23 @@ public class SearchEngine {
     private HashMap<String, Float> tfidf;
     
     private ArrayList<HitList> results;
+    private ArrayList<ResultMessage> resultMessages;
     
 	public SearchEngine(ArrayList<ResultMessage> resultMessages) {
-		this.results = new ArrayList<HitList>();
+		results = new ArrayList<HitList>();
+		this.resultMessages = resultMessages;
 		
 		matchedPages = new HashMap<String, DocEntry>();
 		tfidf = new HashMap<String, Float>();
-		
+	}
+
+	public void init() {
 		for (int i = 0; i < resultMessages.size(); i++) {
 			HitList tmp = resultMessages.get(i).getHitList();
 			if(tmp != null)
 				results.add(tmp);
 		}
-		
 	}
-
 	
 	public void calculateTfidf() {
 		for (int i = 0; i < results.size(); i++) {
@@ -47,39 +49,49 @@ public class SearchEngine {
 			
 			// Calculate ATF values
 			HashMap<String, Float> atf = hitlist.getAtfMap();
-			Set<String> a_keys = atf.keySet();
-			Iterator<String> a_iter = a_keys.iterator(); 
-			while(a_iter.hasNext()) {
-				String doc = a_iter.next();
-
-				// Previous TF-IDF value
-				float tmp = tfidf.get(doc);
+			if (atf != null) {
+				Set<String> a_keys = atf.keySet();
+				Iterator<String> a_iter = a_keys.iterator(); 
 				
-				// ATF value
-				float a_value = atf.get(doc);
-				
-				// Increment + store
-				tfidf.put(doc, (float) (tmp + df * a_value * 0.6));
+				while(a_iter.hasNext()) {
+					String doc = a_iter.next();
+	
+					float tmp = 0;
+					
+					// Previous TF-IDF value
+					if (tfidf.containsKey(doc))
+						tmp = tfidf.get(doc);
+					
+					// ATF value
+					float a_value = atf.get(doc);
+					
+					// Increment + store
+					tfidf.put(doc, (float) (tmp + df * a_value * 0.6));
+				}
 			}
 			
 			
 			// Calculate TF values
 			HashMap<String, Float> tf = hitlist.getTfMap();
-			Set<String> t_keys = tf.keySet();
-			Iterator<String> t_iter = t_keys.iterator(); 
-			while(t_iter.hasNext()) {
-				String doc = t_iter.next();
-
-				// Previous TF-IDF value
-				float tmp = tfidf.get(doc);
-				
-				// ATF value
-				float t_value = tf.get(doc);
-				
-				// Increment + store
-				tfidf.put(doc, (float) (tmp + df * t_value * 0.4));
+			if (tf != null) {
+				Set<String> t_keys = tf.keySet();
+				Iterator<String> t_iter = t_keys.iterator(); 
+				while(t_iter.hasNext()) {
+					String doc = t_iter.next();
+	
+					float tmp = 0;
+					
+					// Previous TF-IDF value
+					if (tfidf.containsKey(doc))
+						tmp = tfidf.get(doc);
+					
+					// ATF value
+					float t_value = tf.get(doc);
+					
+					// Increment + store
+					tfidf.put(doc, (float) (tmp + df * t_value * 0.4));
+				}
 			}
-			
 		}
 		
 		System.out.println(tfidf);

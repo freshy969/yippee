@@ -164,9 +164,9 @@ public class YippeePastryApp implements Application {
     	
     	ArrayList<ResultMessage> results = getResults(queryID);
     	
-    	logger.info("Received result: " + message.getWord());
-    	logger.info("Result size: " + results.size());
-    	logger.info("Query size: " + message.queryLength());
+//    	logger.info("Received result: " + message.getWord());
+//    	logger.info("Result size: " + results.size());
+//    	logger.info("Query size: " + message.queryLength());
     	
     	if (results.size() == message.queryLength()) {
     		results.add(message);
@@ -176,6 +176,9 @@ public class YippeePastryApp implements Application {
     		
     		// Send statistics to SearchEngine
     		SearchEngine se = new SearchEngine(results);
+    		
+    		se.init();
+    		se.calculateTfidf();
     		
     		ArrayList<DocEntry> rankedPages = se.getRankings();
     		
