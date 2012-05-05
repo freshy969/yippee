@@ -118,7 +118,7 @@ public class Spider implements Runnable {
 
 					try{
 						if (robotsModule.allowedToCrawl(url) && !urlFrontier.isSeen(url.toString())){
-                            logger.info("Sending.............");
+                            //logger.info("Sending.............");
 							Configuration.getInstance().getPastryEngine().sendURL(url);
 						} else {
                             logger.info("Robots returned false");

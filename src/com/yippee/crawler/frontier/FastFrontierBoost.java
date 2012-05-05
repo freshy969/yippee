@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 /**
  * An implementation of a really fast crawler!
  */
-public class FastFrontierBoost implements URLFrontier{
+public class FastFrontierBoost implements URLFrontier {
     /**
      * Create logger in the Log4j hierarchy named by by software component
      */
@@ -19,10 +19,7 @@ public class FastFrontierBoost implements URLFrontier{
      * The queue containing the current url-frontier
      */
     private BlockingQueue<String> current = new ArrayBlockingQueue<String>(MAX_SIZE);
-    /**
-     *
-     */
-    private BlockingQueue<String> seen = new ArrayBlockingQueue<String>(MAX_SIZE);
+    private BlockingQueue<String> seen = new ArrayBlockingQueue<String>(MAX_SIZE * 100);
 
     /**
      * Pulls the url from the shared queue.
@@ -30,12 +27,12 @@ public class FastFrontierBoost implements URLFrontier{
      * @return a Message object containing the link information
      * @throws InterruptedException
      */
-    public synchronized Message pull() throws InterruptedException {
+    public synchronized Message pull() {
         int queueSize = current.size();
-        if (queueSize>1000){
+        if (queueSize > 1000) {
             logger.info(queueSize);
         }
-        String url = current.take();
+        String url = current.poll();
         logger.info("PULL: " + url);
         return new Message(url);
     }
@@ -50,9 +47,9 @@ public class FastFrontierBoost implements URLFrontier{
         }
 
         int queueSize = current.size();
-        if ((queueSize>1000) && (queueSize < MAX_SIZE-1)){
+        if ((queueSize > 1000) && (queueSize < MAX_SIZE - 1)) {
             logger.info(queueSize);
-        } else if (queueSize == MAX_SIZE -1) {
+        } else if (queueSize == MAX_SIZE - 1) {
             logger.info("QUEUE IS FULL: Discarding url:" + url);
             return;
         }
@@ -60,13 +57,6 @@ public class FastFrontierBoost implements URLFrontier{
         current.add(url);
         seen.add(url);
         return;
-    }
-
-    public synchronized boolean isSeen(String url){
-        if (seen.contains(url)) {
-            logger.info("Seen " + url);
-            return true;
-        } else return false;
     }
 
     public boolean save() {
@@ -77,4 +67,10 @@ public class FastFrontierBoost implements URLFrontier{
         return false;
     }
 
+    public synchronized boolean isSeen(String url) {
+        if (seen.contains(url)) {
+            logger.info("Seen " + url);
+            return true;
+        } else return false;
+    }
 }
