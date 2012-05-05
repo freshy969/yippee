@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class PageRank {
 
-    public static class TokenizerMapper
+    public static class PRMapper
             extends Mapper<Object, Text, Text, Text> {
 
         private Text mapKey = new Text();
@@ -44,16 +44,26 @@ public class PageRank {
         }
     }
 
-    public static class IntSumReducer
+    public static class PRReducer
             extends Reducer<Text, Text, Text, IntWritable> {
         private IntWritable result = new IntWritable();
+
+        private static String DEL = "', '";
 
         public void reduce(Text key, Iterable<Text> values,
                            Context context
         ) throws IOException, InterruptedException {
             int sum = 0;
-            for (Text val : values) {
-                sum ++;
+            for (Text value : values) {
+                String[] parts = value.toString().split(DEL);
+                if (parts[0].contains("IN")) {
+
+
+                } else {
+                    // This are outgoing links
+                }
+
+
             }
             result.set(sum);
             context.write(key, result);
@@ -69,9 +79,9 @@ public class PageRank {
         }
         Job job = new Job(conf, "PageRank");
         job.setJarByClass(PageRank.class);
-        job.setMapperClass(TokenizerMapper.class);
+        job.setMapperClass(PRMapper.class);
 //        job.setCombinerClass(IntSumReducer.class);
-        job.setReducerClass(IntSumReducer.class);
+        job.setReducerClass(PRReducer.class);
         // Set the outputs for the Map
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
