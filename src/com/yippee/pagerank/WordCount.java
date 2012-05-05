@@ -25,11 +25,13 @@ public class WordCount {
         public void map(Object key, Text value, Context context)
                 throws IOException, InterruptedException {
             String[] line = value.toString().split(", ");
-            String fromString = line[0].trim();
-            String toString   = line[1].trim();
-            from.set(fromString);
-            to.set(toString);
-            context.write(to, from);
+            if (line.length>1) {
+                String fromString = line[0].trim();
+                String toString   = line[1].trim();
+                from.set(fromString);
+                to.set(toString);
+                context.write(to, from);
+            }
         }
     }
 
