@@ -97,8 +97,11 @@ public class LinkTextExtractor {
                 if ((node.getNodeValue() != null) && (!node.getNodeValue().equals(""))) {
                     if (node.getNodeValue().startsWith("http")) {
                     	
+                    	String href = node.getNodeValue();
+                    	if(href.endsWith("/")) href = href.substring(0, href.length() - 1);
+                    	
                     	//logger.info("About to add to anchor list: " + node.getNodeValue());
-                        anchors.add(node.getNodeValue());      //getAttributes("href");
+                        anchors.add(href);      //getAttributes("href");
                     } else {
                         try {
                         	//logger.info("About to add to anchor list (resolved):\n\t\t" + url.toString() + " + " + node.getNodeValue());
@@ -188,6 +191,8 @@ public class LinkTextExtractor {
 	public String resolve(String baseURL, String relativeURL) throws MalformedURLException {
 		//Does baseURL end in slash?
 		if(baseURL.endsWith("/")){
+			baseURL = baseURL.substring(0, baseURL.length() - 1);
+			
 			if(relativeURL.startsWith("/")){
 				//Case 1A
 				//Use URL class to get the root of baseURL (i.e., up to the end of the host)
@@ -198,7 +203,7 @@ public class LinkTextExtractor {
 			} else{
 				//RelativeURL doesn't start with slash
 				//Case 1 B, C & D
-				return baseURL + relativeURL;
+				return baseURL + "/" +  relativeURL;
 			}
 		}else {
 			//baseURL Doesn't End With Slash

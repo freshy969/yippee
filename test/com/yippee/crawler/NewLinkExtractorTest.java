@@ -100,9 +100,9 @@ public class NewLinkExtractorTest {
 
             "http://we.com/index.php",
             "http://we.com/index",
-            "http://we.com/index/",
+            "http://we.com/index",
             "http://we.com",
-            "http://we.com/",
+            "http://we.com",
 
             "http://crawltest.cis.upenn.edu/index/nothingSpecial/./ea.html",
             "http://crawltest.cis.upenn.edu/index/nothingSpecial/",
@@ -136,9 +136,9 @@ public class NewLinkExtractorTest {
 
             "http://we.com/index.php",
             "http://we.com/index",
-            "http://we.com/index/",
+            "http://we.com/index",
             "http://we.com",
-            "http://we.com/",
+            "http://we.com",
 
             "http://crawltest.cis.upenn.edu/nothingSpecial/./ea.html",
             "http://crawltest.cis.upenn.edu/nothingSpecial/",
@@ -171,9 +171,9 @@ public class NewLinkExtractorTest {
 
             "http://we.com/index.php",
             "http://we.com/index",
-            "http://we.com/index/",
+            "http://we.com/index",
             "http://we.com",
-            "http://we.com/",
+            "http://we.com",
 
             "http://crawltest.cis.upenn.edu/nothingSpecial/./ea.html",
             "http://crawltest.cis.upenn.edu/nothingSpecial/",
@@ -206,17 +206,17 @@ public class NewLinkExtractorTest {
 
             "http://we.com/index.php",
             "http://we.com/index",
-            "http://we.com/index/",
+            "http://we.com/index",
             "http://we.com",
-            "http://we.com/",
+            "http://we.com",
 
             "http://crawltest.cis.upenn.edu/index/nothingSpecial/./ea.html",
             "http://crawltest.cis.upenn.edu/index/nothingSpecial/",
             "http://crawltest.cis.upenn.edu/index/nothingSpecial",
             "http://crawltest.cis.upenn.edu/index/nothingSpecial/whatevah/../ea.html",
 
-            "http://crawltest.cis.upenn.edu/index/?who=me",
-            "http://crawltest.cis.upenn.edu/index/#tag",
+            "http://crawltest.cis.upenn.edu/index?who=me",
+            "http://crawltest.cis.upenn.edu/index#tag",
 
             "http://crawltest.cis.upenn.edu/index/1.txt",
             "http://crawltest.cis.upenn.edu/index/2.png",
@@ -241,17 +241,17 @@ public class NewLinkExtractorTest {
 
             "http://we.com/index.php",
             "http://we.com/index",
-            "http://we.com/index/",
+            "http://we.com/index",
             "http://we.com",
-            "http://we.com/",
+            "http://we.com",
 
             "http://crawltest.cis.upenn.edu/nothingSpecial/./ea.html",
             "http://crawltest.cis.upenn.edu/nothingSpecial/",
             "http://crawltest.cis.upenn.edu/nothingSpecial",
             "http://crawltest.cis.upenn.edu/nothingSpecial/whatevah/../ea.html",
 
-            "http://crawltest.cis.upenn.edu/?who=me",
-            "http://crawltest.cis.upenn.edu/#tag",
+            "http://crawltest.cis.upenn.edu?who=me",
+            "http://crawltest.cis.upenn.edu#tag",
 
             "http://crawltest.cis.upenn.edu/1.txt",
             "http://crawltest.cis.upenn.edu/2.png",
@@ -276,9 +276,9 @@ public class NewLinkExtractorTest {
 
             "http://we.com/index.php",
             "http://we.com/index",
-            "http://we.com/index/",
+            "http://we.com/index",
             "http://we.com",
-            "http://we.com/",
+            "http://we.com",
 
             "http://crawltest.cis.upenn.edu:8080/nothingSpecial/./ea.html",
             "http://crawltest.cis.upenn.edu:8080/nothingSpecial/",
@@ -311,9 +311,9 @@ public class NewLinkExtractorTest {
 
             "http://we.com/index.php",
             "http://we.com/index",
-            "http://we.com/index/",
+            "http://we.com/index",
             "http://we.com",
-            "http://we.com/",
+            "http://we.com",
 
             "http://crawltest.cis.upenn.edu/nothingSpecial/./ea.html",
             "http://crawltest.cis.upenn.edu/nothingSpecial/",
