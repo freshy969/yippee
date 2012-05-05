@@ -80,18 +80,15 @@ public class Spider implements Runnable {
 				DocAug docAug = new DocAug();
 				docAug.setDoc(content);
 				docAug.setUrl(urlToCrawl.toString());
-
 				docAug.setId(urlToCrawl.toString());
 
 				logger.info("About to push to DocManager");
 				dam.push(docAug);
 				LinkTextExtractor linkEx = new LinkTextExtractor();
-				ArrayList<String> links = null;
+				ArrayList<String> links;
 				try {
 					logger.debug("About to extract links");
 					links = linkEx.smartExtract(urlToCrawl, content);
-
-
 				} catch (CrawlerException e) {
 					logger.info("Crawler Exception: ", e);
 					continue;
@@ -99,35 +96,28 @@ public class Spider implements Runnable {
 					System.out.println("Null Pointer in ");
 					logger.info("NullPointer in LinkExtractor", e);
 					continue;
-
 				}
 				logger.debug("Done extracting links");
 
-
 				if(links.size() > 0) logger.info("Found some links on:" + urlToCrawl);
 
-				logger.info("Asking robots for each link");
-
+				logger.debug("Asking robots for each link");
 				for (String newUrl : links){
 					if (newUrl == null || newUrl.contains("https")) {
                         logger.info("Skip: " + newUrl);
 						continue;
 					}
-
 					URL url;
 					try {
 						url = new URL(newUrl);
-
 						//logger.info("About to ask robots about: " + url);
-
 					} catch (MalformedURLException e) {
 						logger.warn("Malformed URL Exception");
 						continue; // skip that url
 					}
 
-
 					try{
-						if (robotsModule.allowedToCrawl(url)){
+						if (robotsModule.allowedToCrawl(url) && !DupEliminator.exists(url)){
 							Configuration.getInstance().getPastryEngine().sendURL(url);
 						} else {
                             logger.info("Robots returned false");
@@ -135,7 +125,6 @@ public class Spider implements Runnable {
 					}catch(IllegalStateException e){
 						logger.warn("IllegalStateException", e);
 					}
-
 				}
 			} catch (InterruptedException e) {
 				//e.printStackTrace();

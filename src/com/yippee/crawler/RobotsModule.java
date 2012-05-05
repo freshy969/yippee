@@ -28,10 +28,8 @@ public class RobotsModule {
     private RobotsTxtCache robotsCache;
 
     public RobotsModule() {
-        
     	rm = new RobotsManager();
         robotsCache = new RobotsTxtCache();
-        
     }
 
     /**
@@ -43,6 +41,10 @@ public class RobotsModule {
      * @return yes if allowed; no o/w
      */
     public boolean allowedToCrawl(URL urlInQuestion) {
+        boolean bypassRobots = true;
+        if (bypassRobots) {
+            return true;
+        }
         boolean result = true;
         URL robotsURL = null;
         try {
@@ -130,7 +132,6 @@ public class RobotsModule {
 	        robotsTxt = getRobotsNotInCache(urlInQuestion, robotsURL, robotsTxt);
 	        return robotsTxt.getCrawlDelay();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return 0;
 		}
