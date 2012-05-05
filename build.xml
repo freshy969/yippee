@@ -191,7 +191,6 @@
         *   database path
     -->
     <target name="run" depends="jar">
-        <echo>" Pastry Port: .${bootPort}"</echo>
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
@@ -204,7 +203,7 @@
             <arg value="feed.url"/>
             <arg value="${database}"/>
             <arg value="${service}"/>
-            <arg value="--overwrite"/>
+            <arg value="${lastArg}"/>
         </java>
     </target>
 
@@ -218,6 +217,7 @@
             <param name="bootPort" value="9001"/>
             <param name="database" value="db/test"/>
             <param name="service" value="-C"/>
+            <param name="lastArg" value="--overwrite"/>
         </antcall>
     </target>
 
@@ -228,6 +228,7 @@
             <param name="bootPort" value="${bport}"/>
             <param name="database" value="db/prod"/>
             <param name="service" value="-C"/>
+            <param name="lastArg" value="--overwrite"/>
         </antcall>
     </target>
 
@@ -238,6 +239,7 @@
             <param name="bootPort" value="10001"/>
             <param name="database" value="db/test"/>
             <param name="service" value="-I"/>
+            <param name="lastArg" value="--overwrite"/>
         </antcall>
     </target>
 
@@ -250,24 +252,28 @@
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node1"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9002"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node2"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9003"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node3"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9004"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node4"/>
                 <param name="service" value="-CI"/>
+                <param name="lastArg" value="--overwrite"/>
             </antcall>
         </parallel>
     </target>
@@ -279,7 +285,32 @@
         <antcall target="run">
             <param name="localPort" value="${lport}"/>
             <param name="bootPort" value="${bport}"/>
-            <param name="database" value="db/prod"/>
+            <param name="database" value="db/test"/>
+            <param name="lastArg" value="--overwrite"/>
+            </antcall>
+        </parallel>
+    </target>
+
+    <target name="run-db" depends="jar">
+        <echo>" Pastry Port: .${bootPort}"</echo>
+        <java fork="true" classname="${main-class}">
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="application"/>
+            </classpath>
+            <!-- in case we need to add arguments -->
+            <arg value="${database}"/>
+            <arg value="${lastArg}"/>
+        </java>
+    </target>
+
+    <target name="check-database"
+            depends="project-clean"
+            description="Check the database">
+        <parallel>
+        <antcall target="run-db">
+            <param name="database" value="${B}"/>
+            <param name="lastArg" value="--status"/>
             </antcall>
         </parallel>
     </target>

@@ -17,8 +17,12 @@ public class DbStatusCheck {
 		String dbRootPath = args[0];
 		if(dbRootPath.equals("db/prod") || dbRootPath.equals("db/test"))
 			Configuration.getInstance().setBerkeleyDBRoot(dbRootPath);
-		else
-			die("Invalid Root Path");
+		else {
+            for(int i =0; i< args.length; i++) {
+                System.out.println(args[i]);
+            }
+			die("Invalid Root Path: " + args.length);
+        }
 		
 		CrawlerDBEnv crawlerEnv = CrawlerDBEnv.getInstance(true);
 		DAL dao = new DAL(crawlerEnv.getCrawlerStore());
