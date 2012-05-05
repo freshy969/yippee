@@ -118,7 +118,7 @@ public class IndexWorker extends Thread {
 	public void appendLinks(String url, ArrayList<String> links) {
 		for (int i = 0; i < links.size(); i++) {
 			logger.warn(url + ", " + links.get(i));
-		}              PropertyConfigurator.configure("log/log4j.properties");
+		}
 	}
 
     public static void main(String[] args){
