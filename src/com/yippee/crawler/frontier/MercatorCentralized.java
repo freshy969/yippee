@@ -244,7 +244,11 @@ public class MercatorCentralized implements URLFrontier{
 
 	}
 
-	/**
+    public boolean isSeen(String url) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
 	 * When loading URLs into the backend queue form storage. 
 	 * Will "allocate" backend queues for a host if one does not exists and there are unallocated queues as per
 	 * 	the hostToQueue lookup table

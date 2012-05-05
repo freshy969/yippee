@@ -91,4 +91,8 @@ public class SimpleQueueFrontier implements URLFrontier {
 		
 	}
 
+    public boolean isSeen(String url) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 }
