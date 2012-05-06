@@ -227,7 +227,7 @@
             <param name="localPort" value="9001"/>
             <param name="bootPort" value="9001"/>
             <param name="database" value="db/test"/>
-            <param name="service" value="-C"/>
+            <param name="service" value="-PC"/>
             <param name="lastArg" value="--overwrite"/>
         </antcall>
     </target>
@@ -238,7 +238,7 @@
             <param name="localPort" value="${lport}"/>
             <param name="bootPort" value="${bport}"/>
             <param name="database" value="db/prod"/>
-            <param name="service" value="-C"/>
+            <param name="service" value="-PC"/>
             <param name="lastArg" value="--overwrite"/>
         </antcall>
     </target>
@@ -262,28 +262,28 @@
                 <param name="localPort" value="9001"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node1"/>
-                <param name="service" value="-CI"/>
+                <param name="service" value="-PCI"/>
                 <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9002"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node2"/>
-                <param name="service" value="-CI"/>
+                <param name="service" value="-PCI"/>
                 <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9003"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node3"/>
-                <param name="service" value="-CI"/>
+                <param name="service" value="-PCI"/>
                 <param name="lastArg" value="--overwrite"/>
             </antcall>
             <antcall target="run">
                 <param name="localPort" value="9004"/>
                 <param name="bootPort" value="9001"/>
                 <param name="database" value="db/integ/node4"/>
-                <param name="service" value="-CI"/>
+                <param name="service" value="-PCI"/>
                 <param name="lastArg" value="--overwrite"/>
             </antcall>
         </parallel>
@@ -291,12 +291,27 @@
 
     <target name="project-test-single-pastry"
             depends="project-clean,sanity-check"
-            description="Create a single pastry node">
+            description="Launch only pastry">
         <parallel>
         <antcall target="run">
             <param name="localPort" value="${lport}"/>
             <param name="bootPort" value="${bport}"/>
             <param name="database" value="db/test"/>
+            <param name="lastArg" value="--overwrite"/>
+            </antcall>
+        </parallel>
+    </target>
+
+    <target name="project-test-single-crawler"
+            depends="project-clean"
+            description="Launch only the crawler">
+        <parallel>
+        <antcall target="run">
+            <param name="localPort" value="0"/>
+            <param name="bIp" value="0"/>
+            <param name="bootPort" value="0"/>
+            <param name="database" value="db/test"/>
+            <param name="service" value="-C"/>
             <param name="lastArg" value="--overwrite"/>
             </antcall>
         </parallel>

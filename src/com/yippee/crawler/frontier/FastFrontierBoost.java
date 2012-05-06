@@ -26,7 +26,14 @@ public class FastFrontierBoost implements URLFrontier {
      * The queue containing the current url-frontier
      */
     protected BlockingQueue<String> current = new ArrayBlockingQueue<String>(MAX_SIZE);
+    /**
+     * The queue containing the urls seen (this is the duplicate url eliminator)
+     */
     protected BlockingQueue<String> seen = new ArrayBlockingQueue<String>(MAX_SIZE * 100);
+    /**
+     * Number of pushed urls before we save state
+     */
+    int saveState = 1000;
 
     /**
      * Pulls the url from the shared queue.
@@ -40,6 +47,11 @@ public class FastFrontierBoost implements URLFrontier {
         return new Message(url);
     }
 
+    /**
+     * Push the url to the shared queue
+     *
+     * @param message a message object containing the all url information
+     */
     public synchronized void push(Message message) {
 
         String url = message.getURL().toString();
