@@ -130,7 +130,7 @@ public class IndexWorker extends Thread {
 	public void appendLinks(String url, ArrayList<String> links) {
         int numLinks = links.size();
 		for (int i = 0; i < links.size(); i++) {
-			logger.warn("'"+url + "', '1', '" + links.get(i) +"', '" + numLinks +"'");
+			linkLogger.warn("'"+url + "', '1', '" + links.get(i) +"', '" + numLinks +"'");
 		}
 	}
 
