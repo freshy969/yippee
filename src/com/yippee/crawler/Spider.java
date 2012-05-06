@@ -120,7 +120,7 @@ public class Spider implements Runnable {
 						if (robotsModule.allowedToCrawl(url) && !DupEliminator.exists(url)){
 							Configuration.getInstance().getPastryEngine().sendURL(url);
 						} else {
-                            logger.info("Robots returned false");
+                            logger.info("Robots returned false or duplicate exists");
                         }
 					}catch(IllegalStateException e){
 						logger.warn("IllegalStateException", e);
