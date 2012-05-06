@@ -16,7 +16,8 @@ public class DocArchiveManager {
     static Logger logger = Logger.getLogger(DocArchiveManager.class);
     private static IndexerDBEnv myDbEnv;
     private DAL dao;
-
+    private int count = 0;
+    
     /**
      * The constructor does not take a folder as an argument, to disable
      * overwrites or writes to other locations. The rest of the managers check
@@ -44,12 +45,15 @@ public class DocArchiveManager {
             // Open the data accessor. This is used to store
             // persistent objects.m
             dao.getDocArcByURL().put(docAug);
-            logger.info("Stored DocAug: " + docAug.getUrl());
+//            logger.info("Stored DocAug: " + docAug.getUrl());
+          
         } catch (DatabaseException e) {
             System.out.println("Exception: " + e.toString());
             e.printStackTrace();
             success = false;
         }
+        count++;
+        logger.warn("Stored DocAug:" + count);
         return success;
     }
 
