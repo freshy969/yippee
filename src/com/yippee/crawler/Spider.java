@@ -82,7 +82,7 @@ public class Spider implements Runnable {
 				docAug.setUrl(urlToCrawl.toString());
 				docAug.setId(urlToCrawl.toString());
 
-				logger.info("About to push to DocManager");
+				logger.info("Try to save DocAug for " + urlToCrawl.toString());
 				dam.push(docAug);
 				LinkTextExtractor linkEx = new LinkTextExtractor();
 				ArrayList<String> links;
@@ -104,7 +104,7 @@ public class Spider implements Runnable {
 				logger.debug("Asking robots for each link");
 				for (String newUrl : links){
 					if (newUrl == null || newUrl.contains("https")) {
-                        logger.info("Skip: " + newUrl);
+                        logger.debug("Skip: " + newUrl);
 						continue;
 					}
 					URL url;
@@ -117,10 +117,15 @@ public class Spider implements Runnable {
 					}
 
 					try{
-						if (robotsModule.allowedToCrawl(url) && !DupEliminator.exists(url)){
-							Configuration.getInstance().getPastryEngine().sendURL(url);
+						if (robotsModule.allowedToCrawl(url) && !urlFrontier.isSeen(url.toString())){
+                            //logger.info("Sending.............");
+							//Configuration.getInstance().getPastryEngine().sendURL(url);
+                            Message newMessage = new Message(url.toString());
+                            if (newMessage.getType() == Message.Type.NEW) {
+                                urlFrontier.push(newMessage);
+                            }
 						} else {
-                            logger.info("Robots returned false");
+                            logger.info("Robots returned false or duplicate exists");
                         }
 					}catch(IllegalStateException e){
 						logger.warn("IllegalStateException", e);
@@ -129,8 +134,8 @@ public class Spider implements Runnable {
 			} catch (InterruptedException e) {
 				//e.printStackTrace();
 				logger.debug("Thread " + Thread.currentThread().getName() + ": Shutting down..");
-				running = false;
-				break;
+				//running = false;
+				continue;
 			}
 
 		}

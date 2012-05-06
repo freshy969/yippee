@@ -26,6 +26,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class YippeePastryApp implements Application {
     /**
@@ -286,7 +288,7 @@ public class YippeePastryApp implements Application {
      */
     private void handleCrawlerMessage(Id targetId, CrawlerMessage message) {
         String urlString = message.getUrl();
-        logger.debug("Pushing [" + urlString + "] to the URLFRONTIER");
+        logger.info("Pushing [" + urlString + "] to the URLFRONTIER");
         com.yippee.crawler.Message msg = new com.yippee.crawler.Message(urlString);
         if (msg.getType() == com.yippee.crawler.Message.Type.NEW) {
             urlFrontier.push(msg);
@@ -434,8 +436,6 @@ public class YippeePastryApp implements Application {
 
     /**
      * Starts the daemon query thread
-     *
-     * @param port port on which the daemon listens
      */
     public void startQueryDaemon() {
         Thread daemon = new Thread(new QueryDaemon(this, socketQueue));

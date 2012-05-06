@@ -1,6 +1,7 @@
 package com.yippee.util;
 
 import com.yippee.crawler.Araneae;
+import com.yippee.crawler.Message;
 import com.yippee.crawler.frontier.FrontierFactory;
 import com.yippee.crawler.frontier.FrontierType;
 import com.yippee.crawler.frontier.URLFrontier;
@@ -41,6 +42,7 @@ public class EntryPoint {
     /**
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
+    //10 - 1109, 50 - 1291
     final int NO_OF_THREADS = 50;
     final int SIZE_OF_ROBOTS_CACHE = 512;
     
@@ -127,7 +129,9 @@ public class EntryPoint {
         Configuration.getInstance().setRobotsCacheSize(SIZE_OF_ROBOTS_CACHE);
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
         URLFrontier urlFrontier = FrontierFactory.get(FrontierType.BOOST);
-        Configuration.getInstance().getPastryEngine().setupURLFrontier(urlFrontier);
+        if (Configuration.getInstance().getService().contains("P")) {
+            Configuration.getInstance().getPastryEngine().setupURLFrontier(urlFrontier);
+        }
         boolean success = true;
         // only overwrite database with new seeds iff an overwrite flag was given
         if (args[args.length-1].equals("--overwrite")) {
@@ -144,7 +148,8 @@ public class EntryPoint {
             //urlFrontier.load();
         }
         if (success) {
-            Configuration.getInstance().getPastryEngine().sendPing();
+            if (Configuration.getInstance().getService().contains("P"))
+                Configuration.getInstance().getPastryEngine().sendPing();
             Araneae threadPool = new Araneae(urlFrontier);
 
         } else {
@@ -185,8 +190,14 @@ public class EntryPoint {
                 String urlString = new StringBuilder(scanner.nextLine()).toString();
                 if (urlString.startsWith("#")) continue;
                 String aLog = "New URL [" + urlString +"]";
-                URL url = new URL(urlString);
-                Configuration.getInstance().getPastryEngine().sendURL(url);
+                if (Configuration.getInstance().getService().contains("P")) {
+                    URL url = new URL(urlString);
+                    Configuration.getInstance().getPastryEngine().sendURL(url);
+                } else {
+                    Message message = new Message(urlString);
+                    if (message.getType() == Message.Type.NEW)
+                        urlFrontier.push(message);
+                }
                 logger.info(aLog);
             }
         } catch (MalformedURLException e) {
@@ -215,28 +226,31 @@ public class EntryPoint {
      *             instance 9001 130.91.140.235 9001 4444 DB/db1
      */
     public static void main(String[] args) {
+        // No entry point -- just read database status
         if (args[args.length-1].equals("--status")) {
             DbStatusCheck check = new DbStatusCheck(args);
             return;
         }
-
+        // Pring arguments -- previous targets have no args
+        p2(args);
+        // Create entry point to initialize services
         EntryPoint entryPoint = new EntryPoint();
-        p(args);
-        // Pastry
         if (!entryPoint.configure(args)) return;
-        entryPoint.setUpSubstrate();
-
-        // Start indexer
+        // Start Pastry
+        if (args[5].contains("P")) {
+            Configuration.getInstance().appendService("P");
+            entryPoint.setUpSubstrate();
+        }
+        // Start crawler independently
         if (args[5].contains("C")) {
             System.out.println("Starting crawler");
-            Configuration.getInstance().setService("C");
-            // Crawler
+            Configuration.getInstance().appendService("C");
             if (!entryPoint.setupCrawler(args)) return;
         }
-        // Start indexer, and if crawler is not started, launch pastry
+        // Start indexer independently
         if (args[5].contains("I")) {
             System.out.println("Starting indexer");
-            Configuration.getInstance().setService("I");
+            Configuration.getInstance().appendService("I");
             Indexer ih = new Indexer();
             ih.makeThreads();
         }
@@ -252,7 +266,7 @@ public class EntryPoint {
      * [java] -C
      * [java] --overwrite
      *
-     * @param args
+     * @param args the command line arguemts passed by ant
      */
     private static void p(String[] args) {
         System.out.println("Local port.. " + args[0]);
@@ -262,6 +276,25 @@ public class EntryPoint {
         System.out.println("Database.... " + args[4]);
         System.out.println("Service..... " + args[5]);
         System.out.println("Other....... " + args[6]);
+    }
+
+    /**
+     * The method is the same as before, just outputs arguments in a horizontal
+     * way instead of a vertical one.
+     *
+     * @param args the command line arguments passed by ant
+     */
+    private static void p2(String[] args) {
+        String output = "";
+        System.out.println("| L-port |    Boot IP    | B-port |   Feed   | Database | Services | Other | ");
+        output += "|  " + args[0] + "   ";
+        output += "" + args[1] + "";
+        output += "    " + args[2] + "  ";
+        output += " " + args[3] + "   ";
+        output += " " + args[4] + " ";
+        output += "   " + args[5] + "   ";
+        output += "   " + args[6] + "  |";
+        System.out.println(output);
     }
 
 

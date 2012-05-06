@@ -118,6 +118,10 @@ public class CoralliaFrontier implements URLFrontier {
         return false;
     }
 
+    public boolean isSeen(String url) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     /**
      * When a thread pushes a URL to the URLFrontier, there are two things that
      * could happen:

@@ -95,6 +95,33 @@ public class URLFrontierManager {
 	
 	
 	/**
+	 * To allow frontier to pass state as strings directly.
+	 * @param stringQueues
+	 * @return
+	 */
+	public boolean storeStateStrings(Map<Integer, Queue<String>> stringQueues){
+		boolean successful = false;
+		int newVersionNumber = latestVersion + 1;
+		FrontierSavedState f = FrontierSavedState.makeNewFrontierSavedStateStrings(newVersionNumber, stringQueues);
+		
+		try{
+			dao.getFrontierStateByVersion().put(f);
+			successful =  true;
+			latestVersion = newVersionNumber;
+			
+		} catch(DatabaseException e){
+			logger.warn("DatabaseException", e);
+			successful = false;
+		} catch (IllegalArgumentException e){
+        	logger.warn("IllegalArgumentException", e);
+            successful = false;
+        }
+		
+		return successful;				
+	}
+	
+	
+	/**
 	 * Method to load the latest frontier saved state from the database
 	 * @return The saved state with the greatest version number
 	 */

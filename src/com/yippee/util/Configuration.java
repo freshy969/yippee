@@ -172,7 +172,7 @@ public class Configuration {
      *
      * @param service
      */
-    public void setService(String service) {
+    public void appendService(String service) {
         this.service += service;
     }
 }

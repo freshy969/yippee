@@ -24,7 +24,7 @@ public class NodeIndex {
 	private HashMap<String, byte[]> lexiconMap;
 	private HashMap<String,String> stopWords;
 	private int docCount = 0;
-	//private long startTime = 0;
+	private long startTime = 0;
 	private ArrayList<DocAug> docArchive;
 	private DocArchiveManager dam;
 	private boolean archiveMode = false;
@@ -36,7 +36,7 @@ public class NodeIndex {
 		lexicon = new Lexicon("doc/lexicon.txt");
 		lexiconMap = lexicon.getLexiconMap();
 		stopWords = lexicon.getStopList(); 
-		//startTime = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		docArchive = new ArrayList<DocAug>();
 		dam = new DocArchiveManager();
 	}
@@ -87,12 +87,14 @@ public class NodeIndex {
 				wordIndex.put(word, list);
 			}
 		}
-		//if(docCount%5==0)
-			sendGoodWordsToRing();	
+		if(docCount%5==0){
+			sendGoodWordsToRing();
+			logger.info("WE'VE INDEXED "+docCount+" DOCS IN "+(System.currentTimeMillis()-startTime)+"ms");
+		}
 	//	if (wordIndex.size() > capacity) {
 			//logger.info("REACHED CAPACITY, SENDING TO RING");
-		//	System.out.println("WE'VE INDEXED "+docCount+" DOCS IN "+(System.currentTimeMillis()-startTime)+"ms");
-			
+		//640 DOCS IN 359s
+		//1500 DOCS IN 9756s
 		//	printIndex();
 	//	}		
 	}
@@ -121,13 +123,14 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 			ArrayList<Hit> list = wordIndex.get(word);
-
+			//System.out.println(word+", "+list.size());
 			if(list.size()>capacity){
 				Configuration.getInstance().getPastryEngine().sendList(word,list);
 				logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
 				deleteKeys.add(word);
 			}
 		}
+	//	System.out.println("SENT OUT "+deleteKeys.size()+" out of "+wordIndex.size());
 		for(int i=0; i<deleteKeys.size();i++){
 			String k = deleteKeys.get(i);
 			wordIndex.remove(k);

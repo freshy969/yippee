@@ -37,6 +37,7 @@ public class IndexWorker extends Thread {
 	DocEntryManager dem;
 	long pollDelay;
 	NodeIndex nodeIndex;
+	ArrayList<DocAug> archiveHolder;
 	
 	public IndexWorker(NodeIndex nodeIndex) {
 		Configuration.getInstance().setBerkeleyDBRoot("db/test");
@@ -51,6 +52,7 @@ public class IndexWorker extends Thread {
 		darcm = new DocArchiveManager();
 		dem = new DocEntryManager();
 		this.nodeIndex = nodeIndex;
+		archiveHolder = new ArrayList<DocAug>();
 	}
 
 	@Override
@@ -74,11 +76,10 @@ public class IndexWorker extends Thread {
 				} else {
 					docAug = nodeIndex.poll();
 				}
-				
 				if (pollDelay <= 60000)
 					pollDelay *= 2;
 			}
-				
+		//	System.out.println("Retrieved: " + docAug.getId());
 			logger.info("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
@@ -110,10 +111,21 @@ public class IndexWorker extends Thread {
 	    	
 	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
-	    	if(!nodeIndex.isArchiveMode())
-	    		darcm.store(docAug);
+	    	if(!nodeIndex.isArchiveMode()) {
+	    		archiveHolder.add(docAug);
+	    		if(archiveHolder.size()>100)
+	    			addToArchive();
+	    	}
+	    		//darcm.store(docAug);
 	    }		
 	}	
+	
+	public void addToArchive(){
+		for(int i=0; i<archiveHolder.size(); i++){
+			darcm.store(archiveHolder.get(i));
+		}
+		archiveHolder = new ArrayList<DocAug>();
+	}
 
 	public void appendLinks(String url, ArrayList<String> links) {
         int numLinks = links.size();
