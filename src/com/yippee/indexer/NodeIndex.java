@@ -20,8 +20,6 @@ public class NodeIndex {
     
 	volatile HashMap<String, ArrayList<Hit>> wordIndex;
 	private int capacity = 2;
-	private Lexicon lexicon;
-	private HashMap<String, byte[]> lexiconMap;
 	private HashMap<String,String> stopWords;
 	private int docCount = 0;
 	private long startTime = 0;
@@ -33,9 +31,6 @@ public class NodeIndex {
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
 	//	globalIndex = new HashMap<String, ArrayList<Hit>>();
-		lexicon = new Lexicon("doc/lexicon.txt");
-		lexiconMap = lexicon.getLexiconMap();
-		stopWords = lexicon.getStopList(); 
 		startTime = System.currentTimeMillis();
 		docArchive = new ArrayList<DocAug>();
 		dam = new DocArchiveManager();
@@ -72,20 +67,17 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			
 			String word = iter.next();
-			if((!lexiconMap.containsKey(word) && !word.matches("\\d+")) || stopWords.containsKey(word)){
-				//do nothing
-			} 
-			else{	
-				ArrayList<Hit> hitList = hitMap.get(word); 
-				ArrayList<Hit> list;			
-				if(wordIndex.containsKey(word)){
-					list = wordIndex.get(word);
-				} else {
-					list = new ArrayList<Hit>();
-				}						
-				list.addAll(hitList);
-				wordIndex.put(word, list);
-			}
+
+			ArrayList<Hit> hitList = hitMap.get(word); 
+			ArrayList<Hit> list;			
+			if(wordIndex.containsKey(word)){
+				list = wordIndex.get(word);
+			} else {
+				list = new ArrayList<Hit>();
+			}						
+			list.addAll(hitList);
+			wordIndex.put(word, list);
+		
 		}
 		if(docCount%10==0){
 			sendGoodWordsToRing();
@@ -104,16 +96,16 @@ public class NodeIndex {
 		return wordIndex.get(word);
 	}
 
-	public synchronized void printIndex(){		
-		Set<String> keys = wordIndex.keySet();
-		Iterator<String> iter = keys.iterator();
-		
-		while(iter.hasNext()) {
-			String word = iter.next();
-//			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
-			logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
-		}
-	}
+//	public synchronized void printIndex(){		
+//		Set<String> keys = wordIndex.keySet();
+//		Iterator<String> iter = keys.iterator();
+//		
+//		while(iter.hasNext()) {
+//			String word = iter.next();
+////			System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+//			logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
+//		}
+//	}
 	
 	public synchronized void sendGoodWordsToRing() {
 		// HASH keys
@@ -142,16 +134,16 @@ public class NodeIndex {
 			
 	}
 	
-	public synchronized void printAll(){
-		
-		Set<String> keys = wordIndex.keySet();
-		Iterator<String> iter = keys.iterator();
-		
-		while(iter.hasNext()) {
-			String word = iter.next();
-			//System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
-		}
-		
-	}
+//	public synchronized void printAll(){
+//		
+//		Set<String> keys = wordIndex.keySet();
+//		Iterator<String> iter = keys.iterator();
+//		
+//		while(iter.hasNext()) {
+//			String word = iter.next();
+//			//System.out.println("[" + word + "=" + wordIndex.get(word).size() + "]");
+//		}
+//		
+//	}
 	
 }
