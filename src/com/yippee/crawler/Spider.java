@@ -27,6 +27,7 @@ public class Spider implements Runnable {
 	private boolean running;
 	DocAugManager dam;
 	RobotsModule robotsModule;
+    private static final int MAX_SIZE = 1048576; // no more than one MEG!
 
 	/**
 	 * The -not so default- constructor. It keeps references to the whole thread
@@ -84,8 +85,9 @@ public class Spider implements Runnable {
 					logger.error("IllegalArgumentException", e);
 					continue;
 				}
-				
-				if (!httpModule.isValid()) continue; // There was an error!
+
+                // There was an error or the content was huge
+				if (!httpModule.isValid() || content.length() > MAX_SIZE) continue;
 
 				DocAug docAug = new DocAug();
 				docAug.setDoc(content);
