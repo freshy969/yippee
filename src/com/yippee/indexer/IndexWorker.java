@@ -14,6 +14,8 @@ import org.w3c.dom.Document;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author tdu2 The Indexer continually polls the database until no documents
@@ -99,6 +101,7 @@ public class IndexWorker extends Thread {
 	    	
 	   
 	    	HashMap<String, ArrayList<Hit>> hitList = fe.getHitList();
+	    	hitList = updateDocLength(hitList);
 	 	    
 	    	// Send hits to ring 
 	    	nodeIndex.addAllHits(hitList);
@@ -119,6 +122,31 @@ public class IndexWorker extends Thread {
 	    		//darcm.store(docAug);
 	    }		
 	}	
+	
+	public HashMap<String,ArrayList<Hit>> updateDocLength(HashMap<String,ArrayList<Hit>> hitList){
+		double docLength = 0;
+		Set<String> keys = hitList.keySet();
+		Iterator<String> iter = keys.iterator();
+		while(iter.hasNext()){
+			String word = iter.next();
+			docLength += Math.pow(hitList.get(word).size(), 2);
+		}
+		
+		docLength = Math.sqrt(docLength);
+		
+		keys = hitList.keySet();
+		iter = keys.iterator();
+		while(iter.hasNext()){
+			String word = iter.next();
+			ArrayList<Hit> hl = hitList.get(word);
+			for(int i=0; i<hl.size(); i++){
+				Hit h = hl.get(i);
+				h.setDocLength(docLength);
+			}
+		}
+		
+		return hitList;
+	}
 	
 	public void addToArchive(){
 		for(int i=0; i<archiveHolder.size(); i++){
