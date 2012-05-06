@@ -119,7 +119,11 @@ public class Spider implements Runnable {
 					try{
 						if (robotsModule.allowedToCrawl(url) && !urlFrontier.isSeen(url.toString())){
                             //logger.info("Sending.............");
-							Configuration.getInstance().getPastryEngine().sendURL(url);
+							//Configuration.getInstance().getPastryEngine().sendURL(url);
+                            Message newMessage = new Message(url.toString());
+                            if (newMessage.getType() == Message.Type.NEW) {
+                                urlFrontier.push(newMessage);
+                            }
 						} else {
                             logger.info("Robots returned false or duplicate exists");
                         }

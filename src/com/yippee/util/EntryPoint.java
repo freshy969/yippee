@@ -216,28 +216,34 @@ public class EntryPoint {
      *             instance 9001 130.91.140.235 9001 4444 DB/db1
      */
     public static void main(String[] args) {
+        // Pring arguments
+        p(args);
+        // No entry point -- just read database status
         if (args[args.length-1].equals("--status")) {
             DbStatusCheck check = new DbStatusCheck(args);
             return;
         }
-
+        // Create entry point to initialize services
         EntryPoint entryPoint = new EntryPoint();
-        p(args);
-        // Pastry
-        if (!entryPoint.configure(args)) return;
-        entryPoint.setUpSubstrate();
+        // Start Pastry
+        if (args[5].contains("P")) {
+            // Pastry
+            Configuration.getInstance().appendService("P");
+            if (!entryPoint.configure(args)) return;
+            entryPoint.setUpSubstrate();
+        }
 
         // Start indexer
         if (args[5].contains("C")) {
             System.out.println("Starting crawler");
-            Configuration.getInstance().setService("C");
+            Configuration.getInstance().appendService("C");
             // Crawler
             if (!entryPoint.setupCrawler(args)) return;
         }
         // Start indexer, and if crawler is not started, launch pastry
         if (args[5].contains("I")) {
             System.out.println("Starting indexer");
-            Configuration.getInstance().setService("I");
+            Configuration.getInstance().appendService("I");
             Indexer ih = new Indexer();
             ih.makeThreads();
         }
