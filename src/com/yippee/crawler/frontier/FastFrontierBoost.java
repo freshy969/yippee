@@ -74,10 +74,13 @@ public class FastFrontierBoost implements URLFrontier {
         seen.add(url);
 
         if (--saveState == 0) {
-            if (!save()) System.out.println("There was an error saving state!");
+            if (!save()) {
+                logger.error("There was an error saving state!");
+            } else {
+                logger.warn("Saved Frontier");
+            }
             saveState = SAVE_FREQ;
         }
-
         return;
     }
 
