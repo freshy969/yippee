@@ -22,6 +22,7 @@ public class FastFrontierBoost implements URLFrontier {
      */
     static Logger logger = Logger.getLogger(FastFrontierBoost.class);
     private final int MAX_SIZE = 10000;
+    private final int SAVE_FREQ = 1000;
     /**
      * The queue containing the current url-frontier
      */
@@ -33,7 +34,7 @@ public class FastFrontierBoost implements URLFrontier {
     /**
      * Number of pushed urls before we save state
      */
-    int saveState = 1000;
+    int saveState = SAVE_FREQ;
 
     /**
      * Pulls the url from the shared queue.
@@ -71,6 +72,12 @@ public class FastFrontierBoost implements URLFrontier {
         logger.debug("PUSH: " + url);
         current.add(url);
         seen.add(url);
+
+        if (--saveState == 0) {
+            if (!save()) System.out.println("There was an error saving state!");
+            saveState = SAVE_FREQ;
+        }
+
         return;
     }
 
