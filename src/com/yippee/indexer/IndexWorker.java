@@ -82,21 +82,25 @@ public class IndexWorker extends Thread {
 					pollDelay *= 2;
 			}
 		//	System.out.println("Retrieved: " + docAug.getId());
-			logger.info("Retrieved: " + docAug.getId());
+//			logger.info("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
 	    	
 	    	Document doc = null;
 			
-	    	doc = parser.parseDoc(docAug);
+	    	try {
+	    		doc = parser.parseDoc(docAug);
+	    	} catch (StringIndexOutOfBoundsException e) {
+				logger.info("StringIndexOutOfBounds in: " + docAug.getUrl());				
+	    	}
 	
 	    	try {
 				fe.extract(docAug.getUrl(), doc);
 			} catch (MalformedURLException e) {
-				logger.warn("MalformedURL in: " + docAug.getUrl());				
+				logger.info("MalformedURL in: " + docAug.getUrl());				
 			} catch (NullPointerException e) {
 				//e.printStackTrace();
-				logger.warn("NullPointerException in: " + docAug.getUrl());
+				logger.info("NullPointerException in: " + docAug.getUrl());
 			}
 	    	
 	   

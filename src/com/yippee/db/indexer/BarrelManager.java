@@ -78,6 +78,10 @@ public class BarrelManager {
         	logger.warn("Exception", e);
             success = false;
             System.out.println("Exception: " + e.toString());
+        } catch (NullPointerException e){
+        	logger.warn("Exception", e);
+            success = false;
+            System.out.println("Exception: " + e.toString());
         }
         
         return success;
