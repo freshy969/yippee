@@ -85,7 +85,7 @@ public class IndexWorker extends Thread {
 		    	
 			}
 		//	System.out.println("Retrieved: " + docAug.getId());
-//			logger.info("Retrieved: " + docAug.getId());
+			logger.info("Retrieved: " + docAug.getId());
 			Parser parser = new Parser();
 			FancyExtractor fe = new FancyExtractor(docAug.getId());
 	    	
@@ -132,6 +132,7 @@ public class IndexWorker extends Thread {
 	}	
 	
 	public HashMap<String,ArrayList<Hit>> updateDocLength(HashMap<String,ArrayList<Hit>> hitList){
+	//	System.out.println("in update");
 		double docLength = 0;
 		Set<String> keys = hitList.keySet();
 		Iterator<String> iter = keys.iterator();
@@ -141,7 +142,7 @@ public class IndexWorker extends Thread {
 		}
 		
 		docLength = Math.sqrt(docLength);
-		
+	//	System.out.println("getting iterator 2");
 		keys = hitList.keySet();
 		iter = keys.iterator();
 		while(iter.hasNext()){
@@ -150,9 +151,10 @@ public class IndexWorker extends Thread {
 			for(int i=0; i<hl.size(); i++){
 				Hit h = hl.get(i);
 				h.setDocLength(docLength);
+				//System.out.println(h.getDocId()+","+h.getDocLength());
 			}
 		}
-		
+	//	System.out.println("done with hitlist");
 		return hitList;
 	}
 	

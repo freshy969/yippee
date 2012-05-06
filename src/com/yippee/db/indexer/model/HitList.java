@@ -115,6 +115,7 @@ public class HitList {
 				}
 			} else {
 				hitList.add(hit);
+				//System.out.println(hit.getDocLength());
 				normalizedLength.put(hit.getDocId(), new Float(hit.getDocLength()));
 				if(!tfMap.containsKey(hit.getDocId())){
 					tfMap.put(hit.getDocId(), new Float(1));
@@ -125,19 +126,22 @@ public class HitList {
 			}		
 		}
 		
-		Set<String> keys = tfMap.keySet();
+		Set<String> keys = normalizedLength.keySet();
 		Iterator iter = keys.iterator();
 		while(iter.hasNext()){
 			String doc = (String)iter.next();
 			float tf = tfMap.get(doc);
 			float tf_norm = normalizedLength.get(doc);
+		//	System.out.println(tf+", "+tf_norm);
 			tfMap.put(doc, tf/tf_norm);
+		//	System.out.println(tf/tf_norm);
 		}
 		
 		HashMap<String, Float> temp = new HashMap<String, Float>();
 		temp.putAll(atfMap);
 		temp.putAll(tfMap);
 		df = temp.keySet().size();
+	//	System.out.println(df);
 	}
 	
 
