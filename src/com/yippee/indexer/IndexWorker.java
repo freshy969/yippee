@@ -112,7 +112,7 @@ public class IndexWorker extends Thread {
 	 	    
 	    	// Send hits to ring 
 	    	nodeIndex.addAllHits(hitList);
-	    	nodeIndex.printIndex();
+//	    	nodeIndex.printIndex();
 	    	
 	    	// Write links to file for PageRank
 	    	appendLinks(docAug.getUrl(), fe.getLinks());
