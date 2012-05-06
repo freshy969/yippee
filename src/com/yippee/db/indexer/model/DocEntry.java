@@ -23,6 +23,7 @@ public class DocEntry implements Comparable<DocEntry> {
 		this.title = title;
 		this.host = host;
 		this.lastCrawled = lastCrawled;
+		this.pagerank = 1;
 	}
 	
 	public void update (String title, Date lastCrawled) {

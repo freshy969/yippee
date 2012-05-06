@@ -67,4 +67,25 @@ public class DocEntryManager {
 
         return docEntry;
     }
+    
+    public boolean updatePageRank(String url, float pagerank){
+    	
+    	try {
+        	dao = new DAL(myDbEnv.getIndexerStore());
+        	PrimaryIndex<String, DocEntry> docIndex = dao.getDocEntryByURL();
+        	
+        	DocEntry entry = docIndex.get(url);
+        	entry.setPagerank(pagerank);
+        	docIndex.put(entry);
+        	
+        } catch (DatabaseException e) {
+        	logger.warn("DatabaseException", e);
+        	return false;
+        } catch (IllegalArgumentException e){
+        	logger.warn("IllegalArgumentException", e);
+        	return false;
+        }
+    	
+    	return false;
+    }
 }
