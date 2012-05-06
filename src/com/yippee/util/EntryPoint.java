@@ -226,13 +226,13 @@ public class EntryPoint {
      *             instance 9001 130.91.140.235 9001 4444 DB/db1
      */
     public static void main(String[] args) {
-        // Pring arguments
-        p2(args);
         // No entry point -- just read database status
         if (args[args.length-1].equals("--status")) {
             DbStatusCheck check = new DbStatusCheck(args);
             return;
         }
+        // Pring arguments -- previous targets have no args
+        p2(args);
         // Create entry point to initialize services
         EntryPoint entryPoint = new EntryPoint();
         if (!entryPoint.configure(args)) return;
