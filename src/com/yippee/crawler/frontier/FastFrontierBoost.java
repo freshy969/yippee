@@ -1,8 +1,15 @@
 package com.yippee.crawler.frontier;
 
 import com.yippee.crawler.Message;
+import com.yippee.db.crawler.URLFrontierManager;
+import com.yippee.db.crawler.model.FrontierSavedState;
+
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -18,8 +25,8 @@ public class FastFrontierBoost implements URLFrontier {
     /**
      * The queue containing the current url-frontier
      */
-    private BlockingQueue<String> current = new ArrayBlockingQueue<String>(MAX_SIZE);
-    private BlockingQueue<String> seen = new ArrayBlockingQueue<String>(MAX_SIZE * 100);
+    protected BlockingQueue<String> current = new ArrayBlockingQueue<String>(MAX_SIZE);
+    protected BlockingQueue<String> seen = new ArrayBlockingQueue<String>(MAX_SIZE * 100);
 
     /**
      * Pulls the url from the shared queue.
@@ -56,12 +63,42 @@ public class FastFrontierBoost implements URLFrontier {
     }
 
     public boolean save() {
-        return false;
-    }
+		logger.debug("FastFrontierBoost storing state... ");
+		URLFrontierManager fm = new URLFrontierManager();
+		Map<Integer, Queue<String>> queues = new HashMap<Integer, Queue<String>>();
+		
+		queues.put(1, current);
+		queues.put(-1, seen);
+		
+		return fm.storeStateStrings(queues);
+	}
 
-    public boolean load() {
-        return false;
-    }
+	public boolean load() {
+		logger.debug("FastFrontierBoost loading state... ");
+		URLFrontierManager fm = new URLFrontierManager();
+
+		FrontierSavedState state = fm.loadState();
+		if(state != null){
+			Map<Integer, Set<String>> queues = state.getPrioritySets();
+			
+			for(Integer i : queues.keySet()){
+				if(i > 0){
+					for(String s : queues.get(i)){
+						current.add(s);
+					}
+					
+				} else {
+					for(String s : queues.get(i)){
+						seen.add(s);
+					}
+				}
+			}
+			return true;
+			
+		} else {
+			return false;
+		}
+	}
 
     public synchronized boolean isSeen(String url) {
         if (seen.contains(url)) {
