@@ -167,14 +167,14 @@ public class EntryPoint {
      * @return
      */
     private boolean seed(URLFrontier urlFrontier, String seed) {
-//        for ( int i = 0; i < 60; i++) {
-//            try {
-//                Thread.sleep(1000);
-//                logger.info("sleeping" + (60-i));
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        for ( int i = 0; i < 80; i++) {
+            try {
+                Thread.sleep(1000);
+                logger.info("sleeping" + (80-i));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         File seedFile = new File(seed);
         if (!seedFile.exists()) {
             return false;
