@@ -74,7 +74,17 @@ public class Spider implements Runnable {
 				HttpModule httpModule = new HttpModule(urlToCrawl);
 				logger.debug("Got content from url: " + urlToCrawl);
 				
-				String content = httpModule.getContent();
+				
+				//IllegalArgument 
+				String content = ""; 
+				try{
+					content = httpModule.getContent();
+					
+				} catch(IllegalArgumentException e) {
+					logger.error("IllegalArgumentException", e);
+					continue;
+				}
+				
 				if (!httpModule.isValid()) continue; // There was an error!
 
 				DocAug docAug = new DocAug();
