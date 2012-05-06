@@ -213,41 +213,57 @@ public class YippeePastryApp implements Application {
     	} else {
 	    	
 	    	putQueryResult(queryID, message);
-	    	
 	    	ArrayList<ResultMessage> results = getQueryResults(queryID);
 	    	
+	    	// If all the query words have been collected
 	    	if (results.size() == message.queryLength()) {
 	    	
 	    		String originalQuery = getQuery(queryID);
-	    		
 	    		logger.info("Completed query: " + originalQuery);
 	    		
-	    		// Send statistics to SearchEngine
-	    		SearchEngine se = new SearchEngine(results);
-	    		
-	    		se.init();
-	    		se.calculateTfidf();
-	    		
-	    		ArrayList<URL> docList = se.getMatchedUrls();
-	    		
-	    		tfMap.put(queryID, se.getTfMap());
-	    		
-	    		// Send DocEntry Query Messages
-	    		for (int i = 0; i < docList.size(); i++) {
-	    			URL url = docList.get(i);
-	    			logger.info(url);	
-	    	        Id destination = nodeFactory.getIdFromString(url.getHost());
-	    	        String content = url.toString();
-	    			
-	    			QueryMessage qm = new QueryMessage(node.getLocalNodeHandle(), content, queryID, docList.size(), true);
-	    			
-	    			logger.debug("Sending Query URL " + content + " DocEntry at " + url.getHost());
-	    			
-	    			sendDocMessage(destination, qm);
+	    		// Check if any results were found
+	    		boolean nullResults = false;
+	    		for (int i = 0; i < results.size(); i++) {
+	    			if (results.get(i).getHitList() != null)
+	    				break;
+	    			else if (i == results.size() - 1)
+	    				nullResults = true;
 	    		}
 	    		
+	    		if (nullResults) {
+	    			logger.info("No results found.");
+		    		sendResultToSocket(queryID, null);
+		    	} else {
+		    		
+		    		// Send statistics to SearchEngine
+		    		SearchEngine se = new SearchEngine(results);    		
+		    		se.init();
+		    		se.calculateTfidf();
+		    		
+		    		ArrayList<URL> docList = se.getMatchedUrls();
+		    		tfMap.put(queryID, se.getTfMap());
+		
+		    		// Send DocEntry Query Messages
+		    		if (docList.size() == 0) {
+		    			logger.info("No results found.");
+		    			sendResultToSocket(queryID, null);
+		    		} else {
+			    		for (int i = 0; i < docList.size(); i++) {
+			    			URL url = docList.get(i);
+//			    			logger.info(url);	
+			
+			    			Id destination = nodeFactory.getIdFromString(url.getHost());
+			    	        String content = url.toString();
+			    			
+			    			QueryMessage qm = new QueryMessage(node.getLocalNodeHandle(), content, queryID, docList.size(), true);
+			    			
+//			    			logger.debug("Sending Query URL " + content + " DocEntry at " + url.getHost());
+			    			
+			    			sendDocMessage(destination, qm);
+			    		}
+		    		}    		
+		    	}
 	    	}
-
     	}
     }
     
@@ -443,16 +459,20 @@ public class YippeePastryApp implements Application {
 
 			out.println("<query>" + StringEscapeUtils.escapeXml(queryMap.get(queryID)) + "</query>");
 			
-			for (int i = 0; i < deList.size(); i++) {
-				DocEntry de = deList.get(i);
-				if (de.getTitle() == null)
-					continue;
-				
-				out.println("<document>");
-				out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
-				out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
-				out.println("<description>" + de.getTfidf() + "</description>");
-				out.println("</document>");
+			if (deList == null) {
+				out.println("<document><description>No matching documents found!</description></document>");
+			} else {
+				for (int i = 0; i < deList.size(); i++) {
+					DocEntry de = deList.get(i);
+					if (de.getTitle() == null)
+						continue;
+					
+					out.println("<document>");
+					out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
+					out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
+					out.println("<description>" + de.getTfidf() + "</description>");
+					out.println("</document>");
+				}
 			}
 			
 			out.println("</documentcollection>");

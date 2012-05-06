@@ -4,13 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
 import com.yippee.indexer.Lexicon;
+import com.yippee.indexer.WordStemmer;
 import com.yippee.pastry.YippeePastryApp;
 import com.yippee.pastry.message.QueryMessage;
+import com.yippee.pastry.message.ResultMessage;
 import com.yippee.util.SocketQueue;
 
 import rice.p2p.commonapi.Id;
@@ -24,11 +27,15 @@ public class QueryDaemon implements Runnable  {
 	YippeePastryApp yippeeApp;
 	SocketQueue queue;
 	Lexicon lexicon;
+	private HashMap<String, byte[]> lexiconMap;
+	private WordStemmer stemmer;
 	
 	public QueryDaemon(YippeePastryApp yippeeApp, SocketQueue queue) {
 		this.yippeeApp = yippeeApp;
 		this.queue = queue;
-		lexicon = new Lexicon();
+		lexicon = new Lexicon("doc/lexicon.txt");
+		lexiconMap = lexicon.getLexiconMap();
+		stemmer = new WordStemmer();
 		logger.info("Awaiting queries: ...");
 	}
 	
@@ -58,13 +65,25 @@ public class QueryDaemon implements Runnable  {
 				
 				String[] wordArray = keywords.split("\\s+");
 
+				wordArray = stemmer.stemList(wordArray);
+				
 				// Split query into keywords and send out to ring
 				for (int i = 0; i < wordArray.length; i++) {
-					// Send query to the ring
-					QueryMessage qm = new QueryMessage(yippeeApp.getNode().getLocalNodeHandle(), wordArray[i], queryID, wordArray.length);
-					
-					Id nodeID = yippeeApp.getNodeFactory().getIdFromString(wordArray[i]);			
-					yippeeApp.sendQuery(nodeID, qm);	
+				
+					if (lexiconMap.containsKey(wordArray[i])) {
+						// Send query to the ring
+						QueryMessage qm = new QueryMessage(yippeeApp.getNode().getLocalNodeHandle(), wordArray[i], queryID, wordArray.length);
+						
+						Id nodeID = yippeeApp.getNodeFactory().getIdFromString(wordArray[i]);			
+						yippeeApp.sendQuery(nodeID, qm);	
+					} else {
+						ResultMessage rm = new ResultMessage(yippeeApp.getNode().getLocalNodeHandle(), null, wordArray[i], queryID, wordArray.length);
+						
+						Id nodeID = yippeeApp.getNode().getLocalNodeHandle().getId();			
+						
+						yippeeApp.sendResult(nodeID, rm);
+					}
+						
 				}
 				
 			} catch (InterruptedException e) {
