@@ -249,7 +249,7 @@
             <param name="localPort" value="10001"/>
             <param name="bootPort" value="10001"/>
             <param name="database" value="db/test"/>
-            <param name="service" value="-I"/>
+            <param name="service" value="-PI"/>
             <param name="lastArg" value="--overwrite"/>
         </antcall>
     </target>
