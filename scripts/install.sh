@@ -25,7 +25,7 @@ function usage {
   e
   e '  <uname>: your username at Penn'
 }
-if [[ $1 != 'nvas' -a $1 != 'tdu2' -a $1 != 'mmiran' -a $1 != 'imbriano']]; then
+if [[ "$1" != 'nvas' -a "$1" != 'tdu2' -a "$1" != 'mmiran' -a "$1" != 'imbriano']]; then
   usage;
   exit;
 fi
