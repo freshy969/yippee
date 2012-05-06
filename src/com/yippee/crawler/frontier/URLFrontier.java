@@ -42,4 +42,6 @@ public interface URLFrontier {
      * @return tre if loading completed successfully, false o/w
      */
     public boolean load();
+
+    public boolean isSeen(String url);
 }

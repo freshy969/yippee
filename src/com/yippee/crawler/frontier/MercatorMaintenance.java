@@ -8,7 +8,6 @@ public class MercatorMaintenance implements Runnable {
 		this.mer = mer;
 	}
 
-	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		
