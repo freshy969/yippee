@@ -227,20 +227,17 @@ public class EntryPoint {
         EntryPoint entryPoint = new EntryPoint();
         // Start Pastry
         if (args[5].contains("P")) {
-            // Pastry
             Configuration.getInstance().appendService("P");
             if (!entryPoint.configure(args)) return;
             entryPoint.setUpSubstrate();
         }
-
-        // Start indexer
+        // Start crawler independently
         if (args[5].contains("C")) {
             System.out.println("Starting crawler");
             Configuration.getInstance().appendService("C");
-            // Crawler
             if (!entryPoint.setupCrawler(args)) return;
         }
-        // Start indexer, and if crawler is not started, launch pastry
+        // Start indexer independently
         if (args[5].contains("I")) {
             System.out.println("Starting indexer");
             Configuration.getInstance().appendService("I");
