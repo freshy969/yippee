@@ -1,6 +1,7 @@
 package com.yippee.db.status;
 
 
+import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.PrimaryIndex;
 import com.yippee.db.crawler.CrawlerDBEnv;
@@ -70,12 +71,20 @@ public class DbStatusCheck {
 	private static void printIndexerInfo(){
 		System.out.println("===== Indexer Info =====");
 
-		IndexerDBEnv indexerEnv = IndexerDBEnv.getInstance(true);
-		DAL dao = new DAL(indexerEnv.getIndexerStore());
+		try{
+			
+			IndexerDBEnv indexerEnv = IndexerDBEnv.getInstance(true);
+			DAL dao = new DAL(indexerEnv.getIndexerStore());
+			
+			//Check Number of DocArchives
+			PrimaryIndex<String, DocAug> docArchives = dao.getDocArcByURL();
+			System.out.println("Doc Archive Count: " + docArchives.count());
+			
+		} catch(DatabaseException e){
+			
+			System.out.println("Database Exception");
+		}
 		
-		//Check Number of DocArchives
-		PrimaryIndex<String, DocAug> docArchives = dao.getDocArcByURL();
-		System.out.println("Doc Archive Count: " + docArchives.count());
 
 		System.out.println("\n");
 	}
