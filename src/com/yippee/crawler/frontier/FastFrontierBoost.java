@@ -64,7 +64,7 @@ public class FastFrontierBoost implements URLFrontier {
 
         int queueSize = current.size();
         if ((queueSize > 1000) && (queueSize < MAX_SIZE - 1)) {
-            logger.info(queueSize);
+            //logger.info(queueSize);
         } else if (queueSize == MAX_SIZE - 1) {
             logger.info("QUEUE IS FULL: Discarding url:" + url);
             return;
@@ -75,9 +75,9 @@ public class FastFrontierBoost implements URLFrontier {
 
         if (--saveState == 0) {
             if (!save()) {
-                logger.error("There was an error saving state!");
+                logger.error("[SAVE] There was an error saving state!");
             } else {
-                logger.warn("Saved Frontier");
+                logger.warn("[SAVE] Frontier saved");
             }
             saveState = SAVE_FREQ;
         }
