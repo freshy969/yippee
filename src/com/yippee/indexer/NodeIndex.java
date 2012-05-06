@@ -19,7 +19,7 @@ public class NodeIndex {
     static Logger logger = Logger.getLogger(NodeIndex.class);
     
 	volatile HashMap<String, ArrayList<Hit>> wordIndex;
-	private int capacity = 5;
+	private int capacity = 2;
 	private Lexicon lexicon;
 	private HashMap<String, byte[]> lexiconMap;
 	private HashMap<String,String> stopWords;
@@ -87,9 +87,10 @@ public class NodeIndex {
 				wordIndex.put(word, list);
 			}
 		}
-		if(docCount%5==0){
+		if(docCount%10==0){
 			sendGoodWordsToRing();
 			logger.info("WE'VE INDEXED "+docCount+" DOCS IN "+(System.currentTimeMillis()-startTime)+"ms");
+			//System.out.println("WE'VE INDEXED "+docCount+" DOCS IN "+(System.currentTimeMillis()-startTime)+"ms");
 		}
 	//	if (wordIndex.size() > capacity) {
 			//logger.info("REACHED CAPACITY, SENDING TO RING");
@@ -123,7 +124,6 @@ public class NodeIndex {
 		while(iter.hasNext()) {
 			String word = iter.next();
 			ArrayList<Hit> list = wordIndex.get(word);
-			//System.out.println(word+", "+list.size());
 			if(list.size()>capacity){
 				Configuration.getInstance().getPastryEngine().sendList(word,list);
 				logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
@@ -131,13 +131,14 @@ public class NodeIndex {
 			}
 		}
 	//	System.out.println("SENT OUT "+deleteKeys.size()+" out of "+wordIndex.size());
-		for(int i=0; i<deleteKeys.size();i++){
+	/*	for(int i=0; i<deleteKeys.size();i++){
 			String k = deleteKeys.get(i);
 			wordIndex.remove(k);
-
+		}*/
+		wordIndex = new HashMap<String, ArrayList<Hit>>();
 		//	Configuration.getInstance().getPastryEngine().sendList(word,list);
 
-		}
+		
 			
 	}
 	

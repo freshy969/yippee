@@ -80,6 +80,9 @@ public class IndexWorker extends Thread {
 				}
 				if (pollDelay <= 60000)
 					pollDelay *= 2;
+		    	if(!nodeIndex.isArchiveMode() && archiveHolder.size()>0) 
+	    			addToArchive();
+		    	
 			}
 		//	System.out.println("Retrieved: " + docAug.getId());
 			logger.info("Retrieved: " + docAug.getId());
@@ -116,9 +119,10 @@ public class IndexWorker extends Thread {
 	    	dem.addDocEntry(docEntry);
 	    	if(!nodeIndex.isArchiveMode()) {
 	    		archiveHolder.add(docAug);
-	    		if(archiveHolder.size()>100)
+	    		if(archiveHolder.size()>20)
 	    			addToArchive();
 	    	}
+	    	
 	    		//darcm.store(docAug);
 	    }		
 	}	
