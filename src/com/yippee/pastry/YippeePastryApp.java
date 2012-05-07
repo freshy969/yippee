@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import com.yippee.crawler.frontier.URLFrontier;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -67,6 +68,8 @@ public class YippeePastryApp implements Application {
     private static HashMap<UUID, ArrayList<ResultMessage>> queryResultMap;
     private static HashMap<UUID, ArrayList<ResultMessage>> docResultMap;
     private static HashMap<UUID, HashMap<String, Float>> tfMap;
+    private long start_time;
+    private long end_time;
     
     /**
      * Constructor
@@ -456,10 +459,16 @@ public class YippeePastryApp implements Application {
 			
 			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 			out.println("<?xml-stylesheet type=\"text/xsl\" href=\"yippee.xsl\"?>");
+
+			float time_elapsed = (float) (start_time - new Date().getTime()) / 1000;
 			
 			out.println("<documentcollection>");
 
 			out.println("<query>" + StringEscapeUtils.escapeXml(queryMap.get(queryID)) + "</query>");
+			
+			out.println("<size>" + deList.size() + "</size>");
+			
+			out.println("<time>" + time_elapsed + "</time>");
 			
 			if (deList == null) {
 				out.println("<document><description>No matching documents found!</description></document>");
@@ -472,7 +481,7 @@ public class YippeePastryApp implements Application {
 					out.println("<document>");
 					out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
 					out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
-					out.println("<description>" + de.getTfidf() + StringEscapeUtils.escapeXml(de.getBlurb()) + "</description>");
+					out.println("<description>" + de.getTfidf() + "</description>");
 					out.println("</document>");
 				}
 			}
@@ -486,5 +495,9 @@ public class YippeePastryApp implements Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    public void setStartTime() {
+    	start_time = new Date().getTime();
     }
 }
