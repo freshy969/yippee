@@ -75,8 +75,12 @@ public class DocEntryManager {
         	PrimaryIndex<String, DocEntry> docIndex = dao.getDocEntryByURL();
         	
         	DocEntry entry = docIndex.get(url);
-        	entry.setPagerank(pagerank);
-        	docIndex.put(entry);
+        	if(entry != null) {
+        		entry.setPagerank(pagerank);
+        		docIndex.put(entry);
+        	}
+        	
+        	
         	
         } catch (DatabaseException e) {
         	logger.warn("DatabaseException", e);
