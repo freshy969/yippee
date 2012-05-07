@@ -146,7 +146,6 @@ public class DocAugManager {
     public Iterator<String> getKeys() {
         EntityCursor<String> cursor = dao.getDocById().keys();
         Iterator<String> iter = cursor.iterator();
-        cursor.close();
     	return iter;
     }
     
