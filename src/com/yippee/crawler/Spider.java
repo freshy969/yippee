@@ -66,7 +66,7 @@ public class Spider implements Runnable {
 				Message msg = urlFrontier.pull();
 				URL urlToCrawl = (msg != null) ? msg.getURL() : null;
 				
-				if(urlToCrawl == null){
+				if(urlToCrawl == null || dam.read(urlToCrawl.toString()) != null ){
 					Thread.sleep(10000);
 					continue;
 				}
