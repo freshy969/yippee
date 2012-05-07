@@ -242,9 +242,22 @@
             <param name="lastArg" value="--overwrite"/>
         </antcall>
     </target>
+	
+	<target name="project-prod-indexer" depends="project-clean,sanity-check"
+	            description="Create single-noded crawler">
+	        <antcall target="run">
+	            <param name="localPort" value="${lport}"/>
+	            <param name="bootPort" value="${bport}"/>
+	            <param name="database" value="db/prod"/>
+	            <param name="service" value="-PI"/>
+	            <param name="lastArg" value="--overwrite"/>
+	        </antcall>
+	    </target>
+	
+	
 
     <target name="project-test-indexer" depends="project-clean,sanity-check"
-            description="Create single-noded crawler">
+            description="Create single-noded indexer">
         <antcall target="run">
             <param name="localPort" value="10001"/>
             <param name="bootPort" value="10001"/>
