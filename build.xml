@@ -297,6 +297,7 @@
             <param name="localPort" value="${lport}"/>
             <param name="bootPort" value="${bport}"/>
             <param name="database" value="db/test"/>
+            <param name="service" value="-P"/>
             <param name="lastArg" value="--overwrite"/>
             </antcall>
         </parallel>
