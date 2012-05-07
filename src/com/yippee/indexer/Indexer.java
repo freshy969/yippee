@@ -32,6 +32,7 @@ public class Indexer extends Thread {
 	static Iterator<String> cursor;
 	static DocAugManager dam;
 	static Vector<DocAug> queue;
+	BarrelManager bm;
 	
 	public Indexer() {
 //		Configuration.getInstance().setBerkeleyDBRoot("db/prod");
@@ -41,6 +42,9 @@ public class Indexer extends Thread {
 		
 		nodeIndex = new NodeIndex();
 		queue = new Vector<DocAug>();
+		
+		bm = new BarrelManager();
+		bm.invalidate();
 		
 //		nodeIndex.setArchiveMode(true);
 		//wordIndex = new WordIndex();
@@ -87,8 +91,6 @@ public class Indexer extends Thread {
 	
 	public void run() {
 		dam = new DocAugManager();
-		BarrelManager bm = new BarrelManager();
-		bm.invalidate();
 		long stop = dam.getSize();
 		System.out.println("Barrels size: " + bm.getBarrelSize());
 		System.out.println("Total docs: " + dam.getSize());
