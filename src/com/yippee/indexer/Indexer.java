@@ -89,12 +89,13 @@ public class Indexer extends Thread {
 		dam = new DocAugManager();
 		BarrelManager bm = new BarrelManager();
 		bm.invalidate();
+		long stop = dam.getSize();
 		System.out.println("Barrels size: " + bm.getBarrelSize());
 		System.out.println("Total docs: " + dam.getSize());
 		
 		cursor = dam.getKeys();
 				
-		while(true) {
+		while(count < stop) {
 			fillQueue();
 			try {
 				this.sleep(60000);
@@ -104,5 +105,11 @@ public class Indexer extends Thread {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("Successfully Indexed!");
+		System.out.println("---------------------");
+		System.out.println("Barrels size: " + bm.getBarrelSize());
+		System.out.println("Total docs:   " + count);
+		System.out.println("---------------------");
 	}
 }
