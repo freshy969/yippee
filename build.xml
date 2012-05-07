@@ -76,6 +76,7 @@
     <property name="main-class" value="com.yippee.util.EntryPoint"/>
     <property name="hadoop-class" value="com.yippee.pagerank.PageRank"/>
     <property name="hadoop-example" value="com.yippee.pagerank.WordCount"/>
+	<property name="pagerank-update" value="com.yippee.pagerank.UpdatePageRanks" />
 
     <!-- We are going to make this modular -->
     <property name="server" value="tomcat"/>
@@ -166,6 +167,17 @@
             </manifest>
         </jar>
     </target>
+	
+	<target name="pagerank-update" depends="compile, pastry-revert">	
+		 <java fork="true" classname="${pagerank-update}">
+		            <classpath>
+		                <path refid="classpath"/>
+		                <path refid="application"/>
+		            </classpath>
+		 	
+		 	<arg value="${filename}"/>
+		        </java>
+	</target>
 
     <condition property="isWindows">
         <os family="windows"/>
@@ -365,6 +377,8 @@
             </antcall>
         </parallel>
     </target>
+	
+	
 
     <!-- Run Tests -->
 
