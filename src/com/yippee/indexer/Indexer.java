@@ -23,7 +23,7 @@ public class Indexer extends Thread {
     
 	NodeIndex nodeIndex;
 	//WordIndex wordIndex;
-	final int NO_THREADS = 20;
+	final int NO_THREADS = 5;
 	static int count = 0;
 	static long time = 0;
 	Lexicon lexicon;
@@ -66,12 +66,14 @@ public class Indexer extends Thread {
 			System.out.println("Time (m): " + (float)time/60000);
 			System.out.println("Indexed count: " + count);
 //			System.out.println("Rate: " + ((double) count / time ) + "docs/min");
-			for (int i = 0; i < 1000; i++) {
+			int tmp = 0;
+			while(cursor.hasNext() && tmp < 1000) {
 				String next = cursor.next();
 //				System.out.println(next);
 				queue.add(dam.read(next));
+				tmp++;
 			}
-			count += 1000;
+			count += tmp;
 		}
 		
 	}
