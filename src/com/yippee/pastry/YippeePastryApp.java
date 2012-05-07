@@ -451,7 +451,7 @@ public class YippeePastryApp implements Application {
     
     public void sendResultToSocket(UUID queryID, ArrayList<DocEntry> deList) {
 
-    	DecimalFormat df = new DecimalFormat("#.##");
+    	DecimalFormat df = new DecimalFormat("#.###");
     	
 		Socket client = getSocket(queryID);
 		
@@ -463,7 +463,7 @@ public class YippeePastryApp implements Application {
 			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 			out.println("<?xml-stylesheet type=\"text/xsl\" href=\"yippee.xsl\"?>");
 
-			float time_elapsed = (float) (start_time - new Date().getTime()) / 1000;
+			float time_elapsed = (float) (new Date().getTime() - start_time) / 1000;
 			
 			out.println("<documentcollection>");
 
