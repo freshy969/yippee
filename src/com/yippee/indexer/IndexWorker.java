@@ -2,7 +2,6 @@ package com.yippee.indexer;
 
 import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
-import com.yippee.db.indexer.DocArchiveManager;
 import com.yippee.db.indexer.DocEntryManager;
 import com.yippee.db.indexer.model.DocEntry;
 import com.yippee.db.indexer.model.Hit;
@@ -65,7 +64,7 @@ public class IndexWorker extends Thread {
 			
 			DocAug docAug = null; 
 			
-			while(docAug == null || docAug.getUrl().length() > 200) {
+			while(docAug == null || docAug.getUrl().length() > 200 || docAug.getUrl().contains("#")) {
 				try {
 //					System.out.println("Waiting... " + pollDelay + "ms");
 					Thread.sleep(pollDelay);

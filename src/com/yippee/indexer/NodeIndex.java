@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.yippee.db.crawler.model.DocAug;
-import com.yippee.db.indexer.DocArchiveManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
 

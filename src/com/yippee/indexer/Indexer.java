@@ -12,7 +12,6 @@ import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.crawler.DocAugManager;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.indexer.BarrelManager;
-import com.yippee.db.indexer.DocArchiveManager;
 import com.yippee.search.QueryDaemon;
 import com.yippee.util.Configuration;
 
