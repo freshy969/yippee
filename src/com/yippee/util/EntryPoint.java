@@ -251,8 +251,20 @@ public class EntryPoint {
         if (args[5].contains("I")) {
             System.out.println("Starting indexer");
             Configuration.getInstance().appendService("I");
+            
             Indexer ih = new Indexer();
             ih.makeThreads();
+            
+          //Sleep to allow other nodes to come up before starting the Indexer thread
+            for ( int i = 0; i < 80; i++) {
+                try {
+                    Thread.sleep(1000);
+                    System.out.println("Sleeping.." + (80-i));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            
             ih.start();
         }
     }
