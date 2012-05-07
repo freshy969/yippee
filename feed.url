@@ -1,39 +1,44 @@
 ## This file contains the feed urls. Comments should start with a #
 ##
 ## .org
-http://www.dmoz.org
+#http://www.dmoz.org
+http://www.fremont.gov/
+http://www.nydailynews.com/entertainment/music-arts/justin-bieber-boyfriend-music-video-love-interest-beliebers-worry-married-article-1.1073410?localLinksEnabled=false
+http://disney.go.com/index
+http://www.reuters.com/
+https://www.google.com/search?client=ubuntu&channel=fs&q=justin+beiber&ie=utf-8&oe=utf-8#q=justin+bieber&hl=en&client=ubuntu&hs=NsO&pwst=1&channel=fs&prmd=imvnsuoa&source=univ&tbm=nws&tbo=u&sa=X&ei=zMmnT7anGZCI6AH2h5SbBA&ved=0CEQQqAIoADAA&bav=on.2,or.r_gc.r_pw.r_cp.r_qf.,cf.osb&fp=dae292abea995341&biw=1032&bih=542
 ##
 ##
 ##
 ##.edu
-http://www.upenn.edu
+#http://www.upenn.edu
 #http://www.stanford.edu
-http://mit.edu
+#http://mit.edu
 #http://www.harvard.edu
-http://berkeley.edu
+#http://berkeley.edu
 #http://www.princeton.edu/main
 ##
 ## .com
 ##
 ##http://dir.yahoo.com
-http://www.cnn.com
+#http://www.cnn.com
 #http://www.bbc.com
 #http://www.yahoo.com
 #http://www.reddit.com
 #http://www.espn.com
 #http://www.aol.com
-http://www.stackoverflow.com
+#http://www.stackoverflow.com
 #http://www.huffingtonpost.com
 #http://www.cnet.com
-http://www.nytimes.com
+#http://www.nytimes.com
 #http://www.weather.com
 #http://www.dailymail.co.uk
 #http://www.ehow.com
 #http://www.digg.com
 #http://www.wordpress.com
 #http://www.answers.com
-http://www.foxnews.com
-http://perezhilton.com
+#http://www.foxnews.com
+#http://perezhilton.com
 #http://www.tumblr.com
 #http://www.guardiannews.com
 #http://www.yelp.com
@@ -47,7 +52,7 @@ http://perezhilton.com
 ##
 ## .gov
 ##
-http://www.whitehouse.gov
+#http://www.whitehouse.gov
 ##
 ## .it
 ##
