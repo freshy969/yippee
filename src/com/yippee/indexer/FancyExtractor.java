@@ -32,6 +32,7 @@ public class FancyExtractor {
 	int pos = 0;
 	HashMap<String, ArrayList<Hit>> hitList;
 	ArrayList<Hit> anchorList; 
+	ArrayList<String> blurbs;
 	
 	public FancyExtractor(String docId) {
 		links = new ArrayList<String>();
@@ -45,6 +46,7 @@ public class FancyExtractor {
 		hitList = new HashMap<String, ArrayList<Hit>>();
 		anchorList = new ArrayList<Hit>();
 		this.docId = docId;
+		blurbs = new ArrayList<String>();
 	}
 	
 	/**
@@ -95,12 +97,13 @@ public class FancyExtractor {
 				title = true;
 			} else if (child.getNodeType() == Node.TEXT_NODE) {
 				// Text
-				
+			
 				String sentence = child.getNodeValue();
-				
+					
 				if (title){
 					docTitle = sentence;
-				}
+				} else if (blurbs.size() < 4)
+					blurbs.add(sentence);
 				
 				sentence = removePunctuation(sentence).toLowerCase();
 				
@@ -257,5 +260,15 @@ public class FancyExtractor {
 		URL url = new URL(baseURL);
 		int port = url.getPort();
 		return url.getProtocol() + "://" + url.getHost() + ((port == 80 || port == -1) ? "" : ":" + url.getPort()) + relativeURL;
+	}
+	
+	public String getBlurbs() {
+		String tmp = "";
+		
+		for (int i = 0; i < blurbs.size(); i++) {
+			tmp += blurbs.get(i);
+		}
+		
+		return tmp;
 	}
 }

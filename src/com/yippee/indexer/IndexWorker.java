@@ -121,7 +121,9 @@ public class IndexWorker extends Thread {
 	    	
 	    	String docTitle = fe.getTitle();
 	    	
-	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null , docAug.getTime());
+	    	String blurbs = fe.getBlurbs();
+	    	
+	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null, docAug.getTime(), blurbs);
 	    	dem.addDocEntry(docEntry);
 //	    	if(!nodeIndex.isArchiveMode()) {
 //	    		archiveHolder.add(docAug);

@@ -472,7 +472,7 @@ public class YippeePastryApp implements Application {
 					out.println("<document>");
 					out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
 					out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
-					out.println("<description>" + de.getTfidf() + "</description>");
+					out.println("<description>" + de.getTfidf() + de.getBlurb() + "</description>");
 					out.println("</document>");
 				}
 			}
