@@ -34,8 +34,8 @@ public class IndexWorker extends Thread {
      * This is the logger which appends for the page rank
      */
     static Logger linkLogger = Logger.getLogger(IndexWorker.class.getName() + ".hadoop");
-	DocAugManager dam;
-	DocArchiveManager darcm;
+//	DocAugManager dam;
+//	DocArchiveManager darcm;
 	DocEntryManager dem;
 	long pollDelay;
 	NodeIndex nodeIndex;
@@ -50,8 +50,8 @@ public class IndexWorker extends Thread {
 			e.printStackTrace();
 		}
         linkLogger.warn("Start writing .hadoop file (csv?)");
-		dam = new DocAugManager();
-		darcm = new DocArchiveManager();
+//		dam = new DocAugManager();
+//		darcm = new DocArchiveManager();
 		dem = new DocEntryManager();
 		this.nodeIndex = nodeIndex;
 		archiveHolder = new ArrayList<DocAug>();
@@ -65,7 +65,7 @@ public class IndexWorker extends Thread {
 			
 			DocAug docAug = null; 
 			
-			while(docAug == null) {
+			while(docAug == null || docAug.getUrl().length() > 200) {
 				try {
 //					System.out.println("Waiting... " + pollDelay + "ms");
 					Thread.sleep(pollDelay);
@@ -73,15 +73,19 @@ public class IndexWorker extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(!nodeIndex.isArchiveMode()){
-					docAug = dam.poll();
-				} else {
-					docAug = nodeIndex.poll();
-				}
+				
+//				if(!nodeIndex.isArchiveMode()){
+//					docAug = dam.poll();
+//				} else {
+//					docAug = nodeIndex.poll();
+//				}
+				
+				docAug = Indexer.poll();
+				
 				if (pollDelay <= 60000)
 					pollDelay *= 2;
-		    	if(!nodeIndex.isArchiveMode() && archiveHolder.size()>0) 
-	    			addToArchive();
+//		    	if(!nodeIndex.isArchiveMode() && archiveHolder.size()>0) 
+//	    			addToArchive();
 		    	
 			}
 		//	System.out.println("Retrieved: " + docAug.getId());
@@ -121,11 +125,11 @@ public class IndexWorker extends Thread {
 	    	
 	    	DocEntry docEntry = new DocEntry(docAug.getUrl(),docTitle, null , docAug.getTime());
 	    	dem.addDocEntry(docEntry);
-	    	if(!nodeIndex.isArchiveMode()) {
-	    		archiveHolder.add(docAug);
-	    		if(archiveHolder.size()>20)
-	    			addToArchive();
-	    	}
+//	    	if(!nodeIndex.isArchiveMode()) {
+//	    		archiveHolder.add(docAug);
+//	    		if(archiveHolder.size()>20)
+//	    			addToArchive();
+//	    	}
 	    	
 	    		//darcm.store(docAug);
 	    }		
@@ -158,12 +162,12 @@ public class IndexWorker extends Thread {
 		return hitList;
 	}
 	
-	public void addToArchive(){
-		for(int i=0; i<archiveHolder.size(); i++){
-			darcm.store(archiveHolder.get(i));
-		}
-		archiveHolder = new ArrayList<DocAug>();
-	}
+//	public void addToArchive(){
+//		for(int i=0; i<archiveHolder.size(); i++){
+//			darcm.store(archiveHolder.get(i));
+//		}
+//		archiveHolder = new ArrayList<DocAug>();
+//	}
 
 	public void appendLinks(String url, ArrayList<String> links) {
         int numLinks = links.size();
