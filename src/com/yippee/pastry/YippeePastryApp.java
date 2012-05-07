@@ -168,6 +168,8 @@ public class YippeePastryApp implements Application {
         	else
         		logger.info("Found Hits: \"" + query + "\"=" + list.getHitList().size());
         	
+        	list.setHitList(null);
+        	
         	ResultMessage rm = new ResultMessage(node.getLocalNodeHandle(), list, query, message.getQueryID(), message.queryLength());
         	sendResult(message.getNodeHandle().getId(), rm);
     	}
