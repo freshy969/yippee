@@ -168,6 +168,8 @@ public class YippeePastryApp implements Application {
         	else
         		logger.info("Found Hits: \"" + query + "\"=" + list.getHitList().size());
         	
+        	list.setHitList(null);
+        	
         	ResultMessage rm = new ResultMessage(node.getLocalNodeHandle(), list, query, message.getQueryID(), message.queryLength());
         	sendResult(message.getNodeHandle().getId(), rm);
     	}
@@ -470,7 +472,7 @@ public class YippeePastryApp implements Application {
 					out.println("<document>");
 					out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
 					out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
-					out.println("<description>" + de.getTfidf() + "</description>");
+					out.println("<description>" + de.getTfidf() + de.getBlurb() + "</description>");
 					out.println("</document>");
 				}
 			}

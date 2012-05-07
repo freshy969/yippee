@@ -23,7 +23,7 @@ public class Indexer extends Thread {
     
 	NodeIndex nodeIndex;
 	//WordIndex wordIndex;
-	final int NO_THREADS = 5;
+	final int NO_THREADS = 3;
 	static int count = 0;
 	static long time = 0;
 	Lexicon lexicon;
@@ -32,6 +32,7 @@ public class Indexer extends Thread {
 	static Iterator<String> cursor;
 	static DocAugManager dam;
 	static Vector<DocAug> queue;
+	BarrelManager bm;
 	
 	public Indexer() {
 //		Configuration.getInstance().setBerkeleyDBRoot("db/prod");
@@ -41,6 +42,9 @@ public class Indexer extends Thread {
 		
 		nodeIndex = new NodeIndex();
 		queue = new Vector<DocAug>();
+		
+		bm = new BarrelManager();
+		bm.invalidate();
 		
 //		nodeIndex.setArchiveMode(true);
 		//wordIndex = new WordIndex();
@@ -87,14 +91,13 @@ public class Indexer extends Thread {
 	
 	public void run() {
 		dam = new DocAugManager();
-		BarrelManager bm = new BarrelManager();
-		bm.invalidate();
+		long stop = dam.getSize();
 		System.out.println("Barrels size: " + bm.getBarrelSize());
 		System.out.println("Total docs: " + dam.getSize());
 		
 		cursor = dam.getKeys();
 				
-		while(true) {
+		while(count < stop) {
 			fillQueue();
 			try {
 				this.sleep(60000);
@@ -104,5 +107,11 @@ public class Indexer extends Thread {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("Successfully Indexed!");
+		System.out.println("---------------------");
+		System.out.println("Barrels size: " + bm.getBarrelSize());
+		System.out.println("Total docs:   " + count);
+		System.out.println("---------------------");
 	}
 }
