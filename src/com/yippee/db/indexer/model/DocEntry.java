@@ -11,7 +11,7 @@ public class DocEntry implements Comparable<DocEntry> {
 	@PrimaryKey
 	private String URL;
 
-	private String title, host;
+	private String title, host, blurb;
 	private Date lastCrawled;
 	private float pagerank;
 	private float tfidf;
@@ -24,7 +24,7 @@ public class DocEntry implements Comparable<DocEntry> {
 		this.host = host;
 		this.lastCrawled = lastCrawled;
 		this.pagerank = 1;
-//		this.blurb = blurb;
+		this.blurb = blurb;
 	}
 	
 	public void update (String title, Date lastCrawled) {
@@ -91,13 +91,13 @@ public class DocEntry implements Comparable<DocEntry> {
 		else return 1;
 	}
 
-//	public void setBlurb(String blurb) {
-//		this.blurb = blurb;
-//	}
-//
-//	public String getBlurb() {
-//		return blurb;
-//	}
-//	
+	public void setBlurb(String blurb) {
+		this.blurb = blurb;
+	}
+
+	public String getBlurb() {
+		return blurb;
+	}
+	
 	
 }
