@@ -43,7 +43,7 @@ public class EntryPoint {
      * TODO: THESE NEED TO BE GIVEN DYNAMICALLY -- this is where caution message applies to.
      */
     //10 - 1109, 50 - 1291
-    final int NO_OF_THREADS = 50;
+    final int NO_OF_THREADS = 10;
     final int SIZE_OF_ROBOTS_CACHE = 512;
     
     /**
@@ -128,7 +128,7 @@ public class EntryPoint {
         }
         Configuration.getInstance().setRobotsCacheSize(SIZE_OF_ROBOTS_CACHE);
         Configuration.getInstance().setCrawlerThreadNumber(NO_OF_THREADS);
-        URLFrontier urlFrontier = FrontierFactory.get(FrontierType.BOOST);
+        URLFrontier urlFrontier = FrontierFactory.get(FrontierType.POLITE_SIMPLE);
         if (Configuration.getInstance().getService().contains("P")) {
             Configuration.getInstance().getPastryEngine().setupURLFrontier(urlFrontier);
         }
@@ -167,10 +167,10 @@ public class EntryPoint {
      * @return
      */
     private boolean seed(URLFrontier urlFrontier, String seed) {
-        for ( int i = 0; i < 80; i++) {
+        for ( int i = 0; i < 20; i++) {
             try {
                 Thread.sleep(1000);
-                System.out.println("Sleeping.." + (80-i));
+                System.out.println("Sleeping.." + (20-i));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -256,10 +256,10 @@ public class EntryPoint {
             ih.makeThreads();
             
           //Sleep to allow other nodes to come up before starting the Indexer thread
-            for ( int i = 0; i < 80; i++) {
+            for ( int i = 0; i < 20; i++) {
                 try {
                     Thread.sleep(1000);
-                    System.out.println("Sleeping.." + (80-i));
+                    System.out.println("Sleeping.." + (20-i));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

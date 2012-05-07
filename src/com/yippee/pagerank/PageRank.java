@@ -60,7 +60,7 @@ public class PageRank {
 		public void reduce(Text targetPage, Iterable<Text> values, Context context ) throws IOException, InterruptedException {
 
 			int outgoingLinkCount = 0;
-			Double pagerank = new Double(0);
+			Double pagerank = new Double(1);
 			List<String> outgoingLinks = new LinkedList<String>();
 			DecimalFormat df = new DecimalFormat("#.######");
 

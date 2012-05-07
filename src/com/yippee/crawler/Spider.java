@@ -70,6 +70,13 @@ public class Spider implements Runnable {
 					Thread.sleep(10000);
 					continue;
 				}
+				
+				//Hack to skip urls that have a #
+				// because http://www.upenn.edu#content is the same as http://www.upenn.edu#content
+				if(urlToCrawl.toString().contains("#")){ 
+					continue;
+				}
+				
 				logger.debug("Pulled url: " + urlToCrawl);
 				
 				HttpModule httpModule = new HttpModule(urlToCrawl);
@@ -95,7 +102,11 @@ public class Spider implements Runnable {
 				docAug.setId(urlToCrawl.toString());
 
 				logger.info("Try to save DocAug for " + urlToCrawl.toString());
+				
 				dam.push(docAug);
+				System.out.println("Pushed: " + urlToCrawl.toString());
+				
+				
 				LinkTextExtractor linkEx = new LinkTextExtractor();
 				ArrayList<String> links;
 				try {
@@ -134,7 +145,8 @@ public class Spider implements Runnable {
 							//Configuration.getInstance().getPastryEngine().sendURL(url);
                             Message newMessage = new Message(url.toString());
                             if (newMessage.getType() == Message.Type.NEW) {
-                                urlFrontier.push(newMessage);
+                                //urlFrontier.push(newMessage);
+                                Configuration.getInstance().getPastryEngine().sendURL(url);
                             }
 						} else {
                             logger.info("Robots returned false or duplicate exists");
