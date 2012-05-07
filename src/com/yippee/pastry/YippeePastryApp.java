@@ -166,9 +166,9 @@ public class YippeePastryApp implements Application {
         	if (list == null) 
         	   	logger.info("No Hits: \"" + query + "\"");
         	else
-        		logger.info("Found Hits: \"" + query + "\"=" + list.getHitList().size());
+        		logger.info("Found Hits: \"" + query + "\"");
         	
-        	list.setHitList(null);
+//        	list.setHitList(null);
         	
         	ResultMessage rm = new ResultMessage(node.getLocalNodeHandle(), list, query, message.getQueryID(), message.queryLength());
         	sendResult(message.getNodeHandle().getId(), rm);

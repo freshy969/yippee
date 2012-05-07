@@ -26,22 +26,22 @@ public class HitList {
 	/**
 	 * list of hits for that word
 	 */
-	private ArrayList<Hit> hitList;
-	private ArrayList<Hit> anchorList;
+//	private ArrayList<Hit> hitList;
+//	private ArrayList<Hit> anchorList;
 	
 	public HitList(String i) {
 		id = i;
 		wordId = i.getBytes();
-		hitList = new ArrayList<Hit>();
+//		hitList = new ArrayList<Hit>();
 		tfMap = new HashMap<String, Float>(); 
-		anchorList = new ArrayList<Hit>();
+//		anchorList = new ArrayList<Hit>();
 		atfMap = new HashMap<String, Float>(); 
 	}
 	
 	public HitList() {
-		hitList = new ArrayList<Hit>();
+//		hitList = new ArrayList<Hit>();
 		tfMap = new HashMap<String, Float>(); 
-		anchorList = new ArrayList<Hit>();
+//		anchorList = new ArrayList<Hit>();
 		atfMap = new HashMap<String, Float>(); 
 	}
 	
@@ -73,32 +73,32 @@ public class HitList {
 		this.df = f;
 	}
 	
-	public void addHit(Hit hit) {
-		hitList.add(hit);
-	}
+//	public void addHit(Hit hit) {
+//		hitList.add(hit);
+//	}
+//	
 	
-	
-	public void setHitList(ArrayList<Hit> hits) {
-		hitList = hits;
-	}
+//	public void setHitList(ArrayList<Hit> hits) {
+//		hitList = hits;
+//	}
 	
 	public byte[] getWordId() {
 		return wordId;
 	}
 	
-	public ArrayList<Hit> getHitList() {
-		return hitList;
-	}
+//	public ArrayList<Hit> getHitList() {
+//		return hitList;
+//	}
 	
-	public void sortHitsByDocId() {
-		
-   	 Collections.sort(hitList,new Comparator<Hit>() {
-         public int compare(Hit hit1, Hit hit2) {
-             return hit1.getDocId().compareTo(hit2.getDocId());
-         }
-     });
-   	  
-	}
+//	public void sortHitsByDocId() {
+//		
+//   	 Collections.sort(hitList,new Comparator<Hit>() {
+//         public int compare(Hit hit1, Hit hit2) {
+//             return hit1.getDocId().compareTo(hit2.getDocId());
+//         }
+//     });
+//   	  
+//	}
 	
 	public void addHitList(ArrayList<Hit> hits) {
 		HashMap<String, Float> normalizedLength = new HashMap<String, Float>();
@@ -106,7 +106,7 @@ public class HitList {
 			Hit hit = hits.get(i);
 			
 			if(hit.isAnchor()){
-				anchorList.add(hit);
+//				anchorList.add(hit);
 				if(!atfMap.containsKey(hit.getDocId())){
 					atfMap.put(hit.getDocId(), new Float(1));
 				} else {
@@ -114,7 +114,7 @@ public class HitList {
 					atfMap.put(hit.getDocId(), f+1);
 				}
 			} else {
-				hitList.add(hit);
+//				hitList.add(hit);
 				//System.out.println(hit.getDocLength());
 				normalizedLength.put(hit.getDocId(), new Float(hit.getDocLength()));
 				if(!tfMap.containsKey(hit.getDocId())){

@@ -12,7 +12,7 @@ public class DocEntryManager {
 	/**
      * Create logger in the Log4j hierarchy named by by software component
      */
-    static Logger logger = Logger.getLogger(AnchorManager.class);
+    static Logger logger = Logger.getLogger(DocEntryManager.class);
     private static IndexerDBEnv myDbEnv;
     private DAL dao;
 
