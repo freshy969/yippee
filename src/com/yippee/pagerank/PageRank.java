@@ -10,6 +10,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,8 +60,9 @@ public class PageRank {
 		public void reduce(Text targetPage, Iterable<Text> values, Context context ) throws IOException, InterruptedException {
 
 			int outgoingLinkCount = 0;
-			Double pagerank = new Double(0);
+			Float pagerank = new Float(0);
 			List<String> outgoingLinks = new LinkedList<String>();
+			DecimalFormat df = new DecimalFormat("#.##");
 
 			for (Text value : values) {
                 String line = value.toString().trim();
@@ -70,7 +72,7 @@ public class PageRank {
                     if (parts[0].contains("IN")) {
                         //System.out.println("'" + parts[2] + "' | '" + parts[3] + "'");
                         //String fromPage = parts[1].trim();
-                        double fromRank = Double.parseDouble(parts[2].trim());
+                        float fromRank = Float.parseFloat(parts[2].trim());
                         int fromOutNum = Integer.parseInt(parts[3].trim());
                         pagerank += fromRank / fromOutNum;
 
@@ -87,7 +89,7 @@ public class PageRank {
 
 			for(String s : outgoingLinks){
 				outKey.set("");
-				result.set("'" + targetPage + DEL + pagerank + DEL + s + DEL + outgoingLinkCount + "'");
+				result.set("'" + targetPage + DEL + df.format(pagerank) + DEL + s + DEL + outgoingLinkCount + "'");
 				context.write(outKey, result);
 			}
 
