@@ -255,6 +255,17 @@
 	    </target>
 	
 	
+	<target name="project-prod-pastry" depends="project-clean,sanity-check"
+		            description="Create single-noded crawler">
+		        <antcall target="run">
+		            <param name="localPort" value="${lport}"/>
+		            <param name="bootPort" value="${bport}"/>
+		            <param name="database" value="db/prod"/>
+		            <param name="service" value="-P"/>
+		            <param name="lastArg" value="--overwrite"/>
+		        </antcall>
+		    </target>
+	
 
     <target name="project-test-indexer" depends="project-clean,sanity-check"
             description="Create single-noded indexer">
