@@ -470,10 +470,6 @@ public class YippeePastryApp implements Application {
 
 			out.println("<query>" + StringEscapeUtils.escapeXml(queryMap.get(queryID)) + "</query>");
 			
-			out.println("<size>" + deList.size() + "</size>");
-			
-			out.println("<time>" + df.format(time_elapsed) + "</time>");
-			
 			if (deList == null) {
 				out.println("<document><description>No matching documents found!</description></document>");
 			} else {
@@ -484,6 +480,10 @@ public class YippeePastryApp implements Application {
 //					deList.size();
 //					
 //				for (int i = min; i < max; i++) {
+				
+				out.println("<size>" + deList.size() + "</size>");
+				
+				out.println("<time>" + df.format(time_elapsed) + "</time>");
 				
 				int num;
 				if (deList.size() < 25)
