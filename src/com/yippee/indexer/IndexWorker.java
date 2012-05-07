@@ -41,7 +41,6 @@ public class IndexWorker extends Thread {
 	ArrayList<DocAug> archiveHolder;
 	
 	public IndexWorker(NodeIndex nodeIndex) {
-		Configuration.getInstance().setBerkeleyDBRoot("db/test");
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
