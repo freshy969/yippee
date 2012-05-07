@@ -35,11 +35,11 @@ public class YippeeSearch extends HttpServlet {
 		out.println("<BODY><table border=0 width=\"100%\" height=\"100%\">");
 		out.println("<tr><td valign=\"middle\" align=\"center\"><img src=\"web/resources/logo.png\"><br><br>");
 		out.println("<form action=\"" + request.getContextPath()
-				+ "/yippee\" method=\"post\">"
+				+ "/yippee?page=0\" method=\"post\">"
 				+ "<input type=\"text\" name=\"keywords\" id=\"text\">"
 				+ "<input type=\"submit\" value=\"SEARCH\" id=\"search\">" + "</form>");
 		out.println("</td></tr></table></body></HTML>");
-
+		
 		out.close();
 		response.flushBuffer();
 	}
@@ -47,9 +47,10 @@ public class YippeeSearch extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+		
 		// Get starting params
 		String keywords = request.getParameter("keywords");
+		int page = Integer.parseInt(request.getParameter("page"));
 		String cacheServer = getServletConfig().getInitParameter("cacheServer");
 		int cacheServerPort = Integer.parseInt(getServletConfig()
 				.getInitParameter("cacheServerPort"));
@@ -69,7 +70,7 @@ public class YippeeSearch extends HttpServlet {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					client.getInputStream()));
 
-			searchOut.write(keywords);
+			searchOut.write(keywords + "," + page);
 			searchOut.flush();
 			client.shutdownOutput();
 
@@ -97,7 +98,7 @@ public class YippeeSearch extends HttpServlet {
 			out.println("<BODY><table border=0 width=\"100%\" height=\"100%\">");
 			out.println("<tr><td valign=\"middle\" align=\"center\"><img src=\"logo.png\"><br><br>");
 			out.println("<form action=\"" + request.getContextPath()
-					+ "/yippee\" method=\"post\">"
+					+ "/yippee?page=0\" method=\"post\">"
 					+ "<input type=\"text\" name=\"keywords\" id=\"text\">"
 					+ "<input type=\"submit\" value=\"SEARCH\" id=\"search\">" + "</form>");
 			out.println("</td></tr></table></body></HTML>");

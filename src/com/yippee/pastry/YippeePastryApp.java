@@ -71,6 +71,7 @@ public class YippeePastryApp implements Application {
     private static HashMap<UUID, HashMap<String, Float>> tfMap;
     private long start_time;
     private long end_time;
+    private int page;
     
     /**
      * Constructor
@@ -476,13 +477,13 @@ public class YippeePastryApp implements Application {
 			if (deList == null) {
 				out.println("<document><description>No matching documents found!</description></document>");
 			} else {
-				int num;
-				if (deList.size() < 25)
-					num = deList.size();
-				else
-					num = 25;
+				int min = page * 25;
+				int max = (page + 1) * 25;
+				
+				if (max > deList.size())
+					deList.size();
 					
-				for (int i = 0; i < num; i++) {
+				for (int i = min; i < max; i++) {
 					DocEntry de = deList.get(i);
 					if (de.getTitle() == null)
 						continue;
@@ -508,5 +509,9 @@ public class YippeePastryApp implements Application {
     
     public void setStartTime() {
     	start_time = new Date().getTime();
+    }
+    
+    public void setPage(int page) {
+    	this.page = page;
     }
 }

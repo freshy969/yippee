@@ -56,6 +56,11 @@ public class QueryDaemon implements Runnable  {
 					e.printStackTrace();
 				}
 	
+				String[] tmp = keywords.split(",");
+				
+				keywords = tmp[0];
+				int page = Integer.parseInt(tmp[1]);
+				
 				// Encode the socket and store it
 				UUID queryID = UUID.randomUUID();
 				yippeeApp.putSocket(queryID, request);
@@ -64,6 +69,7 @@ public class QueryDaemon implements Runnable  {
 				logger.info("Received query: " + keywords);
 				
 				yippeeApp.setStartTime();
+				yippeeApp.setPage(page);
 				
 				String[] wordArray = keywords.split("\\s+");
 
