@@ -167,7 +167,7 @@ public class EntryPoint {
      * @return
      */
     private boolean seed(URLFrontier urlFrontier, String seed) {
-        for ( int i = 0; i < 80; i++) {
+        for ( int i = 0; i < 20; i++) {
             try {
                 Thread.sleep(1000);
                 System.out.println("Sleeping.." + (20-i));
@@ -256,7 +256,7 @@ public class EntryPoint {
             ih.makeThreads();
             
           //Sleep to allow other nodes to come up before starting the Indexer thread
-            for ( int i = 0; i < 80; i++) {
+            for ( int i = 0; i < 20; i++) {
                 try {
                     Thread.sleep(1000);
                     System.out.println("Sleeping.." + (20-i));
