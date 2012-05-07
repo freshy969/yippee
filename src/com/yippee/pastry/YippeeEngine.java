@@ -41,12 +41,12 @@ public class YippeeEngine {
         try {
             InetAddress inetAddress = InetAddress.getByName(ipAddress);
             InetSocketAddress address = new InetSocketAddress(inetAddress, bootPort);
-            nodeFactory = new NodeFactory(localPort, address);
+            nodeFactory = new NodeFactory(localPort, address, inetAddress);
             logger.info("Starting ring..");
             yippeePastryApp = new YippeePastryApp(nodeFactory);
     		yippeePastryApp.startDaemonListener(8888);
     		yippeePastryApp.startQueryDaemon();
-    		
+    		System.out.println("Node ID: " + yippeePastryApp.getNode().getId());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

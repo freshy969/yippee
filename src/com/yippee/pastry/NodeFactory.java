@@ -9,6 +9,7 @@ import rice.pastry.NodeHandle;
 import rice.pastry.NodeIdFactory;
 import rice.pastry.PastryNode;
 import rice.pastry.socket.SocketPastryNodeFactory;
+import rice.pastry.standard.IPNodeIdFactory;
 import rice.pastry.standard.RandomNodeIdFactory;
 
 import java.io.IOException;
@@ -37,19 +38,19 @@ public class NodeFactory {
 	int createdCount = 0;
 	int port;
 	
-	NodeFactory(int port) {
-		this(new Environment(), port);
+	NodeFactory(int port, InetAddress inetAddress) {
+		this(new Environment(), port, inetAddress);
 	}	
 	
-	NodeFactory(int port, InetSocketAddress bootstrap) {
-		this(port);
+	NodeFactory(int port, InetSocketAddress bootstrap, InetAddress inetAddress) {
+		this(port, inetAddress);
 		bootHandle = factory.getNodeHandle(bootstrap);
 	}
 	
-	NodeFactory(Environment env, int port) {
+	NodeFactory(Environment env, int port, InetAddress inetAddress) {
 		this.env = env;
 		this.port = port;
-		nidFactory = new RandomNodeIdFactory(env);
+		nidFactory = new IPNodeIdFactory(inetAddress, port, env);
 		try {
 			/*[tj-let-ant-resolve]*/
 			factory = new SocketPastryNodeFactory(nidFactory, port, env);
