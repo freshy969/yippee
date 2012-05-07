@@ -471,7 +471,7 @@ public class YippeePastryApp implements Application {
 			out.println("<query>" + StringEscapeUtils.escapeXml(queryMap.get(queryID)) + "</query>");
 			
 			if (deList == null) {
-				out.println("<size>0</size><time>0</time><document><title>No matching documents found!</time></document>");
+				out.println("<document><description>No matching documents found!</description></document>");
 			} else {
 //				int min = page * 25;
 //				int max = (page + 1) * 25;
