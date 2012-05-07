@@ -170,7 +170,7 @@ public class EntryPoint {
         for ( int i = 0; i < 80; i++) {
             try {
                 Thread.sleep(1000);
-                System.out.println("Sleeping.." + (80-i));
+                System.out.println("Sleeping.." + (20-i));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -259,7 +259,7 @@ public class EntryPoint {
             for ( int i = 0; i < 80; i++) {
                 try {
                     Thread.sleep(1000);
-                    System.out.println("Sleeping.." + (80-i));
+                    System.out.println("Sleeping.." + (20-i));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
