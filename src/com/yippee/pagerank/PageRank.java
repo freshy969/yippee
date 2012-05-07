@@ -74,7 +74,7 @@ public class PageRank {
                         //String fromPage = parts[1].trim();
                         float fromRank = Float.parseFloat(parts[2].trim());
                         int fromOutNum = Integer.parseInt(parts[3].trim());
-                        pagerank += fromRank / fromOutNum;
+                        pagerank += (0.15) + (0.85) * (fromRank / fromOutNum);
 
                     } else if(parts[0].contains("OUT")) {
                         // This are outgoing links
