@@ -102,7 +102,11 @@ public class Spider implements Runnable {
 				docAug.setId(urlToCrawl.toString());
 
 				logger.info("Try to save DocAug for " + urlToCrawl.toString());
+				
 				dam.push(docAug);
+				System.out.println("Pushed: " + urlToCrawl.toString());
+				
+				
 				LinkTextExtractor linkEx = new LinkTextExtractor();
 				ArrayList<String> links;
 				try {
