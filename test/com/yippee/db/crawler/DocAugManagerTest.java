@@ -69,11 +69,12 @@ public class DocAugManagerTest {
         assertTrue(docAugManager.push(docAug));
     }
 
-    @Test
-    public void testPoll(){
-        DocAug doPull = docAugManager.poll();
-        assertEquals(doPull.getId(), "1");
-    }
+//    deprecated
+//    @Test
+//    public void testPoll(){
+//        DocAug doPull = docAugManager.poll();
+//        assertEquals(doPull.getId(), "1");
+//    }
 
     @Test
     public void testPeek(){
