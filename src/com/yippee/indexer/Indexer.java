@@ -23,7 +23,7 @@ public class Indexer extends Thread {
     
 	NodeIndex nodeIndex;
 	//WordIndex wordIndex;
-	final int NO_THREADS = 20;
+	final int NO_THREADS = 1;
 	static int count = 0;
 	static long time = 0;
 	Lexicon lexicon;
