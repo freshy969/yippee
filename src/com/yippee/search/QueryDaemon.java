@@ -58,6 +58,8 @@ public class QueryDaemon implements Runnable  {
 	
 				String[] tmp = keywords.split(",");
 				
+				logger.info("Received query: " + keywords);
+				
 				keywords = tmp[0];
 				int page = Integer.parseInt(tmp[1]);
 				
@@ -66,7 +68,6 @@ public class QueryDaemon implements Runnable  {
 				yippeeApp.putSocket(queryID, request);
 				yippeeApp.putQuery(queryID, keywords);
 				
-				logger.info("Received query: " + keywords);
 				
 				yippeeApp.setStartTime();
 				yippeeApp.setPage(page);
