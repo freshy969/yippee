@@ -3,6 +3,7 @@ package com.yippee.pastry;
 import org.apache.commons.lang3.StringEscapeUtils;
 import com.yippee.crawler.frontier.URLFrontier;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -450,6 +451,8 @@ public class YippeePastryApp implements Application {
     
     public void sendResultToSocket(UUID queryID, ArrayList<DocEntry> deList) {
 
+    	DecimalFormat df = new DecimalFormat("#.##");
+    	
 		Socket client = getSocket(queryID);
 		
 		PrintWriter out;
@@ -468,7 +471,7 @@ public class YippeePastryApp implements Application {
 			
 			out.println("<size>" + deList.size() + "</size>");
 			
-			out.println("<time>" + time_elapsed + "</time>");
+			out.println("<time>" + df.format(time_elapsed) + "</time>");
 			
 			if (deList == null) {
 				out.println("<document><description>No matching documents found!</description></document>");
@@ -481,7 +484,7 @@ public class YippeePastryApp implements Application {
 					out.println("<document>");
 					out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
 					out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
-					out.println("<description>" + de.getTfidf() + "</description>");
+//					out.println("<description>" + de.getTfidf() + "</description>");
 					out.println("</document>");
 				}
 			}
