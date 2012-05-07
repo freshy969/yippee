@@ -353,6 +353,37 @@
             </antcall>
         </parallel>
     </target>
+	
+	<target name="project-prod-single-crawler"
+	            depends="project-clean"
+	            description="Launch only the crawler">
+	        <parallel>
+	        <antcall target="run">
+	            <param name="localPort" value="0"/>
+	            <param name="bIp" value="0"/>
+	            <param name="bootPort" value="0"/>
+	            <param name="database" value="db/prod"/>
+	            <param name="service" value="-C"/>
+	            <param name="lastArg" value="--overwrite"/>
+	            </antcall>
+	        </parallel>
+	    </target>
+	
+	
+	<target name="project-prod-single-indexer"
+		            depends="project-clean"
+		            description="Launch only the indexer">
+		        <parallel>
+		        <antcall target="run">
+		            <param name="localPort" value="0"/>
+		            <param name="bIp" value="0"/>
+		            <param name="bootPort" value="0"/>
+		            <param name="database" value="db/prod"/>
+		            <param name="service" value="-I"/>
+		            <param name="lastArg" value="--overwrite"/>
+		            </antcall>
+		        </parallel>
+		        	</target>
 
     <target name="run-db" depends="jar">
         <echo>" Pastry Port: .${bootPort}"</echo>
