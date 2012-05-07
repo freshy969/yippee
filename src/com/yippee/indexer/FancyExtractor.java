@@ -26,7 +26,7 @@ public class FancyExtractor {
 	ArrayList<String> links;
 	ArrayList<String> text;
 	Stack<String> format;
-	boolean bold, ital, anchor, title, body;
+	boolean bold, ital, anchor, title, paragraph;
 	WordStemmer stemmer;
 	String docId, docTitle;
 	int pos = 0;
@@ -40,7 +40,7 @@ public class FancyExtractor {
 		format = new Stack<String>();
 		bold = false;
 		ital = false;
-		body = false;
+		paragraph = false;
 		anchor = false;
 		title = false;
 		stemmer = new WordStemmer();
@@ -92,10 +92,10 @@ public class FancyExtractor {
 				// Italicized
 				format.push("i");
 				ital = true;
-			} else if (child.getNodeName().equals("body")) {
-				// Body tag
-				format.push("body");
-				body = true;
+			} else if (child.getNodeName().equals("p")) {
+				// paragraph tag
+				format.push("p");
+				paragraph = true;
 			} else if (child.getNodeName().equals("title")) {
 				// Title Node
 				format.push("title");
@@ -154,7 +154,7 @@ public class FancyExtractor {
 						} 					
 						hitList.put(word, list);
 						
-						if (blurbs.size() < 4 && body)
+						if (blurbs.size() < 4 && paragraph)
 							blurbs.add(sentence);
 					}
 				}
@@ -186,8 +186,8 @@ public class FancyExtractor {
 				ital = false;
 			} else if ("title".equals(tag)) {
 				title = false;
-			} else if ("title".equals(tag)) {
-				body = false;
+			} else if ("p".equals(tag)) {
+				paragraph = false;
 			}
 		}		
 		
