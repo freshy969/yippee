@@ -49,7 +49,7 @@ public class IndexWorker extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        linkLogger.warn("Start writing .hadoop file (csv?)");
+//        linkLogger.warn("Start writing .hadoop file (csv?)");
 //		dam = new DocAugManager();
 //		darcm = new DocArchiveManager();
 		dem = new DocEntryManager();

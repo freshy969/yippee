@@ -60,7 +60,7 @@ public class PageRank {
 		public void reduce(Text targetPage, Iterable<Text> values, Context context ) throws IOException, InterruptedException {
 
 			int outgoingLinkCount = 0;
-			Float pagerank = new Float(0);
+			Double pagerank = new Double(0);
 			List<String> outgoingLinks = new LinkedList<String>();
 			DecimalFormat df = new DecimalFormat("#.######");
 
@@ -72,9 +72,9 @@ public class PageRank {
                     if (parts[0].contains("IN")) {
                         //System.out.println("'" + parts[2] + "' | '" + parts[3] + "'");
                         //String fromPage = parts[1].trim();
-                        float fromRank = Float.parseFloat(parts[2].trim());
+                        double fromRank = Double.parseDouble(parts[2].trim());
                         int fromOutNum = Integer.parseInt(parts[3].trim());
-                        pagerank += fromRank / fromOutNum;
+                        pagerank += ((0.15) + (0.85) * (fromRank / fromOutNum));
 
                     } else if(parts[0].contains("OUT")) {
                         // This are outgoing links

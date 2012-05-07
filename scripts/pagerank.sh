@@ -22,16 +22,16 @@ fi
 for (( i = 0; i < 30; i++ )); do
   echo "iteration $i";
   # Copy input to hdfs
-  hadoop dfs -copyFromLocal pr-input-$i.hadoop /user/hduser/pr-input.hadoop
+  hadoop dfs -copyFromLocal pr-input-$i.hadoop /home/hduser/pr-input.hadoop
   
   # Run hadoop process
-  hadoop jar build/yippee.jar PageRank /user/hduser/pr-input.hadoop /user/hduser/pr-output.hadoop
+  hadoop jar build/yippee.jar PageRank /home/hduser/pr-input.hadoop /home/hduser/pr-output.hadoop
 
   # Copy a backup in ext3 and re-run process
-  hadoop dfs -copyToLocal /user/hduser/pr-output.hadoop pr-input-$((i+1)).hadoop
+  hadoop dfs -copyToLocal /home/hduser/pr-output.hadoop pagerank-output/pr-input-$((i+1)).hadoop
 
   # Clean previous input and output on hdfs
-  hadoop fs -rmr /user/hduser/pr-input.hadoop
-  hadoop fs -rmr /user/hduser/pr-output.hadoop
+  hadoop fs -rmr /home/hduser/pr-input.hadoop
+  hadoop fs -rmr /home/hduser/pr-output.hadoop
 done
 
