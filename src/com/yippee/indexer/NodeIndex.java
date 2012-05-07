@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.yippee.db.crawler.model.DocAug;
-import com.yippee.db.indexer.DocArchiveManager;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.util.Configuration;
 
@@ -23,34 +22,34 @@ public class NodeIndex {
 	private HashMap<String,String> stopWords;
 	private int docCount = 0;
 	private long startTime = 0;
-	private ArrayList<DocAug> docArchive;
-	private DocArchiveManager dam;
-	private boolean archiveMode = false;
+//	private ArrayList<DocAug> docArchive;
+//	private DocArchiveManager dam;
+//	private boolean archiveMode = false;
 	
 	
 	public NodeIndex() {
 		wordIndex = new HashMap<String, ArrayList<Hit>>();
 	//	globalIndex = new HashMap<String, ArrayList<Hit>>();
 		startTime = System.currentTimeMillis();
-		docArchive = new ArrayList<DocAug>();
-		dam = new DocArchiveManager();
+//		docArchive = new ArrayList<DocAug>();
+//		dam = new DocArchiveManager();
 	}
 	
-	public void setArchiveMode(boolean mode) {
-		archiveMode = mode;
-		if(mode){
-			docArchive = dam.getAllDocs(); 
-		}
-	}
+//	public void setArchiveMode(boolean mode) {
+//		archiveMode = mode;
+//		if(mode){
+//			docArchive = dam.getAllDocs(); 
+//		}
+//	}
 	
-	public boolean isArchiveMode(){
-		return archiveMode;
-	}
+//	public boolean isArchiveMode(){
+//		return archiveMode;
+//	}
 	
-	public synchronized DocAug poll(){
-		if(!docArchive.isEmpty()) {return docArchive.remove(0);}
-		else {return null;}
-	}
+//	public synchronized DocAug poll(){
+//		if(!docArchive.isEmpty()) {return docArchive.remove(0);}
+//		else {return null;}
+//	}
 	
 	
 	/**
@@ -81,7 +80,7 @@ public class NodeIndex {
 		}
 		if(docCount%10==0){
 			sendGoodWordsToRing();
-			logger.info("WE'VE INDEXED "+docCount+" DOCS IN "+(System.currentTimeMillis()-startTime)+"ms");
+//			logger.info("WE'VE INDEXED "+docCount+" DOCS IN "+(System.currentTimeMillis()-startTime)+"ms");
 			//System.out.println("WE'VE INDEXED "+docCount+" DOCS IN "+(System.currentTimeMillis()-startTime)+"ms");
 		}
 	//	if (wordIndex.size() > capacity) {
@@ -118,7 +117,7 @@ public class NodeIndex {
 			ArrayList<Hit> list = wordIndex.get(word);
 			if(list.size()>capacity){
 				Configuration.getInstance().getPastryEngine().sendList(word,list);
-				logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
+//				logger.info("[" + word + /*lexiconMap.get(word) +*/ "=" + wordIndex.get(word).size() + "]");
 				deleteKeys.add(word);
 			}
 		}

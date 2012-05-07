@@ -253,6 +253,7 @@ public class EntryPoint {
             Configuration.getInstance().appendService("I");
             Indexer ih = new Indexer();
             ih.makeThreads();
+            ih.start();
         }
     }
 
