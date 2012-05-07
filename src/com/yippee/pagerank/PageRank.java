@@ -62,7 +62,7 @@ public class PageRank {
 			int outgoingLinkCount = 0;
 			Float pagerank = new Float(0);
 			List<String> outgoingLinks = new LinkedList<String>();
-			DecimalFormat df = new DecimalFormat("#.###");
+			DecimalFormat df = new DecimalFormat("#.######");
 
 			for (Text value : values) {
                 String line = value.toString().trim();
