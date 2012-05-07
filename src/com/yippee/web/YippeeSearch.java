@@ -31,13 +31,14 @@ public class YippeeSearch extends HttpServlet {
 
 		PrintWriter out = response.getWriter();
 
-		out.println("<HTML><HEAD><TITLE>Yippee Search Engine</TITLE></HEAD>");
-		out.println("<H1>Yippee!</H1>");
+		out.println("<HTML><HEAD><TITLE>Yippee Search Engine</TITLE><link rel=\"stylesheet\" type=\"text/css\" href=\"web/resources/style.css\" /></HEAD>");
+		out.println("<BODY><table border=0 width=\"100%\" height=\"100%\">");
+		out.println("<tr><td valign=\"middle\" align=\"center\"><img src=\"web/resources/logo.png\"><br><br>");
 		out.println("<form action=\"" + request.getContextPath()
 				+ "/yippee\" method=\"post\">"
-				+ "Keywords: <input type=\"text\" name=\"keywords\" /><br />"
-				+ "<input type=\"submit\" value=\"Submit\" />" + "</form>");
-		out.println("</HTML>");
+				+ "<input type=\"text\" name=\"keywords\" id=\"text\">"
+				+ "<input type=\"submit\" value=\"SEARCH\" id=\"search\">" + "</form>");
+		out.println("</td></tr></table></body></HTML>");
 
 		out.close();
 		response.flushBuffer();
@@ -92,20 +93,17 @@ public class YippeeSearch extends HttpServlet {
 
 			PrintWriter out = response.getWriter();
 
-			out.println("<HTML><HEAD><TITLE>Yippee Search</TITLE></HEAD>");
-			out.println("<H1>Yippee!</H1>");
-			out
-					.println("<form action=\""
-							+ request.getContextPath()
-							+ "/yippee\" method=\"post\">"
-							+ "Keywords: <input type=\"text\" name=\"keywords\" /><br />"
-							+ "<input type=\"submit\" value=\"Submit\" />"
-							+ "</form>");
-			out.println("</HTML>");
+			out.println("<HTML><HEAD><TITLE>Yippee Search Engine</TITLE><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" /></HEAD>");
+			out.println("<BODY><table border=0 width=\"100%\" height=\"100%\">");
+			out.println("<tr><td valign=\"middle\" align=\"center\"><img src=\"logo.png\"><br><br>");
+			out.println("<form action=\"" + request.getContextPath()
+					+ "/yippee\" method=\"post\">"
+					+ "<input type=\"text\" name=\"keywords\" id=\"text\">"
+					+ "<input type=\"submit\" value=\"SEARCH\" id=\"search\">" + "</form>");
+			out.println("</td></tr></table></body></HTML>");
 
 			out.close();
 			response.flushBuffer();
 		}
 	}
-
 }
