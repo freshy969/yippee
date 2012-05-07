@@ -10,6 +10,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class PageRank {
 			int outgoingLinkCount = 0;
 			Double pagerank = new Double(0);
 			List<String> outgoingLinks = new LinkedList<String>();
+			DecimalFormat df = new DecimalFormat("#.######");
 
 			for (Text value : values) {
                 String line = value.toString().trim();
@@ -72,7 +74,7 @@ public class PageRank {
                         //String fromPage = parts[1].trim();
                         double fromRank = Double.parseDouble(parts[2].trim());
                         int fromOutNum = Integer.parseInt(parts[3].trim());
-                        pagerank += fromRank / fromOutNum;
+                        pagerank += ((0.15) + (0.85) * (fromRank / fromOutNum));
 
                     } else if(parts[0].contains("OUT")) {
                         // This are outgoing links
@@ -87,7 +89,7 @@ public class PageRank {
 
 			for(String s : outgoingLinks){
 				outKey.set("");
-				result.set("'" + targetPage + DEL + pagerank + DEL + s + DEL + outgoingLinkCount + "'");
+				result.set("'" + targetPage + DEL + df.format(pagerank) + DEL + s + DEL + outgoingLinkCount + "'");
 				context.write(outKey, result);
 			}
 
