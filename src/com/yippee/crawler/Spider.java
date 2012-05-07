@@ -145,7 +145,8 @@ public class Spider implements Runnable {
 							//Configuration.getInstance().getPastryEngine().sendURL(url);
                             Message newMessage = new Message(url.toString());
                             if (newMessage.getType() == Message.Type.NEW) {
-                                urlFrontier.push(newMessage);
+                                //urlFrontier.push(newMessage);
+                                Configuration.getInstance().getPastryEngine().sendURL(url);
                             }
 						} else {
                             logger.info("Robots returned false or duplicate exists");
