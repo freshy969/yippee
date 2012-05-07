@@ -16,7 +16,7 @@ echo "Starting PageRank.."
 # rsync -av --progress 
 
 if [[ $1 == "" ]]; then
-  echo "./pagerank.sh input-file.hadoop
+  echo "./pagerank.sh input-file.hadoop"
 fi
 
 for (( i = 0; i < 30; i++ )); do
