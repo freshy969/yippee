@@ -70,6 +70,13 @@ public class Spider implements Runnable {
 					Thread.sleep(10000);
 					continue;
 				}
+				
+				//Hack to skip urls that have a #
+				// because http://www.upenn.edu#content is the same as http://www.upenn.edu#content
+				if(urlToCrawl.toString().contains("#")){ 
+					continue;
+				}
+				
 				logger.debug("Pulled url: " + urlToCrawl);
 				
 				HttpModule httpModule = new HttpModule(urlToCrawl);
