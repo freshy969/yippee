@@ -103,23 +103,23 @@ public class DocAugManager {
      *
      * @return the "next" document from the database, null if there are no items
      */
-    public DocAug poll() {
-         DocAug result = null;
-        try {
-            // open data access layer
-            EntityCursor<DocAug> cursor = dao.getDocCursor();
-            Iterator<DocAug> docIterator = cursor.iterator();
-            if (docIterator.hasNext()) {
-                result = docIterator.next();
-            }
-            cursor.close();
-        } catch (DatabaseException e) {
-            System.out.println("Exception: " + e.toString());
-            e.printStackTrace();
-        }
-        if (result != null) delete(result.getId()); // remove object from db
-        return result;
-    }
+//    public DocAug poll() {
+//         DocAug result = null;
+//        try {
+//            // open data access layer
+//            EntityCursor<DocAug> cursor = dao.getDocCursor();
+//            Iterator<DocAug> docIterator = cursor.iterator();
+//            if (docIterator.hasNext()) {
+//                result = docIterator.next();
+//            }
+//            cursor.close();
+//        } catch (DatabaseException e) {
+//            System.out.println("Exception: " + e.toString());
+//            e.printStackTrace();
+//        }
+////        if (result != null) delete(result.getId()); // remove object from db
+//        return result;
+//    }
 
     /**
      * Peek an augmented document from the database (read but not remove it)
@@ -141,5 +141,15 @@ public class DocAugManager {
             e.printStackTrace();
         }
         return result;
+    }
+    
+    public Iterator<String> getKeys() {
+        EntityCursor<String> cursor = dao.getDocById().keys();
+        Iterator<String> iter = cursor.iterator();
+    	return iter;
+    }
+    
+    public long getSize() {
+    	return dao.getDocById().count();
     }
 }

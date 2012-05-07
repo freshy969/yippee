@@ -2,6 +2,7 @@ package com.yippee.db.indexer;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
+import com.sleepycat.persist.model.Persistent;
 import com.yippee.db.crawler.model.DocAug;
 import com.yippee.db.util.DAL;
 import org.apache.log4j.Logger;
@@ -26,7 +27,7 @@ public class DocArchiveManager {
     public DocArchiveManager() {
         myDbEnv = IndexerDBEnv.getInstance(false);
         dao = new DAL(myDbEnv.getIndexerStore());
-//        System.out.println("DAL: " + dao.toString());
+//      System.out.println("DAL: " + dao.toString());
 //    	System.out.println("DocINDEX: " + dao.getDocById().toString());
         // Path to the environment home
         // Environment is <i>not</i> readonly
@@ -117,5 +118,15 @@ public class DocArchiveManager {
             e.printStackTrace();
         }
         return result;
+    }
+    
+    public Iterator<String> getKeys() {
+        EntityCursor<String> cursor = dao.getDocById().keys();
+        Iterator<String> iter = cursor.iterator();
+    	return iter;
+    }
+    
+    public long getSize() {
+    	return dao.getDocById().count();
     }
 }
