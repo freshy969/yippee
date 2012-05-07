@@ -477,13 +477,22 @@ public class YippeePastryApp implements Application {
 			if (deList == null) {
 				out.println("<document><description>No matching documents found!</description></document>");
 			} else {
-				int min = page * 25;
-				int max = (page + 1) * 25;
+//				int min = page * 25;
+//				int max = (page + 1) * 25;
+//				
+//				if (max > deList.size())
+//					deList.size();
+//					
+//				for (int i = min; i < max; i++) {
 				
-				if (max > deList.size())
-					deList.size();
-					
-				for (int i = min; i < max; i++) {
+				int num;
+				if (deList.size() < 25)
+				num = deList.size();
+				else
+				num = 25;
+
+				for (int i = 0; i < num; i++) {
+				
 					DocEntry de = deList.get(i);
 					if (de.getTitle() == null)
 						continue;
