@@ -63,6 +63,8 @@ public class QueryDaemon implements Runnable  {
 				
 				logger.info("Received query: " + keywords);
 				
+				yippeeApp.setStartTime();
+				
 				String[] wordArray = keywords.split("\\s+");
 
 				wordArray = stemmer.stemList(wordArray);

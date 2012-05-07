@@ -3,7 +3,9 @@ package com.yippee.pastry;
 import org.apache.commons.lang3.StringEscapeUtils;
 import com.yippee.crawler.frontier.URLFrontier;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -67,6 +69,8 @@ public class YippeePastryApp implements Application {
     private static HashMap<UUID, ArrayList<ResultMessage>> queryResultMap;
     private static HashMap<UUID, ArrayList<ResultMessage>> docResultMap;
     private static HashMap<UUID, HashMap<String, Float>> tfMap;
+    private long start_time;
+    private long end_time;
     
     /**
      * Constructor
@@ -447,6 +451,8 @@ public class YippeePastryApp implements Application {
     
     public void sendResultToSocket(UUID queryID, ArrayList<DocEntry> deList) {
 
+    	DecimalFormat df = new DecimalFormat("#.###");
+    	
 		Socket client = getSocket(queryID);
 		
 		PrintWriter out;
@@ -456,15 +462,27 @@ public class YippeePastryApp implements Application {
 			
 			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 			out.println("<?xml-stylesheet type=\"text/xsl\" href=\"yippee.xsl\"?>");
+
+			float time_elapsed = (float) (new Date().getTime() - start_time) / 1000;
 			
 			out.println("<documentcollection>");
 
 			out.println("<query>" + StringEscapeUtils.escapeXml(queryMap.get(queryID)) + "</query>");
 			
+			out.println("<size>" + deList.size() + "</size>");
+			
+			out.println("<time>" + df.format(time_elapsed) + "</time>");
+			
 			if (deList == null) {
 				out.println("<document><description>No matching documents found!</description></document>");
 			} else {
-				for (int i = 0; i < deList.size(); i++) {
+				int num;
+				if (deList.size() < 25)
+					num = deList.size();
+				else
+					num = 25;
+					
+				for (int i = 0; i < num; i++) {
 					DocEntry de = deList.get(i);
 					if (de.getTitle() == null)
 						continue;
@@ -472,7 +490,7 @@ public class YippeePastryApp implements Application {
 					out.println("<document>");
 					out.println("<title>" + StringEscapeUtils.escapeXml(de.getTitle()) + "</title>");
 					out.println("<link>" + StringEscapeUtils.escapeXml(de.getURL()) + "</link>");
-					out.println("<description>" + de.getTfidf() + StringEscapeUtils.escapeXml(de.getBlurb()) + "</description>");
+//					out.println("<description>" + de.getTfidf() + "</description>");
 					out.println("</document>");
 				}
 			}
@@ -486,5 +504,9 @@ public class YippeePastryApp implements Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    public void setStartTime() {
+    	start_time = new Date().getTime();
     }
 }
