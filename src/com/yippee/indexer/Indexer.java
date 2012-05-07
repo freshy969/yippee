@@ -68,7 +68,7 @@ public class Indexer extends Thread {
 //			System.out.println("Rate: " + ((double) count / time ) + "docs/min");
 			for (int i = 0; i < 1000; i++) {
 				String next = cursor.next();
-				System.out.println(next);
+//				System.out.println(next);
 				queue.add(dam.read(next));
 			}
 			count += 1000;
