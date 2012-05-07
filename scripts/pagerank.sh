@@ -28,7 +28,7 @@ for (( i = 0; i < 30; i++ )); do
   hadoop jar build/yippee.jar PageRank /home/hduser/pr-input.hadoop /home/hduser/pr-output.hadoop
 
   # Copy a backup in ext3 and re-run process
-  hadoop dfs -copyToLocal /home/hduser/pr-output.hadoop pagerank-output/pr-input-$((i+1)).hadoop
+  hadoop dfs -copyToLocal /home/hduser/pr-output.hadoop pr-input-$((i+1)).hadoop
 
   # Clean previous input and output on hdfs
   hadoop fs -rmr /home/hduser/pr-input.hadoop
