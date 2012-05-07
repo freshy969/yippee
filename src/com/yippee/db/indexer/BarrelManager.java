@@ -1,10 +1,12 @@
 package com.yippee.db.indexer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
 import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
 import com.yippee.db.indexer.model.Hit;
 import com.yippee.db.indexer.model.HitList;
 import com.yippee.db.util.DAL;
@@ -78,6 +80,10 @@ public class BarrelManager {
         	logger.warn("Exception", e);
             success = false;
             System.out.println("Exception: " + e.toString());
+        } catch (NullPointerException e){
+        	logger.warn("Exception", e);
+            success = false;
+            System.out.println("Exception: " + e.toString());
         }
         
         return success;
@@ -99,6 +105,17 @@ public class BarrelManager {
     public int getBarrelSize(){
         dao = new DAL(myDbEnv.getIndexerStore());
         return dao.getBarrelById().map().size();
+    }
+    
+    public void invalidate(){
+        dao = new DAL(myDbEnv.getIndexerStore());
+        EntityCursor<String> keys = dao.getBarrelById().keys();
+        Iterator<String> iter = keys.iterator();
+        
+        while(iter.hasNext())
+        	dao.getBarrelById().delete(iter.next());
+        
+        keys.close();
     }
     
     /**

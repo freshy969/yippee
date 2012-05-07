@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
@@ -99,6 +101,7 @@ public class HitList {
 	}
 	
 	public void addHitList(ArrayList<Hit> hits) {
+		HashMap<String, Float> normalizedLength = new HashMap<String, Float>();
 		for(int i=0; i<hits.size(); i++){
 			Hit hit = hits.get(i);
 			
@@ -112,6 +115,8 @@ public class HitList {
 				}
 			} else {
 				hitList.add(hit);
+				//System.out.println(hit.getDocLength());
+				normalizedLength.put(hit.getDocId(), new Float(hit.getDocLength()));
 				if(!tfMap.containsKey(hit.getDocId())){
 					tfMap.put(hit.getDocId(), new Float(1));
 				} else {
@@ -120,10 +125,23 @@ public class HitList {
 				}
 			}		
 		}
+		
+		Set<String> keys = normalizedLength.keySet();
+		Iterator iter = keys.iterator();
+		while(iter.hasNext()){
+			String doc = (String)iter.next();
+			float tf = tfMap.get(doc);
+			float tf_norm = normalizedLength.get(doc);
+		//	System.out.println(tf+", "+tf_norm);
+			tfMap.put(doc, tf/tf_norm);
+		//	System.out.println(tf/tf_norm);
+		}
+		
 		HashMap<String, Float> temp = new HashMap<String, Float>();
 		temp.putAll(atfMap);
 		temp.putAll(tfMap);
 		df = temp.keySet().size();
+	//	System.out.println(df);
 	}
 	
 

@@ -24,6 +24,7 @@ public class Hit implements Serializable {
 	private boolean anchor = false;
 	private String docIDfrom;
 	private int position;
+	private double docLengthNormalized=1;
 				
 	/**
 	 * constructor for a normal Hit - need docID it came from, wordId for that word, and 
@@ -57,6 +58,13 @@ public class Hit implements Serializable {
 	
 	public Hit(){}
 	
+	public void setDocLength(double d){
+		this.docLengthNormalized = d;
+	}
+
+	public double getDocLength(){
+		return this.docLengthNormalized;
+	}
 	
 	/**
 	 * sets capitalization variable to true or false. default is fault.

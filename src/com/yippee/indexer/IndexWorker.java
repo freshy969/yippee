@@ -14,6 +14,8 @@ import org.w3c.dom.Document;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author tdu2 The Indexer continually polls the database until no documents
@@ -78,6 +80,9 @@ public class IndexWorker extends Thread {
 				}
 				if (pollDelay <= 60000)
 					pollDelay *= 2;
+		    	if(!nodeIndex.isArchiveMode() && archiveHolder.size()>0) 
+	    			addToArchive();
+		    	
 			}
 		//	System.out.println("Retrieved: " + docAug.getId());
 			logger.info("Retrieved: " + docAug.getId());
@@ -86,23 +91,28 @@ public class IndexWorker extends Thread {
 	    	
 	    	Document doc = null;
 			
-	    	doc = parser.parseDoc(docAug);
+	    	try {
+	    		doc = parser.parseDoc(docAug);
+	    	} catch (StringIndexOutOfBoundsException e) {
+				logger.info("StringIndexOutOfBounds in: " + docAug.getUrl());				
+	    	}
 	
 	    	try {
 				fe.extract(docAug.getUrl(), doc);
 			} catch (MalformedURLException e) {
-				logger.warn("MalformedURL in: " + docAug.getUrl());				
+				logger.info("MalformedURL in: " + docAug.getUrl());				
 			} catch (NullPointerException e) {
 				//e.printStackTrace();
-				logger.warn("NullPointerException in: " + docAug.getUrl());
+				logger.info("NullPointerException in: " + docAug.getUrl());
 			}
 	    	
 	   
 	    	HashMap<String, ArrayList<Hit>> hitList = fe.getHitList();
+	    	hitList = updateDocLength(hitList);
 	 	    
 	    	// Send hits to ring 
 	    	nodeIndex.addAllHits(hitList);
-	    	nodeIndex.printIndex();
+//	    	nodeIndex.printIndex();
 	    	
 	    	// Write links to file for PageRank
 	    	appendLinks(docAug.getUrl(), fe.getLinks());
@@ -113,12 +123,40 @@ public class IndexWorker extends Thread {
 	    	dem.addDocEntry(docEntry);
 	    	if(!nodeIndex.isArchiveMode()) {
 	    		archiveHolder.add(docAug);
-	    		if(archiveHolder.size()>100)
+	    		if(archiveHolder.size()>20)
 	    			addToArchive();
 	    	}
+	    	
 	    		//darcm.store(docAug);
 	    }		
 	}	
+	
+	public HashMap<String,ArrayList<Hit>> updateDocLength(HashMap<String,ArrayList<Hit>> hitList){
+	//	System.out.println("in update");
+		double docLength = 0;
+		Set<String> keys = hitList.keySet();
+		Iterator<String> iter = keys.iterator();
+		while(iter.hasNext()){
+			String word = iter.next();
+			docLength += Math.pow(hitList.get(word).size(), 2);
+		}
+		
+		docLength = Math.sqrt(docLength);
+	//	System.out.println("getting iterator 2");
+		keys = hitList.keySet();
+		iter = keys.iterator();
+		while(iter.hasNext()){
+			String word = iter.next();
+			ArrayList<Hit> hl = hitList.get(word);
+			for(int i=0; i<hl.size(); i++){
+				Hit h = hl.get(i);
+				h.setDocLength(docLength);
+				//System.out.println(h.getDocId()+","+h.getDocLength());
+			}
+		}
+	//	System.out.println("done with hitlist");
+		return hitList;
+	}
 	
 	public void addToArchive(){
 		for(int i=0; i<archiveHolder.size(); i++){

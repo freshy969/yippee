@@ -120,36 +120,33 @@ public class FancyExtractor {
 					
 					String word = stemlist[i];
 					
-					Hit hit = new Hit(docId, word, pos+i);
+					if (Indexer.isInLexicon(word)) {
+						Hit hit = new Hit(docId, word, pos+i);
 						
-					if (ital)
-						hit.setItalicize(true);
-					
-					if (bold)				
-						hit.setBold(true);
-					
-					ArrayList<Hit> list;
-					
-					if (hitList.containsValue(word)) {
+						// Check formatting
+						if (ital)
+							hit.setItalicize(true);
+						if (bold)				
+							hit.setBold(true);
 						
-						list = hitList.get(word);
-					
-					} else {
-						
-						list = new ArrayList<Hit>();
-					
-					}
-					
-					list.add(hit);
-					
-					if (anchor) {
-						// LINK NEEDS TO BE TESTED!
-						hit = new AnchorHit(docId, word, i, links.get(links.size() - 1));
+						// Make hitlist
+						ArrayList<Hit> list;
+						if (hitList.containsValue(word)) {
+							list = hitList.get(word);
+						} else {
+							list = new ArrayList<Hit>();
+						}
 						list.add(hit);
-						anchorList.add(hit);
-					} 
-					
-					hitList.put(word, list);	
+						
+						// If anchor, make an achor hit too
+						if (anchor) {
+							// LINK NEEDS TO BE TESTED!
+							hit = new AnchorHit(docId, word, i, links.get(links.size() - 1));
+							list.add(hit);
+							anchorList.add(hit);
+						} 					
+						hitList.put(word, list);
+					}
 				}
 				
 				pos += stemlist.length;
