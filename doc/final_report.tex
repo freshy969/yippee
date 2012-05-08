@@ -1,0 +1,121 @@
+\documentclass[11pt, letterpaper, oneside, twocolumn]{article}
+\usepackage{fancyvrb}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{graphicx,dblfloatfix}
+\usepackage[hmargin=1.25cm, vmargin=1.75cm]{geometry}               
+\usepackage{enumitem}
+
+% \usepackage{fullpage}
+% \usepackage{xunicode,xltxtra,url,parskip} 	%other packages for formatting
+
+% \addtolength{\topmargin}{-.5in}
+% \addtolength{\bottommargin}{-.875in}
+% \addtolength{\textheight}{1.75in}
+
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+\DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
+
+\newcommand{\tab}{\hspace*{2em}}
+\floatstyle{plain}
+\restylefloat{figure}
+\begin{document}
+\title{Yippee: Web Search for the New Millenium}
+\author{	TJ Du, Chris Imbriano, Margarita Miranda, Nikos Vasilakis\\
+\{tdu2, imbriano, mmiran, nvas\}@seas.upenn.edu}
+\date{April 2011}
+
+\maketitle
+
+\section{ Introduction }
+
+To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size was estimated to be between forty-five and fifty-five billion pages.\cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one, as many of the commercial search engines during the dawn of the web were unable to return their own site for a search for their site's name.\cite{google} Google has shown that besides the obvious results loading speed, page relevance is just as critical a metric of an effective search engine. This project is an attempt to develop a search engine that can do just that.
+
+Yippee is a distributed search engine designed to provide fast, relevant search results to keyword search via the web.  Section \ref{sec:approach} discusses the architecture decisions while Section \ref{sec:goals}  outlines the goals we set out to achieve.  Section \ref{sec:milestones} outlines the milestones for project completion and Section \ref{sec:labor} discusses our approach to dividing labor.
+
+
+\section{ High-level Approach }
+\label{sec:approach}
+
+The Yippee Search Engine is comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our version of Google's PageRank algorithm \cite{pagerank}, and a web interface to allow users to search the Yippee index for pages relevant to keyword or words.
+
+Most or all of the functionality of these components will be distributed among a number of nodes coordinated via the Pastry substrate. 
+
+The architecture of the Search Engine  is shown in figure 1. Our crawler
+follows the Mercator design\cite{mercator}; however, since the design is
+criticized for its centralized URLFrontier \cite{ubi,para}, we made this
+component pluggable. That  way, we can easily plug in different implementations 
+and analyze the  performance.  Raw content  is  written to a persistent, shared queue  
+between the crawler and  the indexer, enabling
+asynchronous indexing and page-rank.
+
+\label{sec:SOAR} %software architecture
+\begin{figure}[!b]
+  \centering
+  \includegraphics[scale=0.45]{figures/yippee_map.pdf}
+  \caption{Software Architecture.}
+\end{figure}
+
+
+The Indexer will parse the raw content of the url pages that the Crawler crawls and perform two
+main functions. First, it will extract links for the URL Resolver that will
+convert those urls into DocIds. This information will get fed into PageRank.
+Secondly, the Indexer will take the list of all the words in the document and
+turn them into hit lists containing the DocID, the wordID taken from the lexicon, position in document, and any other useful document specific information for that word. Those hit lists will be placed into barrels organized by wordID and the barrels will eventually get sorted to the inverted index which is necessary for the Search Engine.
+
+The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword. Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data. The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.  For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
+
+
+\section{ Project Goals }
+\label{sec:goals}
+
+
+Our main objective in this project is to create a stable and efficient search engine that quickly evaluates queries with high accuracy. We aim to maximize the correlation between our result rankings and those of other major search engines. Additionally we strive to make our indexing resilient to crashes and to interleave external search results into our own. If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results. The performance of Yippee will be evaluated by defining quantifiable metrics for each component, such as pages crawled per minute by the Crawler, or similarity of our PageRank score to that of Google etc.
+
+\section{ Milestones }
+\label{sec:milestones}
+
+\subsection{Milestone 1: 3/20-4/8}
+First, we plan to create a complete map of our project architecture to ensure we
+have a thoughtful design. Then, we will deploy minimally functioning
+Pastry nodes locally and write the scripts to do so. Once that is
+working, we will migrate those nodes to EC2. The Crawler will have a basic
+implementation of pluggable components. The Indexer will have a static lexicon
+and all major components communicating with each other. 
+
+
+\subsection{Milestone 2: 4/9-4/15}
+We will complete both the Crawler and Indexer and start these components on EC2
+to begin building the corpus and index. 
+
+
+\subsection{Milestone 3: 4/16-4/22}
+A basic PageRank Module should be created and working. We will create a wire
+frame for the UI of our web application. For our final report, we will write a complete outline with finished report sections for the crawler
+and indexer. 
+
+
+\subsection{Milestone 4: 4/22-4/30}
+We will evaluate the performance of our PageRank and finish polishing the UI. 
+
+
+\section{ Division of Labor }
+\label{sec:labor}
+
+While each member of the group is ultimately responsible for monitoring progress and completion of one of the four components described in Section 2, no individual is tasked with its implementation.  Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members implements their assigned component.  The other two group members will write black box tests of the agreed upon interface without inspecting the source code such that their tests are unbiased towards any particular implementation decision. The sign-off responsibility is divided as follows: Crawler - Nikos, Indexer - Margarita, PageRank - Chris, Search Engine and Web UI - TJ.
+
+For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer. The same approach will be used for PageRank and User Interface but the team members may be shuffled.
+
+\begin{thebibliography}{9}
+
+  \bibitem{websize} WorldWideWebSize.com, 11 Apr 2012 $\langle$http://www.worldwidewebsize.com$\rangle$
+  \bibitem{google} Sergey Brin and Lawrence Page \emph{The Anatomy of a Large-Scale Hypertextual Web Search Engine}, Stanford University, 1999
+  \bibitem{pagerank} Sergey Brin and  Lawrence Page and Rajeev Motwani and Terry Winograd \emph{The PageRank Citation Ranking: Bringing Order to the Web}, Stanford InfoLab, 1999
+  \bibitem{mercator} Allan Heydon and Marc Najork, \emph{Mercator: A scalable, extensible web crawler}, Compaq Systems Research Center, September 26, 2001
+  \bibitem{ubi} Paolo Boldi, Bruno Codenotti, Massimo Santini, Sebastiano Vigna, \emph{UbiCrawler: a scalable fully distributed Web crawler}, Software: Practice and Experience 34 (2004), 711-726.
+  \bibitem{para} Junghoo Cho, H\'{e}ctor Garcia-Molina, \emph{Parallel crawlers}, Proc. of the 11th International Conference on World Wide Web, 2002.
+
+
+\end{thebibliography}
+
+\end{document}
