@@ -49,7 +49,16 @@ public class RobotsTxt {
 	 * @return true if the policy allows crawling the <url>
 	 */
 	public boolean allowedToCrawl(URL url){
-		return true;
+		String urlString = url.toString();
+		boolean result = true;
+
+		for (String disallow : this.getDisallows()) {
+			if (urlString.contains(disallow)) {
+				result = false;
+			}
+		}
+		
+		return result;
 	}
 
 	public String getHost() {
