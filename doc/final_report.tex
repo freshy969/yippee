@@ -114,7 +114,11 @@ Section \ref{sec:evaluation} will present evaluations for some of the design dec
 \subsection{Crawler}
 
 The Yippee crawler is a multithreaded distributed crawler based on the design of the Mercator crawler\cite{mercator}. 
-Each of the Yippee node is responsible for a subset of the web as determined by FreePastry key-based routing keyed on the host of each url discovered.  
+Each of the Yippee node is responsible for a subset of the web as determined by FreePastry key-based routing keyed on the host of each url discovered.
+Mercator uses various implementations of the URLFrontier to fine tune the crawlers performance and politeness.
+For this reason, we made our frontier pluggable via a factory pattern and interface.
+This allowed us to easily test frontiers with varying degrees of politeness and performance.
+
 One criticism of the Mercator design\cite{ubi,para} is the centralized nature of the URLFrontier. 
 
 \textbf{Needs to be edited}
