@@ -142,9 +142,13 @@ Those hit lists will be placed into barrels organized by wordID and the barrels 
 
 The PageRank component of Yippee is the only centralized part of the system.
 It performs a calculation based-on \[Brin, Page 1999\]\cite{pagerank} to determine the relative importance of each page in the index.
-The calculation is performed via MapReduce on a single node Hadoop cluster.
+The PageRank calculation is an iterative MapReduce running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
+We decided that PageRank should not be a distributed component for the following reasons. 
+First, PageRank is a calcualtion relevant only when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was unlikely that we would have crawled 
+There was a decision as to whether or not PageRank should be a distributed component Yippee. 
+Some of the factors in this decision were how frequently the rankings would need to be updated and how long the Yippee Search Engine would be in production.
 
-The decision 
+however, given that the lifetime of the working project would be short, repeated calculations of PageRank would be unnecessary, as values would only change 
 
 \subsection{Search}
 \textbf{Needs to be edited}
