@@ -19,102 +19,40 @@
 \newcommand{\tab}{\hspace*{2em}}
 \floatstyle{plain}
 \restylefloat{figure}
-\begin{document}t
+\begin{document}
 \title{Yippee: Web Search for the New Millenium}
 \author{	TJ Du, Chris Imbriano, Margarita Miranda, Nikos Vasilakis\\
-\{tdu2, imbriano, mmiran, nvas\}@seas.upenn.edu}
+	\{tdu2, imbriano, mmiran, nvas\}@seas.upenn.edu}
 \date{April 2011}
 
 \maketitle
 
 
-\begin{enumerate}
-
-\item Sections
-- Introduction : 
-	- Intro we have
-	- Outline the paper3
-
-\item Project Approach
-- High-level Architecture Approach - 
-	* major components and how they interact (not pastry details)
-	* Architecture figure
-	
-- Division of labor
-- Actual Timeline
-
-\item Component Discussion
-
-* Key data Structures and how they're used
-* When making a design choice, why make that choice (high level justification, not evaluation)
-* Scalable?
-* Resilient to faults
-* Extra features'
-* Relevant figure / screenshot
-
-- Infrastrcture (BerkeleyDB, FreePastry, ant, JUnit) 
-
-- Crawler
-
-- Indexer
-
-- PageRank
-
-- Search
-3. RANKING
-- Which features do you use to determine the ranking?
-- How do you calculate the score for each feature?
-- How do you compute the final ranking based on the various scores?
-- If you integrate results from Amazon/eBay/..., how is this done?
-
-
-\item Evaluation
-
-* Succinct description of result
-* conclusion drawn from them 
-
-- Crawler Frontier types
-- Crawler # of threads
-- Pastry evaluation of message size/frequency
-- PageRank input size on single node hadoop cluster
-
-\item Future Work
-- If we had more time, what features would be implemented next
-
-\item Conclusion
-- Lessons Learned
-
-
-\end{enumerate}
-
-
-
-
-
-
-
-
-
 
 \section{ Introduction }
 
-To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size was estimated to be between forty-five and fifty-five billion pages.\cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one, as many of the commercial search engines during the dawn of the web were unable to return their own site for a search for their site's name.\cite{google} Google has shown that besides the obvious results loading speed, page relevance is just as critical a metric of an effective search engine. This project is an attempt to develop a search engine that can do just that.
+To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size was estimated to be between forty-five and fifty-five billion pages.\cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one, as many of the commercial search engines during the dawn of the web were unable to return their own site for a search for their site's name.\cite{google} Google has shown that besides the load speed of the results, page relevance is just as critical a metric of an effective search engine. 
 
-Yippee is a distributed search engine designed to provide fast, relevant search results to keyword search via the web.  Section \ref{sec:approach} discusses the architecture decisions while Section \ref{sec:goals}  outlines the goals we set out to achieve.  Section \ref{sec:milestones} outlines the milestones for project completion and Section \ref{sec:labor} discusses our approach to dividing labor.
+Yippee is a distributed search engine designed to provide fast, relevant results to keyword queries via the web.  
 
-
-\section{ High-level Approach }
+\section{Project Approach}
 \label{sec:approach}
 
-The Yippee Search Engine is comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our version of Google's PageRank algorithm \cite{pagerank}, and a web interface to allow users to search the Yippee index for pages relevant to keyword or words.
+The Yippee Search Engine is a distributed application comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our simplistic implementation of Google's PageRank algorithm \cite{pagerank}, and a search module to retrieve documents based on user-provided keywords.  The crawler, indexer and search components are distributed via the FreePastry peer-to-peer substrate, while the PageRank components is centralized.  All parts of the project are deployed to Amazon Elastic Cloud Computing (EC2) instances.  
 
-Most or all of the functionality of these components will be distributed among a number of nodes coordinated via the Pastry substrate. 
+The architecture of the Yippee is shown in figure \textbf{Update this graph} 1 \textbf{make this number a reference since there will be more figures this time}.  The 
 
-The architecture of the Search Engine  is shown in figure 1. Our crawler
-follows the Mercator design\cite{mercator}; however, since the design is
+
+Section \ref{sec:component} will describe each component and the design decisions leading to its implementation.  Section \ref{sec:evaluation} will present an evaluation for some of the components and 
+
+
+\textbf{These paragraphs probably belong in component discussion}
+
+
+Our crawler follows the Mercator design\cite{mercator}; however, since the design is
 criticized for its centralized URLFrontier \cite{ubi,para}, we made this
 component pluggable. That  way, we can easily plug in different implementations 
-and analyze the  performance.  Raw content  is  written to a persistent, shared queue  
+and analyze the  performance. Raw content  is  written to a persistent, shared queue  
 between the crawler and  the indexer, enabling
 asynchronous indexing and page-rank.
 
@@ -134,6 +72,28 @@ turn them into hit lists containing the DocID, the wordID taken from the lexicon
 
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword. Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data. The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.  For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
 
+
+\section{Component Discussion}
+\label{sec:component}
+
+\subsection{Infrastructure}
+
+\subsection{Crawler}
+
+\subsection{Indexer}
+
+\subsection{PageRank}
+
+\subsection{Search}
+
+\section{Evaluation}
+\label{sec:evaluation}
+
+\section{Future Work}
+\label{sec:future}
+
+\section{Conclusion}
+\label{sec:conculsion}
 
 \section{ Project Goals }
 \label{sec:goals}
