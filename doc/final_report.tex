@@ -19,13 +19,72 @@
 \newcommand{\tab}{\hspace*{2em}}
 \floatstyle{plain}
 \restylefloat{figure}
-\begin{document}
+\begin{document}t
 \title{Yippee: Web Search for the New Millenium}
 \author{	TJ Du, Chris Imbriano, Margarita Miranda, Nikos Vasilakis\\
 \{tdu2, imbriano, mmiran, nvas\}@seas.upenn.edu}
 \date{April 2011}
 
 \maketitle
+
+
+\begin{enumerate}
+
+\item Sections
+- Introduction : 
+	- Intro we have
+	- Outline the paper3
+
+\item Project Approach
+- High-level Architecture Approach - 
+	* major components and how they interact (not pastry details)
+	* Architecture figure
+	
+- Division of labor
+- Actual Timeline
+
+\item Component Discussion
+
+* Key data Structures and how they're used
+* When making a design choice, why make that choice (high level justification, not evaluation)
+* Scalable?
+* Resilient to faults
+* Extra features'
+* Relevant figure / screenshot
+
+- Infrastrcture (BerkeleyDB, FreePastry, ant, JUnit) 
+
+- Crawler
+
+- Indexer
+
+- PageRank
+
+- Search
+3. RANKING
+- Which features do you use to determine the ranking?
+- How do you calculate the score for each feature?
+- How do you compute the final ranking based on the various scores?
+- If you integrate results from Amazon/eBay/..., how is this done?
+
+
+\item Evaluation
+
+- Crawler Frontier types
+- PageRank input size on single node hadoop cluster
+- 
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
 
 \section{ Introduction }
 
