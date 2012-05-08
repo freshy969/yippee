@@ -35,33 +35,39 @@
     node[concept] {Yippee Search Engine}
     [clockwise from=0]
     child[concept color=teal!] {
-      node[concept] {Search Module 1}
+      node[concept] {Pastry Node 1 + BerkeleyDB}
       [clockwise from=90]
       child [concept color=cyan!] { node[concept] (c1) {Crawler} }
       child [concept color=purple!]  { node[concept] (i1) {Indexer} }
-      child [concept color=lime!] { node[concept] (d1) {BerkeleyDB} }
+      child [concept color=lime!] { node[concept] (s1) {Search} }
     }  
     child[concept color=teal!] {
-      node[concept] {Search Module 2}
+      node[concept] {Pastry Node 2 + BerkeleyDB}
       [clockwise from=-10]
       child [concept color=cyan!] { node[concept] (c2) {Crawler} }
       child [concept color=purple!] { node[concept] (i2) {Indexer} }
-      child [concept color=violet!] { node[concept] {Pastry} }
-      child [concept color=lime!] { node[concept] (d2) {BerkeleyDB} }
+      child [concept color=lime!] { node[concept] (s2) {Search} }
     }
-    child[concept color=teal!] { node[concept] {Search Module 3} }
+    child[concept color=teal!] { node[concept] {Pastry Node 3 + BerkeleyDB} }
     child[concept color=magenta!] {
       node[concept] {PageRank}
       [clockwise from=-90]
       child { node[concept] {Hadoop} }
     }
-    child[concept color=teal!] { node[concept] {Search Module  4} };
+    child[concept color=teal!] { node[concept] {Pastry Node 4 + BerkeleyDB} };
 
     \begin{pgfonlayer}{background}
-        \draw [circle connection bar ] (i1) edge [color=violet!50!] (i2);
-        \draw[-to,shorten >=10pt,gray] (c1) -- (c2);
+        % \draw [circle connection bar ] (i1) edge [color=violet!50!] (i2);
+        % \draw[-to,shorten >=10pt,gray] (c1) -- (c2);
+        \draw[very thick, dashed, double distance=2pt] (3,2) arc (31:90:3cm);
+        \draw[very thick, dashed, double distance=2pt] (3.8,-1.9) arc (-15:-50:1cm);
+        \draw[very thick, dashed, double distance=2pt] (0,-4.0) arc (-80:-100:1cm);
+        %\node[anchor=north,text width=10cm,inner sep=.05cm,align=center,fill=white] at (2,2) {Pastry}; text width=3cm,
+        \node[fill=white, inner sep=0.1cm, text centered] at (2,3) {Pastry};
     \end{pgfonlayer}
 \end{tikzpicture}
+  \caption{Yippee's fully distributed architecture. Nodes communicate
+  via FreePastry}
 \end{figure*}
 
 \section{ Introduction }
