@@ -6,7 +6,7 @@
 \usepackage[hmargin=1in, vmargin=1in]{geometry}               
 \usepackage{enumitem}
 \usepackage{tikz}
-\usetikzlibrary{mindmap,trees}
+\usetikzlibrary{arrows,backgrounds,calc,fit,mindmap,positioning,trees,shapes}
 
 % \usepackage{fullpage}
 % \usepackage{xunicode,xltxtra,url,parskip} 	%other packages for formatting
@@ -29,34 +29,40 @@
 
 \maketitle
 
+\begin{figure*}[ht]
 \begin{tikzpicture}
   \path[mindmap,concept color=darkgray,text=white]
-    node[concept] {Yippee Search Module}
+    node[concept] {Yippee Search Engine}
     [clockwise from=0]
     child[concept color=teal!] {
-      node[concept] {Node 1}
+      node[concept] {Search Module 1}
       [clockwise from=90]
-      child [concept color=cyan!] { node[concept] {Crawler} }
-      child [concept color=purple!] { node[concept] {Indexer} }
-      child [concept color=violet!] { node[concept] {Pastry} }
-      child [concept color=lime!] { node[concept] {BerkeleyDB} }
+      child [concept color=cyan!] { node[concept] (c1) {Crawler} }
+      child [concept color=purple!]  { node[concept] (i1) {Indexer} }
+      child [concept color=lime!] { node[concept] (d1) {BerkeleyDB} }
     }  
     child[concept color=teal!] {
-      node[concept] {Node 2}
+      node[concept] {Search Module 2}
       [clockwise from=-10]
-      child [concept color=cyan!] { node[concept] {Crawler} }
-      child [concept color=purple!] { node[concept] {Indexer} }
+      child [concept color=cyan!] { node[concept] (c2) {Crawler} }
+      child [concept color=purple!] { node[concept] (i2) {Indexer} }
       child [concept color=violet!] { node[concept] {Pastry} }
-      child [concept color=lime!] { node[concept] {BerkeleyDB} }
+      child [concept color=lime!] { node[concept] (d2) {BerkeleyDB} }
     }
-    child[concept color=teal!] { node[concept] {Node 3} }
+    child[concept color=teal!] { node[concept] {Search Module 3} }
     child[concept color=magenta!] {
       node[concept] {PageRank}
       [clockwise from=-90]
       child { node[concept] {Hadoop} }
     }
-    child[concept color=teal!] { node[concept] {Node 4} };
+    child[concept color=teal!] { node[concept] {Search Module  4} };
+
+    \begin{pgfonlayer}{background}
+        \draw [circle connection bar ] (i1) edge [color=violet!50!] (i2);
+        \draw[-to,shorten >=10pt,gray] (c1) -- (c2);
+    \end{pgfonlayer}
 \end{tikzpicture}
+\end{figure*}
 
 \section{ Introduction }
 
