@@ -60,19 +60,24 @@
 
 \section{ Introduction }
 
-To say the world wide web is enormous would be an understatement.  In the last month (March 2012),  Google's index size was estimated to be between forty-five and fifty-five billion pages.\cite{websize} The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one, as many of the commercial search engines during the dawn of the web were unable to return their own site for a search for their site's name.\cite{google} Google has shown that besides the load speed of the results, page relevance is just as critical a metric of an effective search engine. 
+To say the world wide web is enormous would be an understatement.  
+In the last month (March 2012),  Google's index size was estimated to be between forty-five and fifty-five billion pages.\cite{websize}
+The task of presenting a web user with relevant pages according to keyword search has proven to be a difficult one, as many of the commercial search engines during the dawn of the web were unable to return their own site for a search for their site's name.\cite{google} 
+Google has shown that besides the load speed of the results, page relevance is just as critical a metric of an effective search engine. 
 
 Yippee is a distributed search engine designed to provide fast, relevant results to keyword queries via the web.  
 
 \section{Project Approach}
 \label{sec:approach}
 
-The Yippee Search Engine is a distributed application comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our simplistic implementation of Google's PageRank algorithm \cite{pagerank}, and a search module to retrieve documents based on user-provided keywords.  The crawler, indexer and search components are distributed via the FreePastry peer-to-peer substrate, while the PageRank components is centralized.  All parts of the project are deployed to Amazon Elastic Cloud Computing (EC2) instances.  
+The Yippee Search Engine is a distributed application comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our simplistic implementation of Google's PageRank algorithm \cite{pagerank}, and a search module to retrieve documents based on user-provided keywords.  
+The crawler, indexer and search components are distributed via the FreePastry peer-to-peer substrate, while the PageRank components is centralized.  All parts of the project are deployed to Amazon Elastic Cloud Computing (EC2) instances.  
 
 The architecture of the Yippee is shown in figure \textbf{Update this graph} 1 \textbf{make this number a reference since there will be more figures this time}.
 
 
-Section \ref{sec:component} will describe each component and its relevant design decision. Section \ref{sec:evaluation} will present evaluations for some of the design decisions. \textbf{rephrase}
+Section \ref{sec:component} will describe each component and its relevant design decision.
+Section \ref{sec:evaluation} will present evaluations for some of the design decisions. \textbf{rephrase}
 
 \textbf{These paragraphs probably belong in component discussion}
 
@@ -93,15 +98,22 @@ Section \ref{sec:component} will describe each component and its relevant design
 
 
 
-\subsection{Infrastructure}
+\subsection{Infrastructure and Software Engineering}
+
+* Build process - ant, EntryPoint, Configuration
+* Testing - JUnit
+* Persistent Storage - BerkeleyDB
+* Distributed Application - FreePastry 
 
 \subsection{Crawler}
 
-The Yippee crawler is a multithreaded distributed crawler. To 
+The Yippee crawler is a multithreaded distributed crawler based on the design of the Mercator crawler\cite{mercator}. 
+Each of the Yippee node is responsible for a subset of the web as determined by FreePastry key-based routing keyed on the host of each url discovered.  
+One criticism of the Mercator design\cite{ubi,para} is the centralized nature of the URLFrontier. 
 
 \textbf{Needs to be edited}
-Our crawler follows the Mercator design\cite{mercator}; however, since the design is
-criticized for its centralized URLFrontier \cite{ubi,para}, we made this
+Our crawler follows the Mercator design; however, since the design is
+criticized for its centralized URLFrontier , we made this
 component pluggable. That  way, we can easily plug in different implementations 
 and analyze the  performance. Raw content  is  written to a persistent, shared queue  
 between the crawler and  the indexer, enabling
@@ -110,21 +122,26 @@ asynchronous indexing and page-rank.
 \subsection{Indexer}
 
 \textbf{Needs to be edited}
-The Indexer will parse the raw content of the url pages that the Crawler crawls and perform two
-main functions. First, it will extract links for the URL Resolver that will
-convert those urls into DocIds. This information will get fed into PageRank.
-Secondly, the Indexer will take the list of all the words in the document and
-turn them into hit lists containing the DocID, the wordID taken from the lexicon, position in document, and any other useful document specific information for that word. Those hit lists will be placed into barrels organized by wordID and the barrels will eventually get sorted to the inverted index which is necessary for the Search Engine.
+The Indexer will parse the raw content of the url pages that the Crawler crawls and perform two main functions.
+First, it will extract links for the URL Resolver that will convert those urls into DocIds.
+This information will get fed into PageRank.
+Secondly, the Indexer will take the list of all the words in the document and turn them into hit lists containing the DocID, the wordID taken from the lexicon, position in document, and any other useful document specific information for that word. 
+Those hit lists will be placed into barrels organized by wordID and the barrels will eventually get sorted to the inverted index which is necessary for the Search Engine.
 
 \subsection{PageRank}
 
-The PageRank component of Yippee is the only centralized part of the system. It performs a calculation based-on \[Brin, Page 1999\]\cite{pagerank} to determine the relative importance of each page in the index. The calculation is performed via MapReduce on a single node Hadoop cluster.
+The PageRank component of Yippee is the only centralized part of the system.
+It performs a calculation based-on \[Brin, Page 1999\]\cite{pagerank} to determine the relative importance of each page in the index.
+The calculation is performed via MapReduce on a single node Hadoop cluster.
 
 The decision 
 
 \subsection{Search}
 \textbf{Needs to be edited}
-The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword. Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data. The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.  For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
+The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword.
+Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data.
+The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.
+For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
 
 \section{Evaluation}
 \label{sec:evaluation}
@@ -149,9 +166,13 @@ If we have additional time, we will implement a spell-check and AJAX support for
 \section{ Division of Labor }
 \label{sec:labor}
 
-While each member of the group is ultimately responsible for monitoring progress and completion of one of the four components described in Section 2, no individual is tasked with its implementation. Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members implements their assigned component.  The other two group members will write black box tests of the agreed upon interface without inspecting the source code such that their tests are unbiased towards any particular implementation decision. The sign-off responsibility is divided as follows: Crawler - Nikos, Indexer - Margarita, PageRank - Chris, Search Engine and Web UI - TJ.
+While each member of the group is ultimately responsible for monitoring progress and completion of one of the four components described in Section 2, no individual is tasked with its implementation.
+Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members implements their assigned component.
+The other two group members will write black box tests of the agreed upon interface without inspecting the source code such that their tests are unbiased towards any particular implementation decision.
+The sign-off responsibility is divided as follows: Crawler - Nikos, Indexer - Margarita, PageRank - Chris, Search Engine and Web UI - TJ.
 
-For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer. The same approach will be used for PageRank and User Interface but the team members may be shuffled.
+For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer.
+The same approach will be used for PageRank and User Interface but the team members may be shuffled.
 
 \begin{thebibliography}{9}
 
