@@ -5,6 +5,8 @@
 \usepackage{graphicx,dblfloatfix}
 \usepackage[hmargin=1.25cm, vmargin=1.75cm]{geometry}               
 \usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{mindmap,trees}
 
 % \usepackage{fullpage}
 % \usepackage{xunicode,xltxtra,url,parskip} 	%other packages for formatting
@@ -27,7 +29,34 @@
 
 \maketitle
 
-
+\begin{tikzpicture}
+  \path[mindmap,concept color=darkgray,text=white]
+    node[concept] {Yippee Search Module}
+    [clockwise from=0]
+    child[concept color=teal!] {
+      node[concept] {Node 1}
+      [clockwise from=90]
+      child [concept color=cyan!] { node[concept] {Crawler} }
+      child [concept color=purple!] { node[concept] {Indexer} }
+      child [concept color=violet!] { node[concept] {Pastry} }
+      child [concept color=lime!] { node[concept] {BerkeleyDB} }
+    }  
+    child[concept color=teal!] {
+      node[concept] {Node 2}
+      [clockwise from=-10]
+      child [concept color=cyan!] { node[concept] {Crawler} }
+      child [concept color=purple!] { node[concept] {Indexer} }
+      child [concept color=violet!] { node[concept] {Pastry} }
+      child [concept color=lime!] { node[concept] {BerkeleyDB} }
+    }
+    child[concept color=teal!] { node[concept] {Node 3} }
+    child[concept color=magenta!] {
+      node[concept] {PageRank}
+      [clockwise from=-90]
+      child { node[concept] {Hadoop} }
+    }
+    child[concept color=teal!] { node[concept] {Node 4} };
+\end{tikzpicture}
 
 \section{ Introduction }
 
