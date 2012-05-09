@@ -30,6 +30,7 @@
 
 \maketitle
 
+\label{sec:SOAR} %software architecture
 \begin{figure*}[ht]
 \begin{tikzpicture}
   \path[mindmap,concept color=darkgray,text=white]
@@ -86,21 +87,11 @@ Yippee is a distributed search engine designed to provide fast, relevant results
 The Yippee Search Engine is a distributed application comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our simplistic implementation of Google's PageRank algorithm \cite{pagerank}, and a search module to retrieve documents based on user-provided keywords.  
 The crawler, indexer and search components are distributed via the FreePastry peer-to-peer substrate, while the PageRank components is centralized.  All parts of the project are deployed to Amazon Elastic Cloud Computing (EC2) instances.  
 
-The architecture of the Yippee is shown in figure \textbf{Update this graph} 1 \textbf{make this number a reference since there will be more figures this time}.
+The architecture of the Yippee is shown in figure 1.
 
 
 Section \ref{sec:component} will describe each component and its relevant design decision.
 Section \ref{sec:evaluation} will present evaluations for some of the design decisions. \textbf{rephrase}
-
-
-\label{sec:SOAR} %software architecture
-\begin{figure}[!b]
-  \centering
-  \includegraphics[scale=0.45]{figures/yippee_map.pdf}
-  \caption{Software Architecture.}
-\end{figure}
-
-
 
 \section{Component Discussion}
 \label{sec:component}
