@@ -253,21 +253,16 @@ Other features we will also implement is a way to update Hit objects when a docu
 
 \section{Conclusion}
 \label{sec:conculsion}
-Overall, we feel that this project was a success.
-Despite a few shortcomings, we were able to build a sophisticated search engine which is stable and efficient.
 
-The multi-threaded indexer component was very stable and indexed pages efficiently without much decrease in performance with respect to corpus size.
-Since our indexer used FreePastry to store its indices, it would have scaled very well with respect to more nodes.
-On the other side of this, the indexer was limited when nodes were few due to the high number of messages sent to the ring.
-Thus we learned that when a great amount of data must be distributed around a ring, with fast speed, we need to consider expanding the size of the ring to accommodate the data.
+Searching with Yippee was stable, efficient and returned relevant results fairly quickly.
+Like any search engine, the pages in the corpus dictate the quality of the results, and when we queried items in our corpus, the response was fast and usually appeared within top five results.
+So overall, we feel that this project was a success. 
+Despite a few shortcomings, we were successful in building a full-fledged distributed search engine.
+This project has given us hands on experience dealing with the complexity of building web scale systems.  
+Designing Yippee was an exercise in analysis of the costs and benefits of various solutions addressing scalability, latency, robustness and reliability issues.
+Throughout the project stages, we found ourselves weighing simple, cheap options versus their more feature rich yet expensive counterparts. 
+Professor Haeberlen's words of wisdom ring true that one cannot learn about web system in isolation; one must implement them themselves to deeply understand the challenges in building such systems.
 
-The search component was stable and efficient as well, and ranked results fairly well. 
-Though we had a limited corpus, when we queried items contained within the corpus, the result was fast and usually within 1-5 spots of the top ranked spot. 
-Since we weighted anchor hits more heavily than text hits, it was difficult to tune these metrics without a more robust corpus. 
-Pages with more coverage tended to be ranked higher in relevance, whereas other with less coverage were left with a lower score. 
-Had we more time, we would have hoped to crawl a larger corpus and better tune this metric. 
-Perhaps anchor hits would be better off being weighted less, since they are subject to connectivity issues. 
-Regardless of the ideal algorithm, we tuned ours to give the best results possible with our limited data, and we feel that the results returned were of good quality, despite our shortcomings.
 
 
 \begin{thebibliography}{9}
