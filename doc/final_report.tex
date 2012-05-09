@@ -220,13 +220,12 @@ In order to fix this issue, we could have implemented a more distributed ranking
 PageRank seems to scale well at input size below one million links.
 As mentioned, our indexed corpus never got too large and so we never ran PageRank on input sizes greater than about 350k links.
 We combined input from numerous crawl/indexes to generate sample data for figure (GRAPH NUMBER).
-Unfortunately, the pagerank process repeatedly failed for an input size of one million, suggesting perhaps we either needed even more computing power to perform the calculation in a centralize manner, or a dis
+Unfortunately, during experimentation the PageRank process repeatedly failed for an input size of one million, suggesting perhaps we either needed even more computing power to perform the calculation in a centralize manner, or we might have benefited from a distributed PageRank.
 
 \section{Future Work}
 \label{sec:future}
 
 Given more time and budget, we would focus improvement efforts in the areas of scalability and robustness to improve corpus and index size.
-Additionally, implementing a Mercator style URLFrontier more closely to the original would provide us with a much more polite crawler. 
 Search efficiency could be improved with better caching techniques for queries.
 For result improvement, we will implement spell-check, user feedback on query results, and context/phrasing taken into account for queries. 
 We would also be working with a larger corpus.
