@@ -204,6 +204,20 @@ The results returned are then displayed with statistics on search time elapsed a
 
 Crawler eval - mention corpus size of the weekend ~75k docs
 
+The crawler  performed best with  28 Spider threads. When  crawling with
+more threads we  found performance to degrade, however we  were not able
+to identify the root cause. It may  have been due to thread thrashing or
+our application overflowing Pastry message queues. As mentioned earlier,
+we implemented a number of URLFrontiers,  since the Frontier is the sole
+centralized component, ranging from polite and slow to rude and fast. We
+also  observed a  substantial  decrease in crawling  speed over time.
+The fastest implementation crawled over five hundred documents per
+minute. However after 12 hours of crawling, the crawl rate was less than half of
+the original. We ran a number of tests to measure the memory footprint,
+and we did not identify any memory leaks from the crawler itself -- note
+that all  data structures i.e., queues  and lists were bounded,  so they
+could not exceed a predefined threshold.
+
 The Indexer performed best with 5 IndexerWorker threads at a rate of 250 documents per minute. 
 This is timed from when the document is polled from the queue by the IndexerWord to when the Hits are saved to the appropriate Barrels. 
 Increasing the number of threads resulted in Pastry messages getting sent out more frequently and overflowing the node queues. 
