@@ -172,7 +172,6 @@ Upon message arrival, a HitList object is either created or updated depending on
 Then document frequency and term frequency are adjusted accordingly. 
 This is performed at this point in order to reduce the number of calculations done post query search.  
 
-
 \subsection{PageRank}
 
 The PageRank component of Yippee is the only centralized part of the system.
@@ -182,13 +181,14 @@ We decided that PageRank should not be a distributed component for the following
 First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was only necessary to run PageRank, in production, once.
 Second, given the frequency of PageRank jobs, implementing a distributed version introduced complexity that was unwarranted, so the simpler solution was chosen.
 
-
 \subsection{Search}
 \textbf{Needs to be edited}
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword.
-Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data.
-The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.
-For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
+We used the TF-IDF and PageRank values to calculate ranking scores for all documents. 
+The TF-IDF value of a document was calculated as the product of the sum of its weighted tf and atf values. 
+In this case, the atf values were anchor text hits from other pages pointing to the current document. For each document we weighted its tf by 0.4 and the atf by 0.6 because we felt that given the implications of PageRank link analysis, that the content of a given page may be more accurately described by links point to it. 
+Finally, once all hits per document are summated, each document's TF-IDF value was then multiplied by the PageRank value (default of 1) to give the final rank value. 
+The documents were then sorted by descending value and returned in a list. 
 
 \section{Evaluation}
 \label{sec:evaluation}
@@ -198,6 +198,11 @@ This is timed from when the document is polled from the queue by the IndexerWord
 Increasing the number of threads resulted in Pastry messages getting sent out more frequently and overflowing the node queues. 
 There was also overhead in writing to the DocEntry database between the threads. 
 Despite this, the performance rate over time was constant meaning overflow of messages was eliminated. 
+
+The search time increases linearly with the number of matched results. 
+Unfortunately, since the size of our corpus never exceeded 10k documents, the search time never exceeded 1s in elapsed time and the issue went unnoticed. 
+In retrospect, this points to a design issue in the way we indexed documents in a distributed manner: the more results we matched, the more documents we needed to collect before we were able to rank. 
+In order to fix this issue, we could have implemented a more distributed ranking implementation.
 
 \section{Future Work}
 \label{sec:future}
