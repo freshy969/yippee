@@ -86,7 +86,7 @@ Yippee is a distributed search engine designed to provide fast, relevant results
 The Yippee Search Engine is a distributed application comprised of 4 main components: a web crawler to recursively download pages from the web, an indexer to index crawled web pages, our simplistic implementation of Google's PageRank algorithm \cite{pagerank}, and a search module to retrieve documents based on user-provided keywords.  
 The crawler, indexer and search components are distributed via the FreePastry peer-to-peer substrate, while the PageRank components is centralized.  All parts of the project are deployed to Amazon Elastic Cloud Computing (EC2) instances.  
 
-The architecture of the Yippee is shown in figure \textbf{Update this graph} 1 \textbf{make this number a reference since there will be more figures this time}.
+The architecture of the Yippee is shown in figure 1 \textbf{make this number a reference since there will be more figures this time}.
 
 
 Section \ref{sec:component} will describe each component and its relevant design decision.
@@ -130,8 +130,8 @@ Each message is sent by the module responsible for routing messages, and handled
 The Yippee crawler is a multithreaded distributed crawler based on the design of the Mercator crawler\cite{mercator}. 
 Each of the Yippee node is responsible for a subset of the web as determined by FreePastry key-based routing keyed on the host of each url discovered.
 Mercator uses various implementations of the URLFrontier to fine tune the crawlers performance and politeness.
-The crawler is multithreaded and requires very little inter-thread communication, but the URLFrontier can be a bottle neck depending on the implementation.
-For this reason, we made our frontier pluggable via a factory pattern to allow us to easily test frontiers with varying degrees of politeness and implementations.
+The crawler is multithreaded and requires very little inter-thread communication, but the URLFrontier can be a bottleneck depending on the implementation. 
+Given the critique of the centralized nature of Mercator's URLFrontier \cite{ubi, para}, we made our frontier pluggable via a factory pattern to allow us to easily test frontiers with varying degrees of politeness and implementations.
 
 
 The Yippee Crawler has three important persistence objects; DocAug, FrontierSavedState and RobotsTxt.
@@ -146,7 +146,7 @@ More crawling nodes would result in more pages crawled per unit time, however, w
 In the case we saw, upgrading the Amazon instance to a more powerful instance helped resolve that bottleneck to a degree.
 It is not clear, without some experimentation, whether more crawling nodes would help the bottleneck by reducing the message handling load of an individual node, or the added pages being crawled would increase the number of urls distributed and have the opposite effect.
 
-The Yippee crawler is resilient to failure in that if a node dies, the urls it would have been responsible for are directed to the next available node, per FreePasty's routing.
+The Yippee crawler is resilient to failure in that if a node dies, the urls that would have been routed to it are directed to the next available node, per FreePasty's routing.
 The Yippee application does not however maintain duplicate data, so any already crawled pages, or discovered urls, will be lost and need to be crawled again.
 We felt these tradeoffs were reasonable given the timeline and scope of the project
 
@@ -228,26 +228,15 @@ In order to fix this issue, we could have implemented a more distributed ranking
 
 \section{Future Work}
 \label{sec:future}
-For the future we would like to first and foremost improve search efficency and results. 
+For the future we would like to first and foremost improve search efficiency and results. 
 Efficiency could be improved with better caching techniques for queries. 
 For result improvement, we will implement spell-check, user feedback on query results, and context/phrasing taken into account for queries. 
 We would also be working with a larger corpus.
-Other features we will also implement is a way to update Hit objects when a document is recrawled and the contents have changed and the ability to add more nodes/remove nodes on the fly. 
+Other features we will also implement is a way to update Hit objects when a document is crawled again and the contents have changed and the ability to add more nodes/remove nodes on the fly. 
 
 
 \section{Conclusion}
 \label{sec:conculsion}
-
-\section{ Division of Labor }
-\label{sec:labor}
-
-While each member of the group is ultimately responsible for monitoring progress and completion of one of the four components described in Section 2, no individual is tasked with its implementation.
-Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members implements their assigned component.
-The other two group members will write black box tests of the agreed upon interface without inspecting the source code such that their tests are unbiased towards any particular implementation decision.
-The sign-off responsibility is divided as follows: Crawler - Nikos, Indexer - Margarita, PageRank - Chris, Search Engine and Web UI - TJ.
-
-For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer.
-The same approach will be used for PageRank and User Interface but the team members may be shuffled.
 
 \begin{thebibliography}{9}
 
