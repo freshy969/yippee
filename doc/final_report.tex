@@ -195,7 +195,15 @@ Second, given the frequency of PageRank jobs, implementing a distributed version
 \subsection{Search}
 \textbf{Needs to be edited}
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword.
-We used the TF-IDF and PageRank values to calculate ranking scores for all documents. 
+The search component of the Yippee Engine utilized the Barrel and DocEntry indices to retrieve and aggregate statistics for calculating the TF-IDF ranking. 
+Search queries were split by word and distributed to the appropriate node via key-based routing. 
+If the word was found to have Hits in the corpus, all documents matched in that HitList are retrieved from the ring (via KBR again.) 
+If a word had no matches or was not found in the lexicon, a null reply message is sent immediately, to notify that no results will be returned. 
+Once all DocEntry objects have been aggregated on the query node, we were able to continue onward to ranking the documents. 
+Of note, each query is assigned a unique queryID such that messages sent and replied would be associated with the correct query. 
+This way, the search functionality has high scalability without losing integrity. 
+Additionally, cached queryIDs paved way for future work in caching results and iterating through pages of results.
+As for ranking matched documents, we used the TF-IDF and PageRank values to calculate ranking scores for all documents. 
 The TF-IDF value of a document was calculated as the product of the sum of its weighted tf and atf values. 
 In this case, the atf values were anchor text hits from other pages pointing to the current document. For each document we weighted its tf by 0.4 and the atf by 0.6 because we felt that given the implications of PageRank link analysis, that the content of a given page may be more accurately described by links point to it. 
 Finally, once all hits per document are summated, each document's TF-IDF value was then multiplied by the PageRank value (default of 1) to give the final rank value. 
