@@ -23,9 +23,9 @@ public class DocIndexManagerTest {
 	@Before
     public void setUp(){    
        docIndexManager = new DocEntryManager();
-       doc1 = new DocEntry("http://www.facebook.com/tjdu22", "TJ Du", "www.facebook.com", new Date());
-       doc2 = new DocEntry("http://www.cis.upenn.edu/~cis455", "CIS 455 / 555: Internet and Web Systems (Spring 2012)", "www.cis.upenn.edu", new Date());
-       doc3 = new DocEntry("https://github.com/nvasilakis/yippee", "nvasilakis/yippee", "www.github.com", new Date());
+       doc1 = new DocEntry("http://www.facebook.com/tjdu22", "TJ Du", "www.facebook.com", new Date(), "Facebook!");
+       doc2 = new DocEntry("http://www.cis.upenn.edu/~cis455", "CIS 455 / 555: Internet and Web Systems (Spring 2012)", "www.cis.upenn.edu", new Date(), "Facebook!");
+       doc3 = new DocEntry("https://github.com/nvasilakis/yippee", "nvasilakis/yippee", "www.github.com", new Date(), "Facebook!");
     }
 
     

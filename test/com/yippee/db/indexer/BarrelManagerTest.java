@@ -70,16 +70,6 @@ public class BarrelManagerTest {
         assertTrue(barrelManager.addDocHits(hl));
     }
     
-    @Test
-   public void testGetHitList(){
-    	ArrayList<Hit> hits = barrelManager.getHitList(wordid1).getHitList();  
-    	assertTrue(hits.size()==3);
-    	ArrayList<Hit> hits2 = barrelManager.getHitList(wordid2).getHitList();  	
-    	assertTrue(hits2.size()==1);
-    	ArrayList<Hit> hits3 = barrelManager.getHitList(wordid3).getHitList();  	
-    	assertTrue(hits3.size()==1);
-    }
-    
     @Test 
     public void testDelete() {
     	barrelManager.deleteWordEntry(wordid1);

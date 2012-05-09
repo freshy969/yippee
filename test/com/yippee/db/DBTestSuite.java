@@ -19,7 +19,6 @@ import org.junit.runners.Suite.SuiteClasses;
 				URLFrontierManagerTest.class,
 				
 				HitTest.class,
-				AnchorManagerTest.class,
 				BarrelManagerTest.class,
 				LexiconManagerTest.class,
 				
