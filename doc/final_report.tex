@@ -36,27 +36,27 @@
   \path[mindmap,concept color=darkgray,text=white]
     node[concept] {Yippee Search Engine}
     [clockwise from=0]
-    child[concept color=teal!] {
+    child[concept color=cyan!50!black] {
       node[concept] {Pastry Node 1 + BerkeleyDB}
       [clockwise from=90]
-      child [concept color=violet!] { node[concept] (c1) {Crawler} }
+      child [concept color=green!50!black] { node[concept] (c1) {Crawler} }
       child [concept color=purple!]  { node[concept] (i1) {Indexer} }
-      child [concept color=olive!] { node[concept] (s1) {Search} }
+      child [concept color=cyan!80!purple] { node[concept] (s1) {Search} }
     }  
-    child[concept color=teal!] {
+    child[concept color=cyan!50!black] {
       node[concept] {Pastry Node 2 + BerkeleyDB}
       [clockwise from=-10]
-      child [concept color=violet!] { node[concept] (c2) {Crawler} }
+      child [concept color=green!50!black] { node[concept] (c2) {Crawler} }
       child [concept color=purple!] { node[concept] (i2) {Indexer} }
-      child [concept color=olive!] { node[concept] (s2) {Search} }
+      child [concept color=cyan!80!purple] { node[concept] (s2) {Search} }
     }
-    child[concept color=teal!] { node[concept] {Pastry Node 3 + BerkeleyDB} }
-    child[concept color=brown!] {
+    child[concept color=cyan!50!black!] { node[concept] {Pastry Node 3 + BerkeleyDB} }
+    child[concept color=brown!50!orange] {
       node[concept] {PageRank}
       [clockwise from=-90]
       child { node[concept] {Hadoop} }
     }
-    child[concept color=teal!] { node[concept] {Pastry Node 4 + BerkeleyDB} };
+    child[concept color=cyan!50!black!] { node[concept] {Pastry Node 4 + BerkeleyDB} };
 
     \begin{pgfonlayer}{background}
         % \draw [circle connection bar ] (i1) edge [color=violet!50!] (i2);
