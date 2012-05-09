@@ -122,6 +122,14 @@ Mercator uses various implementations of the URLFrontier to fine tune the crawle
 The crawler is multithreaded and requires very little inter-thread communication, but the URLFrontier can be a bottleneck depending on the implementation. 
 Given the critique of the centralized nature of Mercator's URLFrontier \cite{ubi, para}, we made our frontier pluggable via a factory pattern to allow easy testing of frontiers with varying degrees of politeness and speed.
 
+\label{sec:Crawler}
+\begin{figure}[!b]
+  \centering
+  \includegraphics[scale=0.35]{figures/crawler_diagram.png}
+  \caption{Detailed architecture of the crawler.}
+\end{figure}
+
+
 The Yippee Crawler has three important persistence structures; DocAug, FrontierSavedState and RobotsTxt.
 DocAugs are wrapper objects for the contents of the crawled documents, augmented with a number of metadata (such as date and url).
 They are an object stored by the crawler and later read by the indexer.
@@ -148,6 +156,16 @@ For every word in the document, the Porter Stemmer algorithm is used and the ste
 If the word is valid, a Hit object is created. 
 The Hit object contains important information about that word in relation to the document: document id, document length, position, and word decoration (bold, italics). 
 Similarly, any anchor hit on a document gets created as both a Hit for that document and an AnchorHit for the document its link refers to. 
+
+\label{sec:Indexer}
+\begin{figure}[!b]
+  \centering
+  \includegraphics[scale=0.35]{figures/indexer_diagram.png}
+  \caption{Detailed architecture of the indexer.}
+\end{figure}
+
+
+
 An AnchorHit object is an extension of the Hit object and includes a field for the document it points to. 
 The decision to create both a Hit and an AnchorHit for an anchor was based on the fact that the word tells very important information about both documents. 
 At this point the link of the current document getting indexed and the link found get logged to a special file that will later get used for PageRank. 
