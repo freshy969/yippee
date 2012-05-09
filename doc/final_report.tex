@@ -117,12 +117,12 @@ We practiced test-driven development \footnote{We used jUnit 4, instead of 3, ma
 The project was version controlled with git (v. 1.7.4) and shared among team members via Github.
 At the time of submission, there are approximately 14k lines of code in the Yippee source and test directories.
 
-For our persistent storage across Yippee, we used BerkeleyDB. 
-It was used both as a persistent storage and as an asynchronous queue between components as a crawler and the indexer; that way, the crawler could start and stop at any time without affecting the indexer and page-rank.  
 
-In order to route data across multiple nodes, we made use of FreePastry, a Pasrty implementation. 
-Pastry is an overlay and routing network for the implementation of a distributed hash table(DHT) similar to Chord we did in class. 
-All packages share a common configuration singleton object, which makes it easy to access get and receive messages of different priority. 
+Yippee uses BerkeleyDB for persistent storage and as an asynchronous queue between components (such as the crawler and the indexer). In this way, the crawler could start and stop at any time without affecting the indexer and page-rank.  
+
+In order to route data across multiple nodes, we made use of FreePastry, a Pastry implementation. 
+Pastry is an overlay and routing network for the implementation of a distributed hash table(DHT) similar to Chord. 
+All packages share a common singleton object for configuration, which made it easy to access get and receive messages of different priority. 
 Each message is sent by the module responsible for routing messages, and handled accordingly upon retrieval.
 
 \subsection{Crawler}
