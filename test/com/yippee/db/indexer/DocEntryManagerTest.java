@@ -27,7 +27,7 @@ public class DocEntryManagerTest {
 
 	@Test
 	public void testUpdatePageRank() {
-		DocEntry entry = new DocEntry("http://upenn.edu", "Upenn", "upenn.edu", new Date());
+		DocEntry entry = new DocEntry("http://upenn.edu", "Upenn", "upenn.edu", new Date(), "This is UPenn!");
 		man.addDocEntry(entry);
 		
 		DocEntry fromDB = man.getDocEntry("http://upenn.edu");
