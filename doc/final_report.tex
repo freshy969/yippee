@@ -193,6 +193,12 @@ For these relevant pages, the PageRank score will be taking into account to calc
 \section{Evaluation}
 \label{sec:evaluation}
 
+The Indexer performed best with 5 IndexerWorker threads at a rate of 250 documents per minute. 
+This is timed from when the document is polled from the queue by the IndexerWord to when the Hits are saved to the appropriate Barrels. 
+Increasing the number of threads resulted in Pastry messages getting sent out more frequently and overflowing the node queues. 
+There was also overhead in writing to the DocEntry database between the threads. 
+Despite this, the performance rate over time was constant meaning overflow of messages was eliminated. 
+
 \section{Future Work}
 \label{sec:future}
 
