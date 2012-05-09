@@ -129,19 +129,19 @@ FrontierSavedStates store the necessary data to checkpoint the state of a URLFro
 Last is the RobotsTxt object which stores information retrieved from the robots.txt file for a given host.
 The RobotsTxt interface is defined such that the object can take a url as a parameter and determine if the robots.txt policy allows crawling.
 
+Though Yippee deployed only four EC2 instances, financial obligations to Amazon not-withstanding, there is no reason that prevented us from deploying more nodes.
+More crawling nodes would result in more pages crawled per unit time, however, we did experience a bottleneck as a result of too many Pastry messages.
+In the case we saw, upgrading the Amazon instance to a more powerful instance helped resolve that bottleneck to a degree.
+It is not clear, without some experimentation, whether more crawling nodes would help the bottleneck by reducing the message handling load of an individual node, or the added pages being crawled would increase the number of urls distributed and have the opposite effect.
 
-\textbf{Needs to be edited}
-Our crawler follows the Mercator design; however, since the design is
-criticized for its centralized URLFrontier , we made this
-component pluggable. That  way, we can easily plug in different implementations 
-and analyze the  performance. Raw content  is  written to a persistent, shared queue  
-between the crawler and  the indexer, enabling
-asynchronous indexing and page-rank.
+The Yippee crawler is resilient to failure in that if a node dies, the urls it would have been responsible for are directed to the next available node, per FreePasty's routing.
+The Yippee application does not however maintain duplicate data, so any already crawled pages, or discovered urls, will be lost and need to be crawled again.
+We felt these tradeoffs were reasonable given the timeline and scope of the project
 
 \subsection{Indexer}
 
 \textbf{Needs to be edited}
-The Yippee Indexer has a multi-threaded and distributed design loosely based on \[Brin, Page 1999\]\cite{pagerank}. 
+The Yippee Indexer has a multi-threaded and distributed design loosely based on[Brin, Page 1999]\cite{pagerank}. 
 The Indexer on each node creates IndexerWorker threads that then perform all work. 
 All IndexerWorkers poll from a queue of documents that are placed into the BerkeleyDB DocAug database by the Crawler. 
 JTidy is used to parse each document. 
@@ -176,7 +176,7 @@ This is performed at this point in order to reduce the number of calculations do
 \subsection{PageRank}
 
 The PageRank component of Yippee is the only centralized part of the system.
-It performs a calculation based-on \[Brin, Page 1999\]\cite{pagerank} to determine the relative importance of each page in the index.
+It performs a calculation based-on [Brin, Page 1999]\cite{pagerank} to determine the relative importance of each page in the index.
 The PageRank calculation is an iterative MapReduce running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
 We decided that PageRank should not be a distributed component for the following reasons. 
 First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was only necessary to run PageRank, in production, once.
