@@ -123,12 +123,11 @@ The crawler is multithreaded and requires very little inter-thread communication
 Given the critique of the centralized nature of Mercator's URLFrontier \cite{ubi, para}, we made our frontier pluggable via a factory pattern to allow easy testing of frontiers with varying degrees of politeness and speed.
 
 \label{sec:Crawler}
-\begin{figure}[!b]
+\begin{figure}
   \centering
-  \includegraphics[scale=0.35]{figures/crawler_diagram.png}
-  \caption{Detailed architecture of the crawler.}
+  \includegraphics[scale=0.35]{figures/both.jpg}
+  \caption{Detailed architecture of the crawler and indexer.}
 \end{figure}
-
 
 The Yippee Crawler has three important persistence structures; DocAug, FrontierSavedState and RobotsTxt.
 DocAugs are wrapper objects for the contents of the crawled documents, augmented with a number of metadata (such as date and url).
@@ -157,12 +156,6 @@ If the word is valid, a Hit object is created.
 The Hit object contains important information about that word in relation to the document: document id, document length, position, and word decoration (bold, italics). 
 Similarly, any anchor hit on a document gets created as both a Hit for that document and an AnchorHit for the document its link refers to. 
 
-\label{sec:Indexer}
-\begin{figure}[!b]
-  \centering
-  \includegraphics[scale=0.35]{figures/indexer_diagram.png}
-  \caption{Detailed architecture of the indexer.}
-\end{figure}
 
 
 
