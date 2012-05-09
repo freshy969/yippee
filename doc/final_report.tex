@@ -7,6 +7,7 @@
 \usepackage{enumitem}
 \usepackage{tikz}
 \usetikzlibrary{arrows,backgrounds,calc,fit,mindmap,positioning,trees,shapes}
+\usepackage{xcolor}
 
 % \usepackage{fullpage}
 % \usepackage{xunicode,xltxtra,url,parskip} 	%other packages for formatting
@@ -108,10 +109,20 @@ Section \ref{sec:evaluation} will present evaluations for some of the design dec
 
 \subsection{Infrastructure and Software Engineering}
 
-* Build process - ant, EntryPoint, Configuration
-* Testing - JUnit
-* Persistent Storage - BerkeleyDB
-* Distributed Application - FreePastry 
+We used four Extra Large (m1.xlarge) Amazon instances, each comprising of 8 4-core CPUs, 15GB of RAM and attached 1 TB EBS Volumes. 
+Yippee was implemented using Java 1.6 and the user-interface servlet adhered to the 2.4 specification. 
+Ant (v. 1.8) and bash scripts were extensively used to automate the build, test and deployment process. 
+We implemented using test-driven development\footonote{We used jUnit 4, instead of 3, mainly due to flexible fixtures.} and pair-programmed, and each team which was responsible for a component employed white-box testing while the other team did black-box testing (and vice versa). 
+During the development of the project we made use of git (v. 1.7.4). 
+Our current LOC is slightly above 14k.
+
+For our persistent storage across yippee, we used BerkeleyDB. 
+It was used both as a persistent storage and as an asynchronous queue between components as a crawler and the indexer; that way, the crawler could start and stop at any time without affecting the indexer and page-rank.  
+
+In order to route data across multiple nodes, we made use of FreePastry, a Pasrty implementation. 
+Pastry is an overlay and routing network for the implementation of a distributed hash table(DHT) similar to Chord we did in class. 
+All packages share a common configuration singleton object, which makes it easy to access get and receive messages of different priority. 
+Each message is sent by the module responsible for routing messages, and handled accordingly upon retrieval.
 
 \subsection{Crawler}
 
