@@ -153,7 +153,7 @@ We felt these tradeoffs were reasonable given the timeline and scope of the proj
 \subsection{Indexer}
 
 \textbf{Needs to be edited}
-The Yippee Indexer has a multi-threaded and distributed design loosely based on[Brin, Page 1999]\cite{pagerank}. 
+The Yippee Indexer has a multi-threaded and distributed design loosely based on Google's  PageRank algorithm\cite{pagerank}. 
 The Indexer on each node creates IndexerWorker threads that then perform all work. 
 All IndexerWorkers poll from a queue of documents that are placed into the BerkeleyDB DocAug database by the Crawler. 
 JTidy is used to parse each document. 
@@ -189,16 +189,24 @@ This is performed at this point in order to reduce the number of calculations do
 \subsection{PageRank}
 
 The PageRank component of Yippee is the only centralized part of the system.
-It performs a calculation based-on [Brin, Page 1999]\cite{pagerank} to determine the relative importance of each page in the index.
-The PageRank calculation is an iterative MapReduce running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
-We decided that PageRank should not be a distributed component for the following reasons. 
-First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was only necessary to run PageRank, in production, once.
+It performs a calculation based-on PageRank algorithm\cite{pagerank} to determine the relative importance of each page in the index.
+The PageRank calculation is an iterative MapReduce process running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
+We decided that PageRank should not be a distributed component for a number of  reasons. 
+First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was not necessary to run PageRank multiple times in our production environment.
 Second, given the frequency of PageRank jobs, implementing a distributed version introduced complexity that was unwarranted, so the simpler solution was chosen.
 
 \subsection{Search}
 \textbf{Needs to be edited}
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword.
-We used the TF-IDF and PageRank values to calculate ranking scores for all documents. 
+The search component of the Yippee Engine utilized the Barrel and DocEntry indices to retrieve and aggregate statistics for calculating the TF-IDF ranking. 
+Search queries were split by word and distributed to the appropriate node via key-based routing. 
+If the word was found to have Hits in the corpus, all documents matched in that HitList are retrieved from the ring (via KBR again.) 
+If a word had no matches or was not found in the lexicon, a null reply message is sent immediately, to notify that no results will be returned. 
+Once all DocEntry objects have been aggregated on the query node, we were able to continue onward to ranking the documents. 
+Of note, each query is assigned a unique queryID such that messages sent and replied would be associated with the correct query. 
+This way, the search functionality has high scalability without losing integrity. 
+Additionally, cached queryIDs paved way for future work in caching results and iterating through pages of results.
+As for ranking matched documents, we used the TF-IDF and PageRank values to calculate ranking scores for all documents. 
 The TF-IDF value of a document was calculated as the product of the sum of its weighted tf and atf values. 
 In this case, the atf values were anchor text hits from other pages pointing to the current document. For each document we weighted its tf by 0.4 and the atf by 0.6 because we felt that given the implications of PageRank link analysis, that the content of a given page may be more accurately described by links point to it. 
 Finally, once all hits per document are summated, each document's TF-IDF value was then multiplied by the PageRank value (default of 1) to give the final rank value. 
@@ -220,16 +228,11 @@ In order to fix this issue, we could have implemented a more distributed ranking
 
 \section{Future Work}
 \label{sec:future}
-
-\begin{enumerate}
-\item Spell-check
-\item Ability to add more nodes/remove nodes on the fly
-\item User feedback on query results
-\end{enumerate}
-
-
-\textbf{edit}
-If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results.
+For the future we would like to first and foremost improve search efficency and results. 
+Efficiency could be improved with better caching techniques for queries. 
+For result improvement, we will implement spell-check, user feedback on query results, and context/phrasing taken into account for queries. 
+We would also be working with a larger corpus.
+Other features we will also implement is a way to update Hit objects when a document is recrawled and the contents have changed and the ability to add more nodes/remove nodes on the fly. 
 
 
 \section{Conclusion}
