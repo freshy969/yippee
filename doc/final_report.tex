@@ -236,7 +236,15 @@ Other features we will also implement is a way to update Hit objects when a docu
 \section{Conclusion}
 \label{sec:conculsion}
 Overall, we feel that this project was a success.
-We were able to build a search engine which is stable and 
+Despite a few shortcomings, we were able to build a sophisticated search engine which is stable and efficient.
+
+The multi-threaded indexer component was very stable and indexed pages efficiently without much decrease in performance with respect to corpus size.
+Since our indexer used FreePastry to store its indices, it would have scaled very well with respect to more nodes.
+On the other side of this, the indexer was limited when nodes were few due to the high number of messages sent to the ring.
+Thus we learned that when a great amount of data must be distributed around a ring, with fast speed, we need to consider expanding the size of the ring to accommodate the data.
+
+The search component was stable and efficient as well, and ranked results fairly well. Though we had a limited corpus, when we queried items contained within the corpus, the result was fast and usually within 1-5 spots of the top ranked spot. Since we weighted anchor hits more heavily than text hits, it was difficult to tune these metrics without a more robust corpus. Pages with more coverage tended to be ranked higher in relevance, whereas other with less coverage were left with a lower score. Had we more time, we would have hoped to crawl a larger corpus and better tune this metric. Perhaps anchor hits would be better off being weighted less, since they are subject to connectivity. Regardless of the ideal algorithm, we tuned ours to give the best results possible with our limited data, and we feel that the results returned were of good quality, despite our shortcomings.
+
 
 
 
