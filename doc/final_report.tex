@@ -168,12 +168,14 @@ First, a DocEntry object is created and saved to the DocEntry Database.
 This object contains valuable information about the document needed pre and post query such as page rank, tf-idf, document url, and document title. 
 Second, all the Hits for that document are sent to a centralized NodeIndex that handles them.
 
+
 The NodeIndex accumulates all the Hits into a HashMap that stores the word as its key and an ArrayList of Hits for that word from all IndexWorkers. 
 The Hits will get saved in a Barrel database on the node whose id is closest to the Hit’s SHA-1 hashed word. 
 FreePastry is used for passing the ArrayList of Hits for a word to the appropriate node. 
 In order to reduce the number of messages being passed around the pastry ring, messages were sent in batches. 
 For every 10 documents whose Hits were sent to the NodeIndex, the current HashMap would get iterated over and only words whose ArrayList of Hits were longer than 3 would get sent to the ring to get saved in the Barrels. 
 These values were chosen based on finding a balance with the frequency and size of the Pastry messages being sent. 
+
 
 The Barrels contain an inverted index and is managed by a BarrelManager. 
 There is a BarrelManager on each node that is responsible for the HitLists of all the words whose ids get hashed to it. There is only one HitList object for every word. 
