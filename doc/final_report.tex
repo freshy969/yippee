@@ -152,7 +152,7 @@ We felt these tradeoffs were reasonable given the timeline and scope of the proj
 \subsection{Indexer}
 
 \textbf{Needs to be edited}
-The Yippee Indexer has a multi-threaded and distributed design loosely based on[Brin, Page 1999]\cite{pagerank}. 
+The Yippee Indexer has a multi-threaded and distributed design loosely based on Google's  PageRank algorithm\cite{pagerank}. 
 The Indexer on each node creates IndexerWorker threads that then perform all work. 
 All IndexerWorkers poll from a queue of documents that are placed into the BerkeleyDB DocAug database by the Crawler. 
 JTidy is used to parse each document. 
@@ -188,10 +188,10 @@ This is performed at this point in order to reduce the number of calculations do
 \subsection{PageRank}
 
 The PageRank component of Yippee is the only centralized part of the system.
-It performs a calculation based-on [Brin, Page 1999]\cite{pagerank} to determine the relative importance of each page in the index.
-The PageRank calculation is an iterative MapReduce running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
-We decided that PageRank should not be a distributed component for the following reasons. 
-First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was only necessary to run PageRank, in production, once.
+It performs a calculation based-on PageRank algorithm\cite{pagerank} to determine the relative importance of each page in the index.
+The PageRank calculation is an iterative MapReduce process running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
+We decided that PageRank should not be a distributed component for a number of  reasons. 
+First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was not necessary to run PageRank multiple times in our production environment.
 Second, given the frequency of PageRank jobs, implementing a distributed version introduced complexity that was unwarranted, so the simpler solution was chosen.
 
 \subsection{Search}
