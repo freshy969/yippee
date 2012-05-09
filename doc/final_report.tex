@@ -122,10 +122,17 @@ Section \ref{sec:evaluation} will present evaluations for some of the design dec
 The Yippee crawler is a multithreaded distributed crawler based on the design of the Mercator crawler\cite{mercator}. 
 Each of the Yippee node is responsible for a subset of the web as determined by FreePastry key-based routing keyed on the host of each url discovered.
 Mercator uses various implementations of the URLFrontier to fine tune the crawlers performance and politeness.
-For this reason, we made our frontier pluggable via a factory pattern and interface.
-This allowed us to easily test frontiers with varying degrees of politeness and performance.
+The crawler is multithreaded and requires very little inter-thread communication, but the URLFrontier can be a bottle neck depending on the implementation.
+For this reason, we made our frontier pluggable via a factory pattern to allow us to easily test frontiers with varying degrees of politeness and implementations.
 
-One criticism of the Mercator design\cite{ubi,para} is the centralized nature of the URLFrontier. 
+
+The Yippee Crawler has three important persistence objects; DocAug, FrontierSavedState and RobotsTxt.
+DocAugs are wrapper objects for the contents of the crawled documents.
+They are an object stored by the crawler and later read by the indexer
+FrontierSavedStates store the necessary data to checkpoint the state of a URLFrontier and allow for restarting a frontier without losing the URLs waiting in the queue.
+Last is the RobotsTxt object which stores information retrieved from the robots.txt file for a given host.
+The RobotsTxt interface is defined such that the object can take a url as a parameter and determine if the robots.txt policy allows crawling.
+
 
 \textbf{Needs to be edited}
 Our crawler follows the Mercator design; however, since the design is
