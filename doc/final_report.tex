@@ -112,7 +112,7 @@ Section \ref{sec:evaluation} will present evaluations for some of the design dec
 We used four Extra Large (m1.xlarge) Amazon instances, each comprising of 8 4-core CPUs, 15GB of RAM and attached 1 TB EBS Volumes. 
 Yippee was implemented using Java 1.6 and the user-interface servlet adhered to the 2.4 specification. 
 Ant (v. 1.8) and bash scripts were extensively used to automate the build, test and deployment process. 
-We implemented using test-driven development\footonote{We used jUnit 4, instead of 3, mainly due to flexible fixtures.} and pair-programmed, and each team which was responsible for a component employed white-box testing while the other team did black-box testing (and vice versa). 
+We implemented using test-driven development \footnote{We used jUnit 4, instead of 3, mainly due to flexible fixtures.} and pair-programmed, and each team which was responsible for a component employed white-box testing while the other team did black-box testing (and vice versa). 
 During the development of the project we made use of git (v. 1.7.4). 
 Our current LOC is slightly above 14k.
 
@@ -140,19 +140,19 @@ FrontierSavedStates store the necessary data to checkpoint the state of a URLFro
 Last is the RobotsTxt object which stores information retrieved from the robots.txt file for a given host.
 The RobotsTxt interface is defined such that the object can take a url as a parameter and determine if the robots.txt policy allows crawling.
 
+Though Yippee deployed only four EC2 instances, financial obligations to Amazon not-withstanding, there is no reason that prevented us from deploying more nodes.
+More crawling nodes would result in more pages crawled per unit time, however, we did experience a bottleneck as a result of too many Pastry messages.
+In the case we saw, upgrading the Amazon instance to a more powerful instance helped resolve that bottleneck to a degree.
+It is not clear, without some experimentation, whether more crawling nodes would help the bottleneck by reducing the message handling load of an individual node, or the added pages being crawled would increase the number of urls distributed and have the opposite effect.
 
-\textbf{Needs to be edited}
-Our crawler follows the Mercator design; however, since the design is
-criticized for its centralized URLFrontier , we made this
-component pluggable. That  way, we can easily plug in different implementations 
-and analyze the  performance. Raw content  is  written to a persistent, shared queue  
-between the crawler and  the indexer, enabling
-asynchronous indexing and page-rank.
+The Yippee crawler is resilient to failure in that if a node dies, the urls it would have been responsible for are directed to the next available node, per FreePasty's routing.
+The Yippee application does not however maintain duplicate data, so any already crawled pages, or discovered urls, will be lost and need to be crawled again.
+We felt these tradeoffs were reasonable given the timeline and scope of the project
 
 \subsection{Indexer}
 
 \textbf{Needs to be edited}
-The Yippee Indexer has a multi-threaded and distributed design loosely based on \[Brin, Page 1999\]\cite{pagerank}. 
+The Yippee Indexer has a multi-threaded and distributed design loosely based on Google's  PageRank algorithm\cite{pagerank}. 
 The Indexer on each node creates IndexerWorker threads that then perform all work. 
 All IndexerWorkers poll from a queue of documents that are placed into the BerkeleyDB DocAug database by the Crawler. 
 JTidy is used to parse each document. 
@@ -168,12 +168,14 @@ First, a DocEntry object is created and saved to the DocEntry Database.
 This object contains valuable information about the document needed pre and post query such as page rank, tf-idf, document url, and document title. 
 Second, all the Hits for that document are sent to a centralized NodeIndex that handles them.
 
+
 The NodeIndex accumulates all the Hits into a HashMap that stores the word as its key and an ArrayList of Hits for that word from all IndexWorkers. 
 The Hits will get saved in a Barrel database on the node whose id is closest to the Hit’s SHA-1 hashed word. 
 FreePastry is used for passing the ArrayList of Hits for a word to the appropriate node. 
 In order to reduce the number of messages being passed around the pastry ring, messages were sent in batches. 
 For every 10 documents whose Hits were sent to the NodeIndex, the current HashMap would get iterated over and only words whose ArrayList of Hits were longer than 3 would get sent to the ring to get saved in the Barrels. 
 These values were chosen based on finding a balance with the frequency and size of the Pastry messages being sent. 
+
 
 The Barrels contain an inverted index and is managed by a BarrelManager. 
 There is a BarrelManager on each node that is responsible for the HitLists of all the words whose ids get hashed to it. There is only one HitList object for every word. 
@@ -186,10 +188,10 @@ This is performed at this point in order to reduce the number of calculations do
 \subsection{PageRank}
 
 The PageRank component of Yippee is the only centralized part of the system.
-It performs a calculation based-on \[Brin, Page 1999\]\cite{pagerank} to determine the relative importance of each page in the index.
-The PageRank calculation is an iterative MapReduce running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
-We decided that PageRank should not be a distributed component for the following reasons. 
-First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was only necessary to run PageRank, in production, once.
+It performs a calculation based-on PageRank algorithm\cite{pagerank} to determine the relative importance of each page in the index.
+The PageRank calculation is an iterative MapReduce process running on a single-node Hadoop cluster after retrieving, from each Yippee node, a log of links found during the indexing process.
+We decided that PageRank should not be a distributed component for a number of  reasons. 
+First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was not necessary to run PageRank multiple times in our production environment.
 Second, given the frequency of PageRank jobs, implementing a distributed version introduced complexity that was unwarranted, so the simpler solution was chosen.
 
 \subsection{Search}
@@ -225,16 +227,11 @@ In order to fix this issue, we could have implemented a more distributed ranking
 
 \section{Future Work}
 \label{sec:future}
-
-\begin{enumerate}
-\item Spell-check
-\item Ability to add more nodes/remove nodes on the fly
-\item User feedback on query results
-\end{enumerate}
-
-
-\textbf{edit}
-If we have additional time, we will implement a spell-check and AJAX support for users to give feedback on query results.
+For the future we would like to first and foremost improve search efficency and results. 
+Efficiency could be improved with better caching techniques for queries. 
+For result improvement, we will implement spell-check, user feedback on query results, and context/phrasing taken into account for queries. 
+We would also be working with a larger corpus.
+Other features we will also implement is a way to update Hit objects when a document is recrawled and the contents have changed and the ability to add more nodes/remove nodes on the fly. 
 
 
 \section{Conclusion}
