@@ -90,30 +90,28 @@ The crawler, indexer and search components are distributed via the FreePastry pe
 The architecture of the Yippee is shown in figure 1.
 
 
+
 Section \ref{sec:component} will describe each component and its relevant design decision.
 Section \ref{sec:evaluation} will present evaluations for some of the design decisions. \textbf{rephrase}
 
 \section{Component Discussion}
 \label{sec:component}
 
-
-
 \subsection{Infrastructure and Software Engineering}
 
-We used four Extra Large (m1.xlarge) Amazon instances, each comprising of 8 4-core CPUs, 15GB of RAM and attached 1 TB EBS Volumes. 
-Yippee was implemented using Java 1.6 and the user-interface servlet adhered to the 2.4 specification. 
-Ant (v. 1.8) and bash scripts were extensively used to automate the build, test and deployment process. 
-We implemented using test-driven development \footnote{We used jUnit 4, instead of 3, mainly due to flexible fixtures.} and pair-programmed, and each team which was responsible for a component employed white-box testing while the other team did black-box testing (and vice versa). 
-During the development of the project we made use of git (v. 1.7.4). 
-Our current LOC is slightly above 14k.
+We used four Extra Large (m1.xlarge) Amazon EC2 instances, each comprised of eight 4-core CPUs, 15GB of RAM.
+To each instance, we attached a one terabyte Elastic Block Storage volume. 
+Yippee was implemented using Java 1.6 and the user-interface servlet adhered to the Servlet API 2.4 specification. 
+Ant (v. 1.8) and bash scripts were used to automate the build, test and deployment process, allowing us to start any combination of componets in any mode (test, integration and production) with simple command-line arguments.
+We practiced test-driven development \footnote{We used jUnit 4, instead of 3, mainly due to flexible fixtures.} while pair-programming each component.  Each pair was responsible for implementing white-box tests for the component they implemented, while the other team wrote black-box tests (and vice versa). 
+The project was version controlled with git (v. 1.7.4) and shared among team members via Github.
+At the time of submission, there are approximately 14k lines of code in the Yippee source and test directories.
 
-For our persistent storage across yippee, we used BerkeleyDB. 
-It was used both as a persistent storage and as an asynchronous queue between components as a crawler and the indexer; that way, the crawler could start and stop at any time without affecting the indexer and page-rank.  
+Yippee uses BerkeleyDB for persistent storage and as an asynchronous queue between components (such as the crawler and the indexer). In this way, the crawler could start and stop at any time without affecting the indexer and page-rank.  
 
-In order to route data across multiple nodes, we made use of FreePastry, a Pasrty implementation. 
-Pastry is an overlay and routing network for the implementation of a distributed hash table(DHT) similar to Chord we did in class. 
-All packages share a common configuration singleton object, which makes
-it easy to send and receive messages of different priority. 
+In order to route data across multiple nodes, we made use of FreePastry, a Pastry implementation. 
+Pastry is an overlay and routing network for the implementation of a distributed hash table(DHT) similar to Chord. 
+All packages share a common singleton object for configuration, which made it easy to access get and receive messages of different priority. 
 Each message is sent by the module responsible for routing messages, and handled accordingly upon retrieval.
 
 \subsection{Crawler}
@@ -121,9 +119,8 @@ Each message is sent by the module responsible for routing messages, and handled
 The Yippee crawler is a multithreaded distributed crawler based on the design of the Mercator crawler\cite{mercator}. 
 Each of the Yippee node is responsible for a subset of the web as determined by FreePastry key-based routing keyed on the host of each url discovered.
 Mercator uses various implementations of the URLFrontier to fine tune the crawlers performance and politeness.
-The crawler is multi-threaded and requires very little inter-thread communication, but the URLFrontier can be a bottle neck depending on the implementation.
-For this reason, we made our frontier pluggable via a factory pattern to allow easy testing of frontiers with varying degrees of politeness and speed.
-
+The crawler is multithreaded and requires very little inter-thread communication, but the URLFrontier can be a bottleneck depending on the implementation. 
+Given the critique of the centralized nature of Mercator's URLFrontier \cite{ubi, para}, we made our frontier pluggable via a factory pattern to allow easy testing of frontiers with varying degrees of politeness and speed.
 
 The Yippee Crawler has three important persistence structures; DocAug, FrontierSavedState and RobotsTxt.
 DocAugs are wrapper objects for the contents of the crawled documents, augmented with a number of metadata (such as date and url).
@@ -137,13 +134,12 @@ More crawling nodes would result in more pages crawled per unit time, however, w
 In the case we saw, upgrading the Amazon instance to a more powerful instance helped resolve that bottleneck to a degree.
 It is not clear, without some experimentation, whether more crawling nodes would help the bottleneck by reducing the message handling load of an individual node, or the added pages being crawled would increase the number of urls distributed and have the opposite effect.
 
-The Yippee crawler is resilient to failure in that if a node dies, the urls it would have been responsible for are directed to the next available node, per FreePasty's routing.
+The Yippee crawler is resilient to failure in that if a node dies, the urls that would have been routed to it are directed to the next available node, per FreePasty's routing.
 The Yippee application does not however maintain duplicate data, so any already crawled pages, or discovered urls, will be lost and need to be crawled again.
 We felt these tradeoffs were reasonable given the timeline and scope of the project
 
 \subsection{Indexer}
 
-\textbf{Needs to be edited}
 The Yippee Indexer has a multi-threaded and distributed design loosely based on Google's  PageRank algorithm\cite{pagerank}. 
 The Indexer on each node creates IndexerWorker threads that then perform all work. 
 All IndexerWorkers poll from a queue of documents that are placed into the BerkeleyDB DocAug database by the Crawler. 
@@ -157,12 +153,12 @@ The decision to create both a Hit and an AnchorHit for an anchor was based on th
 At this point the link of the current document getting indexed and the link found get logged to a special file that will later get used for PageRank. 
 After all the Hit and AnchorHit objects are created for that document, two things happen. 
 First, a DocEntry object is created and saved to the DocEntry Database. 
-This object contains valuable information about the document needed pre and post query such as page rank, tf-idf, document url, and document title. 
+This object contains valuable information about the document needed pre- and post-query such as page rank, tf-idf, document url, and document title. 
 Second, all the Hits for that document are sent to a centralized NodeIndex that handles them.
 
 
 The NodeIndex accumulates all the Hits into a HashMap that stores the word as its key and an ArrayList of Hits for that word from all IndexWorkers. 
-The Hits will get saved in a Barrel database on the node whose id is closest to the Hit’s SHA-1 hashed word. 
+The Hits will get saved in a Barrel database on the node whose id is closest to the Hit's SHA-1 hashed word. 
 FreePastry is used for passing the ArrayList of Hits for a word to the appropriate node. 
 In order to reduce the number of messages being passed around the pastry ring, messages were sent in batches. 
 For every 10 documents whose Hits were sent to the NodeIndex, the current HashMap would get iterated over and only words whose ArrayList of Hits were longer than 3 would get sent to the ring to get saved in the Barrels. 
@@ -171,7 +167,7 @@ These values were chosen based on finding a balance with the frequency and size 
 
 The Barrels contain an inverted index and is managed by a BarrelManager. 
 There is a BarrelManager on each node that is responsible for the HitLists of all the words whose ids get hashed to it. There is only one HitList object for every word. 
-A HitList contains the word, document frequency, and two HashMaps: one for Hit term frequency and another for AnchorHit term frequency in a particaular document. 
+A HitList contains the word, document frequency, and two HashMaps: one for Hit term frequency and another for AnchorHit term frequency in a particular document. 
 The keys for the HashMaps are the document ids and the values are floats. 
 Upon message arrival, a HitList object is either created or updated depending on whether that word has been seen before. 
 Then document frequency and term frequency are adjusted accordingly. 
@@ -187,11 +183,10 @@ First, the PageRank metric is only relevant when doing searches and since the Yi
 Second, given the frequency of PageRank jobs, implementing a distributed version introduced complexity that was unwarranted, so the simpler solution was chosen.
 
 \subsection{Search}
-\textbf{Needs to be edited}
-The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword.
+The final piece of Yippee involves presenting the user with relevant pages given a user-provided keyword.
 The search component of the Yippee Engine utilized the Barrel and DocEntry indices to retrieve and aggregate statistics for calculating the TF-IDF ranking. 
 Search queries were split by word and distributed to the appropriate node via key-based routing. 
-If the word was found to have Hits in the corpus, all documents matched in that HitList are retrieved from the ring (via KBR again.) 
+If the word was found to have Hits in the corpus, all documents matched in that HitList are retrieved from the ring (via key-based routing again.) 
 If a word had no matches or was not found in the lexicon, a null reply message is sent immediately, to notify that no results will be returned. 
 Once all DocEntry objects have been aggregated on the query node, we were able to continue onward to ranking the documents. 
 Of note, each query is assigned a unique queryID such that messages sent and replied would be associated with the correct query. 
@@ -207,6 +202,8 @@ The results returned are then displayed with statistics on search time elapsed a
 \section{Evaluation}
 \label{sec:evaluation}
 
+Crawler eval - mention corpus size of the weekend ~75k docs
+
 The Indexer performed best with 5 IndexerWorker threads at a rate of 250 documents per minute. 
 This is timed from when the document is polled from the queue by the IndexerWord to when the Hits are saved to the appropriate Barrels. 
 Increasing the number of threads resulted in Pastry messages getting sent out more frequently and overflowing the node queues. 
@@ -220,13 +217,20 @@ We believe though the time increases linearly in our data, given calculation and
 Unfortunately, since the size of our corpus never exceeded 10k documents, the search time never exceeded 1s in elapsed time and the issue went unnoticed.
 In order to fix this issue, we could have implemented a more distributed ranking implementation, such that 
 
+PageRank seems to scale well at input size below one million links.
+As mentioned, our indexed corpus never got too large and so we never ran PageRank on input sizes greater than about 350k links.
+We combined input from numerous crawl/indexes to generate sample data for figure (GRAPH NUMBER).
+Unfortunately, the pagerank process repeatedly failed for an input size of one million, suggesting perhaps we either needed even more computing power to perform the calculation in a centralize manner, or a dis
+
 \section{Future Work}
 \label{sec:future}
-For the future we would like to first and foremost improve search efficency and results. 
-Efficiency could be improved with better caching techniques for queries. 
+
+Given more time and budget, we would focus improvement efforts in the areas of scalability and robustness to improve corpus and index size.
+Additionally, implementing a Mercator style URLFrontier more closely to the original would provide us with a much more polite crawler. 
+Search efficiency could be improved with better caching techniques for queries.
 For result improvement, we will implement spell-check, user feedback on query results, and context/phrasing taken into account for queries. 
 We would also be working with a larger corpus.
-Other features we will also implement is a way to update Hit objects when a document is recrawled and the contents have changed and the ability to add more nodes/remove nodes on the fly. 
+Other features we will also implement is a way to update Hit objects when a document is crawled again and the contents have changed.
 
 
 \section{Conclusion}
@@ -234,16 +238,7 @@ Other features we will also implement is a way to update Hit objects when a docu
 Overall, we feel that this project was a success.
 We were able to build a search engine which is stable and 
 
-\section{ Division of Labor }
-\label{sec:labor}
 
-While each member of the group is ultimately responsible for monitoring progress and completion of one of the four components described in Section 2, no individual is tasked with its implementation.
-Instead, the group collectively determines the high level architecture and component interfaces, then a pair of members implements their assigned component.
-The other two group members will write black box tests of the agreed upon interface without inspecting the source code such that their tests are unbiased towards any particular implementation decision.
-The sign-off responsibility is divided as follows: Crawler - Nikos, Indexer - Margarita, PageRank - Chris, Search Engine and Web UI - TJ.
-
-For the first milestone, Chris and Nikos will work on the Crawler and the preliminary components of FreePastry, and TJ and Margarita will work on the Indexer.
-The same approach will be used for PageRank and User Interface but the team members may be shuffled.
 
 \begin{thebibliography}{9}
 
