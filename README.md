@@ -20,7 +20,7 @@ FreePastry  peer-to-peer substrate,  while  the  PageRank components  is
 centralized. All  parts of  the project are  deployed to  Amazon Elastic
 Cloud Computing (EC2) instances.
 
-[Yippee's architecture](http://www.seas.upenn.edu/~nvas/architecture.png)
+![](http://www.seas.upenn.edu/~nvas/architecture.png)
 
 Contributors:
 
