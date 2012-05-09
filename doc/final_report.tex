@@ -7,6 +7,7 @@
 \usepackage{enumitem}
 \usepackage{tikz}
 \usetikzlibrary{arrows,backgrounds,calc,fit,mindmap,positioning,trees,shapes}
+\usepackage{xcolor}
 
 % \usepackage{fullpage}
 % \usepackage{xunicode,xltxtra,url,parskip} 	%other packages for formatting
@@ -108,10 +109,20 @@ Section \ref{sec:evaluation} will present evaluations for some of the design dec
 
 \subsection{Infrastructure and Software Engineering}
 
-* Build process - ant, EntryPoint, Configuration
-* Testing - JUnit
-* Persistent Storage - BerkeleyDB
-* Distributed Application - FreePastry 
+We used four Extra Large (m1.xlarge) Amazon instances, each comprising of 8 4-core CPUs, 15GB of RAM and attached 1 TB EBS Volumes. 
+Yippee was implemented using Java 1.6 and the user-interface servlet adhered to the 2.4 specification. 
+Ant (v. 1.8) and bash scripts were extensively used to automate the build, test and deployment process. 
+We implemented using test-driven development \footnote{We used jUnit 4, instead of 3, mainly due to flexible fixtures.} and pair-programmed, and each team which was responsible for a component employed white-box testing while the other team did black-box testing (and vice versa). 
+During the development of the project we made use of git (v. 1.7.4). 
+Our current LOC is slightly above 14k.
+
+For our persistent storage across yippee, we used BerkeleyDB. 
+It was used both as a persistent storage and as an asynchronous queue between components as a crawler and the indexer; that way, the crawler could start and stop at any time without affecting the indexer and page-rank.  
+
+In order to route data across multiple nodes, we made use of FreePastry, a Pasrty implementation. 
+Pastry is an overlay and routing network for the implementation of a distributed hash table(DHT) similar to Chord we did in class. 
+All packages share a common configuration singleton object, which makes it easy to access get and receive messages of different priority. 
+Each message is sent by the module responsible for routing messages, and handled accordingly upon retrieval.
 
 \subsection{Crawler}
 
@@ -157,12 +168,14 @@ First, a DocEntry object is created and saved to the DocEntry Database.
 This object contains valuable information about the document needed pre and post query such as page rank, tf-idf, document url, and document title. 
 Second, all the Hits for that document are sent to a centralized NodeIndex that handles them.
 
+
 The NodeIndex accumulates all the Hits into a HashMap that stores the word as its key and an ArrayList of Hits for that word from all IndexWorkers. 
 The Hits will get saved in a Barrel database on the node whose id is closest to the Hit’s SHA-1 hashed word. 
 FreePastry is used for passing the ArrayList of Hits for a word to the appropriate node. 
 In order to reduce the number of messages being passed around the pastry ring, messages were sent in batches. 
 For every 10 documents whose Hits were sent to the NodeIndex, the current HashMap would get iterated over and only words whose ArrayList of Hits were longer than 3 would get sent to the ring to get saved in the Barrels. 
 These values were chosen based on finding a balance with the frequency and size of the Pastry messages being sent. 
+
 
 The Barrels contain an inverted index and is managed by a BarrelManager. 
 There is a BarrelManager on each node that is responsible for the HitLists of all the words whose ids get hashed to it. There is only one HitList object for every word. 
@@ -171,7 +184,6 @@ The keys for the HashMaps are the document ids and the values are floats.
 Upon message arrival, a HitList object is either created or updated depending on whether that word has been seen before. 
 Then document frequency and term frequency are adjusted accordingly. 
 This is performed at this point in order to reduce the number of calculations done post query search.  
-
 
 \subsection{PageRank}
 
@@ -182,16 +194,28 @@ We decided that PageRank should not be a distributed component for the following
 First, the PageRank metric is only relevant when doing searches and since the Yippee Search Engine would only be in deployment for a short period of time, it was only necessary to run PageRank, in production, once.
 Second, given the frequency of PageRank jobs, implementing a distributed version introduced complexity that was unwarranted, so the simpler solution was chosen.
 
-
 \subsection{Search}
 \textbf{Needs to be edited}
 The final piece of Yippee involves presenting the user with highly relevant pages given a provided keyword.
-Once a keyword search is received, a heuristic aggregator will calculate highly relevant documents given queries to the indexed data.
-The precise details of the heuristic aggregator have yet to be determined, but the main idea is to shrink the pool of possible results as much as possible using metrics like TF/IDF, word count and position, etc.
-For these relevant pages, the PageRank score will be taking into account to calculate a final ordering of results to be returned.
+We used the TF-IDF and PageRank values to calculate ranking scores for all documents. 
+The TF-IDF value of a document was calculated as the product of the sum of its weighted tf and atf values. 
+In this case, the atf values were anchor text hits from other pages pointing to the current document. For each document we weighted its tf by 0.4 and the atf by 0.6 because we felt that given the implications of PageRank link analysis, that the content of a given page may be more accurately described by links point to it. 
+Finally, once all hits per document are summated, each document's TF-IDF value was then multiplied by the PageRank value (default of 1) to give the final rank value. 
+The documents were then sorted by descending value and returned in a list. 
 
 \section{Evaluation}
 \label{sec:evaluation}
+
+The Indexer performed best with 5 IndexerWorker threads at a rate of 250 documents per minute. 
+This is timed from when the document is polled from the queue by the IndexerWord to when the Hits are saved to the appropriate Barrels. 
+Increasing the number of threads resulted in Pastry messages getting sent out more frequently and overflowing the node queues. 
+There was also overhead in writing to the DocEntry database between the threads. 
+Despite this, the performance rate over time was constant meaning overflow of messages was eliminated. 
+
+The search time increases linearly with the number of matched results. 
+Unfortunately, since the size of our corpus never exceeded 10k documents, the search time never exceeded 1s in elapsed time and the issue went unnoticed. 
+In retrospect, this points to a design issue in the way we indexed documents in a distributed manner: the more results we matched, the more documents we needed to collect before we were able to rank. 
+In order to fix this issue, we could have implemented a more distributed ranking implementation.
 
 \section{Future Work}
 \label{sec:future}
