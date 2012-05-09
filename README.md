@@ -21,11 +21,11 @@ centralized. All  parts of  the project are  deployed to  Amazon Elastic
 Cloud Computing (EC2) instances.
 
 [![Yippee's
-architecture](http://www.cis.seas.upenn.edu/~nvas/architecture.png)]
+architecture](http://www.seas.upenn.edu/~nvas/architecture.png)]
 
 Contributors:
 
-Chris Imbriano    -  imbriano@seas.upenn.edu
-Margarita Miranda -  mmiran@seas.upenn.edu
-Nikos Vasilakis   -  nvas@seas.upenn.edu
-TJ Du             -  tdu2@seas.upenn.edu
+* Chris Imbriano    -  imbriano@seas.upenn.edu
+* Margarita Miranda -  mmiran@seas.upenn.edu
+* Nikos Vasilakis   -  nvas@seas.upenn.edu
+* TJ Du             -  tdu2@seas.upenn.edu
